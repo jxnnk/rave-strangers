@@ -7,7 +7,7 @@ Eine Community-App für die Techno-Szene in Deutschland: alle Raves an einem Ort
 | Teil | Status |
 |---|---|
 | Klickbarer Prototyp (`prototype/`) | fertig, läuft komplett im Browser, Daten nur im Speicher |
-| Datenbank-Bauplan (`supabase/schema.sql`) | fertig und getestet, noch nicht in Supabase eingespielt |
+| Datenbank (`supabase/`) | eingespielt in Supabase, Sicherheitscheck sauber |
 | Echte App mit Login | als Nächstes |
 
 ## Was der Prototyp kann
@@ -46,7 +46,9 @@ Jede Tabelle hat Row Level Security. Die wichtigsten Regeln:
 - Meldungen sehen nur Admins.
 - Bewertungen gehen erst nach dem Event und nur, wenn man als Teilnehmer eingetragen war.
 
-Einspielen: im Supabase-Projekt den SQL Editor öffnen, den Inhalt von `schema.sql` einfügen, Run.
+Einspielen in ein neues Projekt: im SQL Editor zuerst `schema.sql`, danach die Dateien in `supabase/migrations/` der Reihe nach ausführen. Im Projekt `rave-strangers` (Region Frankfurt) ist beides schon eingespielt.
+
+`migrations/002_harden_functions.sql` setzt die Hinweise des Supabase-Sicherheitschecks um: Hilfsfunktionen liegen im nicht öffentlichen Schema `private`, nur `start_chat` und `approve_artist` sind für angemeldete Nutzer aufrufbar.
 
 ## Sicherheit
 
