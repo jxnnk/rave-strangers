@@ -58,7 +58,7 @@ Jede Tabelle hat Row Level Security. Die wichtigsten Regeln:
 - Meldungen sehen nur Admins.
 - Bewertungen gehen erst nach dem Event und nur, wenn man als Teilnehmer eingetragen war.
 
-Einspielen in ein neues Projekt: im SQL Editor zuerst `schema.sql`, danach die Dateien in `supabase/migrations/` der Reihe nach, zum Schluss `seed.sql` (echte Clubs und Events, Stand 10.11.2026) und `seed_02_more_clubs.sql` (117 weitere Clubs, Liste von technoairlines.com; Positionen ungefähr, nicht geokodiert). Im Projekt `rave-strangers` (Region Frankfurt) ist beides schon eingespielt.
+Einspielen in ein neues Projekt: im SQL Editor zuerst `schema.sql`, danach die Dateien in `supabase/migrations/` der Reihe nach, zum Schluss `seed.sql` (echte Clubs und Events, Stand 10.11.2026) und `seed_02_more_clubs.sql` (117 weitere Clubs, Liste von technoairlines.com). Danach wurden Adressen und Positionen mit OpenStreetMap abgeglichen und von Hand geprüft (`migrations/005_osm_import_tools.sql`): 138 von 141 Clubs haben jetzt eine genaue Position. Kartendaten © OpenStreetMap-Mitwirkende (ODbL). Im Projekt `rave-strangers` (Region Frankfurt) ist beides schon eingespielt.
 
 `migrations/002_harden_functions.sql` setzt die Hinweise des Supabase-Sicherheitschecks um: Hilfsfunktionen liegen im nicht öffentlichen Schema `private`, nur `start_chat` und `approve_artist` sind für angemeldete Nutzer aufrufbar.
 

@@ -59,7 +59,7 @@ var T={
     f_title:'Name des Events',f_venue:'Club',f_venue_pick:'Club wählen',f_venue_missing:'Dein Club fehlt? Schreib es in den Namen, wir legen ihn an.',f_date:'Datum',f_time:'Beginn',f_genres:'Genres',
     f_lineup:'Line-up (Namen mit Komma trennen)',f_link:'Link zu Tickets oder Flyer',f_nophone:'Auf dem Event gilt ein Foto- und Videoverbot',f_kind:'Art',f_submit:'Event einreichen',
     f_err:'Bitte Name, Club und Datum ausfüllen.',sub_ok_pub:'Event ist online.',sub_ok_pend:'Danke! Dein Event wird geprüft und erscheint danach.',
-    footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr.'
+    footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
     nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
@@ -109,7 +109,7 @@ var T={
     f_title:'Event name',f_venue:'Club',f_venue_pick:'Pick a club',f_venue_missing:'Your club is missing? Put it in the name, we will add it.',f_date:'Date',f_time:'Start',f_genres:'Genres',
     f_lineup:'Line-up (separate names with commas)',f_link:'Link to tickets or flyer',f_nophone:'This event has a no-photo, no-video rule',f_kind:'Type',f_submit:'Submit event',
     f_err:'Please fill in name, club and date.',sub_ok_pub:'Event is live.',sub_ok_pend:'Thanks! Your event will be checked and then appear.',
-    footer:'Rave Strangers · Beta · Event data from public sources, no guarantee.'
+    footer:'Rave Strangers · Beta · Event data from public sources, no guarantee. Club addresses and positions: © OpenStreetMap contributors.'
   }
 };
 
