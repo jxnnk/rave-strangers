@@ -18,7 +18,7 @@ var T={
     events_title:'Raves in Deutschland',events_sub:'Finde Nächte, DJs und Leute, die auch hinwollen.',
     search:'Suche',search_ph:'Event, Club oder DJ',city:'Stadt',all_cities:'Alle Städte',when:'Zeitraum',
     when_all:'Alle Termine',when_week:'Nächste 7 Tage',when_month:'Nächste 30 Tage',genre_all:'Alle Genres',
-    type_all:'Alles',type_club:'Clubnächte',type_fest:'Festivals & Open Airs',fest_tag:'Festival',fest_note:'Gerade ist Indoor-Saison. Open Airs für 2027 kommen rein, sobald Termine bestätigt sind.',
+    type_all:'Alles',type_club:'Clubnächte',type_fest:'Festivals & Open Airs',fest_tag:'Festival',fest_note:'Festivals erscheinen etwa zwei Monate vorher und verschwinden, sobald sie vorbei sind. Gerade ist Indoor-Saison, Open Airs für 2027 kommen rein, sobald Termine bestätigt sind.',kind_event_site:'Festival- und Event-Gelände',kind_seasonal:'Open Air, nur in der Saison',kind_note:'Erscheint auf der Karte nur, wenn hier etwas ansteht.',f_end:'Ende (optional, bei mehrtägigen Events)',
     n_events:'{n} Events',none_found:'Keine Events gefunden. Probier weniger Filter.',going_n:'{n} aus der Community',
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
@@ -68,7 +68,7 @@ var T={
     events_title:'Raves in Germany',events_sub:'Find nights, DJs and people who are heading there too.',
     search:'Search',search_ph:'Event, club or DJ',city:'City',all_cities:'All cities',when:'When',
     when_all:'Any date',when_week:'Next 7 days',when_month:'Next 30 days',genre_all:'All genres',
-    type_all:'All',type_club:'Club nights',type_fest:'Festivals & open airs',fest_tag:'Festival',fest_note:'It is indoor season. Open airs for 2027 get added once dates are confirmed.',
+    type_all:'All',type_club:'Club nights',type_fest:'Festivals & open airs',fest_tag:'Festival',fest_note:'Festivals show up about two months ahead and disappear once they are over. It is indoor season; open airs for 2027 get added once dates are confirmed.',kind_event_site:'Festival and event grounds',kind_seasonal:'Open air, in season only',kind_note:'Shows on the map only when something is coming up here.',f_end:'End (optional, for multi-day events)',
     n_events:'{n} events',none_found:'No events found. Try fewer filters.',going_n:'{n} from the community',
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
@@ -126,6 +126,8 @@ var CITIES=[
 var GENRES=['Techno','Hard Techno','Acid','Trance','House','Minimal','Drum & Bass','Electronic'];
 var SOC=[['instagram','Instagram','https://instagram.com/'],['soundcloud','SoundCloud','https://soundcloud.com/'],['ra','Resident Advisor','https://ra.co/dj/'],['spotify','Spotify',null],['mixcloud','Mixcloud','https://www.mixcloud.com/'],['tiktok','TikTok','https://www.tiktok.com/@']];
 var RULE_KEYS=['phone','door','age','access','aware'];
+/* Festivals and temporary places appear this many days before they start and disappear once they are over. */
+var LEAD_DAYS=60;
 var RULE_LABEL={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
 
 /* ---------- State ---------- */
@@ -170,7 +172,9 @@ function safeUrl(u){ return /^https?:\/\//i.test(u||'')?u:null; }
 function venue(id){ for(var i=0;i<VENUES.length;i++){ if(VENUES[i].id===id) return VENUES[i]; } return null; }
 function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return EVENTS[i]; } return null; }
 function genreTags(g){ return g.map(function(x){ return '<span class="tag">'+esc(x)+'</span>'; }).join(' '); }
-function inWindow(e){ if(e.off<0) return false; if(S.when==='week'&&e.off>7) return false; if(S.when==='month'&&e.off>30) return false; return true; }
+function isTemporary(e){ var v=venue(e.v); return e.type==='festival'||(v&&v.kind!=='club'); }
+function upcoming(e){ if(e.endOff<0) return false; if(isTemporary(e)&&e.off>LEAD_DAYS) return false; return true; }
+function inWindow(e){ if(!upcoming(e)) return false; if(S.when==='week'&&e.off>7) return false; if(S.when==='month'&&e.off>30) return false; return true; }
 function sortedEvents(){ return EVENTS.slice().sort(function(a,b){ return a.off-b.off||(a.time||'').localeCompare(b.time||''); }); }
 function has(arr,x){ return arr.indexOf(x)>-1; }
 function proj(lon,lat){ var l=lon*Math.PI/180,p=lat*Math.PI/180; return [GEO.tx+GEO.k*l,GEO.ty-GEO.k*Math.log(Math.tan(Math.PI/4+p/2))]; }
@@ -185,21 +189,21 @@ function loadingBox(){ return '<p class="sub" aria-busy="true">'+t('loading')+'<
 
 /* ---------- Data loading ---------- */
 function mapEvent(r){
-  var p=berlinParts(new Date(r.starts_at));
+  var p=berlinParts(new Date(r.starts_at)), pe=r.ends_at?berlinParts(new Date(r.ends_at)):null;
   var lu=(r.event_lineup||[]).slice().sort(function(a,b){ return a.position-b.position; }).map(function(x){ return x.name; });
-  return {id:r.id,title:r.title,v:r.venue_id,date:p.date,time:r.time_known?p.time:null,off:offOf(p.date),genres:r.genres||[],
+  return {id:r.id,title:r.title,v:r.venue_id,date:p.date,time:r.time_known?p.time:null,off:offOf(p.date),endDate:pe?pe.date:null,endOff:pe?Math.max(offOf(pe.date),offOf(p.date)):offOf(p.date),genres:r.genres||[],
     lineup:lu.length?lu:null,more:r.lineup_more||0,nophone:r.no_phone,src:safeUrl(r.source_url),ticket:safeUrl(r.ticket_url),
     type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by};
 }
-function mapVenue(r){ var p=proj(r.lon,r.lat); return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,rules:r.rules||{},x:p[0],y:p[1]}; }
+function mapVenue(r){ var p=proj(r.lon,r.lat); return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,kind:r.kind||'club',rules:r.rules||{},x:p[0],y:p[1]}; }
 function loadBase(){
-  var since=berlinToISO(TODAY,'00:00');
+  var since=berlinToISO(isoOf(-14),'00:00');   /* a little back, so festivals that are still running are included */
   return Promise.all([
-    data(sb.from('venues').select('id,name,city,address,lat,lon,approx,rules')),
-    data(sb.from('events').select('id,venue_id,title,starts_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,event_lineup(position,name)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
+    data(sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules')),
+    data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,event_lineup(position,name)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
   ]).then(function(res){
     VENUES=res[0].map(mapVenue);
-    EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v); });
+    EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
 }
@@ -305,7 +309,7 @@ function viewEvent(id){
   var tix=e.ticket||e.src;
   return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+esc(e.title)+'</h1>'+
     '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+
-    '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
+    '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+(e.endDate&&e.endDate!==e.date?' – '+esc(fmtLong(dayOf(e.endOff))):'')+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
     '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div></dl>'+
     (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
     '<div class="row" style="margin-top:20px"><button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
@@ -330,9 +334,9 @@ function loadAttendees(id){
 function viewClub(id){
   var v=venue(id);
   if(!v) return '<a class="back" href="#map">← '+t('back')+'</a><div class="empty">'+t('no_club')+'</div>';
-  var evs=sortedEvents().filter(function(e){ return e.v===id&&e.off>=0; });
+  var evs=sortedEvents().filter(function(e){ return e.v===id&&upcoming(e); });
   var facts=RULE_KEYS.map(function(k){ var x=v.rules[k]; return '<div><dt>'+t(RULE_LABEL[k])+'</dt><dd'+(x?'':' style="color:var(--muted);font-weight:400"')+'>'+(x?esc(ruleVal(x)):t('not_set'))+'</dd></div>'; }).join('');
-  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a><h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+
+  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a><h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+(v.kind!=='club'?'<p class="sub"><span class="tag">'+t('kind_'+v.kind)+'</span> '+t('kind_note')+'</p>':'')+
     '<div class="row" style="margin-top:16px"><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
     '<div class="sec"><h2>'+t('rules_t')+'</h2><dl class="facts" style="margin-top:0">'+facts+'</dl></div>'+
     '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v)+'</div>'+
@@ -462,6 +466,7 @@ function viewNew(){
     '<div class="field"><label for="n-venue">'+t('f_venue')+'</label><select id="n-venue" name="venue">'+vopts+'</select><p class="sub" style="margin:4px 0 0;font-size:13px">'+t('f_venue_missing')+'</p></div>'+
     '<div class="form2"><div class="field"><label for="n-date">'+t('f_date')+'</label><input id="n-date" name="date" type="date" min="'+TODAY+'"></div>'+
     '<div class="field"><label for="n-time">'+t('f_time')+'</label><input id="n-time" name="time" type="time" value="23:00"></div></div>'+
+    '<div class="field"><label for="n-end">'+t('f_end')+'</label><input id="n-end" name="end" type="date" min="'+TODAY+'"></div>'+
     '<div class="field"><label for="n-kind">'+t('f_kind')+'</label><select id="n-kind" name="kind"><option value="club">'+t('type_club')+'</option><option value="festival">'+t('type_fest')+'</option></select></div>'+
     '<div class="field"><label>'+t('f_genres')+'</label><div class="chips">'+g+'</div></div>'+
     '<div class="field"><label for="n-lineup">'+t('f_lineup')+'</label><input id="n-lineup" name="lineup" type="text"></div>'+
@@ -516,7 +521,7 @@ function panelHTML(){
   var rows=evs.map(function(e){ var d=dayOf(e.off);
     return '<a class="evrow" href="#event-'+e.id+'"><b>'+d.getDate()+'. '+esc(fmtMonth(d))+'</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+' · '+esc(e.genres.join(', '))+'</p></div></a>'; }).join('');
   return '<h2><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h2>'+
-    '<p class="addr">'+esc(v.addr||v.city)+(v.addr?'':'')+'</p>'+
+    '<p class="addr">'+esc(v.addr||v.city)+'</p>'+(v.kind!=='club'?'<p class="addr"><span class="tag">'+t('kind_'+v.kind)+'</span></p>':'')+
     (v.approx?'<p class="addr">'+t('approx')+'</p>':'')+
     '<p class="addr" style="color:var(--text)">'+evCountLabel(evs.length)+'</p>'+
     (rows||'<p class="sub">'+t('no_ev_here')+'</p>')+
@@ -526,6 +531,7 @@ function venueListHTML(){
   var list=mapEvents();
   var vs=VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); });
   return vs.map(function(v){ var n=venueEvents(v.id,list).length;
+    if(v.kind!=='club'&&!n) return '';
     return '<button type="button" class="person" data-act="mapvenue" data-id="'+v.id+'"><div class="grow"><strong>'+esc(v.name)+'</strong><p>'+esc(v.city)+' · '+(n?evCountLabel(n):t('zero'))+'</p></div></button>'; }).join('');
 }
 function viewMap(){
@@ -581,7 +587,7 @@ function drawMap(){
   var items=[];
   VENUES.forEach(function(v){
     var n=venueEvents(v.id,list).length;
-    if(S.onlyEvents && !n) return;
+    if((S.onlyEvents||v.kind!=='club') && !n) return;   /* festival grounds and open airs only show up around their events */
     items.push({v:v,n:n,px:(v.x-vb[0])/s,py:(v.y-vb[1])/s});
   });
   items.sort(function(a,b){ return b.n-a.n; });
@@ -851,7 +857,7 @@ document.addEventListener('submit',function(ev){
     var names=String(fd.get('lineup')||'').split(',').map(function(x){ return x.trim(); }).filter(Boolean).slice(0,40);
     var genres=fd.getAll('genre'); if(!genres.length) genres=['Techno'];
     busy(true);
-    data(sb.from('events').insert({venue_id:vid,title:title,starts_at:berlinToISO(date,fd.get('time')||'22:00'),time_known:!!fd.get('time'),kind:fd.get('kind')==='festival'?'festival':'club',genres:genres,no_phone:!!fd.get('nophone'),ticket_url:link,source_url:link}).select('id,status').single())
+    data(sb.from('events').insert({venue_id:vid,title:title,starts_at:berlinToISO(date,fd.get('time')||'22:00'),ends_at:(fd.get('end')&&fd.get('end')>date)?berlinToISO(fd.get('end'),'23:59'):null,time_known:!!fd.get('time'),kind:fd.get('kind')==='festival'?'festival':'club',genres:genres,no_phone:!!fd.get('nophone'),ticket_url:link,source_url:link}).select('id,status').single())
       .then(function(row){
         var lp=names.length?data(sb.from('event_lineup').insert(names.map(function(n,i){ return {event_id:row.id,position:i,name:n}; }))):Promise.resolve();
         return lp.then(function(){ return row; });
