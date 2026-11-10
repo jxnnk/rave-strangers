@@ -160,6 +160,8 @@ dl.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));g
 .mk text,.cl text{fill:#fff;font-family:var(--body);font-weight:700;text-anchor:middle;pointer-events:none}
 .mk .vname{fill:#ececee;text-anchor:start;font-weight:600;paint-order:stroke;stroke:#0b0b0c;stroke-linejoin:round}
 .cl .dot{fill:var(--surface-2);stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.cl.off .dot{stroke:#74747c}
+.cl.off text{fill:#b4b4ba}
 .mk:focus-visible,.cl:focus-visible{outline:none}
 .mk:focus-visible .dot,.cl:focus-visible .dot{stroke:#fff;stroke-width:3}
 .mapctl{position:absolute;right:10px;top:10px;display:grid;gap:6px}

@@ -118,7 +118,10 @@ var CITIES=[
   {name:'Berlin',lat:52.520,lon:13.405},{name:'Hamburg',lat:53.551,lon:9.994},{name:'München',lat:48.137,lon:11.576},
   {name:'Köln',lat:50.938,lon:6.960},{name:'Frankfurt',lat:50.111,lon:8.682},{name:'Stuttgart',lat:48.776,lon:9.183},
   {name:'Düsseldorf',lat:51.228,lon:6.774},{name:'Leipzig',lat:51.340,lon:12.373},{name:'Dresden',lat:51.050,lon:13.737},
-  {name:'Karlsruhe',lat:49.007,lon:8.404},{name:'Hannover',lat:52.376,lon:9.732},{name:'Nürnberg',lat:49.452,lon:11.077},{name:'Bremen',lat:53.079,lon:8.802}
+  {name:'Karlsruhe',lat:49.007,lon:8.404},{name:'Hannover',lat:52.376,lon:9.732},{name:'Nürnberg',lat:49.452,lon:11.077},{name:'Bremen',lat:53.079,lon:8.802},
+  {name:'Dortmund',lat:51.514,lon:7.465},{name:'Essen',lat:51.456,lon:7.012},{name:'Münster',lat:51.960,lon:7.626},{name:'Mannheim',lat:49.488,lon:8.466},
+  {name:'Freiburg',lat:47.999,lon:7.842},{name:'Augsburg',lat:48.371,lon:10.898},{name:'Würzburg',lat:49.792,lon:9.953},{name:'Erfurt',lat:50.978,lon:11.029},
+  {name:'Rostock',lat:54.092,lon:12.099},{name:'Kassel',lat:51.312,lon:9.479},{name:'Magdeburg',lat:52.121,lon:11.628}
 ];
 var GENRES=['Techno','Hard Techno','Acid','Trance','House','Minimal','Drum & Bass','Electronic'];
 var SOC=[['instagram','Instagram','https://instagram.com/'],['soundcloud','SoundCloud','https://soundcloud.com/'],['ra','Resident Advisor','https://ra.co/dj/'],['spotify','Spotify',null],['mixcloud','Mixcloud','https://www.mixcloud.com/'],['tiktok','TikTok','https://www.tiktok.com/@']];
@@ -556,7 +559,7 @@ function mapEl(){ return document.getElementById('mapsvg'); }
 function mapSize(){ var r=mapEl().getBoundingClientRect(); return {cw:Math.max(r.width,1),ch:Math.max(r.height,1),left:r.left,top:r.top}; }
 function fitView(){ var z=mapSize(); return {cx:GEO.W/2,cy:GEO.H/2,w:Math.max(GEO.W,GEO.H*z.cw/z.ch)}; }
 function clampView(m){
-  var minW=GEO.W/22, maxW=Math.max(fitView().w*1.25,GEO.W);
+  var minW=GEO.W/90, maxW=Math.max(fitView().w*1.25,GEO.W);
   m.w=Math.min(maxW,Math.max(minW,m.w));
   m.cx=Math.min(GEO.W+80,Math.max(-80,m.cx)); m.cy=Math.min(GEO.H+80,Math.max(-80,m.cy));
   return m;
@@ -591,13 +594,13 @@ function drawMap(){
   cls.forEach(function(c){ if(c.items.length>1){ var sx=0,sy=0; c.items.forEach(function(i){ sx+=i.v.x; sy+=i.v.y; }); c.x=sx/c.items.length; c.y=sy/c.items.length; } });
   cls.sort(function(a,b){ return (a.n>0)-(b.n>0); });
   CL=[];
-  var showNames=S.map.w<GEO.W/2.4;
+  var showNames=S.map.w<GEO.W/14;
   cls.forEach(function(c){
     if(c.items.length>1){
       CL.push({x:c.x,y:c.y});
       var r=(15+Math.min(6,c.items.length))*s;
-      var label=c.n||c.items.length;
-      out+='<g class="cl" data-cluster="'+(CL.length-1)+'" tabindex="0" role="button" aria-label="'+esc(c.items.length+' · '+evCountLabel(c.n))+'" transform="translate('+c.x+' '+c.y+')">'+
+      var label=c.items.length;
+      out+='<g class="cl'+(c.n?'':' off')+'" data-cluster="'+(CL.length-1)+'" tabindex="0" role="button" aria-label="'+esc(c.items.length+' · '+evCountLabel(c.n))+'" transform="translate('+c.x+' '+c.y+')">'+
         '<circle class="dot" r="'+r+'"/><text font-size="'+(13*s)+'" dy="'+(4.5*s)+'">'+label+'</text></g>';
     } else {
       var it=c.items[0], v=it.v, sel=S.mapSel===v.id;
@@ -637,14 +640,14 @@ function zoomAt(clientX,clientY,f){
   var z=mapSize(), vb=viewBoxOf(), s=S.map.w/z.cw;
   var px=clientX-z.left, py=clientY-z.top;
   var sx=vb[0]+px*s, sy=vb[1]+py*s;
-  var w=Math.min(Math.max(fitView().w*1.25,GEO.W),Math.max(GEO.W/22,S.map.w*f)), s2=w/z.cw, h=w*z.ch/z.cw;
+  var w=Math.min(Math.max(fitView().w*1.25,GEO.W),Math.max(GEO.W/90,S.map.w*f)), s2=w/z.cw, h=w*z.ch/z.cw;
   S.map=clampView({cx:sx-px*s2+w/2,cy:sy-py*s2+h/2,w:w});
   drawMap();
 }
 function selectVenue(id,center){
   S.mapSel=id; setPanel(); drawMap();
   var v=venue(id);
-  if(center&&v){ animateTo({cx:v.x,cy:v.y,w:Math.min(S.map.w,GEO.W/14)}); }
+  if(center&&v){ animateTo({cx:v.x,cy:v.y,w:Math.min(S.map.w,GEO.W/45)}); }
   var p=document.getElementById('mappanel');
   if(p&&window.innerWidth<=860&&p.scrollIntoView){ p.scrollIntoView({block:'nearest',behavior:'smooth'}); }
 }
@@ -701,7 +704,7 @@ function initMap(){
 function focusVenueFromHash(id){
   var v=venue(id); if(!v) return;
   S.mapSel=id;
-  S.map={cx:v.x,cy:v.y,w:GEO.W/14};
+  S.map={cx:v.x,cy:v.y,w:GEO.W/45};
 }
 
 /* ---------- Router ---------- */
