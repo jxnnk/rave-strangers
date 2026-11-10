@@ -1,0 +1,16 @@
+{
+  "name": "Rave Strangers",
+  "short_name": "Rave Strangers",
+  "description": "Alle Raves in Deutschland, verifizierte Artists und Leute, die auch hingehen.",
+  "start_url": "./#events",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0b0c",
+  "theme_color": "#0b0b0c",
+  "lang": "de",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml"}
+  ]
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rave Strangers</title>
+<meta name="description" content="Alle Raves in Deutschland, verifizierte Artists und Leute, die auch hingehen.">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#events"><i></i>Rave Strangers</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-act="lang" data-id="de" aria-pressed="true">DE</button>
+      <button type="button" data-act="lang" data-id="en" aria-pressed="false">EN</button>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Main"></nav>
+  </div>
+</header>
+<div class="banner"><div class="wrap" id="banner"></div></div>
+<main><div class="wrap" id="view"><p class="sub">Lädt …</p></div></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:16px">Rave Strangers braucht JavaScript.</p></noscript>
+<script src="vendor/supabase.js"></script>
+<script src="geo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
