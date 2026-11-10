@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rave Strangers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark app shell. Sticky header with tabs (bottom bar on phones), one centred content column. Map view = map plus side panel. */
+:root{
+  --bg:#0b0b0c;
+  --surface:#141416;
+  --surface-2:#1d1d20;
+  --line:#2b2b30;
+  --text:#ececee;
+  --muted:#8e8e96;
+  --accent:#e4262e;
+  --accent-ink:#ffffff;
+  --display:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.45;padding-bottom:84px}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand i{width:12px;height:12px;background:var(--accent);display:inline-block}
+.lang{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang button{background:none;border:0;padding:6px 10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:.04em}
+.lang button[aria-pressed="true"]{background:var(--surface-2);color:var(--text)}
+
+nav.tabs{display:flex;gap:4px}
+nav.tabs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;color:var(--muted);font-weight:600;font-size:15px}
+nav.tabs a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs a[aria-current="page"]{color:var(--text);background:var(--surface-2);box-shadow:inset 0 -2px 0 var(--accent)}
+@media (max-width:720px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(11,11,12,.97);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom, 0px));justify-content:space-around;z-index:30;gap:0}
+  nav.tabs a{flex-direction:column;gap:2px;font-size:11px;padding:6px 4px;flex:1;align-items:center}
+  nav.tabs a[aria-current="page"]{box-shadow:inset 0 2px 0 var(--accent)}
+}
+
+.banner{background:var(--surface);border-bottom:1px solid var(--line);color:var(--muted);font-size:13px;padding:8px 0}
+main{padding:24px 0 40px}
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;margin:0;text-wrap:balance;line-height:1.05}
+h1{font-size:44px;font-weight:700}
+h2{font-size:26px;font-weight:700}
+h3{font-size:22px;font-weight:700}
+.sub{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.sec{margin-top:32px}
+.sec>h2{margin-bottom:12px;display:flex;align-items:baseline;gap:10px}
+
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:20px}
+@media (max-width:640px){.filters{grid-template-columns:1fr 1fr}.filters .f-q{grid-column:1/-1}}
+.filters.two{grid-template-columns:1fr 1fr 1fr}
+@media (max-width:640px){.filters.two{grid-template-columns:1fr}}
+.field label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=date],input[type=time],input[type=url],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+input::placeholder,textarea::placeholder{color:#62626a}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:34px}
+.chip[aria-pressed="true"],.chipcheck input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chipcheck{position:relative}
+.chipcheck input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.chipcheck span{display:inline-block;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+.chipcheck input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.tag{display:inline-block;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);font-weight:600;cursor:pointer}
+.btn:hover{border-color:#44444b}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.small{min-height:36px;padding:0 12px;font-size:14px}
+.btn.on{background:transparent;border-color:var(--accent);color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.link{color:var(--text);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+
+.list{display:grid;gap:10px;margin-top:12px}
+.ev{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.ev:hover{border-color:#44444b}
+.date{text-align:center;border-right:1px solid var(--line);padding-right:14px}
+.date b{display:block;font-family:var(--display);font-size:34px;line-height:1;font-weight:700}
+.date span{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.ev .meta{color:var(--muted);font-size:14px;margin:4px 0 8px}
+.ev .side{text-align:right;font-size:13px;color:var(--muted)}
+@media (max-width:560px){.ev{grid-template-columns:52px 1fr}.ev .side{grid-column:1/-1;text-align:left;display:flex;align-items:center;gap:10px}}
+.avs{display:flex}
+.avs .av{margin-left:-8px;border:2px solid var(--surface)}
+.avs .av:first-child{margin-left:0}
+.av{--s:40px;width:var(--s);height:var(--s);border-radius:50%;background:hsl(var(--h) 14% 24%);display:inline-grid;place-items:center;font-weight:600;font-size:calc(var(--s) * .38);flex:none;color:#d8d8dc}
+.vb{width:18px;height:18px;vertical-align:-3px;margin-left:4px;flex:none}
+
+.empty{border:1px dashed var(--line);border-radius:8px;padding:28px;color:var(--muted);text-align:center;margin-top:20px}
+.count{color:var(--muted);font-size:14px;margin:16px 0 0}
+
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;margin-bottom:16px;min-height:36px}
+dl.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:20px 0 0}
+.facts div{background:var(--surface);padding:12px 14px}
+.facts dt{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.facts dd{margin:2px 0 0;font-weight:600}
+.nophone{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;background:var(--surface);padding:12px 14px;margin-top:16px;color:var(--muted);font-size:15px}
+.nophone b{color:var(--text)}
+.srcbox{margin-top:24px;color:var(--muted);font-size:14px}
+
+.people{display:grid;gap:8px}
+.person{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:left;width:100%}
+.person .grow{flex:1;min-width:0}
+.person .grow p{margin:0;color:var(--muted);font-size:14px}
+.person .grow strong{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:20px}
+.acard{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.acard:hover{border-color:#44444b}
+.acard p{margin:0;color:var(--muted);font-size:14px}
+.acard strong{font-size:17px}
+
+.socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.soc{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:14px}
+.soc em{font-style:normal;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+
+.tour{display:grid;gap:8px}
+.tour .t{display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.tour .t .d{font-family:var(--display);font-size:20px;font-weight:700;text-transform:uppercase}
+.tour .t p{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:480px){.tour .t{grid-template-columns:76px 1fr}.tour .t .tag{grid-column:2}}
+
+.hero{display:flex;gap:18px;align-items:center;margin-top:8px}
+.hero h1{font-size:40px}
+.form{display:grid;gap:14px;margin-top:20px;max-width:620px}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.form2{grid-template-columns:1fr}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:10px 16px;font-weight:600;color:var(--muted);cursor:pointer;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+.card p{margin:0 0 10px;color:var(--muted)}
+.card p:last-child{margin-bottom:0}
+
+.chat{display:grid;gap:8px;margin-top:16px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;min-height:240px;align-content:start}
+.msg{max-width:78%;padding:8px 12px;border-radius:10px;background:var(--surface-2);justify-self:start}
+.msg.me{background:var(--accent);color:var(--accent-ink);justify-self:end}
+.composer{display:flex;gap:8px;margin-top:10px}
+.composer input{flex:1}
+
+/* Map */
+.mapgrid{display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:16px;align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{position:relative;height:clamp(380px,66vh,660px);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#08080a;touch-action:none}
+#mapsvg{width:100%;height:100%;display:block;cursor:grab;user-select:none;-webkit-user-select:none}
+#mapsvg.drag{cursor:grabbing}
+.land path{vector-effect:non-scaling-stroke;stroke-width:1;stroke-linejoin:round}
+.land.nb path{fill:#101012;stroke:#222226}
+.land.de path{fill:#1b1b1f;stroke:#55555d}
+.clabel{fill:#8e8e96;font-family:var(--body);font-weight:600;paint-order:stroke;stroke:#1b1b1f;stroke-linejoin:round;pointer-events:none;letter-spacing:.02em}
+.cdot{fill:#6a6a72;pointer-events:none}
+.mk,.cl{cursor:pointer}
+.mk .dot{fill:var(--accent);stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.mk.off .dot{fill:#26262b;stroke:#74747c}
+.mk .ring{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk text,.cl text{fill:#fff;font-family:var(--body);font-weight:700;text-anchor:middle;pointer-events:none}
+.mk .vname{fill:#ececee;text-anchor:start;font-weight:600;paint-order:stroke;stroke:#0b0b0c;stroke-linejoin:round}
+.cl .dot{fill:var(--surface-2);stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk:focus-visible,.cl:focus-visible{outline:none}
+.mk:focus-visible .dot,.cl:focus-visible .dot{stroke:#fff;stroke-width:3}
+.mapctl{position:absolute;right:10px;top:10px;display:grid;gap:6px}
+.mapctl button{width:40px;height:40px;border-radius:6px;border:1px solid var(--line);background:rgba(20,20,22,.95);font-size:22px;font-weight:600;line-height:1;cursor:pointer;display:grid;place-items:center}
+.mapctl button:hover{border-color:#55555d}
+.mapctl svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.maplegend{position:absolute;left:10px;bottom:10px;display:flex;gap:12px;background:rgba(20,20,22,.92);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--muted)}
+.maplegend span{display:inline-flex;align-items:center;gap:6px}
+.maplegend i{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--accent)}
+.maplegend i.off{background:#26262b;border:1px solid #74747c}
+.mappanel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;min-height:120px}
+.mappanel h2{font-size:28px}
+.mappanel .addr{color:var(--muted);margin:6px 0 0;font-size:14px}
+.mappanel .evrow{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.mappanel .evrow:first-of-type{margin-top:12px}
+.mappanel .evrow b{font-family:var(--display);font-size:20px;text-transform:uppercase;line-height:1.05}
+.mappanel .evrow p{margin:0;color:var(--muted);font-size:14px}
+.mappanel .evrow strong{display:block}
+
+details.more{margin-top:12px}
+details.more summary{cursor:pointer;font-weight:600;min-height:44px;display:inline-flex;align-items:center;list-style:none;border:1px solid var(--line);border-radius:6px;padding:0 16px;background:var(--surface-2)}
+details.more summary::-webkit-details-marker{display:none}
+details.more[open] summary{margin-bottom:4px;border-color:#44444b}
+.stars{color:var(--accent);letter-spacing:1px}
+.btn[disabled]{opacity:.5;cursor:default}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;font-size:14px}
+.facts dd a{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:6px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+footer{color:var(--muted);font-size:13px;padding:24px 0 8px;border-top:1px solid var(--line);margin-top:40px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#events"><i></i>Rave Strangers</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-act="lang" data-id="de" aria-pressed="true">DE</button>
+      <button type="button" data-act="lang" data-id="en" aria-pressed="false">EN</button>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Main"></nav>
+  </div>
+</header>
+<div class="banner"><div class="wrap" id="banner"></div></div>
+<main><div class="wrap" id="view"></div></main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Map geometry (Germany outline from open Natural Earth data via world-atlas) ---------- */
+var GEO = /*GEO*/null;
+
+/* ---------- Texts ---------- */
+var T = {
+  de:{
+    nav_events:'Events', nav_map:'Karte', nav_artists:'Artists', nav_connect:'Connect', nav_me:'Profil',
+    banner:'Prototyp: Events und Clubs sind echt (Stand 10.11.2026, mit Quelle). Profile, Chats und Teilnehmende sind Beispiele.',
+    events_title:'Raves in Deutschland', events_sub:'Finde Nächte, DJs und Leute, die auch hinwollen.',
+    search:'Suche', search_ph:'Event, Club oder DJ', city:'Stadt', all_cities:'Alle Städte', when:'Zeitraum',
+    when_all:'Alle Termine', when_week:'Nächste 7 Tage', when_month:'Nächste 30 Tage', genre_all:'Alle Genres',
+    n_events:'{n} Events', none_found:'Keine Events gefunden. Probier weniger Filter.',
+    going_n:'{n} aus der Community', back:'Zurück', date:'Datum', time:'Beginn', venue:'Ort', price:'Eintritt',
+    tba:'siehe Quelle', lineup:'Line-up', who_goes:'Wer geht hin', nobody:'Noch niemand aus der Community. Sei die erste Person.',
+    go:'Ich gehe hin', going:'Du gehst hin', say_hi:'Hi sagen', open_chat:'Chat öffnen',
+    nophone_t:'Foto- und Videoverbot', nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
+    lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.', and_more:'und {n} weitere',
+    show_map:'Auf der Karte zeigen', source_t:'Quelle', source_note:'Stand 10.11.2026. Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',
+    verified:'Verifizierter Artist', artists_title:'Artists', artists_sub:'DJs und Live-Acts mit eigenem Profil. Das rote Häkchen bedeutet: Identität geprüft.',
+    demo_artists:'Diese Profile sind erfunden und zeigen, wie Artist-Seiten aussehen. Echte Artists kommen mit Registrierung und Verifizierung.',
+    only_verified:'Nur verifizierte', about:'Über', socials:'Socials', tour:'Termine', no_tour:'Keine Termine eingetragen.',
+    on_app:'In der App', external:'Extern', add_event:'Event eintragen',
+    connect_title:'Connect', connect_sub:'Du gehst zu denselben Events wie diese Leute. Sag Hi, bevor ihr euch auf dem Floor verpasst.',
+    shared:'Gleiche Events wie du', inbox:'Nachrichten', no_threads:'Noch keine Unterhaltungen.', goes_to:'geht zu',
+    msg_ph:'Nachricht schreiben', send:'Senden', chat_note:'Chat ist für davor und danach. Auf dem Event bleibt das Handy aus.',
+    me_title:'Mein Profil', name:'Name', bio:'Über mich', bio_ph:'Was hörst du, wo tanzt du?', save:'Speichern', saved:'Gespeichert',
+    soc_hint:'Socials verlinken', role_demo:'Demo-Ansicht', role_fan:'Normaler Account', role_artist:'Artist (verifiziert)',
+    verif_t:'Artist-Verifizierung', verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung, dann bekommst du das rote Häkchen und kannst Tourtermine eintragen.',
+    verif_btn:'Verifizierung beantragen', verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',
+    verif_ok:'Dein Profil ist verifiziert.', tour_add:'Tourtermin eintragen', tour_event:'Event oder Club', tour_add_btn:'Termin hinzufügen',
+    tour_added:'Termin eingetragen', my_tour:'Meine Termine',
+    new_title:'Event eintragen', new_sub:'Trag eine Nacht ein. Verifizierte Artists erscheinen sofort, alle anderen Einträge werden kurz geprüft.',
+    f_title:'Name des Events', f_venue:'Club oder Ort', f_date:'Datum', f_time:'Beginn', f_genres:'Genres', f_lineup:'Line-up (Namen mit Komma trennen)',
+    f_link:'Link zu Tickets oder Flyer', f_nophone:'Auf dem Event gilt ein Foto- und Videoverbot', f_submit:'Event veröffentlichen',
+    f_err:'Bitte Name, Ort und Datum ausfüllen.', pending:'In Prüfung', new_tag:'Neu', published:'Event ist eingetragen',
+    footer:'Rave Strangers · Prototyp · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Konten und Chats existieren nur in diesem Fenster.',
+    sources_t:'So kommen Events rein', sources_d:'Aktuell von Hand aus öffentlichen Kalendern zusammengetragen. Später tragen Veranstalter und Artists selbst ein, dazu kommen Kalender-Feeds und offizielle Schnittstellen.',
+    no_artist:'Dieser Artist existiert nicht.', no_event:'Dieses Event existiert nicht.',
+    map_title:'Karte', map_sub:'Alle Clubs und Events auf einen Blick. Ziehen zum Verschieben, Mausrad oder Plus und Minus zum Zoomen.',
+    only_events:'Nur Orte mit Events', venues_t:'Alle Orte', ev_one:'1 Event', ev_many:'{n} Events', pick_marker:'Tippe auf einen Marker, um Events und Details zu sehen.',
+    summary_map:'{v} Orte mit {e} Events im gewählten Zeitraum.', no_ev_here:'Keine Events an diesem Ort im gewählten Zeitraum.',
+    approx:'Position ungefähr', zoom_in:'Vergrößern', zoom_out:'Verkleinern', zoom_reset:'Ganz Deutschland', leg_ev:'Mit Events', leg_none:'Ohne Events', zero:'keine Events'
+    ,save_ev:'Merken', saved_ev:'Gemerkt', remind:'Erinnern', reminded:'Erinnerung an', ics:'In Google Kalender', tickets:'Tickets & Infos',
+    rides_t:'Mitfahrgelegenheiten', rides_none:'Noch keine Fahrten angeboten.', ride_from:'ab {c}, Abfahrt {t}', seats:'{n} Plätze frei', seat_req:'Platz anfragen', seat_reqd:'Angefragt',
+    ride_offer:'Fahrt anbieten', ride_city:'Abfahrt in', ride_time:'Abfahrtszeit', ride_seats:'Freie Plätze', ride_added:'Fahrt eingetragen', ride_msg:'Hi, hast du noch einen Platz frei zu {e}?', ride_mine:'Deine Fahrt',
+    crew_t:'Crew-Suche', crew_none:'Noch niemand sucht hier eine Crew.', crew_join:'Bin dabei', crew_joined:'Angefragt', crew_ph:'z. B. Suche 2 Leute, bin ab 1 Uhr da', crew_new:'Crew suchen', crew_post:'Posten', crew_msg:'Hi, ich wär bei deiner Crew dabei!', crew_all:'Leute suchen eine Crew', crew_posted:'Gepostet', crew_mine:'dein Post',
+    rules_t:'Regeln & Infos', r_phone:'Handy & Fotos', r_door:'Einlass', r_age:'Alter', r_access:'Barrierefreiheit', r_aware:'Awareness', not_set:'Noch nicht vom Club hinterlegt', photo_ban:'Fotoverbot, Handykamera wird am Einlass abgeklebt',
+    aware_t:'Awareness & Sicherheit', aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.', aware_team:'Awareness vor Ort: {x}',
+    upcoming:'Kommende Events', reviews_t:'Berichte & Bewertungen', reviews_none:'Noch keine Berichte. Schreib den ersten.', review_ph:'Wie waren Sound, Crowd, Tür, Awareness?', review_post:'Bericht posten', review_posted:'Danke für deinen Bericht', stars:'Bewertung', review_txt:'Dein Bericht',
+    rev_after:'Berichte und Bewertungen öffnen am Tag nach dem Event.', club_claim:'Du gehörst zum Team dieses Clubs? Mit einem Veranstalter-Account pflegst du Regeln und Events selbst.', club_claim_btn:'Als Veranstalter verwalten', open_club:'Club-Seite', no_club:'Diesen Club gibt es nicht.',
+    report:'Melden', block:'Blockieren', unblock:'Aufheben', blocked:'Blockiert. Du siehst diese Person nicht mehr.', report_reason:'Grund', rr1:'Belästigung', rr2:'Spam oder Fake-Profil', rr3:'Gefährliches Verhalten', rr4:'Sonstiges', report_txt:'Was ist passiert? (optional)', report_send:'Meldung senden', report_sent:'Danke. Unser Team prüft die Meldung vertraulich.', report_ev:'Falsche Angaben melden', blocked_list:'Blockierte Personen', safety_note:'Melden und Blockieren bleibt anonym. Die Person erfährt nichts davon.',
+    role_org:'Veranstalter', org_t:'Veranstalter-Bereich', org_pick:'Welchen Club verwaltest du?', org_note:'Im Prototyp kannst du jeden Club wählen. In der echten App prüfen wir vorher, ob du wirklich zum Team gehörst.', org_rules:'Club-Infos bearbeiten', org_saved:'Club-Infos gespeichert', org_add:'Event für diesen Club eintragen', org_tag:'Veranstalter', org_view:'Club-Seite ansehen',
+    import_t:'Kalender-Feed importieren', import_d:'Füg den Inhalt einer .ics-Datei ein oder lade die Datei hoch. Später holt die App Feeds und offizielle Schnittstellen automatisch ab.', import_file:'.ics-Datei', import_sample:'Beispiel-Feed einfügen', import_parse:'Vorschau', import_go:'{n} Events importieren', import_none:'Keine Events im Feed gefunden.', import_done:'{n} Events importiert', import_tag:'Import', import_txt:'Feed-Inhalt',
+    notifs_t:'Benachrichtigungen', notifs_none:'Noch nichts Neues.', saved_t:'Merkliste', saved_none:'Noch nichts gemerkt. Auf Eventseiten gibt es den Merken-Knopf.', ics_all:'Alle in Kalender (.ics)', follows_t:'Du folgst', follows_none:'Du folgst noch niemandem.', follow:'Folgen', following:'Du folgst',
+    n_follow:'{a} spielt am {d}: {c}', n_follow0:'Du folgst jetzt {a}. Neue Termine landen hier.', n_remind:'Erinnerung gesetzt: {e}, einen Tag vorher', n_ride:'Platzanfrage gesendet: {e}', push_note:'In der echten App kommen diese als Push-Nachricht aufs Handy.',
+    type_all:'Alles', type_club:'Clubnächte', type_fest:'Festivals & Open Airs', fest_note:'Gerade ist Indoor-Saison. Open Airs für 2027 kommen rein, sobald die Veranstalter Termine bestätigen.', fest_tag:'Festival'
+
+  },
+  en:{
+    nav_events:'Events', nav_map:'Map', nav_artists:'Artists', nav_connect:'Connect', nav_me:'Profile',
+    banner:'Prototype: events and clubs are real (as of 10 Nov 2026, with source). Profiles, chats and attendees are samples.',
+    events_title:'Raves in Germany', events_sub:'Find nights, DJs and people who are heading there too.',
+    search:'Search', search_ph:'Event, club or DJ', city:'City', all_cities:'All cities', when:'When',
+    when_all:'Any date', when_week:'Next 7 days', when_month:'Next 30 days', genre_all:'All genres',
+    n_events:'{n} events', none_found:'No events found. Try fewer filters.',
+    going_n:'{n} from the community', back:'Back', date:'Date', time:'Starts', venue:'Venue', price:'Entry',
+    tba:'see source', lineup:'Line-up', who_goes:"Who's going", nobody:'Nobody from the community yet. Be the first.',
+    go:"I'm going", going:"You're going", say_hi:'Say hi', open_chat:'Open chat',
+    nophone_t:'No photos or video', nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
+    lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.', and_more:'and {n} more',
+    show_map:'Show on map', source_t:'Source', source_note:'As of 10 Nov 2026. Please check time, line-up and price with the organiser.',
+    verified:'Verified artist', artists_title:'Artists', artists_sub:'DJs and live acts with their own profile. The red tick means identity checked.',
+    demo_artists:'These profiles are made up to show what artist pages look like. Real artists come with sign-up and verification.',
+    only_verified:'Verified only', about:'About', socials:'Socials', tour:'Dates', no_tour:'No dates listed.',
+    on_app:'On the app', external:'External', add_event:'Add event',
+    connect_title:'Connect', connect_sub:"You're going to the same events as these people. Say hi before you miss each other on the floor.",
+    shared:'Same events as you', inbox:'Messages', no_threads:'No conversations yet.', goes_to:'going to',
+    msg_ph:'Write a message', send:'Send', chat_note:'Chat is for before and after. At the event the phone stays off.',
+    me_title:'My profile', name:'Name', bio:'About me', bio_ph:'What do you listen to, where do you dance?', save:'Save', saved:'Saved',
+    soc_hint:'Link your socials', role_demo:'Demo view', role_fan:'Regular account', role_artist:'Artist (verified)',
+    verif_t:'Artist verification', verif_none:'Are you a DJ or live act? Request verification to get the red tick and add tour dates.',
+    verif_btn:'Request verification', verif_pending:"Request received. We'll check your profile and get back to you.",
+    verif_ok:'Your profile is verified.', tour_add:'Add a tour date', tour_event:'Event or club', tour_add_btn:'Add date',
+    tour_added:'Date added', my_tour:'My dates',
+    new_title:'Add an event', new_sub:'List a night. Verified artists appear right away, all other entries get a quick check.',
+    f_title:'Event name', f_venue:'Club or venue', f_date:'Date', f_time:'Start', f_genres:'Genres', f_lineup:'Line-up (separate names with commas)',
+    f_link:'Link to tickets or flyer', f_nophone:'This event has a no-photo, no-video rule', f_submit:'Publish event',
+    f_err:'Please fill in name, venue and date.', pending:'Under review', new_tag:'New', published:'Event added',
+    footer:'Rave Strangers · Prototype · Event data from public sources, no guarantee. Accounts and chats only live in this window.',
+    sources_t:'How events get in', sources_d:'Currently collected by hand from public calendars. Later organisers and artists add their own, plus calendar feeds and official partner interfaces.',
+    no_artist:'This artist does not exist.', no_event:'This event does not exist.',
+    map_title:'Map', map_sub:'All clubs and events at a glance. Drag to move, mouse wheel or plus and minus to zoom.',
+    only_events:'Only places with events', venues_t:'All places', ev_one:'1 event', ev_many:'{n} events', pick_marker:'Tap a marker to see events and details.',
+    summary_map:'{v} places with {e} events in the chosen period.', no_ev_here:'No events at this place in the chosen period.',
+    approx:'Approximate position', zoom_in:'Zoom in', zoom_out:'Zoom out', zoom_reset:'All of Germany', leg_ev:'With events', leg_none:'No events', zero:'no events'
+    ,save_ev:'Save', saved_ev:'Saved', remind:'Remind me', reminded:'Reminder on', ics:'Add to Google Calendar', tickets:'Tickets & info',
+    rides_t:'Ride sharing', rides_none:'No rides offered yet.', ride_from:'from {c}, leaving {t}', seats:'{n} seats free', seat_req:'Request seat', seat_reqd:'Requested',
+    ride_offer:'Offer a ride', ride_city:'Leaving from', ride_time:'Departure', ride_seats:'Free seats', ride_added:'Ride added', ride_msg:'Hi, do you still have a seat to {e}?', ride_mine:'Your ride',
+    crew_t:'Crew finder', crew_none:'Nobody is looking for a crew here yet.', crew_join:"I'm in", crew_joined:'Requested', crew_ph:'e.g. Looking for 2 people, there from 1 am', crew_new:'Find a crew', crew_post:'Post', crew_msg:"Hi, I'd like to join your crew!", crew_all:'People looking for a crew', crew_posted:'Posted', crew_mine:'your post',
+    rules_t:'Rules & info', r_phone:'Phones & photos', r_door:'Door', r_age:'Age', r_access:'Accessibility', r_aware:'Awareness', not_set:'Not provided by the club yet', photo_ban:'No photos, phone cameras get taped at the door',
+    aware_t:'Awareness & safety', aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.', aware_team:'Awareness on site: {x}',
+    upcoming:'Upcoming events', reviews_t:'Reports & ratings', reviews_none:'No reports yet. Write the first one.', review_ph:'How were sound, crowd, door, awareness?', review_post:'Post report', review_posted:'Thanks for your report', stars:'Rating', review_txt:'Your report',
+    rev_after:'Reports and ratings open the day after the event.', club_claim:'Part of this club’s team? With an organiser account you keep rules and events up to date yourself.', club_claim_btn:'Manage as organiser', open_club:'Club page', no_club:'This club does not exist.',
+    report:'Report', block:'Block', unblock:'Unblock', blocked:'Blocked. You will not see this person any more.', report_reason:'Reason', rr1:'Harassment', rr2:'Spam or fake profile', rr3:'Dangerous behaviour', rr4:'Other', report_txt:'What happened? (optional)', report_send:'Send report', report_sent:'Thanks. Our team reviews the report confidentially.', report_ev:'Report wrong details', blocked_list:'Blocked people', safety_note:'Reporting and blocking are anonymous. The person is not told.',
+    role_org:'Organiser', org_t:'Organiser area', org_pick:'Which club do you manage?', org_note:'In the prototype you can pick any club. In the real app we first check that you are really on the team.', org_rules:'Edit club info', org_saved:'Club info saved', org_add:'Add an event for this club', org_tag:'Organiser', org_view:'View club page',
+    import_t:'Import a calendar feed', import_d:'Paste the contents of an .ics file or upload it. Later the app fetches feeds and official partner interfaces automatically.', import_file:'.ics file', import_sample:'Insert sample feed', import_parse:'Preview', import_go:'Import {n} events', import_none:'No events found in the feed.', import_done:'{n} events imported', import_tag:'Import', import_txt:'Feed contents',
+    notifs_t:'Notifications', notifs_none:'Nothing new yet.', saved_t:'Saved', saved_none:'Nothing saved yet. Event pages have a save button.', ics_all:'All to calendar (.ics)', follows_t:'Following', follows_none:'You are not following anyone yet.', follow:'Follow', following:'Following',
+    n_follow:'{a} plays on {d}: {c}', n_follow0:'You now follow {a}. New dates show up here.', n_remind:'Reminder set: {e}, one day before', n_ride:'Seat request sent: {e}', push_note:'In the real app these arrive as push notifications on your phone.',
+    type_all:'All', type_club:'Club nights', type_fest:'Festivals & open airs', fest_note:'It is indoor season right now. Open airs for 2027 get added once organisers confirm dates.', fest_tag:'Festival'
+
+  }
+};
+
+/* ---------- Data: cities, venues, events (real, collected 10 Nov 2026), demo artists and people ---------- */
+var CITIES = [
+  {name:'Berlin',lat:52.520,lon:13.405},{name:'Hamburg',lat:53.551,lon:9.994},{name:'München',lat:48.137,lon:11.576},
+  {name:'Köln',lat:50.938,lon:6.960},{name:'Frankfurt',lat:50.111,lon:8.682},{name:'Stuttgart',lat:48.776,lon:9.183},
+  {name:'Düsseldorf',lat:51.228,lon:6.774},{name:'Leipzig',lat:51.340,lon:12.373},{name:'Dresden',lat:51.050,lon:13.737},
+  {name:'Karlsruhe',lat:49.007,lon:8.404},{name:'Hannover',lat:52.376,lon:9.732},{name:'Nürnberg',lat:49.452,lon:11.077},{name:'Bremen',lat:53.079,lon:8.802}
+];
+var EVENT_CITIES = ['Berlin','Dresden','Düsseldorf','Frankfurt','Hamburg','Karlsruhe','Köln','Leipzig','München','Stuttgart'];
+var GENRES = ['Techno','Hard Techno','Acid','Trance','House','Minimal','Drum & Bass','Electronic'];
+var SOC = [['instagram','Instagram'],['soundcloud','SoundCloud'],['ra','Resident Advisor'],['spotify','Spotify'],['mixcloud','Mixcloud'],['tiktok','TikTok']];
+
+var VENUES = [
+  {id:1,name:'Tresor',city:'Berlin',addr:'Köpenicker Str. 70, 10179 Berlin',lat:52.5107,lon:13.4200},
+  {id:2,name:'Berghain',city:'Berlin',addr:'Am Wriezener Bahnhof, 10243 Berlin',lat:52.5111,lon:13.4430},
+  {id:3,name:'Sisyphos',city:'Berlin',addr:'Hauptstr. 15, 10317 Berlin',lat:52.4962,lon:13.4935,approx:true},
+  {id:4,name:'About Blank',city:'Berlin',addr:'Markgrafendamm 24c, 10245 Berlin',lat:52.5019,lon:13.4680},
+  {id:5,name:'Bootshaus',city:'Köln',addr:'Auenweg 173, 51063 Köln',lat:50.9540,lon:6.9880,approx:true},
+  {id:6,name:'Distillery',city:'Leipzig',addr:'Eggebrechtstr. 2, 04103 Leipzig',lat:51.3370,lon:12.3880,approx:true},
+  {id:7,name:'Sky Club',city:'Leipzig',addr:'Riesaer Str. 56-64, 04328 Leipzig',lat:51.3400,lon:12.4540,approx:true},
+  {id:8,name:'elipamanoke',city:'Leipzig',addr:null,lat:51.3300,lon:12.3300,approx:true},
+  {id:9,name:'Docks',city:'Hamburg',addr:'Spielbudenplatz 19, 20359 Hamburg',lat:53.5497,lon:9.9566},
+  {id:10,name:'Uebel & Gefährlich',city:'Hamburg',addr:'Feldstr. 66, 20359 Hamburg',lat:53.5632,lon:9.9693},
+  {id:11,name:'Edelfettwerk',city:'Hamburg',addr:'Schnackenburgallee 202, 22525 Hamburg',lat:53.5960,lon:9.9040,approx:true},
+  {id:12,name:'Beat Boutique',city:'Hamburg',addr:null,lat:53.5500,lon:9.9600,approx:true},
+  {id:13,name:'Rote Sonne',city:'München',addr:'Maximiliansplatz 5, 80333 München',lat:48.1412,lon:11.5662},
+  {id:14,name:'Bahnwärter Thiel',city:'München',addr:null,lat:48.1240,lon:11.5420,approx:true},
+  {id:15,name:'Tanzhaus West',city:'Frankfurt',addr:'Gutleutstr. 294, 60327 Frankfurt',lat:50.0990,lon:8.6340,approx:true},
+  {id:16,name:'Zoom Club',city:'Frankfurt',addr:'Brönnerstr. 5-9, 60313 Frankfurt',lat:50.1146,lon:8.6838},
+  {id:17,name:'Pracht',city:'Frankfurt',addr:'Niddastr. 54, 60327 Frankfurt',lat:50.1065,lon:8.6585},
+  {id:18,name:'Airport Club (Dorian Lounge)',city:'Frankfurt',addr:'Hugo-Eckener-Ring, 60549 Frankfurt',lat:50.0510,lon:8.5700,approx:true},
+  {id:19,name:'Gotec',city:'Karlsruhe',addr:'Gablonzer Str. 11, 76185 Karlsruhe',lat:49.0125,lon:8.3720,approx:true},
+  {id:20,name:'dm-arena (Rheinstetten)',city:'Karlsruhe',addr:null,lat:48.9830,lon:8.3330,approx:true},
+  {id:21,name:'Stromwerk',city:'Dresden',addr:null,lat:51.0600,lon:13.7090,approx:true},
+  {id:22,name:'Arteum',city:'Dresden',addr:null,lat:51.0640,lon:13.7380,approx:true},
+  {id:23,name:'Stahlwerk',city:'Düsseldorf',addr:'Ronsdorfer Str. 134, 40233 Düsseldorf',lat:51.2040,lon:6.8060,approx:true},
+  {id:24,name:'Stutyard',city:'Stuttgart',addr:null,lat:48.8100,lon:9.2250,approx:true}
+];
+
+var TA='https://www.technoairlines.com/';
+var EVENTS = [
+  {id:1,title:'Tresor New Faces hosted by Tresor.West',v:1,date:'2026-11-11',time:'23:00',genres:['Techno'],lineup:['Frontspin','ananda priori','Mariami','Sparkling Water Dreams'],src:TA+'event/tresor-new-faces-hosted-by-tresor-west-tresor-2026-11-11'},
+  {id:2,title:'garryklein',v:13,date:'2026-11-11',time:'22:00',genres:['Electronic'],lineup:null,src:TA+'event/garryklein-rote-sonne-2026-11-11'},
+  {id:3,title:'135+ mit XOXO & Secret Trance Frequencies',v:14,date:'2026-11-12',time:'22:00',genres:['Trance'],lineup:['Atzlina'],src:TA+'event/135-mit-xoxo-secret-trance-frequencies-bahnwarter-thiel-2026-11-12'},
+  {id:4,title:'S.D.H.Q. presents: Sonic Dimensions #2',v:6,date:'2026-11-13',time:'20:00',genres:['Techno'],lineup:['Emeveka','Kalitos','Die Ruhe','OutWithJane'],src:TA+'event/s-d-h-q-presents-sonic-dimensions-2-distillery-2026-11-13'},
+  {id:5,title:'Tresor meets DJ Bone: FURTHER',v:1,date:'2026-11-13',time:'23:00',genres:['Techno'],lineup:['DJ Bone','DAIYAH','LYZA','madwoman','Mark Williams','Yeti Mind Tricks'],src:TA+'event/tresor-meets-dj-bone-further-tresor-2026-11-13'},
+  {id:6,title:'Tresor Klubnacht',v:1,date:'2026-11-14',time:'23:00',genres:['Techno'],lineup:['Cecilia Tosh','James Ruskin','NEUX','UVB','Hamish & Toby','JAXX TMS','Nat Wendell'],src:TA+'event/tresor-klubnacht-tresor-2026-11-14'},
+  {id:7,title:'Klubnacht',v:2,date:'2026-11-14',time:'23:59',genres:['Techno'],lineup:['Efdemin','Ian Pooley','Alexander Skancke','Alinka','Bryan Kessler','Cinthie','Dresden','Gabrielle Kwarteng'],more:1,src:TA+'event/klubnacht-berghain-2026-11-14'},
+  {id:8,title:'VER x TELETECH',v:11,date:'2026-11-14',time:'23:00',genres:['Techno','Trance','Hard Techno'],lineup:['A.N.I.','NIKOLINA','EVA CHARLEY','Charleen Herzig','HOOM','AH-NICE','BARBIIE','MKHXR'],nophone:true,src:'https://xceed.me/en/hamburg/event/ver-x-teletech-w-ani-nikolina-eva-charley-charleen-herzig-uvm/241364'},
+  {id:9,title:'Chrome',v:5,date:'2026-11-14',time:null,genres:['Techno'],lineup:null,src:'https://edmli.com/?p=55724'},
+  {id:10,title:'DJ Hell & Lars Eidinger',v:21,date:'2026-11-14',time:'22:00',genres:['Techno'],lineup:['DJ Hell','Lars Eidinger','Mike Buké'],src:TA+'events/dresden'},
+  {id:11,title:'Hasardeur Indoor',v:20,date:'2026-11-14',time:null,genres:['Techno'],lineup:['Fantasm','Klofama','Winson'],src:TA+'festival/hasardeur-indoor-rheinstetten-germany-2026'},
+  {id:12,title:'Unreleased Hamburg',v:9,date:'2026-11-18',time:null,genres:['Techno'],lineup:null,src:'https://xceed.me/hamburg/events/all/today/filters--music-genres_hard-techno'},
+  {id:13,title:'Tresor New Faces hosted by ENIGMA',v:1,date:'2026-11-18',time:'23:00',genres:['Techno'],lineup:['Adriano.','DAHRAXT','KEROSENE (ZA)','Miss Italia'],src:TA+'event/tresor-new-faces-hosted-by-enigma-tresor-2026-11-18'},
+  {id:14,title:'HEELIX',v:2,date:'2026-11-19',time:'22:00',genres:['Techno'],lineup:['Innersha','Abo Abo','Marco Maldarella','Seta Loto','Marie Midori','vp allowed'],src:TA+'event/heelix-berghain-2026-11-19'},
+  {id:15,title:'Pracht pres. Marc Werner, AMacowicz & Merna',v:17,date:'2026-11-20',time:'22:00',genres:['Techno'],lineup:['Marc Werner','AMacowicz','Merna'],src:'https://ra.co/events/2575985'},
+  {id:16,title:'Red Zone – Hardtekk Fest Dresden',v:22,date:'2026-11-20',time:'22:00',genres:['Hard Techno'],lineup:null,src:TA+'events/dresden'},
+  {id:17,title:'RA25 x Tresor Berlin',v:1,date:'2026-11-21',time:'20:00',genres:['Electronic'],lineup:['Appleblim','Beatrice M.','Peverelist','Chloe Lula','gyrofield','Nídia'],more:6,src:TA+'event/ra25-x-tresor-berlin-tresor-2026-11-21'},
+  {id:18,title:'Roman Flügel × nebula',v:6,date:'2026-11-21',time:'21:00',genres:['Techno'],lineup:['Roman Flügel','Cynthia Matisse','Lea Jessen','a:tok','moraine','morphin','noxsonos'],src:TA+'event/roman-flugel-x-nebula-distillery-2026-11-21'},
+  {id:19,title:'Berghain / Panorama Bar',v:2,date:'2026-11-27',time:'22:00',genres:['House'],lineup:['Danilo Plessow aka MCDE'],src:'https://de.ra.co/events/2543878'},
+  {id:20,title:'Clubnight mit Talla 2XLC & DJ Taucher',v:18,date:'2026-11-27',time:'22:00',genres:['Trance'],lineup:['Talla 2XLC','DJ Taucher'],src:'https://www.regioactive.de/party/clubnight-mit-talla-2xlc-dj-taucher-frankfurt-am-main-airport-club-dorian-lounge-2026-11-27-ng54lm4Fm8'},
+  {id:21,title:'Poltergst x Karla Blum',v:21,date:'2026-11-27',time:'22:00',genres:['Techno'],lineup:['Poltergeist','Karla Blum','Michael Klotz'],src:TA+'events/dresden'},
+  {id:22,title:'23 Jahre Tanzhaus West',v:15,date:'2026-11-28',time:'22:00',genres:['Techno'],lineup:['CEM','Fabe','HOTBOI2300','Nene H','MËRO','stargurl'],more:6,src:TA+'event/23-jahre-tanzhaus-west-tanzhaus-west-2026-11-28'},
+  {id:23,title:'Fuchsbau zum satten Bass',v:7,date:'2026-11-28',time:'22:00',genres:['Hard Techno'],lineup:null,src:'https://de.ra.co/events/2521533'},
+  {id:24,title:'newfaces – weekend edition',v:8,date:'2026-11-28',time:'23:59',genres:['Techno'],lineup:null,src:TA+'event/newfaces-weekend-edition-elipamanoke-2026-11-28'},
+  {id:25,title:'EarlyBeats – Part 11',v:12,date:'2026-11-28',time:'20:00',genres:['Techno'],lineup:['STOECKER_','NoraDrenalin'],src:TA+'events/hamburg'},
+  {id:26,title:'AREA51 Techno – Hart an der Grenze 3 x Ampere',v:23,date:'2026-11-28',time:'22:00',genres:['Hard Techno'],lineup:['HOEHENANGST','DØPAIR','LIO','DUTCHMAN','SEELSORGER'],src:'https://de.ra.co/events/2563747'},
+  {id:27,title:'HARDRAISE',v:21,date:'2026-12-04',time:'22:00',genres:['Hard Techno'],lineup:null,src:TA+'events/dresden'},
+  {id:28,title:'240KM/H x Heat x Face2Face Frankfurt',v:16,date:'2026-12-05',time:'23:00',genres:['Hard Techno'],lineup:null,src:TA+'event/240km-h-x-heat-x-face2face-frankfurt-zoom-club-2026-12-05'},
+  {id:29,title:'44 Label x Stutyard',v:24,date:'2026-12-12',time:null,genres:['Hard Techno'],lineup:null,src:TA+'festival/44-label-x-stutyard-stuttgart-germany-2026'},
+  {id:30,title:'Unreal x Stutyard',v:24,date:'2026-12-18',time:null,genres:['Hard Techno'],lineup:null,src:TA+'festival/unreal-x-stutyard-stuttgart-germany-2026'},
+  {id:31,title:'Bootshaus & Loonyland pres. NYE 2026',v:5,date:'2026-12-31',time:'21:00',genres:['Electronic'],lineup:null,src:'https://www.bootshaus.tv/events/bootshaus-loonyland-pres-nye-2026'}
+];
+
+var ARTISTS = [
+  {id:1,name:'Mira Halden',city:'Berlin',genres:['Techno','Acid'],verified:true,
+   bio:{de:'Acid-lastiger Techno, lange Übergänge, selten unter 135 BPM.',en:'Acid-heavy techno, long blends, rarely under 135 BPM.'},
+   soc:{instagram:'@mira.halden',soundcloud:'mirahalden',ra:'mira-halden'},
+   tour:[{off:21,city:'Wien',venue:'Fabrikhalle',ext:true}]},
+  {id:2,name:'KASIMIR',city:'Leipzig',genres:['Hard Techno'],verified:true,
+   bio:{de:'Hard Techno mit Industrial-Kanten. Resident in Leipzig.',en:'Hard techno with industrial edges. Leipzig resident.'},
+   soc:{instagram:'@kasimir.live',soundcloud:'kasimir-live',spotify:'KASIMIR'},tour:[]},
+  {id:3,name:'Nova Kress',city:'Köln',genres:['Trance','Hard Techno'],verified:true,
+   bio:{de:'Trance für Leute, die Techno lieben. Open Air bevorzugt.',en:'Trance for people who love techno. Open air preferred.'},
+   soc:{instagram:'@novakress',mixcloud:'novakress',tiktok:'@novakress'},
+   tour:[{off:27,city:'Zürich',venue:'Gerberei',ext:true}]},
+  {id:4,name:'TRVSS',city:'Hamburg',genres:['Minimal','House'],verified:true,
+   bio:{de:'Minimal und House für die späte Stunde.',en:'Minimal and house for the late hours.'},
+   soc:{instagram:'@trvss.hh',soundcloud:'trvss',ra:'trvss'},tour:[]},
+  {id:5,name:'Lio Brandt',city:'München',genres:['Techno'],verified:false,
+   bio:{de:'Hobby-DJ aus München. Noch nicht verifiziert.',en:'Hobby DJ from Munich. Not verified yet.'},
+   soc:{instagram:'@lio.brandt'},tour:[]},
+  {id:6,name:'Ida Wolter',city:'Dresden',genres:['Acid','Techno'],verified:true,
+   bio:{de:'Acid, 303 und Hardware-Live-Sets.',en:'Acid, 303s and hardware live sets.'},
+   soc:{instagram:'@idawolter',soundcloud:'ida-wolter',spotify:'Ida Wolter'},tour:[]},
+  {id:7,name:'Sektor 9',city:'Frankfurt',genres:['Drum & Bass'],verified:true,
+   bio:{de:'Duo aus Frankfurt. Drum & Bass, dunkel und schnell.',en:'Frankfurt duo. Drum and bass, dark and fast.'},
+   soc:{instagram:'@sektor9',soundcloud:'sektor9',mixcloud:'sektor9'},tour:[]},
+  {id:8,name:'Juno Falk',city:'Stuttgart',genres:['House'],verified:false,
+   bio:{de:'House, Disco-Edits, Sonntagabend-Sets.',en:'House, disco edits, Sunday evening sets.'},
+   soc:{instagram:'@juno.falk'},tour:[]}
+];
+
+var PEOPLE = [
+  {id:1,name:'Lea',city:'Berlin',goes:[6,7,17]},
+  {id:2,name:'Tobi',city:'Leipzig',goes:[4,6,18]},
+  {id:3,name:'Samira',city:'Köln',goes:[9,22]},
+  {id:4,name:'Jonas',city:'Hamburg',goes:[8,12,25]},
+  {id:5,name:'Mia',city:'Dresden',goes:[10,16,21]},
+  {id:6,name:'Felix',city:'Berlin',goes:[6,7,13,14]},
+  {id:7,name:'Nora',city:'Stuttgart',goes:[29,30]},
+  {id:8,name:'Can',city:'Frankfurt',goes:[15,22,28]}
+];
+
+var REPLIES = {
+  de:['Hey, cool dass du auch hingehst! Wo treffen wir uns vorher?','Ich bin ab Mitternacht am Eingang zum Hauptfloor.','Mega, bis dann. Handy bleibt aus.'],
+  en:['Hey, nice that you are going too! Where do we meet beforehand?','I will be at the main floor entrance from midnight.','Great, see you there. Phone stays off.']
+};
+
+/* ---------- State ---------- */
+var S = {
+  lang:'de',
+  q:'', city:'', genre:'', when:'all',
+  onlyVerified:false, onlyEvents:false,
+  me:{name:'Du',city:'Berlin',bio:'',soc:{},role:'fan',verif:'none',goes:[6,7]},
+  myTour:[],
+  threads:{2:[{from:2,de:'Hey, gehst du auch zum Tresor Klubnacht?',en:'Hey, are you going to the Tresor Klubnacht?'}]},
+  nextId:100, nextVenue:100, type:'', saved:[], remind:[], follows:[], blocked:[], notifs:[], rideReq:[], crewJoined:[], org:null, clubEdits:{}, reviews:{}, importPreview:[],
+  map:null, mapSel:null, mapHash:null
+};
+var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+
+/* ---------- Helpers ---------- */
+function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.replace('{'+x+'}',v[x]); } } return s; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function dayOf(off){ var d=new Date(TODAY.getTime()); d.setDate(d.getDate()+off); return d; }
+function locale(){ return S.lang==='de'?'de-DE':'en-GB'; }
+function fmtMonth(d){ return d.toLocaleDateString(locale(),{month:'short'}).replace('.',''); }
+function fmtLong(d){ return d.toLocaleDateString(locale(),{weekday:'long',day:'numeric',month:'long'}); }
+function fmtShort(d){ return d.toLocaleDateString(locale(),{weekday:'short',day:'numeric',month:'short'}); }
+function offFromISO(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return Math.round((d-TODAY)/86400000); }
+function isoOf(off){ var d=dayOf(off); var m=('0'+(d.getMonth()+1)).slice(-2), dd=('0'+d.getDate()).slice(-2); return d.getFullYear()+'-'+m+'-'+dd; }
+function hue(name){ var h=0; for(var i=0;i<name.length;i++){ h=(h*31+name.charCodeAt(i))%360; } return h; }
+function initials(name){ var p=name.trim().split(/\s+/); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
+function av(name,size){ return '<span class="av" style="--h:'+hue(name)+';--s:'+(size||40)+'px" aria-hidden="true">'+esc(initials(name||'?'))+'</span>'; }
+var VB='<svg class="vb" viewBox="0 0 24 24" role="img" aria-label="verified"><circle cx="12" cy="12" r="11" fill="#e4262e"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function artistById(id){ for(var i=0;i<ARTISTS.length;i++){ if(ARTISTS[i].id===id) return ARTISTS[i]; } return null; }
+function artistByName(n){ var l=n.toLowerCase(); for(var i=0;i<ARTISTS.length;i++){ if(ARTISTS[i].name.toLowerCase()===l) return ARTISTS[i]; } return null; }
+function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return EVENTS[i]; } return null; }
+function venue(id){ for(var i=0;i<VENUES.length;i++){ if(VENUES[i].id===id) return VENUES[i]; } return null; }
+function person(id){ for(var i=0;i<PEOPLE.length;i++){ if(PEOPLE[i].id===id) return PEOPLE[i]; } return null; }
+function amGoing(id){ return S.me.goes.indexOf(id)>-1; }
+function blocked(pid){ return S.blocked.indexOf(pid)>-1; }
+function attendees(id){ return PEOPLE.filter(function(p){ return p.goes.indexOf(id)>-1 && !blocked(p.id); }); }
+function goingCount(e){ return attendees(e.id).length+(amGoing(e.id)?1:0); }
+function genreTags(g){ return g.map(function(x){ return '<span class="tag">'+esc(x)+'</span>'; }).join(' '); }
+function host(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
+function inWindow(e){ if(e.off<0) return false; if(S.when==='week' && e.off>7) return false; if(S.when==='month' && e.off>30) return false; return true; }
+function sortedEvents(){ return EVENTS.slice().sort(function(a,b){ return a.off-b.off || (a.time||'').localeCompare(b.time||''); }); }
+var toastTimer;
+function toast(msg){ var el=document.getElementById('toast'); el.textContent=msg; el.className='show'; clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.className=''; },2200); }
+
+function proj(lon,lat){ var l=lon*Math.PI/180, p=lat*Math.PI/180; return [GEO.tx+GEO.k*l, GEO.ty-GEO.k*Math.log(Math.tan(Math.PI/4+p/2))]; }
+VENUES.forEach(function(v){ var p=proj(v.lon,v.lat); v.x=p[0]; v.y=p[1]; });
+CITIES.forEach(function(c){ var p=proj(c.lon,c.lat); c.x=p[0]; c.y=p[1]; });
+EVENTS.forEach(function(e){ e.off=offFromISO(e.date); });
+[11,29,30].forEach(function(id){ evt(id).type='festival'; });
+var RIDES=[{id:1,ev:6,by:2,from:'Leipzig',time:'20:30',seats:2},{id:2,ev:22,by:3,from:'Köln',time:'19:00',seats:3}];
+var CREW=[
+  {id:1,ev:7,by:6,text:{de:'Suche 1–2 Leute für die Klubnacht, bin ab 1 Uhr da.',en:'Looking for 1–2 people for Klubnacht, there from 1 am.'}},
+  {id:2,ev:17,by:1,text:{de:'Wer geht zu RA25? Wir wollen vorher zusammen essen.',en:'Who is going to RA25? We want to grab food together before.'}},
+  {id:3,ev:8,by:4,text:{de:'Erstes Mal Teletech, wer nimmt mich in die Crew auf?',en:'First time at Teletech, who takes me into their crew?'}}
+];
+var CLUB_INFO={1:{phone:'photo_ban'},2:{phone:'photo_ban'}};
+
+/* ---------- Views: events ---------- */
+function eventCard(e){
+  var d=dayOf(e.off), v=venue(e.v);
+  var ppl=attendees(e.id).slice(0,3), n=goingCount(e);
+  var tag=e.pending?' <span class="tag hot">'+t('pending')+'</span>':(e.isNew?' <span class="tag hot">'+t('new_tag')+'</span>':'');
+  if(e.type==='festival') tag+=' <span class="tag">'+t('fest_tag')+'</span>';
+  if(e.imported) tag+=' <span class="tag">'+t('import_tag')+'</span>'; else if(e.byOrg) tag+=' <span class="tag">'+t('org_tag')+'</span>';
+  if(S.saved.indexOf(e.id)>-1) tag+=' <span class="stars" title="'+t('saved_ev')+'">★</span>';
+  return '<a class="ev" href="#event-'+e.id+'">'+
+    '<div class="date"><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
+    '<div><h3>'+esc(e.title)+tag+'</h3><p class="meta">'+esc(v.name)+' · '+esc(v.city)+(e.time?' · '+esc(e.time):'')+'</p><div class="chips">'+genreTags(e.genres)+'</div></div>'+
+    '<div class="side">'+(n?'<div class="avs">'+ppl.map(function(p){ return av(p.name,28); }).join('')+'</div><span>'+t('going_n',{n:n})+'</span>':'')+'</div>'+
+    '</a>';
+}
+function filteredEvents(){
+  var q=S.q.trim().toLowerCase();
+  return sortedEvents().filter(function(e){
+    var v=venue(e.v);
+    if(e.off<0) return false;
+    if(S.city && v.city!==S.city) return false;
+    if(S.genre && e.genres.indexOf(S.genre)<0) return false;
+    if(S.type==='festival' && e.type!=='festival') return false;
+    if(S.type==='club' && e.type==='festival') return false;
+    if(S.when==='week' && e.off>7) return false;
+    if(S.when==='month' && e.off>30) return false;
+    if(q){
+      var hay=(e.title+' '+v.name+' '+v.city+' '+(e.lineup||[]).join(' ')).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  });
+}
+function eventsListHTML(){
+  var list=filteredEvents();
+  if(!list.length) return '<div class="empty">'+t('none_found')+'</div>';
+  return '<p class="count">'+t('n_events',{n:list.length})+'</p><div class="list">'+list.map(eventCard).join('')+'</div>';
+}
+function whenOptions(){
+  return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join('');
+}
+function genreChips(){
+  return '<button type="button" class="chip" data-act="genre" data-id="" aria-pressed="'+(S.genre===''?'true':'false')+'">'+t('genre_all')+'</button>'+
+    GENRES.map(function(g){ return '<button type="button" class="chip" data-act="genre" data-id="'+esc(g)+'" aria-pressed="'+(S.genre===g?'true':'false')+'">'+esc(g)+'</button>'; }).join('');
+}
+function viewEvents(){
+  var cityOpts='<option value="">'+t('all_cities')+'</option>'+EVENT_CITIES.map(function(c){ return '<option'+(S.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  return '<div class="row" style="justify-content:space-between;align-items:flex-end"><div><h1>'+t('events_title')+'</h1><p class="sub">'+t('events_sub')+'</p></div>'+
+    '<div class="row"><a class="btn" href="#map">'+t('nav_map')+'</a><a class="btn primary" href="#new-event">+ '+t('add_event')+'</a></div></div>'+
+    '<div class="filters">'+
+      '<div class="field f-q"><label for="f-q">'+t('search')+'</label><input id="f-q" type="text" value="'+esc(S.q)+'" placeholder="'+esc(t('search_ph'))+'" autocomplete="off"></div>'+
+      '<div class="field"><label for="f-city">'+t('city')+'</label><select id="f-city" data-sel="city">'+cityOpts+'</select></div>'+
+      '<div class="field"><label for="f-when">'+t('when')+'</label><select id="f-when" data-sel="when">'+whenOptions()+'</select></div>'+
+    '</div>'+
+    '<div class="chips" style="margin-top:12px">'+typeChips()+'</div>'+
+    '<div class="chips" style="margin-top:8px">'+genreChips()+'</div>'+
+    (S.type==='festival'?'<p class="sub">'+t('fest_note')+'</p>':'')+
+    '<div id="evlist">'+eventsListHTML()+'</div>'+
+    '<div class="card" style="margin-top:24px"><p><b style="color:var(--text)">'+t('sources_t')+'</b></p><p>'+t('sources_d')+'</p></div>';
+}
+function viewEvent(id){
+  var e=evt(id);
+  if(!e) return '<a class="back" href="#events">← '+t('back')+'</a><div class="empty">'+t('no_event')+'</div>';
+  var d=dayOf(e.off), go=amGoing(e.id), ppl=attendees(e.id), v=venue(e.v);
+  var sv=S.saved.indexOf(e.id)>-1, rm=S.remind.indexOf(e.id)>-1;
+  var lineup;
+  if(e.lineup&&e.lineup.length){
+    lineup=e.lineup.map(function(n){ var a=artistByName(n);
+      var inner=av(n)+'<div class="grow"><strong>'+esc(n)+(a&&a.verified?VB:'')+'</strong></div>';
+      return a?'<a class="person" href="#artist-'+a.id+'">'+inner+'</a>':'<div class="person">'+inner+'</div>'; }).join('');
+    if(e.more) lineup+='<p class="sub" style="margin:4px 0 0">'+t('and_more',{n:e.more})+'</p>';
+  } else lineup='<div class="empty" style="margin-top:0">'+t('lineup_tba')+'</div>';
+  var who=ppl.length?ppl.map(function(p){
+    return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(p.city)+'</p></div><button type="button" class="btn small" data-act="chat" data-id="'+p.id+'">'+t('say_hi')+'</button></div>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('nobody')+'</div>';
+  var n=goingCount(e);
+  return '<a class="back" href="#events">← '+t('back')+'</a>'+
+    '<h1>'+esc(e.title)+(e.pending?' <span class="tag hot">'+t('pending')+'</span>':'')+'</h1>'+
+    '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+
+    '<dl class="facts">'+
+      '<div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+'</dd></div>'+
+      '<div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
+      '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div>'+
+    '</dl>'+
+    (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
+    '<div class="row" style="margin-top:20px">'+
+      '<button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
+      '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button>'+
+      '<button type="button" class="btn'+(rm?' on':'')+'" data-act="remind" data-id="'+e.id+'" aria-pressed="'+rm+'">'+(rm?'✓ '+t('reminded'):t('remind'))+'</button>'+
+    '</div>'+
+    '<div class="row" style="margin-top:10px">'+
+      '<a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('ics')+' ↗</a>'+
+      (e.src?'<a class="btn" href="'+esc(e.src)+'" target="_blank" rel="noopener">'+t('tickets')+' ↗</a>':'')+
+      '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a>'+
+    '</div>'+
+    (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
+    '<div class="sec"><h2>'+t('lineup')+'</h2><div class="people">'+lineup+'</div></div>'+
+    '<div class="sec"><h2>'+t('who_goes')+'</h2><div class="people">'+who+'</div></div>'+
+    crewHTML(e)+ridesHTML(e)+
+    '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v.id)+'</div>'+
+    '<div class="sec"><h2>'+t('reviews_t')+'</h2><div class="empty" style="margin-top:0">'+t('rev_after')+'</div></div>'+
+    '<p class="srcbox">'+(e.src?t('source_t')+': <a class="link" href="'+esc(e.src)+'" target="_blank" rel="noopener">'+esc(host(e.src))+'</a>. '+t('source_note')+' ':'')+
+      '<button type="button" class="linkbtn" data-act="repev">'+t('report_ev')+'</button></p>';
+}
+
+/* ---------- Views: artists (demo profiles) ---------- */
+function viewArtists(){
+  var list=ARTISTS.filter(function(a){ return !S.onlyVerified||a.verified; });
+  var cards=list.map(function(a){
+    return '<a class="acard" href="#artist-'+a.id+'">'+av(a.name,52)+'<div><strong>'+esc(a.name)+(a.verified?VB:'')+'</strong><p>'+esc(a.city)+'</p><p>'+esc(a.genres.join(' · '))+'</p></div></a>'; }).join('');
+  return '<h1>'+t('artists_title')+'</h1><p class="sub">'+t('artists_sub')+'</p>'+
+    '<div class="nophone"><div>'+t('demo_artists')+'</div></div>'+
+    '<div class="row" style="margin-top:16px"><button type="button" class="chip" data-act="onlyv" aria-pressed="'+S.onlyVerified+'">'+t('only_verified')+'</button></div>'+
+    '<div class="grid">'+cards+'</div>';
+}
+function socialsHTML(soc){
+  var items=SOC.filter(function(s){ return soc&&soc[s[0]]; });
+  if(!items.length) return '';
+  return '<div class="socials">'+items.map(function(s){ return '<span class="soc"><em>'+esc(s[1])+'</em>'+esc(soc[s[0]])+'</span>'; }).join('')+'</div>';
+}
+function tourRows(a){
+  var rows=[];
+  EVENTS.forEach(function(e){ if(e.lineup && e.lineup.some(function(n){ return n.toLowerCase()===(a.name||'').toLowerCase(); })){ var v=venue(e.v); rows.push({off:e.off,title:e.title,sub:v.name+', '+v.city,href:'#event-'+e.id,kind:'app'}); } });
+  (a.tour||[]).forEach(function(x){ rows.push({off:x.off,title:x.venue,sub:x.city,kind:'ext'}); });
+  rows.sort(function(x,y){ return x.off-y.off; });
+  return rows;
+}
+function tourHTML(rows){
+  if(!rows.length) return '<div class="empty" style="margin-top:0">'+t('no_tour')+'</div>';
+  return '<div class="tour">'+rows.map(function(r){
+    var inner='<div class="d">'+esc(fmtShort(dayOf(r.off)))+'</div><div><strong>'+esc(r.title)+'</strong><p>'+esc(r.sub)+'</p></div><span class="tag">'+(r.kind==='app'?t('on_app'):t('external'))+'</span>';
+    return r.href?'<a class="t" href="'+r.href+'">'+inner+'</a>':'<div class="t">'+inner+'</div>';
+  }).join('')+'</div>';
+}
+function viewArtist(id){
+  var a=artistById(id);
+  if(!a) return '<a class="back" href="#artists">← '+t('back')+'</a><div class="empty">'+t('no_artist')+'</div>';
+  return '<a class="back" href="#artists">← '+t('back')+'</a>'+
+    '<div class="hero">'+av(a.name,84)+'<div><h1>'+esc(a.name)+(a.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1><p class="sub" style="margin-top:6px">'+esc(a.city)+' · '+esc(a.genres.join(' · '))+(a.verified?' · '+t('verified'):'')+'</p></div></div>'+
+    '<div class="row" style="margin-top:16px"><button type="button" class="btn'+(S.follows.indexOf(a.id)>-1?' on':' primary')+'" data-act="follow" data-id="'+a.id+'" aria-pressed="'+(S.follows.indexOf(a.id)>-1)+'">'+(S.follows.indexOf(a.id)>-1?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>'+
+    '<div class="sec"><h2>'+t('about')+'</h2><p class="sub" style="margin-top:0">'+esc(a.bio[S.lang])+'</p></div>'+
+    '<div class="sec"><h2>'+t('socials')+'</h2>'+socialsHTML(a.soc)+'</div>'+
+    '<div class="sec"><h2>'+t('tour')+'</h2>'+tourHTML(tourRows(a))+'</div>';
+}
+
+/* ---------- Views: connect, chat ---------- */
+function sharedEvents(p){ return p.goes.filter(function(g){ return amGoing(g); }); }
+function viewConnect(){
+  var shared=PEOPLE.filter(function(p){ return !blocked(p.id) && sharedEvents(p).length; });
+  var rows=shared.map(function(p){
+    var names=sharedEvents(p).map(function(g){ return evt(g).title; }).join(', ');
+    return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(p.city)+' · '+t('goes_to')+' '+esc(names)+'</p></div><button type="button" class="btn small" data-act="chat" data-id="'+p.id+'">'+t('say_hi')+'</button></div>'; }).join('');
+  var ids=Object.keys(S.threads).filter(function(pid){ return !blocked(+pid); });
+  var inbox=ids.length?ids.map(function(pid){ var p=person(+pid); var m=S.threads[pid]; var last=m[m.length-1]; var txt=last?(last[S.lang]||last.de):'';
+    return '<a class="person" href="#chat-'+pid+'">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(txt)+'</p></div></a>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('no_threads')+'</div>';
+  var crew=CREW.filter(function(c){ return !blocked(c.by) && evt(c.ev).off>=0; }).sort(function(a,b){ return evt(a.ev).off-evt(b.ev).off; });
+  return '<h1>'+t('connect_title')+'</h1><p class="sub">'+t('connect_sub')+'</p>'+
+    '<div class="sec"><h2>'+t('inbox')+'</h2><div class="people">'+inbox+'</div></div>'+
+    '<div class="sec"><h2>'+t('crew_all')+'</h2><div class="people">'+(crew.length?crew.map(function(c){ return crewRow(c,true); }).join(''):'<div class="empty" style="margin-top:0">'+t('crew_none')+'</div>')+'</div></div>'+
+    '<div class="sec"><h2>'+t('shared')+'</h2><div class="people">'+(rows||'<div class="empty" style="margin-top:0">'+t('nobody')+'</div>')+'</div></div>';
+}
+function chatHTML(pid){
+  var msgs=S.threads[pid]||[];
+  return msgs.map(function(m){ return '<div class="msg'+(m.from===0?' me':'')+'">'+esc(m[S.lang]||m.de)+'</div>'; }).join('');
+}
+function viewChat(pid){
+  var p=person(pid);
+  if(!p||blocked(pid)) return '<a class="back" href="#connect">← '+t('back')+'</a>';
+  var reasons=['rr1','rr2','rr3','rr4'].map(function(k){ return '<option>'+t(k)+'</option>'; }).join('');
+  return '<a class="back" href="#connect">← '+t('back')+'</a>'+
+    '<div class="row">'+av(p.name,52)+'<div><h1 style="font-size:34px">'+esc(p.name)+'</h1><p class="sub" style="margin:2px 0 0">'+esc(p.city)+'</p></div></div>'+
+    '<div class="nophone"><div>'+t('chat_note')+'</div></div>'+
+    '<div class="chat" id="chatbox" aria-live="polite">'+chatHTML(pid)+'</div>'+
+    '<form class="composer" data-form="msg" data-id="'+pid+'"><label for="msg-in" style="position:absolute;left:-9999px">'+t('msg_ph')+'</label><input id="msg-in" type="text" placeholder="'+esc(t('msg_ph'))+'" autocomplete="off"><button class="btn primary" type="submit">'+t('send')+'</button></form>'+
+    '<div class="sec"><div class="row"><button type="button" class="btn small" data-act="block" data-id="'+pid+'">'+t('block')+'</button></div>'+
+    '<details class="more"><summary>'+t('report')+'</summary><form class="form" data-form="report" data-id="'+pid+'" style="margin-top:8px">'+
+      '<div class="field"><label for="rp-r">'+t('report_reason')+'</label><select id="rp-r" name="reason">'+reasons+'</select></div>'+
+      '<div class="field"><label for="rp-t">'+t('report_txt')+'</label><textarea id="rp-t" name="text"></textarea></div>'+
+      '<div><button class="btn primary" type="submit">'+t('report_send')+'</button></div></form></details>'+
+    '<p class="sub">'+t('safety_note')+'</p></div>';
+}
+
+/* ---------- Views: profile, new event ---------- */
+function viewMe(){
+  var m=S.me, isArtist=m.role==='artist', isOrg=m.role==='org';
+  var cityOpts=EVENT_CITIES.map(function(c){ return '<option'+(m.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  var soc=SOC.map(function(s){ return '<div class="field"><label for="soc-'+s[0]+'">'+esc(s[1])+'</label><input id="soc-'+s[0]+'" name="soc-'+s[0]+'" type="text" value="'+esc(m.soc[s[0]]||'')+'" placeholder="@handle"></div>'; }).join('');
+  var verif;
+  if(isArtist||m.verif==='verified') verif='<p>'+t('verif_ok')+'</p>';
+  else if(m.verif==='pending') verif='<p>'+t('verif_pending')+'</p>';
+  else verif='<p>'+t('verif_none')+'</p><button type="button" class="btn" data-act="verify">'+t('verif_btn')+'</button>';
+  var tourBlock='';
+  if(isArtist){
+    tourBlock='<div class="sec"><h2>'+t('tour_add')+'</h2>'+
+      '<form class="form" data-form="tour"><div class="form2"><div class="field"><label for="t-date">'+t('date')+'</label><input id="t-date" name="date" type="date" min="'+isoOf(0)+'" required></div>'+
+      '<div class="field"><label for="t-city">'+t('city')+'</label><select id="t-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="field"><label for="t-venue">'+t('tour_event')+'</label><input id="t-venue" name="venue" type="text" required></div>'+
+      '<div><button class="btn primary" type="submit">'+t('tour_add_btn')+'</button></div></form>'+
+      '<h2 style="margin-top:24px">'+t('my_tour')+'</h2>'+tourHTML(tourRows({name:'',tour:S.myTour}))+'</div>';
+  }
+  var saved=S.saved.map(evt).filter(Boolean).sort(function(a,b){ return a.off-b.off; });
+  var savedHTML=saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('saved_none')+'</div>';
+  var notifs=S.notifs.length?'<div class="people">'+S.notifs.map(function(n){ return '<div class="person"><div class="grow"><p style="color:var(--text)">'+esc(notifText(n))+'</p></div></div>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('notifs_none')+'</div>';
+  var fol=ARTISTS.filter(function(a){ return S.follows.indexOf(a.id)>-1; });
+  var folHTML=fol.length?'<div class="grid" style="margin-top:0">'+fol.map(function(a){ return '<a class="acard" href="#artist-'+a.id+'">'+av(a.name,44)+'<div><strong>'+esc(a.name)+(a.verified?VB:'')+'</strong><p>'+esc(a.city)+'</p></div></a>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('follows_none')+'</div>';
+  var bl=S.blocked.length?'<div class="sec"><h2>'+t('blocked_list')+'</h2><div class="people">'+S.blocked.map(function(pid){ var p=person(pid); return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong></div><button type="button" class="btn small" data-act="unblock" data-id="'+pid+'">'+t('unblock')+'</button></div>'; }).join('')+'</div></div>':'';
+  return '<h1>'+t('me_title')+'</h1>'+
+    '<div class="hero" style="margin-top:16px">'+av(m.name||'?',72)+'<div><h2 style="font-size:30px">'+esc(m.name)+(isArtist?VB:'')+'</h2><p class="sub" style="margin:2px 0 0">'+esc(m.city)+(isArtist?' · '+t('verified'):'')+(isOrg?' · '+t('role_org'):'')+'</p></div></div>'+
+    '<div class="sec"><h2>'+t('role_demo')+'</h2><div class="seg" role="group" aria-label="'+t('role_demo')+'">'+
+      '<button type="button" data-act="role" data-id="fan" aria-pressed="'+(m.role==='fan')+'">'+t('role_fan')+'</button>'+
+      '<button type="button" data-act="role" data-id="artist" aria-pressed="'+isArtist+'">'+t('role_artist')+'</button>'+
+      '<button type="button" data-act="role" data-id="org" aria-pressed="'+isOrg+'">'+t('role_org')+'</button></div></div>'+
+    tourBlock+(isOrg?orgPanel():'')+
+    '<div class="sec"><h2>'+t('notifs_t')+'</h2>'+notifs+(S.notifs.length?'<p class="sub">'+t('push_note')+'</p>':'')+'</div>'+
+    '<div class="sec"><h2>'+t('saved_t')+'</h2>'+savedHTML+'</div>'+
+    '<div class="sec"><h2>'+t('follows_t')+'</h2>'+folHTML+'</div>'+
+    '<div class="sec"><h2>'+t('me_title')+'</h2><form class="form" data-form="me" style="margin-top:0">'+
+      '<div class="form2"><div class="field"><label for="me-name">'+t('name')+'</label><input id="me-name" name="name" type="text" value="'+esc(m.name)+'"></div>'+
+      '<div class="field"><label for="me-city">'+t('city')+'</label><select id="me-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="field"><label for="me-bio">'+t('bio')+'</label><textarea id="me-bio" name="bio" placeholder="'+esc(t('bio_ph'))+'">'+esc(m.bio)+'</textarea></div>'+
+      '<div><b>'+t('soc_hint')+'</b></div><div class="form2">'+soc+'</div>'+
+      '<div><button class="btn primary" type="submit">'+t('save')+'</button></div>'+
+    '</form></div>'+
+    (isOrg?'':'<div class="sec"><h2>'+t('verif_t')+'</h2><div class="card">'+verif+'</div></div>')+
+    bl;
+}
+function viewNew(){
+  var ov=(S.me.role==='org'&&S.org)?venue(S.org):null;
+  var cityOpts=EVENT_CITIES.map(function(c){ return '<option'+(ov&&ov.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  var g=GENRES.map(function(x){ return '<label class="chipcheck"><input type="checkbox" name="genre" value="'+esc(x)+'"><span>'+esc(x)+'</span></label>'; }).join('');
+  var dl=VENUES.map(function(v){ return '<option value="'+esc(v.name)+'"></option>'; }).join('');
+  return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><p class="sub">'+t('new_sub')+'</p>'+
+    '<form class="form" data-form="event" novalidate>'+
+      '<div class="field"><label for="n-title">'+t('f_title')+'</label><input id="n-title" name="title" type="text"></div>'+
+      '<div class="form2"><div class="field"><label for="n-venue">'+t('f_venue')+'</label><input id="n-venue" name="venue" type="text" list="venue-list" autocomplete="off" value="'+(ov?esc(ov.name):'')+'"><datalist id="venue-list">'+dl+'</datalist></div>'+
+      '<div class="field"><label for="n-city">'+t('city')+'</label><select id="n-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="form2"><div class="field"><label for="n-date">'+t('f_date')+'</label><input id="n-date" name="date" type="date" min="'+isoOf(0)+'"></div>'+
+      '<div class="field"><label for="n-time">'+t('f_time')+'</label><input id="n-time" name="time" type="time" value="23:00"></div></div>'+
+      '<div class="field"><label>'+t('f_genres')+'</label><div class="chips">'+g+'</div></div>'+
+      '<div class="field"><label for="n-lineup">'+t('f_lineup')+'</label><input id="n-lineup" name="lineup" type="text"></div>'+
+      '<div class="field"><label for="n-link">'+t('f_link')+'</label><input id="n-link" name="link" type="url" placeholder="https://"></div>'+
+      '<label class="row" style="gap:10px"><input type="checkbox" name="nophone" style="width:20px;height:20px;accent-color:#e4262e"> '+t('f_nophone')+'</label>'+
+      '<div id="form-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div>'+
+      '<div><button class="btn primary" type="submit">'+t('f_submit')+'</button></div>'+
+    '</form>';
+}
+
+/* ---------- Community extras: crew, rides, clubs, safety, calendar, organisers ---------- */
+var RULE_KEYS=['phone','door','age','access','aware'];
+function toggle(arr,x){ var i=arr.indexOf(x); if(i>-1){ arr.splice(i,1); return false; } arr.push(x); return true; }
+function notify(k,v,off){ S.notifs.unshift({k:k,v:v||{},off:off}); }
+function notifText(n){ var v={}; for(var k in n.v) v[k]=n.v[k]; if(n.off!=null) v.d=fmtShort(dayOf(n.off)); return t(n.k,v); }
+function rideById(id){ for(var i=0;i<RIDES.length;i++){ if(RIDES[i].id===id) return RIDES[i]; } return null; }
+function crewById(id){ for(var i=0;i<CREW.length;i++){ if(CREW[i].id===id) return CREW[i]; } return null; }
+function nameOf(pid){ return pid===0?S.me.name:person(pid).name; }
+function msgTo(pid,key,e){
+  if(!S.threads[pid]) S.threads[pid]=[];
+  S.threads[pid].push({from:0,de:T.de[key].replace('{e}',e),en:T.en[key].replace('{e}',e)});
+  sendReply(pid); location.hash='#chat-'+pid;
+}
+function crewRow(c,showEv){
+  var e=evt(c.ev), mine=c.by===0, name=nameOf(c.by), j=S.crewJoined.indexOf(c.id)>-1;
+  return '<div class="person">'+av(name)+'<div class="grow"><strong>'+esc(name)+(mine?' · '+t('crew_mine'):'')+'</strong><p>'+esc(c.text[S.lang]||c.text.de)+'</p>'+
+    (showEv?'<p><a class="link" href="#event-'+e.id+'">'+esc(e.title)+'</a> · '+esc(fmtShort(dayOf(e.off)))+'</p>':'')+'</div>'+
+    (mine?'':'<button type="button" class="btn small" data-act="crewjoin" data-id="'+c.id+'"'+(j?' disabled':'')+'>'+(j?t('crew_joined'):t('crew_join'))+'</button>')+'</div>';
+}
+function crewHTML(e){
+  var list=CREW.filter(function(c){ return c.ev===e.id && !blocked(c.by); });
+  return '<div class="sec"><h2>'+t('crew_t')+'</h2><div class="people">'+(list.length?list.map(function(c){ return crewRow(c,false); }).join(''):'<div class="empty" style="margin-top:0">'+t('crew_none')+'</div>')+'</div>'+
+    '<details class="more"><summary>+ '+t('crew_new')+'</summary><form class="composer" data-form="crew" data-id="'+e.id+'"><label for="c-in" style="position:absolute;left:-9999px">'+t('crew_new')+'</label><input id="c-in" name="text" type="text" placeholder="'+esc(t('crew_ph'))+'" autocomplete="off"><button class="btn primary" type="submit">'+t('crew_post')+'</button></form></details></div>';
+}
+function ridesHTML(e){
+  var list=RIDES.filter(function(r){ return r.ev===e.id && !blocked(r.by); });
+  var rows=list.length?list.map(function(r){
+    var mine=r.by===0, name=nameOf(r.by), req=S.rideReq.indexOf(r.id)>-1;
+    var btn=mine?'<span class="tag">'+t('ride_mine')+'</span>':'<button type="button" class="btn small" data-act="seat" data-id="'+r.id+'"'+(req||r.seats<1?' disabled':'')+'>'+(req?t('seat_reqd'):t('seat_req'))+'</button>';
+    return '<div class="person">'+av(name)+'<div class="grow"><strong>'+esc(name)+'</strong><p>'+t('ride_from',{c:esc(r.from),t:esc(r.time)})+' · '+t('seats',{n:r.seats})+'</p></div>'+btn+'</div>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('rides_none')+'</div>';
+  var cityOpts=CITIES.map(function(c){ return '<option'+(S.me.city===c.name?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('');
+  return '<div class="sec"><h2>'+t('rides_t')+'</h2><div class="people">'+rows+'</div>'+
+    '<details class="more"><summary>+ '+t('ride_offer')+'</summary><form class="form" data-form="ride" data-id="'+e.id+'" style="margin-top:8px">'+
+    '<div class="form2"><div class="field"><label for="r-city">'+t('ride_city')+'</label><select id="r-city" name="from">'+cityOpts+'</select></div>'+
+    '<div class="field"><label for="r-time">'+t('ride_time')+'</label><input id="r-time" name="time" type="time" value="20:00"></div></div>'+
+    '<div class="field"><label for="r-seats">'+t('ride_seats')+'</label><select id="r-seats" name="seats"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>'+
+    '<div><button class="btn primary" type="submit">'+t('ride_offer')+'</button></div></form></details></div>';
+}
+function clubRules(id){ var base=CLUB_INFO[id]||{}, ed=S.clubEdits[id]||{}, r={}; RULE_KEYS.forEach(function(k){ r[k]=ed[k]?ed[k]:(base[k]||''); }); return r; }
+function ruleVal(x){ return x==='photo_ban'?t('photo_ban'):x; }
+function awareHTML(vid){ var r=clubRules(vid); return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(r.aware?'<br><b>'+esc(t('aware_team',{x:r.aware}))+'</b>':'')+'</div></div>'; }
+function viewClub(id){
+  var v=venue(id);
+  if(!v) return '<a class="back" href="#map">← '+t('back')+'</a><div class="empty">'+t('no_club')+'</div>';
+  var r=clubRules(id), evs=sortedEvents().filter(function(e){ return e.v===id && e.off>=0; });
+  var labels={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
+  var facts=RULE_KEYS.map(function(k){ var x=r[k]; return '<div><dt>'+t(labels[k])+'</dt><dd'+(x?'':' style="color:var(--muted);font-weight:400"')+'>'+(x?esc(ruleVal(x)):t('not_set'))+'</dd></div>'; }).join('');
+  var revs=S.reviews[id]||[];
+  var revHTML=revs.length?'<div class="people">'+revs.map(function(rv){ return '<div class="person">'+av(rv.name)+'<div class="grow"><strong>'+esc(rv.name)+' <span class="stars" aria-label="'+rv.stars+'/5">'+'★★★★★'.slice(0,rv.stars)+'</span></strong><p>'+esc(rv.text)+'</p></div></div>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('reviews_none')+'</div>';
+  var starOpts=[5,4,3,2,1].map(function(n){ return '<option value="'+n+'">'+'★★★★★'.slice(0,n)+'</option>'; }).join('');
+  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a>'+
+    '<h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+
+    '<div class="row" style="margin-top:16px"><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
+    '<div class="sec"><h2>'+t('rules_t')+'</h2><dl class="facts" style="margin-top:0">'+facts+'</dl></div>'+
+    '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(id)+'</div>'+
+    '<div class="sec"><h2>'+t('upcoming')+'</h2>'+(evs.length?'<div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('no_ev_here')+'</div>')+'</div>'+
+    '<div class="sec"><h2>'+t('reviews_t')+'</h2>'+revHTML+
+      '<details class="more"><summary>+ '+t('review_post')+'</summary><form class="form" data-form="review" data-id="'+id+'" style="margin-top:8px">'+
+      '<div class="field"><label for="rv-s">'+t('stars')+'</label><select id="rv-s" name="stars">'+starOpts+'</select></div>'+
+      '<div class="field"><label for="rv-t">'+t('review_txt')+'</label><textarea id="rv-t" name="text" placeholder="'+esc(t('review_ph'))+'"></textarea></div>'+
+      '<div><button class="btn primary" type="submit">'+t('review_post')+'</button></div></form></details></div>'+
+    ((S.me.role==='org'&&S.org===id)?'':'<div class="card" style="margin-top:32px"><p>'+t('club_claim')+'</p><button type="button" class="btn" data-act="claim" data-id="'+id+'">'+t('club_claim_btn')+'</button></div>');
+}
+function typeChips(){ return [['','type_all'],['club','type_club'],['festival','type_fest']].map(function(x){ return '<button type="button" class="chip" data-act="type" data-id="'+x[0]+'" aria-pressed="'+(S.type===x[0])+'">'+t(x[1])+'</button>'; }).join(''); }
+
+/* calendar export: Google Calendar link works inside the preview; icsFor() is kept for the real app (the preview blocks .ics downloads) */
+function gcalUrl(e){
+  var v=venue(e.v), d=e.date.replace(/-/g,''), dates;
+  if(e.time){ var st=new Date(e.date+'T'+e.time+':00'), en=new Date(st.getTime()+6*3600000);
+    function f(x){ return x.getFullYear()+('0'+(x.getMonth()+1)).slice(-2)+('0'+x.getDate()).slice(-2)+'T'+('0'+x.getHours()).slice(-2)+('0'+x.getMinutes()).slice(-2)+'00'; }
+    dates=f(st)+'/'+f(en); }
+  else dates=d+'/'+isoOf(e.off+1).replace(/-/g,'');
+  var details=(e.lineup?'Line-up: '+e.lineup.join(', ')+'\n':'')+(e.src?e.src:'');
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+'&ctz=Europe/Berlin&location='+encodeURIComponent(v.name+', '+(v.addr||v.city))+'&details='+encodeURIComponent(details);
+}
+function icsEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/([,;])/g,'\\$1'); }
+function icsFor(list){
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Rave Strangers//Prototype//DE','CALSCALE:GREGORIAN'];
+  var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  list.forEach(function(e){
+    var v=venue(e.v), d=e.date.replace(/-/g,'');
+    L.push('BEGIN:VEVENT','UID:rs-'+e.id+'-'+d+'@ravestrangers.app','DTSTAMP:'+stamp);
+    if(e.time) L.push('DTSTART;TZID=Europe/Berlin:'+d+'T'+e.time.replace(':','')+'00','DURATION:PT6H');
+    else L.push('DTSTART;VALUE=DATE:'+d,'DTEND;VALUE=DATE:'+isoOf(e.off+1).replace(/-/g,''));
+    L.push('SUMMARY:'+icsEsc(e.title),'LOCATION:'+icsEsc(v.name+', '+(v.addr||v.city)));
+    if(e.lineup) L.push('DESCRIPTION:'+icsEsc('Line-up: '+e.lineup.join(', ')));
+    if(e.src) L.push('URL:'+e.src);
+    L.push('END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n')+'\r\n';
+}
+/* calendar import */
+function parseICS(txt){
+  var lines=String(txt||'').replace(/\r?\n[ \t]/g,'').split(/\r?\n/), out=[], cur=null;
+  lines.forEach(function(l){
+    l=l.trim();
+    if(l==='BEGIN:VEVENT'){ cur={}; return; }
+    if(l==='END:VEVENT'){ if(cur&&cur.summary&&cur.date) out.push(cur); cur=null; return; }
+    if(!cur) return;
+    var i=l.indexOf(':'); if(i<0) return;
+    var key=l.slice(0,i).split(';')[0].toUpperCase(), val=l.slice(i+1).replace(/\\n/gi,' ').replace(/\\([,;\\])/g,'$1');
+    if(key==='SUMMARY') cur.summary=val;
+    else if(key==='LOCATION') cur.location=val;
+    else if(key==='URL') cur.url=val;
+    else if(key==='DTSTART'){
+      var m=val.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2}))?/); if(!m) return;
+      if(m[4]&&/Z$/.test(val)){
+        var dt=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]));
+        cur.date=dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);
+        cur.time=('0'+dt.getHours()).slice(-2)+':'+('0'+dt.getMinutes()).slice(-2);
+      } else { cur.date=m[1]+'-'+m[2]+'-'+m[3]; cur.time=m[4]?m[4]+':'+m[5]:null; }
+    }
+  });
+  return out;
+}
+function sampleICS(){
+  var v=venue(S.org)||VENUES[0];
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Beispiel//DE',
+    'BEGIN:VEVENT','SUMMARY:Testimport – Clubnacht','DTSTART:'+isoOf(24).replace(/-/g,'')+'T230000','LOCATION:'+v.name,'END:VEVENT',
+    'BEGIN:VEVENT','SUMMARY:Testimport – Sonntagsrave','DTSTART:'+isoOf(32).replace(/-/g,'')+'T140000','LOCATION:'+v.name,'END:VEVENT',
+    'END:VCALENDAR'].join('\n');
+}
+function impPrevHTML(){
+  var p=S.importPreview;
+  if(!p.length) return '<p class="sub">'+t('import_none')+'</p>';
+  return '<div class="people" style="margin-top:12px">'+p.map(function(x){ return '<div class="person"><div class="grow"><strong>'+esc(x.summary)+'</strong><p>'+esc(x.date)+(x.time?' · '+esc(x.time):'')+(x.location?' · '+esc(x.location):'')+'</p></div></div>'; }).join('')+'</div>'+
+    '<div class="row" style="margin-top:10px"><button type="button" class="btn primary" data-act="imp-go">'+t('import_go',{n:p.length})+'</button></div>';
+}
+function importEvents(){
+  var n=0;
+  S.importPreview.forEach(function(x){
+    var vid=S.org, loc=(x.location||'').toLowerCase();
+    VENUES.forEach(function(v){ if(loc && loc.indexOf(v.name.toLowerCase())>-1) vid=v.id; });
+    if(!vid) return;
+    EVENTS.push({id:S.nextId++,title:x.summary,v:vid,date:x.date,off:offFromISO(x.date),time:x.time,genres:['Electronic'],lineup:null,src:x.url||null,imported:true,byOrg:true});
+    n++;
+  });
+  S.importPreview=[];
+  return n;
+}
+function orgPanel(){
+  var opts='<option value="">–</option>'+VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); }).map(function(v){ return '<option value="'+v.id+'"'+(S.org===v.id?' selected':'')+'>'+esc(v.name)+' · '+esc(v.city)+'</option>'; }).join('');
+  var h='<div class="sec"><h2>'+t('org_t')+'</h2><div class="card"><p>'+t('org_note')+'</p><div class="field"><label for="org-v">'+t('org_pick')+'</label><select id="org-v" data-sel="org">'+opts+'</select></div></div>';
+  if(S.org){
+    var v=venue(S.org), r=clubRules(v.id), labels={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
+    var fields=RULE_KEYS.map(function(k){ return '<div class="field"><label for="ru-'+k+'">'+t(labels[k])+'</label><input id="ru-'+k+'" name="'+k+'" type="text" value="'+esc(ruleVal(r[k]))+'"></div>'; }).join('');
+    h+='<div class="row" style="margin-top:12px"><a class="btn primary" href="#new-event">+ '+t('org_add')+'</a><a class="btn" href="#club-'+v.id+'">'+t('org_view')+'</a></div>'+
+      '<h3 style="margin-top:24px">'+t('org_rules')+'</h3><form class="form" data-form="rules" style="margin-top:8px"><div class="form2">'+fields+'</div><div><button class="btn primary" type="submit">'+t('save')+'</button></div></form>'+
+      '<h3 style="margin-top:28px">'+t('import_t')+'</h3><p class="sub">'+t('import_d')+'</p>'+
+      '<div class="form" style="margin-top:12px">'+
+        '<div class="field"><label for="imp-txt">'+t('import_txt')+'</label><textarea id="imp-txt" spellcheck="false" style="font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:120px" placeholder="BEGIN:VCALENDAR …"></textarea></div>'+
+        '<div class="field"><label for="imp-file">'+t('import_file')+'</label><input id="imp-file" type="file" accept=".ics,text/calendar"></div>'+
+        '<div class="row"><button type="button" class="btn" data-act="imp-sample">'+t('import_sample')+'</button><button type="button" class="btn primary" data-act="imp-parse">'+t('import_parse')+'</button></div>'+
+        '<div id="imp-prev"></div></div>';
+  }
+  return h+'</div>';
+}
+
+/* ---------- Map ---------- */
+var CL=[];   /* cluster centres of the last draw */
+function mapEvents(){ return EVENTS.filter(function(e){ return inWindow(e) && (!S.genre || e.genres.indexOf(S.genre)>-1); }).sort(function(a,b){ return a.off-b.off; }); }
+function venueEvents(id,list){ return (list||mapEvents()).filter(function(e){ return e.v===id; }); }
+function evCountLabel(n){ return n===1?t('ev_one'):t('ev_many',{n:n}); }
+
+function panelHTML(){
+  var list=mapEvents();
+  var v=S.mapSel?venue(S.mapSel):null;
+  if(!v){
+    var vs={}; list.forEach(function(e){ vs[e.v]=1; });
+    return '<p class="sub" style="margin:0">'+t('pick_marker')+'</p><p class="sub">'+t('summary_map',{v:Object.keys(vs).length,e:list.length})+'</p>';
+  }
+  var evs=venueEvents(v.id,list);
+  var rows=evs.map(function(e){ var d=dayOf(e.off);
+    return '<a class="evrow" href="#event-'+e.id+'"><b>'+d.getDate()+'. '+esc(fmtMonth(d))+'</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+' · '+esc(e.genres.join(', '))+'</p></div></a>'; }).join('');
+  return '<h2><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h2>'+
+    '<p class="addr">'+esc(v.addr||v.city)+(v.addr?'':'')+'</p>'+
+    (v.approx?'<p class="addr">'+t('approx')+'</p>':'')+
+    '<p class="addr" style="color:var(--text)">'+evCountLabel(evs.length)+'</p>'+
+    (rows||'<p class="sub">'+t('no_ev_here')+'</p>')+
+    '<div class="row" style="margin-top:12px"><a class="btn small" href="#club-'+v.id+'">'+t('open_club')+' →</a></div>';
+}
+function venueListHTML(){
+  var list=mapEvents();
+  var vs=VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); });
+  return vs.map(function(v){ var n=venueEvents(v.id,list).length;
+    return '<button type="button" class="person" data-act="mapvenue" data-id="'+v.id+'"><div class="grow"><strong>'+esc(v.name)+'</strong><p>'+esc(v.city)+' · '+(n?evCountLabel(n):t('zero'))+'</p></div></button>'; }).join('');
+}
+function viewMap(){
+  return '<h1>'+t('map_title')+'</h1><p class="sub">'+t('map_sub')+'</p>'+
+    '<div class="filters two">'+
+      '<div class="field"><label for="m-when">'+t('when')+'</label><select id="m-when" data-sel="when">'+whenOptions()+'</select></div>'+
+      '<div class="field" style="align-self:end"><button type="button" class="chip" data-act="onlyev" aria-pressed="'+S.onlyEvents+'" style="min-height:44px">'+t('only_events')+'</button></div>'+
+    '</div>'+
+    '<div class="chips" style="margin-top:12px">'+genreChips()+'</div>'+
+    '<div class="mapgrid">'+
+      '<div class="mapbox" id="mapbox">'+
+        '<svg id="mapsvg" viewBox="0 0 '+GEO.W+' '+GEO.H+'" role="img" aria-label="'+esc(t('map_title'))+'">'+
+          '<rect x="-6000" y="-6000" width="12000" height="12000" fill="#08080a"/>'+
+          '<g class="land nb"><path d="'+GEO.nb+'"/></g>'+
+          '<g class="land de"><path d="'+GEO.de+'"/></g>'+
+          '<g id="mapdyn"></g>'+
+        '</svg>'+
+        '<div class="mapctl">'+
+          '<button type="button" data-act="zin" aria-label="'+esc(t('zoom_in'))+'">+</button>'+
+          '<button type="button" data-act="zout" aria-label="'+esc(t('zoom_out'))+'">−</button>'+
+          '<button type="button" data-act="zfit" aria-label="'+esc(t('zoom_reset'))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>'+
+        '</div>'+
+        '<div class="maplegend"><span><i></i>'+t('leg_ev')+'</span><span><i class="off"></i>'+t('leg_none')+'</span></div>'+
+      '</div>'+
+      '<aside class="mappanel" id="mappanel" aria-live="polite">'+panelHTML()+'</aside>'+
+    '</div>'+
+    '<div class="sec"><h2>'+t('venues_t')+'</h2><div class="people" id="venuelist">'+venueListHTML()+'</div></div>';
+}
+
+function mapEl(){ return document.getElementById('mapsvg'); }
+function mapSize(){ var r=mapEl().getBoundingClientRect(); return {cw:Math.max(r.width,1),ch:Math.max(r.height,1),left:r.left,top:r.top}; }
+function fitView(){ var z=mapSize(); return {cx:GEO.W/2,cy:GEO.H/2,w:Math.max(GEO.W,GEO.H*z.cw/z.ch)}; }
+function clampView(m){
+  var minW=GEO.W/22, maxW=Math.max(fitView().w*1.25,GEO.W);
+  m.w=Math.min(maxW,Math.max(minW,m.w));
+  m.cx=Math.min(GEO.W+80,Math.max(-80,m.cx)); m.cy=Math.min(GEO.H+80,Math.max(-80,m.cy));
+  return m;
+}
+function viewBoxOf(){ var z=mapSize(), h=S.map.w*z.ch/z.cw; return [S.map.cx-S.map.w/2,S.map.cy-h/2,S.map.w,h]; }
+
+function drawMap(){
+  var svg=mapEl(); if(!svg) return;
+  if(!S.map) S.map=fitView();
+  var vb=viewBoxOf(), z=mapSize(), s=S.map.w/z.cw;
+  svg.setAttribute('viewBox',vb[0]+' '+vb[1]+' '+vb[2]+' '+vb[3]);
+  var list=mapEvents(), out='';
+  /* city labels */
+  CITIES.forEach(function(c){
+    out+='<circle class="cdot" cx="'+c.x+'" cy="'+c.y+'" r="'+(2.2*s)+'"/>'+
+         '<text class="clabel" x="'+(c.x+6*s)+'" y="'+(c.y-5*s)+'" font-size="'+(11*s)+'" stroke-width="'+(3*s)+'">'+esc(c.name)+'</text>';
+  });
+  /* clusters */
+  var items=[];
+  VENUES.forEach(function(v){
+    var n=venueEvents(v.id,list).length;
+    if(S.onlyEvents && !n) return;
+    items.push({v:v,n:n,px:(v.x-vb[0])/s,py:(v.y-vb[1])/s});
+  });
+  items.sort(function(a,b){ return b.n-a.n; });
+  var cls=[];
+  items.forEach(function(it){
+    var c=null;
+    for(var i=0;i<cls.length;i++){ var dx=cls[i].px-it.px, dy=cls[i].py-it.py; if(dx*dx+dy*dy<20*20){ c=cls[i]; break; } }
+    if(c){ c.items.push(it); c.n+=it.n; } else cls.push({items:[it],n:it.n,px:it.px,py:it.py,x:it.v.x,y:it.v.y});
+  });
+  cls.forEach(function(c){ if(c.items.length>1){ var sx=0,sy=0; c.items.forEach(function(i){ sx+=i.v.x; sy+=i.v.y; }); c.x=sx/c.items.length; c.y=sy/c.items.length; } });
+  cls.sort(function(a,b){ return (a.n>0)-(b.n>0); });
+  CL=[];
+  var showNames=S.map.w<GEO.W/2.4;
+  cls.forEach(function(c){
+    if(c.items.length>1){
+      CL.push({x:c.x,y:c.y});
+      var r=(15+Math.min(6,c.items.length))*s;
+      var label=c.n||c.items.length;
+      out+='<g class="cl" data-cluster="'+(CL.length-1)+'" tabindex="0" role="button" aria-label="'+esc(c.items.length+' · '+evCountLabel(c.n))+'" transform="translate('+c.x+' '+c.y+')">'+
+        '<circle class="dot" r="'+r+'"/><text font-size="'+(13*s)+'" dy="'+(4.5*s)+'">'+label+'</text></g>';
+    } else {
+      var it=c.items[0], v=it.v, sel=S.mapSel===v.id;
+      out+='<g class="mk'+(it.n?'':' off')+'" data-venue="'+v.id+'" tabindex="0" role="button" aria-label="'+esc(v.name+', '+v.city+', '+(it.n?evCountLabel(it.n):t('zero')))+'" transform="translate('+v.x+' '+v.y+')">'+
+        '<title>'+esc(v.name)+'</title>'+
+        (sel?'<circle class="ring" r="'+(15*s)+'"/>':'')+
+        '<circle class="dot" r="'+((it.n?9:6)*s)+'"/>'+
+        (it.n>1?'<text font-size="'+(10*s)+'" dy="'+(3.6*s)+'">'+it.n+'</text>':'')+
+        (showNames?'<text class="vname" x="'+(13*s)+'" dy="'+(4*s)+'" font-size="'+(12*s)+'" stroke-width="'+(3.5*s)+'">'+esc(v.name)+'</text>':'')+
+        '</g>';
+    }
+  });
+  document.getElementById('mapdyn').innerHTML=out;
+}
+function setPanel(){
+  var p=document.getElementById('mappanel'); if(p) p.innerHTML=panelHTML();
+}
+var animTok=0;
+function animateTo(target){
+  var from={cx:S.map.cx,cy:S.map.cy,w:S.map.w};
+  var to=clampView({cx:target.cx!=null?target.cx:from.cx,cy:target.cy!=null?target.cy:from.cy,w:target.w!=null?target.w:from.w});
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tok=++animTok;
+  if(reduce){ S.map=to; drawMap(); return; }
+  var t0=null, dur=240;
+  function step(ts){
+    if(tok!==animTok||!mapEl()) return;
+    if(t0===null) t0=ts;
+    var k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
+    S.map={cx:from.cx+(to.cx-from.cx)*e,cy:from.cy+(to.cy-from.cy)*e,w:from.w*Math.pow(to.w/from.w,e)};
+    drawMap();
+    if(k<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function zoomAt(clientX,clientY,f){
+  var z=mapSize(), vb=viewBoxOf(), s=S.map.w/z.cw;
+  var px=clientX-z.left, py=clientY-z.top;
+  var sx=vb[0]+px*s, sy=vb[1]+py*s;
+  var w=Math.min(Math.max(fitView().w*1.25,GEO.W),Math.max(GEO.W/22,S.map.w*f)), s2=w/z.cw, h=w*z.ch/z.cw;
+  S.map=clampView({cx:sx-px*s2+w/2,cy:sy-py*s2+h/2,w:w});
+  drawMap();
+}
+function selectVenue(id,center){
+  S.mapSel=id; setPanel(); drawMap();
+  var v=venue(id);
+  if(center&&v){ animateTo({cx:v.x,cy:v.y,w:Math.min(S.map.w,GEO.W/14)}); }
+  var p=document.getElementById('mappanel');
+  if(p&&window.innerWidth<=860&&p.scrollIntoView){ p.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+}
+function initMap(){
+  var svg=mapEl(); if(!svg) return;
+  var ptrs={}, moved=0, last=null;
+  drawMap();
+  svg.addEventListener('wheel',function(e){ e.preventDefault(); zoomAt(e.clientX,e.clientY,Math.exp(e.deltaY*0.0015)); },{passive:false});
+  svg.addEventListener('dblclick',function(e){ zoomAt(e.clientX,e.clientY,0.5); });
+  svg.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0&&e.pointerType==='mouse') return;
+    ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; moved=0; animTok++;
+    svg.classList.add('drag');
+    var n=Object.keys(ptrs).length;
+    if(n===2){ var k=Object.keys(ptrs); last={d:Math.hypot(ptrs[k[0]].x-ptrs[k[1]].x,ptrs[k[0]].y-ptrs[k[1]].y)}; }
+    function mv(ev){
+      if(!ptrs[ev.pointerId]) return;
+      var prev=ptrs[ev.pointerId], dx=ev.clientX-prev.x, dy=ev.clientY-prev.y;
+      ptrs[ev.pointerId]={x:ev.clientX,y:ev.clientY};
+      moved+=Math.abs(dx)+Math.abs(dy);
+      var ks=Object.keys(ptrs);
+      if(ks.length===1){
+        var z=mapSize(), s=S.map.w/z.cw;
+        S.map=clampView({cx:S.map.cx-dx*s,cy:S.map.cy-dy*s,w:S.map.w}); drawMap();
+      } else if(ks.length===2&&last){
+        var a=ptrs[ks[0]], b=ptrs[ks[1]], d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(last.d>0&&d>0) zoomAt((a.x+b.x)/2,(a.y+b.y)/2,last.d/d);
+        last.d=d;
+      }
+    }
+    function up(ev){
+      delete ptrs[ev.pointerId];
+      if(Object.keys(ptrs).length<2) last=null;
+      if(!Object.keys(ptrs).length){
+        svg.classList.remove('drag');
+        window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up);
+      }
+    }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+  });
+  svg.addEventListener('click',function(e){
+    if(moved>6) return;
+    var m=e.target.closest('[data-venue]'), c=e.target.closest('[data-cluster]');
+    if(m){ selectVenue(+m.getAttribute('data-venue'),false); }
+    else if(c){ var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
+  });
+  svg.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ') return;
+    var m=e.target.closest&&e.target.closest('[data-venue]'), c=e.target.closest&&e.target.closest('[data-cluster]');
+    if(m){ e.preventDefault(); selectVenue(+m.getAttribute('data-venue'),false); }
+    else if(c){ e.preventDefault(); var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
+  });
+}
+function focusVenueFromHash(id){
+  var v=venue(id); if(!v) return;
+  S.mapSel=id;
+  S.map={cx:v.x,cy:v.y,w:GEO.W/14};
+}
+
+/* ---------- Router ---------- */
+var ICONS={
+  events:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  map:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.800-6.500 11-6.500 11z"/><circle cx="12" cy="10" r="2.400"/></svg>',
+  artists:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>',
+  connect:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  me:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
+};
+function route(){
+  var h=(location.hash||'#events').slice(1);
+  if(h==='new-event') return {tab:'events',html:viewNew()};
+  var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
+  switch(name){
+    case 'event': return {tab:'events',html:viewEvent(+arg)};
+    case 'map':
+      if(arg){ if(S.mapHash!==h){ S.mapHash=h; focusVenueFromHash(+arg); } } else { S.mapHash=null; }
+      return {tab:'map',html:viewMap(),map:true};
+    case 'club': return {tab:'map',html:viewClub(+arg)};
+    case 'artists': return {tab:'artists',html:viewArtists()};
+    case 'artist': return {tab:'artists',html:viewArtist(+arg)};
+    case 'connect': return {tab:'connect',html:viewConnect()};
+    case 'chat': return {tab:'connect',html:viewChat(+arg)};
+    case 'me': return {tab:'me',html:viewMe()};
+    default: return {tab:'events',html:viewEvents()};
+  }
+}
+function render(scroll){
+  var r=route();
+  document.documentElement.lang=S.lang;
+  document.getElementById('banner').textContent=t('banner');
+  document.getElementById('tabs').innerHTML=['events','map','artists','connect','me'].map(function(k){
+    return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
+  var langBtns=document.querySelectorAll('.lang button');
+  for(var i=0;i<langBtns.length;i++){ langBtns[i].setAttribute('aria-pressed', langBtns[i].getAttribute('data-id')===S.lang?'true':'false'); }
+  document.getElementById('view').innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
+  if(r.map){ if(S.map&&!mapEl()){ } initMap(); }
+  if(scroll){ window.scrollTo(0,0); }
+}
+
+/* ---------- Actions ---------- */
+function openChat(pid){ if(!S.threads[pid]) S.threads[pid]=[]; location.hash='#chat-'+pid; }
+function sendReply(pid){
+  var n=S.threads[pid].filter(function(m){ return m.from!==0; }).length;
+  var de=REPLIES.de[n%3], en=REPLIES.en[n%3];
+  setTimeout(function(){
+    S.threads[pid].push({from:pid,de:de,en:en});
+    if(location.hash==='#chat-'+pid){ var box=document.getElementById('chatbox'); if(box){ box.innerHTML=chatHTML(pid); } }
+  },1200);
+}
+document.addEventListener('click',function(ev){
+  var el=ev.target.closest('[data-act]'); if(!el) return;
+  var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
+  if(act==='lang'){ S.lang=id; render(false); }
+  else if(act==='genre'){ S.genre=id; render(false); }
+  else if(act==='onlyv'){ S.onlyVerified=!S.onlyVerified; render(false); }
+  else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
+  else if(act==='go'){ var n=+id, ix=S.me.goes.indexOf(n); if(ix>-1){ S.me.goes.splice(ix,1); } else { S.me.goes.push(n); } render(false); }
+  else if(act==='chat'){ openChat(+id); }
+  else if(act==='verify'){ S.me.verif='pending'; render(false); }
+  else if(act==='role'){ S.me.role=id; S.me.verif=id==='artist'?'verified':'none'; render(false); }
+  else if(act==='type'){ S.type=id; render(false); }
+  else if(act==='save'){ toggle(S.saved,+id); render(false); }
+  else if(act==='remind'){ var rid=+id; if(toggle(S.remind,rid)){ notify('n_remind',{e:evt(rid).title}); toast(t('reminded')); } render(false); }
+  else if(act==='follow'){ var aid=+id; if(toggle(S.follows,aid)){ var a=artistById(aid), rows=tourRows(a); if(rows.length){ rows.slice().reverse().forEach(function(r){ notify('n_follow',{a:a.name,c:r.title+', '+r.sub},r.off); }); } else notify('n_follow0',{a:a.name}); toast(t('following')+': '+a.name); } render(false); }
+  else if(act==='seat'){ var r1=rideById(+id); if(r1&&S.rideReq.indexOf(r1.id)<0&&r1.seats>0){ r1.seats--; S.rideReq.push(r1.id); var ev1=evt(r1.ev); notify('n_ride',{e:ev1.title}); msgTo(r1.by,'ride_msg',ev1.title); } }
+  else if(act==='crewjoin'){ var c1=crewById(+id); if(c1&&S.crewJoined.indexOf(c1.id)<0){ S.crewJoined.push(c1.id); msgTo(c1.by,'crew_msg',''); } }
+  else if(act==='block'){ var b1=+id; if(!blocked(b1)) S.blocked.push(b1); toast(t('blocked')); location.hash='#connect'; }
+  else if(act==='unblock'){ var ib=S.blocked.indexOf(+id); if(ib>-1) S.blocked.splice(ib,1); render(false); }
+  else if(act==='repev'){ toast(t('report_sent')); }
+  else if(act==='claim'){ S.me.role='org'; S.me.verif='none'; S.org=+id; S.importPreview=[]; location.hash='#me'; }
+  else if(act==='imp-sample'){ var ta=document.getElementById('imp-txt'); if(ta) ta.value=sampleICS(); }
+  else if(act==='imp-parse'){ var ta2=document.getElementById('imp-txt'); S.importPreview=parseICS(ta2?ta2.value:''); var pv=document.getElementById('imp-prev'); if(pv) pv.innerHTML=impPrevHTML(); }
+  else if(act==='imp-go'){ var cnt=importEvents(); toast(t('import_done',{n:cnt})); render(false); }
+  else if(act==='zin'){ animateTo({w:S.map.w/1.8}); }
+  else if(act==='zout'){ animateTo({w:S.map.w*1.8}); }
+  else if(act==='zfit'){ S.mapSel=null; setPanel(); animateTo(fitView()); }
+  else if(act==='mapvenue'){ selectVenue(+id,true); var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView){ b.scrollIntoView({block:'nearest',behavior:'smooth'}); } }
+});
+document.addEventListener('change',function(ev){
+  var el=ev.target; var sel=el.getAttribute&&el.getAttribute('data-sel');
+  if(el.id==='imp-file'&&el.files&&el.files[0]){ var fr=new FileReader(); fr.onload=function(){ var ta=document.getElementById('imp-txt'); if(ta) ta.value=fr.result; }; fr.readAsText(el.files[0]); return; }
+  if(sel==='org'){ S.org=+el.value||null; S.importPreview=[]; render(false); return; }
+  if(sel){ S[sel]=el.value; render(false); }
+});
+document.addEventListener('input',function(ev){
+  if(ev.target.id==='f-q'){ S.q=ev.target.value; var l=document.getElementById('evlist'); if(l){ l.innerHTML=eventsListHTML(); } }
+});
+document.addEventListener('submit',function(ev){
+  var f=ev.target.closest('form[data-form]'); if(!f) return;
+  ev.preventDefault();
+  var kind=f.getAttribute('data-form'), fd=new FormData(f);
+  if(kind==='msg'){
+    var pid=+f.getAttribute('data-id'), input=document.getElementById('msg-in'), txt=input.value.trim();
+    if(!txt) return;
+    S.threads[pid].push({from:0,de:txt,en:txt});
+    document.getElementById('chatbox').innerHTML=chatHTML(pid);
+    input.value='';
+    sendReply(pid);
+  } else if(kind==='me'){
+    S.me.name=(fd.get('name')||'').trim()||'Du'; S.me.city=fd.get('city'); S.me.bio=fd.get('bio')||'';
+    SOC.forEach(function(s){ var v=(fd.get('soc-'+s[0])||'').trim(); if(v){ S.me.soc[s[0]]=v; } else { delete S.me.soc[s[0]]; } });
+    render(false); toast(t('saved'));
+  } else if(kind==='tour'){
+    var date=fd.get('date'), venueName=(fd.get('venue')||'').trim();
+    if(!date||!venueName) return;
+    S.myTour.push({off:offFromISO(date),city:fd.get('city'),venue:venueName,ext:true});
+    render(false); toast(t('tour_added'));
+  } else if(kind==='ride'){
+    RIDES.push({id:S.nextId++,ev:+f.getAttribute('data-id'),by:0,from:fd.get('from'),time:fd.get('time')||'20:00',seats:+fd.get('seats')||1});
+    render(false); toast(t('ride_added'));
+  } else if(kind==='crew'){
+    var tx=(fd.get('text')||'').trim(); if(!tx) return;
+    CREW.push({id:S.nextId++,ev:+f.getAttribute('data-id'),by:0,text:{de:tx,en:tx}});
+    render(false); toast(t('crew_posted'));
+  } else if(kind==='rules'){
+    var ed={}; RULE_KEYS.forEach(function(k){ ed[k]=(fd.get(k)||'').trim(); }); S.clubEdits[S.org]=ed;
+    render(false); toast(t('org_saved'));
+  } else if(kind==='review'){
+    var vid=+f.getAttribute('data-id'), txr=(fd.get('text')||'').trim(); if(!txr) return;
+    (S.reviews[vid]=S.reviews[vid]||[]).unshift({name:S.me.name,stars:+fd.get('stars')||5,text:txr});
+    render(false); toast(t('review_posted'));
+  } else if(kind==='report'){
+    f.reset(); var dt=f.closest('details'); if(dt) dt.open=false; toast(t('report_sent'));
+  } else if(kind==='event'){
+    var title=(fd.get('title')||'').trim(), vname=(fd.get('venue')||'').trim(), date2=fd.get('date');
+    if(!title||!vname||!date2){ document.getElementById('form-err').textContent=t('f_err'); return; }
+    var city=fd.get('city'), v=null;
+    VENUES.forEach(function(x){ if(x.name.toLowerCase()===vname.toLowerCase()) v=x; });
+    if(!v){
+      var c=CITIES.filter(function(x){ return x.name===city; })[0]||CITIES[0], p=proj(c.lon+(Math.random()-.5)*0.04,c.lat+(Math.random()-.5)*0.03);
+      v={id:S.nextVenue++,name:vname,city:city,addr:null,lat:c.lat,lon:c.lon,approx:true,x:p[0],y:p[1]};
+      VENUES.push(v);
+    }
+    var genres=fd.getAll('genre'); if(!genres.length) genres=['Techno'];
+    var names=(fd.get('lineup')||'').split(',').map(function(x){ return x.trim(); }).filter(Boolean);
+    EVENTS.push({id:S.nextId++,title:title,v:v.id,date:date2,off:offFromISO(date2),time:fd.get('time')||null,genres:genres,lineup:names.length?names:null,nophone:!!fd.get('nophone'),src:(fd.get('link')||'').trim()||null,isNew:true,pending:S.me.role==='fan',byOrg:S.me.role==='org'});
+    S.q=''; S.city=''; S.genre=''; S.when='all';
+    location.hash='#events'; toast(t('published'));
+  }
+});
+window.addEventListener('hashchange',function(){ render(true); });
+window.addEventListener('resize',function(){ if(mapEl()) drawMap(); });
+render(false);
+})();
+</script>
+</body>
+</html>

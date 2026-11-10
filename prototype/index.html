@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rave Strangers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark app shell. Sticky header with tabs (bottom bar on phones), one centred content column. Map view = map plus side panel. */
+:root{
+  --bg:#0b0b0c;
+  --surface:#141416;
+  --surface-2:#1d1d20;
+  --line:#2b2b30;
+  --text:#ececee;
+  --muted:#8e8e96;
+  --accent:#e4262e;
+  --accent-ink:#ffffff;
+  --display:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.45;padding-bottom:84px}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand i{width:12px;height:12px;background:var(--accent);display:inline-block}
+.lang{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.lang button{background:none;border:0;padding:6px 10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:.04em}
+.lang button[aria-pressed="true"]{background:var(--surface-2);color:var(--text)}
+
+nav.tabs{display:flex;gap:4px}
+nav.tabs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;color:var(--muted);font-weight:600;font-size:15px}
+nav.tabs a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs a[aria-current="page"]{color:var(--text);background:var(--surface-2);box-shadow:inset 0 -2px 0 var(--accent)}
+@media (max-width:720px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(11,11,12,.97);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom, 0px));justify-content:space-around;z-index:30;gap:0}
+  nav.tabs a{flex-direction:column;gap:2px;font-size:11px;padding:6px 4px;flex:1;align-items:center}
+  nav.tabs a[aria-current="page"]{box-shadow:inset 0 2px 0 var(--accent)}
+}
+
+.banner{background:var(--surface);border-bottom:1px solid var(--line);color:var(--muted);font-size:13px;padding:8px 0}
+main{padding:24px 0 40px}
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;margin:0;text-wrap:balance;line-height:1.05}
+h1{font-size:44px;font-weight:700}
+h2{font-size:26px;font-weight:700}
+h3{font-size:22px;font-weight:700}
+.sub{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.sec{margin-top:32px}
+.sec>h2{margin-bottom:12px;display:flex;align-items:baseline;gap:10px}
+
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:20px}
+@media (max-width:640px){.filters{grid-template-columns:1fr 1fr}.filters .f-q{grid-column:1/-1}}
+.filters.two{grid-template-columns:1fr 1fr 1fr}
+@media (max-width:640px){.filters.two{grid-template-columns:1fr}}
+.field label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=date],input[type=time],input[type=url],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+input::placeholder,textarea::placeholder{color:#62626a}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:34px}
+.chip[aria-pressed="true"],.chipcheck input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chipcheck{position:relative}
+.chipcheck input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.chipcheck span{display:inline-block;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+.chipcheck input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.tag{display:inline-block;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);font-weight:600;cursor:pointer}
+.btn:hover{border-color:#44444b}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.small{min-height:36px;padding:0 12px;font-size:14px}
+.btn.on{background:transparent;border-color:var(--accent);color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.link{color:var(--text);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+
+.list{display:grid;gap:10px;margin-top:12px}
+.ev{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.ev:hover{border-color:#44444b}
+.date{text-align:center;border-right:1px solid var(--line);padding-right:14px}
+.date b{display:block;font-family:var(--display);font-size:34px;line-height:1;font-weight:700}
+.date span{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.ev .meta{color:var(--muted);font-size:14px;margin:4px 0 8px}
+.ev .side{text-align:right;font-size:13px;color:var(--muted)}
+@media (max-width:560px){.ev{grid-template-columns:52px 1fr}.ev .side{grid-column:1/-1;text-align:left;display:flex;align-items:center;gap:10px}}
+.avs{display:flex}
+.avs .av{margin-left:-8px;border:2px solid var(--surface)}
+.avs .av:first-child{margin-left:0}
+.av{--s:40px;width:var(--s);height:var(--s);border-radius:50%;background:hsl(var(--h) 14% 24%);display:inline-grid;place-items:center;font-weight:600;font-size:calc(var(--s) * .38);flex:none;color:#d8d8dc}
+.vb{width:18px;height:18px;vertical-align:-3px;margin-left:4px;flex:none}
+
+.empty{border:1px dashed var(--line);border-radius:8px;padding:28px;color:var(--muted);text-align:center;margin-top:20px}
+.count{color:var(--muted);font-size:14px;margin:16px 0 0}
+
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;margin-bottom:16px;min-height:36px}
+dl.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:20px 0 0}
+.facts div{background:var(--surface);padding:12px 14px}
+.facts dt{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.facts dd{margin:2px 0 0;font-weight:600}
+.nophone{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;background:var(--surface);padding:12px 14px;margin-top:16px;color:var(--muted);font-size:15px}
+.nophone b{color:var(--text)}
+.srcbox{margin-top:24px;color:var(--muted);font-size:14px}
+
+.people{display:grid;gap:8px}
+.person{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-align:left;width:100%}
+.person .grow{flex:1;min-width:0}
+.person .grow p{margin:0;color:var(--muted);font-size:14px}
+.person .grow strong{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:20px}
+.acard{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.acard:hover{border-color:#44444b}
+.acard p{margin:0;color:var(--muted);font-size:14px}
+.acard strong{font-size:17px}
+
+.socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.soc{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:14px}
+.soc em{font-style:normal;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+
+.tour{display:grid;gap:8px}
+.tour .t{display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.tour .t .d{font-family:var(--display);font-size:20px;font-weight:700;text-transform:uppercase}
+.tour .t p{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:480px){.tour .t{grid-template-columns:76px 1fr}.tour .t .tag{grid-column:2}}
+
+.hero{display:flex;gap:18px;align-items:center;margin-top:8px}
+.hero h1{font-size:40px}
+.form{display:grid;gap:14px;margin-top:20px;max-width:620px}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.form2{grid-template-columns:1fr}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:10px 16px;font-weight:600;color:var(--muted);cursor:pointer;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+.card p{margin:0 0 10px;color:var(--muted)}
+.card p:last-child{margin-bottom:0}
+
+.chat{display:grid;gap:8px;margin-top:16px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;min-height:240px;align-content:start}
+.msg{max-width:78%;padding:8px 12px;border-radius:10px;background:var(--surface-2);justify-self:start}
+.msg.me{background:var(--accent);color:var(--accent-ink);justify-self:end}
+.composer{display:flex;gap:8px;margin-top:10px}
+.composer input{flex:1}
+
+/* Map */
+.mapgrid{display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:16px;align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{position:relative;height:clamp(380px,66vh,660px);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#08080a;touch-action:none}
+#mapsvg{width:100%;height:100%;display:block;cursor:grab;user-select:none;-webkit-user-select:none}
+#mapsvg.drag{cursor:grabbing}
+.land path{vector-effect:non-scaling-stroke;stroke-width:1;stroke-linejoin:round}
+.land.nb path{fill:#101012;stroke:#222226}
+.land.de path{fill:#1b1b1f;stroke:#55555d}
+.clabel{fill:#8e8e96;font-family:var(--body);font-weight:600;paint-order:stroke;stroke:#1b1b1f;stroke-linejoin:round;pointer-events:none;letter-spacing:.02em}
+.cdot{fill:#6a6a72;pointer-events:none}
+.mk,.cl{cursor:pointer}
+.mk .dot{fill:var(--accent);stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.mk.off .dot{fill:#26262b;stroke:#74747c}
+.mk .ring{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk text,.cl text{fill:#fff;font-family:var(--body);font-weight:700;text-anchor:middle;pointer-events:none}
+.mk .vname{fill:#ececee;text-anchor:start;font-weight:600;paint-order:stroke;stroke:#0b0b0c;stroke-linejoin:round}
+.cl .dot{fill:var(--surface-2);stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk:focus-visible,.cl:focus-visible{outline:none}
+.mk:focus-visible .dot,.cl:focus-visible .dot{stroke:#fff;stroke-width:3}
+.mapctl{position:absolute;right:10px;top:10px;display:grid;gap:6px}
+.mapctl button{width:40px;height:40px;border-radius:6px;border:1px solid var(--line);background:rgba(20,20,22,.95);font-size:22px;font-weight:600;line-height:1;cursor:pointer;display:grid;place-items:center}
+.mapctl button:hover{border-color:#55555d}
+.mapctl svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.maplegend{position:absolute;left:10px;bottom:10px;display:flex;gap:12px;background:rgba(20,20,22,.92);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--muted)}
+.maplegend span{display:inline-flex;align-items:center;gap:6px}
+.maplegend i{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--accent)}
+.maplegend i.off{background:#26262b;border:1px solid #74747c}
+.mappanel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;min-height:120px}
+.mappanel h2{font-size:28px}
+.mappanel .addr{color:var(--muted);margin:6px 0 0;font-size:14px}
+.mappanel .evrow{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.mappanel .evrow:first-of-type{margin-top:12px}
+.mappanel .evrow b{font-family:var(--display);font-size:20px;text-transform:uppercase;line-height:1.05}
+.mappanel .evrow p{margin:0;color:var(--muted);font-size:14px}
+.mappanel .evrow strong{display:block}
+
+details.more{margin-top:12px}
+details.more summary{cursor:pointer;font-weight:600;min-height:44px;display:inline-flex;align-items:center;list-style:none;border:1px solid var(--line);border-radius:6px;padding:0 16px;background:var(--surface-2)}
+details.more summary::-webkit-details-marker{display:none}
+details.more[open] summary{margin-bottom:4px;border-color:#44444b}
+.stars{color:var(--accent);letter-spacing:1px}
+.btn[disabled]{opacity:.5;cursor:default}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;font-size:14px}
+.facts dd a{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:6px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+footer{color:var(--muted);font-size:13px;padding:24px 0 8px;border-top:1px solid var(--line);margin-top:40px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#events"><i></i>Rave Strangers</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-act="lang" data-id="de" aria-pressed="true">DE</button>
+      <button type="button" data-act="lang" data-id="en" aria-pressed="false">EN</button>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Main"></nav>
+  </div>
+</header>
+<div class="banner"><div class="wrap" id="banner"></div></div>
+<main><div class="wrap" id="view"></div></main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Map geometry (Germany outline from open Natural Earth data via world-atlas) ---------- */
+var GEO = {"W": 600, "H": 820, "k": 3628.4962222731674, "tx": -361.04952830188677, "ty": 4210.466862859421, "center": [0, 0], "rot": [0, 0, 0], "de": "M242.1,781.2L231.1,774.2L220.4,767.3L217,767.3L201.3,768.8L200.8,768.1L198.3,764.2L195.8,763.1L194.4,763.7L193.3,764.9L191.7,764.5L184.6,758.3L181.9,757.5L177.8,758.3L173.2,761.6L171.2,765.7L171.6,768.1L174.2,769.1L180.5,768.5L181.4,769.1L181.7,770.4L181,771.7L175.7,772.9L174.4,774.3L172.8,774.8L171.9,775L166.4,773.4L158.2,773.4L151.6,776.3L140.9,777.4L126.5,776.8L121.3,774.7L118.1,773.4L115.8,767.2L116.5,757.7L119.9,745.2L120.8,736L119.2,730.3L121.3,721.4L127,709.7L130.6,697.3L132.7,684.3L135.4,675.7L140.6,669.7L153.4,653L154.5,651.7L154.1,643.3L150.7,642.1L145.7,639.6L132.9,636.6L121,634.8L115.6,632.4L110.8,626L107.8,625.9L102.1,628.2L94.8,629.7L89.8,628.4L86.4,628.7L84.6,629.9L83.6,628.9L82.3,623.3L79.5,621.8L75.4,620.6L72.7,621.1L70.9,623.8L68.1,625.9L65.4,625.2L57.4,612.6L55.4,609.7L54.7,607.2L52.9,602.4L47.8,597.9L43.1,596.3L40.8,596.9L41,590.9L42.8,582.5L44.7,578L47.2,574.5L49.7,571.9L50.1,567.3L49.9,563.1L46.9,562.4L39.4,559.2L35.1,555.7L31.9,551.5L27.8,545.7L26,539.9L25.7,533.9L26.4,531.3L26.6,529.4L30.1,520.3L41.9,511.9L40.8,503.6L40.6,498.4L37.6,495.1L31.9,493.8L30.3,491.5L29.6,489.1L33.9,484.1L28.7,479.9L26.4,475.8L19.3,470.5L18.4,468.6L22.1,453.1L19.3,448.6L16.2,446.3L12.3,445.3L10.5,443L10,440.6L10.7,439L15,439.5L16.4,438L27.1,428.8L27.6,427.1L26.2,426L24.1,425.5L23.7,423.6L23.7,421L29.4,407.8L31.2,402.1L31.4,398.1L31.2,394.2L27.8,388L24.6,383.1L24.6,379L22.3,376.9L15.7,366.2L15.7,362.1L19.3,358.9L24.6,357L26.4,355.2L29.4,354.1L37.8,357.1L41.5,360L42.6,359.3L45.8,356.4L51.7,357L65.9,351.1L67.9,348.2L69.5,345.2L69.7,344L64.3,338.2L64,336.1L64.7,333.6L66.3,331.8L69.5,330.4L73.2,327.9L80.9,320.7L83.4,314.4L84.3,307.8L84.6,302.5L82.3,298.6L80.2,296L77.3,296.4L71.6,296.2L66.3,293.9L63.3,290.3L62.7,287L64,285L64.5,282.5L63.6,280L64,278L66.3,276.2L83.2,276.3L84.3,274.4L85.5,264.6L89.6,249.8L93.7,241.4L94.4,238L94.1,218.2L94.8,208.1L91.8,203.3L85.7,198.1L87.1,187.3L89.1,178.9L95.3,168.4L100.3,165.6L122.2,163.9L146.1,164.7L156.1,180.2L152.5,188.4L158.2,192.1L161.2,190.8L163.2,183.8L164.6,176L166.6,173.6L174.2,179.5L176.9,183.4L176.9,196.1L179.6,178.9L177.6,166.7L178.9,155L182.1,148.7L184.9,144.8L202.4,149L222,146.8L229.3,151.5L246,174.3L251.4,178L258.5,179.1L248.9,174.3L228.6,146.6L222.7,143.1L213.4,142.1L207.4,139.3L203.8,135.1L202.9,131.3L203.1,103.2L199.5,99L194.9,97.5L192.2,99.4L186.5,99.6L185.3,93.2L186.7,88.3L198.3,85.1L205.8,80.7L206.3,73L201.3,66.9L195.6,55.9L188.7,45.2L188.1,33L199.9,33.2L202.9,33.7L220.7,39.5L225,43.5L230.5,43.7L240.5,39.9L248,38.3L250.8,40.6L254.9,41.6L255.8,41.6L256.2,43.5L265.3,46.5L269.2,51.1L273.6,58.1L274,68.4L268.5,75.6L264,80.1L281.3,78.4L283.1,82.6L285.6,87.1L295,83.9L318.5,97.1L332.8,90.7L336.5,90.4L339.7,101.1L336,111.8L323.5,123.3L326.4,130.4L330.3,131.9L342.2,130.4L360.9,137.3L364.7,135.2L380,119.1L386,115.8L406,113.1L409.7,106.9L417.6,100.7L422.9,93.9L435.4,80.7L448.2,83.2L455.7,85.6L464.2,87L471.7,100.9L490.6,116.1L508.2,114.8L514.3,129.3L517,147.2L522.5,152.8L527.1,156.3L541.4,160.2L541.9,160.4L542.4,162.8L543.3,171.7L544.4,178.9L551.9,207.9L551.7,215.1L551.5,216.9L549,226.8L544.2,235L537.8,239.8L534.4,244.9L533.7,250.7L541.7,260.7L558.1,275.1L564.7,287.2L561.7,297.3L560.6,304.7L562,309.6L564.5,313.3L568.6,316L570.2,320.5L569.5,326.4L570.2,330.5L573.1,333.4L572.9,334.7L571.5,338.8L569.5,346.3L568.3,351.6L563.6,359.1L565.1,365.5L568.8,372.8L571.5,376.5L572.4,380L570.6,388.5L571.5,390.7L582.9,396.8L584.8,399.7L585.9,405.5L590,418.1L586.6,434.1L583.6,442.8L577.2,456.5L576.8,457.8L576.1,459.4L574,461.9L571.3,462.2L567.2,460.5L564.5,458.2L565.1,452.3L563.3,451.7L561,448.3L560.1,444.2L557.6,442.7L548.7,440.9L545.8,439.9L543.5,440.7L541.7,443.4L542.8,446L544.6,448.4L549.4,452.3L549,453.8L538.2,457.5L531.6,461.5L525.5,463.6L519.1,467.6L506.6,472.1L497.4,473.3L495.6,474.4L492.2,482L489.9,483.6L487.6,482.9L486,481.5L483.8,482.5L481.7,485.1L479.2,486.2L477.4,486L473.7,492.7L463.2,494.6L462.1,498.1L460,502.1L458.7,502.9L453.9,501.4L447.3,500.5L443.6,502.7L439.1,503.9L433.6,504.3L427.7,508.6L421.5,516.2L418.3,522.9L416.5,525.3L413.5,519.1L409.9,514.6L407.4,512.4L405.1,512.4L404.6,513.4L404.6,516.7L406.9,522.2L409.9,525.8L410.3,528.5L412.2,533.5L416.5,539L423.3,543.3L427.9,547.6L431.3,553.5L431.3,555.2L430.4,557.6L428.8,559.8L427.4,562.9L423.6,568.9L424.7,571.4L427.9,574.6L430.6,578.6L434.1,584.8L438.8,596L442,600.6L446.4,605.3L450.5,608.8L456.9,608.7L463.7,615.6L471.2,625.3L476.7,629.9L480.6,631.2L483.8,634.9L486.5,640L487.6,643L490.1,645L497,644.6L505.6,652.7L510.9,658.5L513.9,663.2L513.2,665L512.7,670.9L512.7,677.2L512,680.3L508.2,684.7L506.1,685.7L505,686.5L493.1,680.8L492.2,681.8L491.3,682.5L488.1,698.9L486,701.9L482.6,704.9L475.8,707.7L471.2,708.8L467.3,710.2L455.7,716.9L450.5,721.1L447.1,726.2L447.1,729.1L452.8,737.7L459.4,746.7L459.4,754.4L456.4,760.3L455.7,762.6L457.8,763.4L461.4,763.7L464.4,764.7L465.7,768.8L465.3,776L464.2,782.6L463.2,785.4L460.3,785.7L454.6,782.8L450.2,779.4L448.4,777.4L448.4,775L449.3,773.4L447.7,770.3L442.3,767.5L436.6,768.8L432.2,770.6L429.5,770.6L426.5,767.8L422,765.7L415.8,764.4L412.2,762.9L411.3,763.7L411.7,769.6L410.6,772.2L380.9,775.6L371.8,778.7L365.4,782.8L360.4,784.6L359.3,787.2L354.5,790.4L349,791.4L347.6,790.4L344.2,791.9L338.3,793.4L334.4,792.9L332.6,790.3L329,786.2L327.4,783.3L327.6,781.5L319.2,781.2L313.9,778.9L302.7,779.5L300,778.6L299.5,779.5L297.7,791.1L295.7,796L292,800.8L287.5,803.6L283.8,804.1L284,800.5L285,796.1L282.2,795.2L278.3,794.7L276.5,793.4L277,790.1L276.1,788.2L274.5,785.9L270.4,783L262.2,778.6L256.5,776.3L254.2,778.6L250.1,781L243.7,780.2ZM507.2,90L508.8,97.3L507,100.9L499.9,94.9L492.6,94.9L488.5,104.5L485.4,104.9L474.2,96.2L472.6,91.9L472.1,88.5L473.7,76.2L473.5,72.4L476.9,68.2L477.4,62.1L483.5,55.7L489,55.5L490.8,60.8L493.3,64.6L502.5,68.8L503.8,70.7L504.7,73.3L500.4,78.4L499,81.1L500.4,85.4ZM538.9,136.7L538,140.1L539.2,145.3L536.4,144.9L528.7,146.1L520.9,144.4L519.3,138L520.7,131.7L517.5,127.6L514.5,124.9L514.1,121.4L514.5,117.6L528,127.8ZM353.6,86.2L343.8,86.4L340.1,82L336.3,80.9L338.3,75.4L341,73.5L350.4,77.1L353.3,83.9ZM165,45.8L163.7,48.1L164.3,32.4L171.2,15.9L174.2,16.3L171.2,20.7L170.3,23.8L169.1,30.1L169.6,33.4L185.6,34.3L183.7,37.2L167.5,39.1ZM182.8,54L180.3,56.6L174.4,56.2L171,53.8L172.1,51.1L175.3,49L177.8,48.6L181.9,50Z", "nb": "M242.1,781.2L243.9,782.3L248.5,786.5L247.6,793.5L242.3,804.9L239.6,813.9L239.4,821.1L239.8,824.3L240.7,824.3L245.7,824.8L248.2,824.8L256,826.5L262.4,829.3L263.8,832.4L264.4,835.9L272,840.7L280.6,843.8L283.6,842.8L294.3,831.4L298.6,833.3L301.1,839.4L300.9,842.5L297.9,854.5L297.5,861.1L300,865.3L300.2,868.6L299.5,871.7L295.2,872L289.5,870.2L284.7,865.1L280.8,865.8L277.7,867L276.1,872L274.7,877.7L275.1,881.1L277.4,883.5L279.3,888.9L280.4,895.8L281.5,898.9L280.4,900.2L277.4,901.2L274.9,900.4L270.4,892.1L268.3,888.9L264.9,888.4L258.7,890.3L249.4,895L245.5,895L242.3,894L239.4,890.2L236.8,882.7L235.9,877.9L234.1,878.1L228.2,876.6L225.4,878.5L225.4,886.2L224.8,895.9L221.8,902L213.4,912.7L210.4,917.3L209,920.7L208.8,923.5L210.2,928.6L211.8,933.3L210.4,936.2L206.1,937.6L202.9,934.6L201.7,929.5L194.9,922.4L197.9,916.6L197.4,915L186.2,912L181.4,907.5L174.6,899.6L173.2,896.2L173.7,885.2L173.2,882.5L172.3,881.3L169.1,881.3L164.6,885.1L160.2,890.8L151.6,897.3L150.7,898.6L153.6,905L153.4,907.4L146.6,917.3L145.2,920.7L136.3,926.8L132.2,929.2L119.9,924.6L116.5,924L110.8,927.2L103,930L90.5,933L85.7,930.8L83.6,928.7L82.5,925.7L79.3,920.5L75.7,917.3L73.2,913.9L70,910.1L67.9,907L70.6,896.9L68.6,893.4L67.5,888.3L68.1,884.8L67,884L55.6,882.1L46,882.7L39.4,886L33.7,891.6L33,892.9L33.5,893.8L36.2,898.9L31.7,904.5L24.4,908.6L19.3,909.1L17.1,908.3L17.1,902.4L21.2,900.4L25,896.5L26.2,891.1L26.6,887.5L22.8,882.9L23.2,880.1L25.7,874.7L27.1,870.1L29.2,866.1L36.9,859.3L44.9,852.8L46,845.5L46.7,836.9L47.8,834.8L58.6,829.6L61.1,827.5L62.4,824.6L70.9,814.9L79.3,805.2L80.9,802L82.3,800L82.3,798.4L81.4,797.3L77.3,796.5L75.9,793.4L80.2,787.8L85.7,784.4L90.9,784.4L93,785.9L92.8,787.7L95,789.6L99.1,790.3L103.9,789.6L108.9,787.5L111.9,782.6L113.5,778.9L121.3,774.7L126.5,776.8L140.9,777.4L151.6,776.3L158.2,773.4L166.4,773.4L171.9,775L172.8,774.8L174.4,774.3L175.7,772.9L181,771.7L181.7,770.4L181.4,769.1L180.5,768.5L174.2,769.1L171.6,768.1L171.2,765.7L173.2,761.6L177.8,758.3L181.9,757.5L184.6,758.3L191.7,764.5L193.3,764.9L194.4,763.7L195.8,763.1L198.3,764.2L200.8,768.1L201.3,768.8L217,767.3L220.4,767.3L231.1,774.2ZM846.9,-302.5L841.7,-299.6L838.7,-291.4L834.4,-289.9L830.5,-287L828.9,-260.8L836.5,-250.8L832.4,-249.3L828.5,-246.5L826,-242L823.2,-232.4L813,-227.2L809.1,-223.3L803.4,-214.4L800.4,-201.7L794.7,-196.2L788.1,-195L792,-205.5L797,-214L792.2,-219.7L789.3,-229L785.6,-235.9L788.6,-243.8L787,-256.7L787.4,-269.4L791.8,-275.9L796.8,-281.1L804.5,-293.2L813,-301.9L824.6,-305.8L829.8,-302.3L832.1,-310.2L836,-312L839.4,-310.2ZM685.8,-122.5L682.3,-116.8L679.6,-117.2L677.5,-124.9L677.1,-144.6L678.2,-154.3L692.1,-190L698.3,-192.8L707,-214.8L709.2,-224.5L713.1,-233.5L715.4,-241.4L717.2,-244.5L721.1,-243L722.9,-241.6L718.8,-236.9L719.3,-231L719,-228.4L708.1,-202.5L705.4,-185.8L701.5,-181.5ZM360.2,-447.9L365.4,-432.3L370,-430.2L376.4,-434.2L380.7,-445.5L383.2,-462.8L386.2,-479.2L382.8,-496.6L378.9,-512.2L378.7,-516.8L388.5,-529.9L391.4,-540.5L394.6,-550.8L398.3,-554.3L403.5,-555.2L409.7,-557.2L417.4,-564L424.3,-573.2L429.7,-581.6L431.5,-598.4L431.5,-607L433.8,-613.3L436.1,-625.5L434.1,-637.8L427,-656.4L418.8,-682.7L417.6,-697L421.3,-699.7L428.6,-702.2L442.3,-702.9L443.6,-704.5L445,-710.9L448,-719.5L451.4,-725.9L453.7,-734.8L454.6,-743.1L446.8,-755.5L436.6,-768.1L429.7,-772.3L417.4,-782.9L408.8,-792L413.8,-826.5L417.4,-852L418.1,-858.4L418.1,-868.1L406.2,-910.1L406.7,-919.5L407.8,-927.9L406.5,-942.5L405.8,-955.5L407.8,-959.4L412.6,-966.7L408.1,-978.1L407.6,-979L398.9,-1007.5L412.4,-1035.8L409.9,-1050.6L418.1,-1061.5L432.7,-1086.1L440.9,-1100.1L442.5,-1102.3L449.1,-1108.6L461.4,-1115.9L475.1,-1119.4L481.3,-1119.4L504.7,-1114.4L523,-1110.6L525.7,-1114.4L529.6,-1122.4L534.6,-1133.8L534.8,-1146.4L533.2,-1164.9L530.5,-1176.1L517.5,-1183.5L503.4,-1193.5L520.7,-1225.4L532.8,-1247.7L547.8,-1281.3L552.6,-1295.4L556,-1301.2L560.4,-1353.7L563.3,-1368.6L565.8,-1376.4L565.8,-1384.4L564.2,-1397.9L559.9,-1428.8L583.6,-1432.6L591.4,-1434.5L598.7,-1438.3L612.6,-1447.8L619.6,-1456.3L615.8,-1485.4L624.2,-1495.3L644.9,-1530L667.3,-1563.3L677.8,-1576.3L678.9,-1582.5L679.8,-1592.4L675,-1608.3L670,-1618.2L660.2,-1636.8L664.6,-1650L671.6,-1652.6L681.2,-1657.8L688.5,-1669L689.4,-1670.5L701.9,-1715.2L726.3,-1737.8L736.1,-1750.4L751.4,-1741L773.5,-1726.9L783.6,-1747.8L786.8,-1755.4L790.2,-1767L788.8,-1786.8L788.1,-1812.8L789.3,-1823L798.2,-1827.8L802.9,-1829L827.6,-1818.2L833.9,-1818.5L845.6,-1817L858.6,-1812.2L885.9,-1799.7L897.3,-1794.6L903.7,-1793.4L909.2,-1799.4L920.8,-1814.3L903.5,-1825.4L914.9,-1836.9L920.8,-1848.3L925.8,-1862.3L927.6,-1879L927,-1887.8L923.3,-1893.9L912.8,-1909.3L936.8,-1911.4L945,-1912L962.3,-1901.9L963,-1899.8L963,-1894.6L963.7,-1889L980.5,-1875.3L985.3,-1868.3L995.6,-1857.1L998.3,-1851.4L1007.9,-1844.4L1014.7,-1837.2L1022.7,-1831.1L1032.1,-1821.8L1044.6,-1814.3L1055.1,-1811.9L1081.8,-1799.4L1086.3,-1795.5L1093.9,-1786.5L1101.8,-1776.4L1107.1,-1756L1115.7,-1754.8L1118,-1747.8L1125.5,-1735.7L1136,-1725.1L1135.6,-1721.6L1127.4,-1711.7L1126.5,-1698.6L1127.1,-1681.7L1129.9,-1668.2L1129.4,-1664.1L1127.4,-1659.5L1125.1,-1652L1124.2,-1645.7L1124.4,-1642.5L1125.1,-1640.8L1129.6,-1640.8L1137.4,-1639.4L1142,-1636.5L1144.7,-1620.8L1143.8,-1618L1137.2,-1610.8L1135.1,-1605.4L1134.9,-1597.2L1136.3,-1588.4L1138.3,-1578.3L1143.6,-1567.8L1150.6,-1556.6L1155.2,-1547.6L1157.2,-1541.2L1158.1,-1536.7L1155,-1531.1L1152.2,-1520L1151.5,-1507.5L1150.4,-1499.2L1144.2,-1487.9L1139.9,-1484L1138.8,-1478L1138.1,-1468.1L1139.4,-1456L1139.9,-1448.1L1141.3,-1442.1L1143.1,-1438.3L1152.9,-1431.5L1158.6,-1417.9L1162,-1406.8L1168.6,-1378.3L1152,-1374.8L1139.2,-1381.8L1133.1,-1378.3L1122.1,-1378L1109.6,-1375.3L1105.3,-1369.7L1102.1,-1367.6L1090.4,-1375.3L1079.5,-1388.5L1071.5,-1378.5L1066.3,-1376.7L1061.7,-1385.5L1057.6,-1387.1L1055.3,-1383.9L1053.5,-1376.1L1050.3,-1369.7L1049.6,-1366L1049.2,-1349.9L1048.3,-1346.2L1037.8,-1348.3L1038.2,-1344.1L1040.5,-1342L1041.6,-1339.3L1037.8,-1335.8L1027.1,-1336.4L1026.1,-1332.7L1029.1,-1326.8L1026.8,-1321.8L1024.5,-1319.7L1012,-1316.5L1004.7,-1317.3L1002.7,-1314.1L1002,-1309.9L1003.3,-1305.7L1006.5,-1303.3L1007.7,-1300.7L1007.4,-1295.2L1004.7,-1294.1L997.2,-1304.1L994.9,-1303.6L996.5,-1298.3L1000.8,-1292.6L1003.3,-1286.8L1005.6,-1280L1005.2,-1274.5L995.8,-1257.5L987.4,-1246.9L981.2,-1237.3L977.6,-1227.2L981.9,-1222L986.5,-1214.6L989.9,-1200.4L993.8,-1187.9L1001.7,-1176.1L1000.1,-1169.2L998.3,-1163.9L985.1,-1152L970.1,-1134.3L953.9,-1089.6L948.4,-1083.6L934.3,-1076.1L929,-1068.7L918.5,-1060L900.1,-1052.8L891.6,-1042.4L888,-1031.8L883.6,-1031.1L879.5,-1035.3L874.1,-1038.2L873.4,-1031.3L873.6,-1026.2L864.7,-1033.8L860.4,-1026.9L857.2,-1015.4L844.4,-1000L830.5,-1002.7L829.2,-1000L832.8,-998L833.3,-995.6L830.8,-994.4L826.9,-994.4L821.2,-991.4L817.3,-991.7L815.5,-984.4L812.5,-975.4L804.8,-971.7L800.7,-971L798.6,-966.2L810.7,-965L809.8,-960.8L809.6,-956.7L808.2,-952.2L794.5,-945.6L792.5,-940.6L789.7,-937.5L783.6,-937.5L783.8,-940.6L784.7,-943.7L775.8,-943.5L773.1,-950.9L771.3,-949L772.2,-943L774.7,-937L777.2,-927.9L775.1,-922.1L772.8,-919.5L774.4,-916.8L779.2,-914.9L781.3,-911.3L775.6,-908.2L768.3,-897.7L761,-897.5L756.4,-890.8L751.6,-890.8L747.8,-895.1L741.6,-898.7L739.6,-892.3L739.1,-887.5L742.8,-874.9L749.4,-865.2L755.7,-861L751.2,-858.2L747.8,-852L743.9,-832.5L741.6,-824.8L739.3,-811.5L740.7,-800.1L742.1,-794.5L745,-787.1L736.8,-788L727.9,-792.4L729.3,-783.4L723.8,-772.5L724.7,-763.3L725.9,-757.1L724.3,-747L726.8,-743.8L728.2,-737.8L725.9,-733.2L727,-729.3L727.2,-715.9L729.1,-695L728.4,-690.4L733.2,-672.4L732,-665.8L731.4,-657.7L738.4,-650.1L744.6,-650.1L750.7,-650.3L753,-648.3L755.5,-642.9L757.3,-636.4L762.6,-636.9L770.8,-642.3L776,-643.6L779.7,-633.3L789.3,-620.2L794.7,-614.1L804.3,-611L814.1,-600.4L812.7,-587.6L816.8,-583.1L828.7,-578.3L832.8,-571.5L834.9,-565.5L838.1,-560.9L841.7,-546.4L840.3,-537.5L835.5,-534.4L824.4,-524.8L819.4,-517.9L815.5,-513.5L804.3,-504L800.2,-502.3L796.3,-497.5L792.7,-495.4L789.3,-496.6L776.7,-487.8L777.6,-483.9L787.2,-482.4L792.2,-484.3L796.1,-488.7L800.2,-489.7L803.9,-488.9L808,-492.3L811.1,-493.8L814.3,-492.1L818,-483.7L810.5,-479.4L805.2,-479.2L802.5,-465.4L799.3,-459.6L797,-456.8L785.2,-451.1L777.2,-443.6L768.1,-437.8L764,-439.1L758,-432.9L744.6,-425.9L737.5,-416.4L722,-407.9L714.3,-401.1L692.6,-400.7L672.3,-402.2L665.7,-398.8L672.3,-397.9L676.9,-394.6L682.6,-396L695.6,-394.4L702.2,-392.7L710.8,-381.3L704.4,-377.3L693.5,-374.4L697.6,-358.4L701,-347.8L696.5,-341.3L696.2,-312.2L690.1,-311.8L687.4,-299.8L689.4,-293.6L689.2,-279.4L690.5,-270.8L693.5,-262.8L692.1,-254.4L682.3,-235.1L682.6,-226.2L684.4,-220.7L685.8,-212.2L681.2,-195.8L678,-181.9L674.4,-170.5L665.9,-156.7L661.8,-146.5L652,-114.8L647.2,-108.5L641.3,-103.7L634.7,-108.1L628.5,-110.6L621.2,-110.2L609.6,-106.7L592.1,-109.1L575.2,-107.9L570.8,-104.7L573.4,-93.3L567,-91.7L561,-95.1L555.6,-91.1L551,-86.8L542.1,-76.8L539.2,-70.5L538.5,-59L543,-48.5L547.1,-36.4L536.7,-21.7L530.7,-21.3L513.4,-25.2L482.6,-16.1L455,-23.4L458.5,-31.2L458.5,-37L459.8,-45.7L460.7,-54.9L460.5,-61.1L458.5,-67.6L451.8,-76.2L436.3,-105.1L432,-117.4L428.8,-122.5L431.1,-122.7L443.6,-116.2L446.6,-117L449.6,-119.5L445.9,-128.9L442.7,-133.2L440.4,-139.6L448,-141.4L453.2,-141L457.1,-148.3L454.8,-159.9L449.1,-163.7L444.3,-165.1L435.2,-183.8L425.6,-193.4L408.5,-230.6L402.4,-256.5L396.4,-254L393.7,-265.3L391.7,-276.2L391.2,-284L382.1,-288.5L381.8,-294L380,-318.8L370.4,-322.2L364.1,-336.3L362.9,-363L356.5,-367.8L351.3,-366.4L351.5,-373.1L352.7,-379.4L349.7,-404.1L348.8,-427L346.3,-433.8L344.9,-441.9L346.1,-448.9L347.9,-453L354.3,-454.1ZM852.2,-312.8L851,-305.4L847.6,-306L844.7,-311.4L850.8,-319.9L859.9,-319.5L863.1,-317.6ZM805.2,-447L802.5,-445.7L801.1,-446.2L802.7,-451.9L804.1,-454.3L808.4,-456.6L809.6,-456.2ZM816.6,-501.6L815,-497.5L813.4,-502.5L814.1,-503.6L815,-508.6L818.2,-511.2L823,-509.6L823,-508.3L818.4,-504.2ZM1133.8,391.2L1137.2,398.3L1138.5,403.7L1137.2,407.9L1137.6,412.3L1140.6,416.9L1150.2,431L1155,444.4L1157.9,449.7L1165,456.5L1165.4,459.2L1162.7,461.7L1160.4,462L1158.6,462.7L1157.5,465.2L1159.3,467.8L1161.8,471.4L1164.8,482L1164.5,490.7L1162.2,492.9L1159.1,497.9L1157.2,502.6L1140.6,505.8L1136.7,510.8L1127.6,520.5L1121.4,526L1112.3,536.1L1097.7,553.2L1092.5,560.4L1088.6,566.1L1077,581.8L1073.3,588.4L1074,593.8L1077.9,606.5L1078.6,612.2L1077.9,617.4L1076.8,622.2L1077,624.2L1080.4,627.5L1085.9,632.9L1086.1,634.6L1085.4,636.9L1083.4,638.8L1076.5,636.9L1069,633.2L1066.3,633.7L1062.2,632.9L1045.1,625.9L1033.4,620.5L1032.3,616.9L1030.2,611.7L1025.2,607.5L1014.1,603.8L1009.3,600.7L991,599.2L983.1,599L977.6,600.2L973.9,600.2L968.9,607.8L965.5,610L960.5,610.2L956.1,608.8L951.6,605L944.5,602.8L939.3,603.8L935.6,602.9L932.2,602.8L931.1,603.4L928.6,603.4L924.7,605.3L920.6,608L915.8,610L912.4,614.6L909.2,623.2L900.3,619.3L897.3,621L893,622.2L890,621L890.7,617.9L892.1,614.6L892.1,609.9L891.2,604.6L888.4,602.9L884.3,602.3L882.1,601.2L881.8,599.6L879.8,597.4L876.1,591.8L872.5,584.8L870.2,582.6L866.8,586L861.3,589.7L858.1,591.1L851.7,601.9L840.1,602.3L839.4,597.2L838.3,592.5L831.7,591.1L831.4,588.2L830.1,581.1L816.6,567L814.8,561L815.5,558.8L814.6,555.1L811.6,552.8L800.9,550.1L798.2,551.7L795.6,550.1L791.8,546.7L785.2,544L784.5,542.4L782,540L780.6,539.7L779.9,541.2L777.9,543.3L771,546L768.3,544.8L765.8,542.6L762.8,537.6L758.7,533.3L755.3,531.8L753.2,529.4L752.8,527.7L760.5,524.1L762.1,520.5L761.2,513.8L760.1,512.9L757.1,515.1L750.7,517L744.8,518.1L741.8,518.1L725.2,505.8L714.3,502.1L707.9,501L707.2,502.2L710.1,509.1L715.2,517.6L714.9,519.8L709,523.2L705.6,524.8L701.5,527.7L698.1,531.8L695.3,533.5L692.6,533.2L690.1,531.1L683,518.6L674.4,509.1L673.4,506.9L670.7,506.4L666.8,504.3L665.5,501.2L667.5,498.3L670,495.3L674.8,493.6L676.2,492L677.1,489.6L678.7,486.3L678.2,485.3L675,481.6L670,478.2L656.3,480.8L652.7,482.5L650.6,480.3L649,476.6L645.4,476.1L640.8,472.8L635.1,469.7L629.7,468.8L618.3,464.3L613.9,464.1L611.4,462.5L608.7,459.1L606.4,455.4L605.3,447.7L596.8,444.4L588.4,442.1L587.9,443.4L588.2,450.9L587.7,455.1L582.2,457.5L576.8,457.8L577.2,456.5L583.6,442.8L586.6,434.1L590,418.1L585.9,405.5L584.8,399.7L582.9,396.8L571.5,390.7L570.6,388.5L572.4,380L571.5,376.5L568.8,372.8L565.1,365.5L563.6,359.1L568.3,351.6L569.5,346.3L571.5,338.8L572.9,334.7L573.1,333.4L570.2,330.5L569.5,326.4L570.2,320.5L568.6,316L564.5,313.3L562,309.6L560.6,304.7L561.7,297.3L564.7,287.2L558.1,275.1L541.7,260.7L533.7,250.7L534.4,244.9L537.8,239.8L544.2,235L549,226.8L551.5,216.9L551.7,215.1L551.9,207.9L544.4,178.9L543.3,171.7L542.4,162.8L541.9,160.4L556.5,166.5L562.4,170.1L561.7,166.2L560.6,162.8L561.3,157.8L560.8,150.4L547.8,146.6L539.2,145.3L538,140.1L538.9,136.7L541.4,138.8L549.9,139.5L570.8,129.4L607.1,116.3L645.9,103.9L655,102.6L664.1,100L667.3,95.4L670.7,92.2L676,84.1L687.6,71.2L708.3,66.7L716.1,60.6L732,52.1L769,42.5L784.2,40.4L799.3,40.2L812.7,47.7L826.9,57L829.6,62.7L821.9,59.1L810.7,50.7L806.6,50.3L816.2,75.8L821.2,84.7L831.9,91.5L840.8,93.6L867.9,89.6L877.7,84.3L880.5,81.7L883,83L900.7,84.3L918.8,85.8L947.7,87.3L977.8,89L1009,90.7L1042.8,92.4L1078.6,93.6L1080.6,92.8L1084.3,88.5L1088.8,89L1094.1,91.7L1096.6,93.7L1097.5,96L1098.2,98.5L1101.1,99L1106.4,100.9L1113.5,105.4L1118.9,109.8L1124.2,115.9L1126,122.9L1126,130.8L1125.8,135.8L1126.2,137.9L1133.5,174.3L1145.6,209.2L1149.9,226.1L1151.8,235L1153.1,247.8L1153.6,256.9L1153.6,262L1152.7,268.9L1149,273.1L1126,284.9L1121.4,288.5L1114.8,297.7L1108.4,307L1107.1,310.3L1106.6,312.3L1108,315.5L1116.2,320.3L1124.6,324.5L1127.4,327.5L1133.3,331.3L1135.6,334.7L1136.9,337.7L1136.7,344.7L1134,354.3L1135.1,361.4L1132.4,366.2L1130.1,371.5L1129.6,380.9ZM18.4,468.6L12.1,468.5L6.1,468.3L2.9,467.8L-0.5,466.2L-2.1,463.1L-3.9,459.4L-3.5,457L2.2,450.5L3.2,448.6L2.5,447.7L3.2,444.8L7.5,435L7.9,431L6.1,428.1L3.2,426.6L-6,423.6L-10.3,419.6L-12.1,415.9L-14.2,414.8L-17.1,416L-24.7,417.4L-30.8,415.5L-38.1,408.7L-39.7,402.5L-40.6,397.9L-42.4,396.1L-44.9,398.6L-47.9,402.5L-54.1,402.8L-55.7,402L-56.1,399.8L-56.3,397.9L-58.2,395.4L-59.8,394L-67.5,401.1L-70.5,400.9L-74.1,398.3L-76,395.6L-79.8,397.2L-83.5,400.4L-82.1,406.5L-84.2,407.6L-88.5,407.1L-93.5,404.6L-99,403L-107.4,398.8L-119,402.3L-127.2,398.1L-133.9,397.7L-138.2,394.4L-142.5,388.9L-139.3,385.2L-136.4,383.9L-124.1,383.2L-114.9,385.5L-98.7,397.5L-94.6,397.4L-90.3,396L-92.6,392.6L-96.7,391L-102.6,387.8L-107.4,383.2L-96.2,381.8L-97.8,379.5L-99.2,375.4L-111.1,361.4L-109,357.5L-106,349.3L-102.4,342.5L-99.4,340.7L-94.4,335.9L-83.9,321.6L-77.1,309.9L-72.1,296.2L-64.8,257.8L-62.5,251.3L-59.1,244L-54.5,245.4L-51.6,247.5L-40.6,242L-21.7,227.7L-16.2,215.3L-10.7,209.6L10.9,198.1L22.8,194.8L41.2,193.9L54.7,191.9L70.6,191.1L76.8,198.1L80.2,203.3L85.9,206.1L94.8,208.1L94.1,218.2L94.4,238L93.7,241.4L89.6,249.8L85.5,264.6L84.3,274.4L83.2,276.3L66.3,276.2L64,278L63.6,280L64.5,282.5L64,285L62.7,287L63.3,290.3L66.3,293.9L71.6,296.2L77.3,296.4L80.2,296L82.3,298.6L84.6,302.5L84.3,307.8L83.4,314.4L80.9,320.7L73.2,327.9L69.5,330.4L66.3,331.8L64.7,333.6L64,336.1L64.3,338.2L69.7,344L69.5,345.2L67.9,348.2L65.9,351.1L51.7,357L45.8,356.4L42.6,359.3L41.5,360L37.8,357.1L29.4,354.1L26.4,355.2L24.6,357L19.3,358.9L15.7,362.1L15.7,366.2L22.3,376.9L24.6,379L24.6,383.1L27.8,388L31.2,394.2L31.4,398.1L31.2,402.1L29.4,407.8L23.7,421L23.7,423.6L24.1,425.5L26.2,426L27.6,427.1L27.1,428.8L16.4,438L15,439.5L10.7,439L10,440.6L10.5,443L12.3,445.3L16.2,446.3L19.3,448.6L22.1,453.1ZM-93.5,404.6L-94.4,408.5L-96.7,412.7L-105.1,418.7L-114,422.7L-118.4,422.2L-121.5,420.1L-123.1,418L-127.9,415.9L-134.3,414.8L-138.4,417.1L-141.2,419.2L-143.7,418.8L-145.5,417.1L-147.1,414.3L-148.9,405.5L-144.1,403.9L-133.6,403.2L-125.7,406.4L-115.2,407.8L-107,403.5L-100.6,407.2ZM40.1,183.8L31.2,187.4L28.9,186.7L29.6,185.6L37.4,183.4ZM14.6,189.3L2,191L-2.3,189.7L-3,188.6L0.4,187.8L11.1,187.6L14.3,188.7ZM-37.4,205.3L-49.3,213.1L-50.2,212L-42.7,205.1ZM-23.7,197L-29.7,198L-32.4,196.5L-18,192.2L-9.2,191L-7.6,191.5ZM-51.6,230.5L-57.9,238L-61.8,235.8L-62.7,234.1L-60.9,228.3L-51.6,218.6ZM-111.1,368.7L-104.7,374.2L-103.5,376L-103.1,377.9L-110.8,380L-119.3,373.3L-124.7,374.9L-126.8,371.7L-126.8,369.6L-121.1,368ZM65.4,176.2L59.7,176.5L61.3,173.8L66.8,171.5L69.7,171.5ZM-4680.4,3435.6L-4683.6,3442.8L-4685.4,3439.6L-4685.6,3433.8L-4687,3431.5L-4689.5,3430.2L-4690.9,3428.3L-4690.9,3425.3L-4681.3,3430ZM-4346.8,3084.8L-4348.4,3086.2L-4349.8,3086.1L-4350.7,3084.8L-4350.7,3082.5L-4349.6,3083.2L-4348.9,3083.4L-4348.7,3083.9ZM-4365.5,3076.4L-4366,3076.6L-4366.9,3076.1L-4366.7,3074.9L-4366,3074.4L-4365.5,3074.8L-4365.1,3075.6ZM26.4,531.3L25.7,533.9L26,539.9L27.8,545.7L31.9,551.5L35.1,555.7L39.4,559.2L46.9,562.4L49.9,563.1L50.1,567.3L49.7,571.9L47.2,574.5L44.7,578L42.8,582.5L41,590.9L40.8,596.9L36.4,594.5L34.2,592.8L30.3,592.3L26.4,593.6L23.7,596.7L19.6,597.5L16.4,596.7L14.3,594.5L12.7,593.1L7.7,591.8L5.7,588.6L7.3,587L8.6,584.5L9.8,581.3L11.4,578L6.6,569.5L5.4,566.8L1.6,562.1L1.6,559.7L2.5,557.3L2.2,555.4L2.7,551.1L5.4,547L7.3,541.9L10.5,535.1L17.5,526.7L22.3,528L24.6,528L26,530.9ZM245.7,824.8L240.7,824.3L239.8,824.3L239.4,821.1L239.6,813.9L242.3,804.9L243,806.3L243.2,808.3L243.9,810.2L244.1,812.8L245.1,815.4L246.9,817.8L247.6,820.1L246.7,823ZM83.6,928.7L85.7,930.8L90.5,933L103,930L110.8,927.2L116.5,924L119.9,924.6L132.2,929.2L136.3,926.8L145.2,920.7L146.6,917.3L153.4,907.4L153.6,905L150.7,898.6L151.6,897.3L160.2,890.8L164.6,885.1L169.1,881.3L172.3,881.3L173.2,882.5L173.7,885.2L173.2,896.2L174.6,899.6L181.4,907.5L186.2,912L197.4,915L197.9,916.6L194.9,922.4L201.7,929.5L202.9,934.6L206.1,937.6L210.4,936.2L211.8,933.3L210.2,928.6L208.8,923.5L209,920.7L210.4,917.3L213.4,912.7L221.8,902L224.8,895.9L225.4,886.2L225.4,878.5L228.2,876.6L234.1,878.1L235.9,877.9L236.8,882.7L239.4,890.2L242.3,894L245.5,895L249.4,895L258.7,890.3L264.9,888.4L268.3,888.9L270.4,892.1L274.9,900.4L277.4,901.2L280.4,900.2L281.5,898.9L280.4,895.8L279.3,888.9L277.4,883.5L275.1,881.1L274.7,877.7L276.1,872L277.7,867L280.8,865.8L284.7,865.1L289.5,870.2L295.2,872L299.5,871.7L300.2,868.6L300,865.3L297.5,861.1L297.9,854.5L300.9,842.5L302.5,843.5L308.9,843.6L316,844.3L320.3,849.2L324.6,850.8L331,851.3L335.1,850.7L337.2,848.9L339.7,843.1L344,835.9L351.1,832.4L362.9,831.5L369.1,830.3L375.2,830.4L379.8,831.5L384.6,831.4L396.9,826.4L409.7,822.4L411.5,823L411.7,824.5L409.4,827.4L407.2,831.4L408.8,836.1L415.8,845.2L419.7,852.3L423.6,857.6L429.3,860.3L436.8,862.1L443.2,862.7L450,864.6L472.8,869.6L484.4,870.9L493.3,871.2L506.6,874.4L505.2,879.7L502.7,880.9L497.9,884.1L492.4,888.3L487.6,893L486.3,898.1L487.6,901.5L489,902.6L490.8,901.6L493.3,902.3L496.8,904L502.2,905.9L502.5,907.7L501.3,909.9L497,913.9L493.1,918.5L492.6,921.1L493.1,923.2L494.5,924.5L500.2,923.8L501.1,925.6L498.3,937.1L499.3,939.2L504.3,941.1L507.9,943.7L514.8,951.1L517.7,957.1L515.7,959L511.3,960.1L507.9,959.5L511.8,955.8L502,942.9L497.7,942.9L491.7,948.5L475.3,942.8L472.1,945.1L469.9,949.6L464.2,955.1L456.2,957.4L447.1,963.4L437.7,967.6L430.4,970.9L426.3,970.3L432.9,963.4L430,963.2L421.3,968.1L416.3,972.3L414.7,979.2L413.1,990.8L417,993.8L423.8,1008.9L432,1015.2L430.4,1021.5L428.4,1026.3L423.3,1030.4L419,1027.3L416.5,1027.3L414.7,1037.3L418.3,1063.2L424,1081.5L429.7,1089.3L442.7,1101.7L456.4,1108.1L481,1128.8L494.5,1135.2L497.9,1138.8L506.1,1154.6L513.2,1172.9L520.7,1201.3L526.2,1215.4L537.1,1231.1L559.9,1253.5L580.4,1270L599.6,1280L614.6,1281.8L650,1279.6L656.1,1280.5L662.7,1283.3L664.1,1290.2L661.8,1295L654.3,1299.8L646.8,1306.6L645.9,1315.8L652.9,1322.3L687.1,1339.4L722,1353.7L732.9,1361L745.5,1372.4L776,1387.9L781.1,1395.4L799.7,1411.5L808,1424L809.6,1433.6L805.7,1443.3L803.9,1450.1L800.7,1457L792.7,1454.4L783.8,1447.4L770.3,1419.1L745.7,1416.2L740.7,1414.1L731.8,1409.2L731.4,1406L729.1,1401.9L727,1400.5L717.4,1399.6L711.1,1404.2L703.3,1415.2L694.6,1430.9L685.8,1453.9L685.3,1463L690.1,1472L704.4,1477L715.4,1485L722.7,1493.3L723.4,1513.1L726.6,1524.5L721.8,1530.8L712.4,1529.3L700.1,1533.4L691.2,1540.6L687.6,1547.5L688.5,1565.5L686.7,1572.2L670,1585.1L661.4,1598.3L659.1,1603.7L655.9,1610L634.7,1610.1L629.9,1602.5L629.7,1591.1L633.3,1584.1L641.1,1580.8L646.1,1566.2L644.5,1555.7L647.7,1551L650.4,1547.8L656.3,1545.8L664.8,1544L665.5,1529.1L659.1,1522.4L656.8,1513L653.6,1495.4L642.9,1473L637.2,1453L632.9,1443.1L626,1437.8L613.7,1438L607.6,1436.5L585.7,1422.4L584.3,1420.3L584.3,1416.7L587.9,1410.9L585.7,1403.4L582.9,1396.1L578.8,1389.9L574,1386.7L564.2,1388.8L560.8,1390.2L554.7,1389.6L549.9,1392.4L547.1,1392.5L554.7,1381.7L552.6,1379.2L545.1,1374.7L534.8,1374L532.1,1373.4L530.3,1376.3L528.4,1374.7L528.7,1369.9L516.6,1348L508.6,1339.1L504.7,1337.5L497.4,1339.4L485.1,1335.5L477.8,1334.6L474,1335.6L467.8,1338.4L464.8,1336.6L463.7,1333.7L452.8,1324.5L438.8,1319.4L411.9,1290.4L403.7,1279.5L386.6,1267.5L375.9,1249.8L367,1243.4L354.3,1238.2L351.3,1238.8L347.4,1240.7L344.5,1241L342.2,1238.8L344.5,1236.4L347.2,1235.4L346.3,1228.7L331.7,1211L323,1205.5L320.7,1201.9L318.9,1197.1L317.1,1194.1L313,1192.1L309.6,1192.6L304.8,1191.4L305,1182.8L305.9,1176.3L305.2,1170.8L300.7,1156.3L292.5,1143.9L287.9,1114.2L284,1105.8L275.1,1099.4L255.1,1092.4L227.3,1073L221.3,1072.7L204.5,1065.2L194,1064L180.5,1070.6L164.1,1089.1L150.7,1108.3L145.9,1112.1L128.8,1118.6L113.5,1121.7L113.3,1116.8L112.8,1113.1L115.3,1109L119.7,1104.3L123.5,1098.2L125.1,1093.9L124.4,1091L122.6,1086.7L120.1,1086.4L105.8,1089.9L102.3,1089L91.6,1083.5L80.2,1076.4L75.9,1071.5L74.3,1066.6L75.4,1063.3L74.5,1060.3L72.2,1056.1L74.3,1051.3L77.9,1045.3L79.8,1041.3L82.7,1040.2L84.1,1037.7L81.8,1027.8L80.4,1026.3L78.4,1025L75.2,1024.9L69.7,1022.9L65.6,1019.4L64.7,1014.8L62.7,1010.4L59,1006.2L58.8,1001.9L62.7,999.5L68.4,999.4L72.2,1000.3L81.1,993.1L84.3,992.5L87.3,990.9L89.6,981.1L91.6,978.1L92.1,976.4L90.3,974.4L83.2,967.3L79.8,960.1L74.7,952.1L70,948.5L69,945.6L68.8,942L70,939L78.4,934.1ZM426.8,1283L426.8,1282.4L426.1,1282.4L426.1,1282.9L426.1,1283.1ZM429.7,1109.9L431.5,1105.4L430.9,1102.1L426.8,1102.8L424,1106.9L425.8,1110.5ZM297.3,1200.8L299.3,1204.1L299.5,1206.1L298.2,1208.3L298.9,1213.3L293.4,1209.1L285.4,1211.2L280.6,1210.7L279.3,1207.1L280.4,1204.9L287.9,1204.4L290.4,1203.4L295,1203.8ZM521.6,1383.5L518.9,1384.3L517.3,1383.4L516.4,1382.1L517.5,1378.9L523.2,1380.8L523,1382.5ZM402.1,1704.3L399.2,1705.1L395.1,1702.5L394.8,1698.7L395.5,1697.4L400.5,1699.2L401.9,1702.8ZM625.3,1587.5L621,1596.7L619,1600.2L603.7,1622.5L602.1,1627.7L600.9,1633.2L599.3,1638.1L597.3,1642.8L595.2,1648.6L595.5,1655.3L596.4,1658.4L598.2,1660.7L601.2,1662.6L603.5,1665.6L599.8,1668.5L603.9,1674L607.1,1677.4L607.6,1680.7L607.6,1684L600.7,1690.3L598,1693.6L596.2,1697.9L595.5,1702.1L596.2,1706L595.9,1709.8L589.1,1709.3L581.8,1706.9L574.7,1708L564.5,1703.5L560.8,1702.8L557.4,1701L548.7,1687.3L541.9,1681.4L534.6,1676.8L527.1,1676.5L519.6,1677.1L512.9,1674.3L499.5,1664.9L485.1,1657.3L479,1652.5L476.2,1649.2L473,1647L464.8,1644.7L457.3,1639.6L454.1,1639.3L446.8,1639.9L443.2,1639.6L439.5,1637.8L432.2,1631.7L427.7,1623.4L426.5,1619.7L429.7,1610.1L433.6,1601.1L437,1598.4L440.9,1596.6L443.4,1593.8L445.5,1590.6L452.8,1600.1L456.2,1602.5L459.4,1601.9L465.3,1598.5L465.7,1594.8L472.4,1589.9L480.6,1589.9L484.4,1590.7L486.5,1595.1L489.7,1596.3L493.3,1597L505.4,1605.2L508.8,1606.5L512.3,1606.8L521.6,1603.3L528.7,1602L543.7,1603.9L551.9,1601.8L557.6,1601.6L565.8,1598.4L572.2,1593.1L575.6,1591.8L579.1,1591.4L587.7,1591.7L596.4,1593L600,1591.7L603,1588.2L606.6,1586.7L610.5,1587.8L620.6,1581.8L624.9,1581.5L629,1583.7ZM248.9,1368.9L252.1,1374.3L259.2,1396.1L259.9,1400.8L258.5,1405.7L256.7,1409L249.6,1420L250.8,1429L253.3,1434.7L253.7,1440.8L252.4,1448.6L248,1495.4L246,1503.6L244.6,1510.7L239.8,1513L233.4,1510.6L225.7,1506.6L222,1506.9L218.4,1508.3L215.4,1507L212.5,1504.8L210.4,1520.8L206.8,1527.3L201.5,1531.4L196.3,1531.7L191,1530.3L186.7,1530.3L183.3,1527.3L180.5,1521.9L176.4,1515.3L172.1,1507.5L171.6,1500.5L171,1485L172.1,1481.6L173.9,1478.3L174.8,1471.3L174.2,1465.2L175.5,1463L178,1465.2L179.9,1464.5L179.6,1461.3L180.3,1455.6L176.9,1450.7L171.4,1449.1L171,1444.1L171.4,1439.1L174.4,1435.8L175.3,1431.5L175.5,1418L171.4,1413.1L170,1405.5L168,1400.8L164.3,1395.9L160.2,1392L157.5,1388.2L157.1,1378.2L158.4,1369.8L159.8,1366.3L161.2,1366.7L165.3,1370.9L168.7,1371.8L175.3,1372.8L181.9,1371.5L189.9,1367.7L197.6,1363.2L208.8,1349.7L215.6,1347L219.3,1343.4L220.4,1338.5L223.4,1337.4L226.8,1342.1L231.1,1342.5L237.8,1346.3L240.5,1350.1L243,1354.5L245.3,1356.4L247.8,1357.5L248.2,1358.5L246.2,1359.6L243.9,1364.7L245.3,1366.1ZM176,1518.8L172.3,1526.9L168.5,1521.2L168.2,1516.3L168.9,1514.8L173.5,1517ZM163.7,1355.6L161.6,1359.4L158.6,1359.1L159.8,1356.4L162.5,1350.7L165.9,1348.8L167.3,1350.4L165.7,1353.7ZM239.4,1205.3L237.8,1217.9L238.9,1221.7L241.2,1224.3L242.3,1227.2L244.1,1260.7L243.7,1263.3L235.9,1276.8L234.3,1280.6L233.9,1297.3L232.5,1301.7L229.8,1306.1L225,1320.2L220.7,1326.5L209,1318.8L202.2,1315.5L199,1311.9L196.7,1309.4L198.1,1306L201.3,1302.6L201.7,1299.8L194.4,1296.7L191,1294.7L191,1291.1L193.5,1285.5L192.4,1280.8L188.3,1281.1L184.9,1280.3L184.6,1277.8L186.9,1274.7L190.1,1270.7L189.9,1266.3L186.2,1264.4L182.8,1260.7L181.4,1255.8L184.2,1252.3L188.3,1250.1L185.3,1245.1L183,1244.9L181.4,1243.9L182.8,1241.5L186,1237.9L190.8,1227.3L197.2,1222.4L208.6,1219.1L211.8,1217.8L214.5,1214L217.7,1211.6L221.3,1211.9L225,1213.3L227,1214.9L228.9,1213.3L230.2,1208.6L229.3,1204.6L229.8,1193.3L231.8,1187L235.3,1186.6L238.2,1190.2L238,1193.2L239.1,1200.5ZM121.3,774.7L113.5,778.9L111.9,782.6L108.9,787.5L103.9,789.6L99.1,790.3L95,789.6L92.8,787.7L93,785.9L90.9,784.4L85.7,784.4L80.2,787.8L75.9,793.4L77.3,796.5L81.4,797.3L82.3,798.4L82.3,800L80.9,802L79.3,805.2L70.9,814.9L62.4,824.6L61.1,827.5L58.6,829.6L47.8,834.8L46.7,836.9L46,845.5L44.9,852.8L36.9,859.3L29.2,866.1L27.1,870.1L25.7,874.7L23.2,880.1L22.8,882.9L26.6,887.5L26.2,891.1L25,896.5L21.2,900.4L17.1,902.4L17.1,908.3L19.3,909.1L24.4,908.6L31.7,904.5L36.2,898.9L33.5,893.8L33,892.9L33.7,891.6L39.4,886L46,882.7L55.6,882.1L67,884L68.1,884.8L67.5,888.3L68.6,893.4L70.6,896.9L67.9,907L70,910.1L73.2,913.9L75.7,917.3L79.3,920.5L82.5,925.7L83.6,928.7L78.4,934.1L70,939L68.8,942L69,945.6L70,948.5L74.7,952.1L79.8,960.1L83.2,967.3L90.3,974.4L92.1,976.4L91.6,978.1L89.6,981.1L87.3,990.9L84.3,992.5L81.1,993.1L72.2,1000.3L68.4,999.4L62.7,999.5L58.8,1001.9L59,1006.2L62.7,1010.4L64.7,1014.8L65.6,1019.4L69.7,1022.9L75.2,1024.9L78.4,1025L80.4,1026.3L81.8,1027.8L84.1,1037.7L82.7,1040.2L79.8,1041.3L77.9,1045.3L74.3,1051.3L72.2,1056.1L74.5,1060.3L75.4,1063.3L74.3,1066.6L75.9,1071.5L80.2,1076.4L91.6,1083.5L102.3,1089L105.8,1089.9L120.1,1086.4L122.6,1086.7L124.4,1091L125.1,1093.9L123.5,1098.2L119.7,1104.3L115.3,1109L112.8,1113.1L113.3,1116.8L113.5,1121.7L110.1,1123.2L109.9,1122.1L108.5,1121.4L107.4,1121.8L106.4,1122.9L106.2,1124.7L98.9,1127.9L93.7,1131.1L73.6,1150.4L64.3,1156.1L62.4,1159.4L60.6,1165.8L55.1,1171.2L50.1,1173.8L38.3,1176.5L26.2,1182.2L20.9,1179.8L6.8,1180L-1.9,1173L-18.7,1168.7L-24.2,1158.5L-31.7,1157.9L-36.7,1158.2L-39.7,1156.7L-40.6,1153.2L-40.6,1149.9L-45.9,1151.4L-50,1151.4L-52.5,1152.8L-54.3,1154.3L-56.6,1153.2L-57.9,1153.7L-57.7,1155.7L-62.7,1156.1L-68,1154.9L-81.9,1149.6L-83.9,1148.9L-93.5,1146.9L-97.4,1144.8L-100.6,1139.5L-103.1,1137.9L-104.4,1136.9L-113.3,1139.5L-116.5,1143.5L-121.3,1148.4L-154.6,1171.8L-160.8,1181.5L-167.8,1195.9L-168.3,1202.5L-165.3,1223.7L-158.5,1234.9L-157.6,1237.6L-161.4,1237.6L-167.8,1236.1L-173.1,1234.5L-177.9,1235.4L-182.6,1237.8L-187,1239.1L-189.9,1239.5L-192,1240.7L-192.9,1243.4L-193.1,1245.4L-198.4,1244.9L-210.7,1241L-221.6,1238.4L-228.2,1241.3L-232.4,1244.2L-235.3,1243.7L-237.4,1240.9L-239,1237.9L-243.3,1235.4L-253.1,1231.4L-252.4,1229.4L-250.8,1226.7L-250.8,1225.1L-252.9,1222.7L-261.8,1220L-265.9,1219.4L-268.6,1221.2L-270.7,1223.4L-275.7,1215.2L-279.1,1213.6L-284.6,1213.3L-290.7,1210.7L-297.1,1207.6L-312.6,1202.5L-316.9,1201.9L-318.5,1202.6L-319.7,1205.8L-320.4,1214.3L-321,1215.4L-328.3,1215.7L-337.2,1214.5L-341.3,1215.1L-345,1215.1L-348.4,1212.7L-363.7,1215.4L-366.2,1214L-369.8,1210.1L-374.2,1207L-377.4,1205.5L-380.1,1203.5L-382.6,1203.2L-386.2,1205L-391.5,1205.8L-395.8,1205.6L-398.1,1205.9L-407.9,1196.3L-409.3,1193.8L-414.3,1193L-420.2,1192.9L-435.5,1186.7L-442.6,1183.3L-443.5,1181.3L-443.5,1179.8L-444.6,1180.1L-446.7,1183L-447.8,1185.2L-449.4,1185.7L-451.4,1185.4L-453.5,1184L-454.9,1182.4L-453.5,1179.4L-451.2,1175.6L-450.1,1171.4L-450.3,1167.7L-454.2,1165.3L-459.9,1164.3L-464,1164L-469.5,1161.9L-472.2,1160.3L-474.5,1156.1L-474.7,1153.1L-464.4,1150.5L-455.1,1139.5L-446.2,1099.4L-439.8,1051.6L-435.3,1042.7L-429.3,1040L-434.1,1033.5L-437.1,1036.8L-438.2,1040.4L-439.8,1042.2L-436.4,998L-433.9,981.6L-429.6,964.5L-420.7,971.2L-413.4,978.1L-409.5,984.2L-404.7,1004L-401.3,1008.2L-395.8,1012.3L-397.9,1007.8L-401.7,1004.4L-407.4,977.8L-411.1,970.3L-416.8,964L-435,950.7L-436.9,948L-437.8,942.9L-431.6,943.1L-426.4,945.6L-427.1,942.8L-428.6,939.8L-430.9,928.9L-433,903.4L-432.8,898.9L-433.7,893.5L-439.6,892.4L-444.2,892.1L-449.2,890L-474.2,874.9L-482.7,859.2L-491.6,847.6L-493.6,842.5L-493.4,837.3L-488.8,826.5L-492.9,819.6L-496.8,818.3L-500.2,814.9L-497,809.3L-494.5,805.5L-489.5,804.6L-482.7,805.9L-476.3,809.1L-471.5,809.9L-486.1,801.2L-510,804.1L-515.3,802.9L-519.6,801L-521.2,794.5L-517.8,791.6L-514.8,786.1L-518.2,782.3L-522.8,780.8L-529.9,781L-536.5,782.1L-538.1,779.9L-534.2,773.8L-537.6,771.6L-542.2,772.7L-548.8,773.8L-555.2,772L-561.1,765.2L-565,765.2L-567.7,766L-571.8,763.4L-576.2,762.7L-579.1,763.6L-583.2,759.6L-608.1,751.6L-618.8,750.6L-628.6,754.2L-634.1,753.1L-638.2,747.8L-641.4,739.3L-657.3,732.6L-654.1,728.1L-646.8,727.2L-638.4,724L-635.2,720.2L-641.8,715.6L-646.8,714.5L-648.9,712.8L-650.9,708.8L-648,706.9L-645.9,707.9L-640,708.5L-629.7,707.5L-633.4,703.4L-637.5,702.4L-639.3,701.4L-647.5,700.9L-651.4,702.4L-659.8,701.7L-661.9,697.3L-662.6,693.5L-660.1,685L-648,677.3L-618.1,668.9L-605.3,670L-596.2,668.5L-585.5,663.4L-580.9,658.7L-565.7,656L-551.3,660.9L-537.9,679L-531.5,685.2L-516,674.5L-492.7,674.9L-487.9,680.8L-486.1,675.9L-481.8,669.9L-478.3,672.5L-476.5,676.2L-452.1,675.2L-448.3,674.2L-454.9,669.9L-460.1,659.5L-461.2,621.1L-468.1,610.4L-475.8,593.1L-479.5,583L-479.7,579.4L-478.6,574.3L-469,574.5L-461.7,575.8L-447.6,571.9L-440.7,574.6L-441.2,582.6L-439.1,592.8L-436.6,597.5L-433.2,603.1L-421.8,602.6L-409.5,605.8L-394,606.3L-371.4,612L-361.8,608.7L-352.5,601.8L-334.7,597.2L-333.1,594.8L-343.4,595.8L-353,591.4L-354.1,586.5L-353,582.3L-349.3,572.4L-321.9,556.8L-302.6,552L-282.3,543.5L-272,534.5L-265.2,522.9L-262.9,520.5L-260.2,518.2L-262.9,514.1L-261.1,469.9L-259,461.9L-255.1,455.2L-249,450.2L-239.9,444.6L-206.1,436.9L-201.1,433.9L-200.4,438.7L-197.9,444.8L-196.3,448.1L-197.7,452.4L-196.6,456.1L-192,462.5L-186.3,468.6L-181.3,472.6L-179.7,472.1L-176,471.1L-169.7,467.1L-164.2,465.9L-161.2,468.8L-159.6,470.5L-156.2,477.5L-155.3,484.6L-153.7,490.5L-151,492.9L-140.9,493.8L-133.4,496L-131.4,497.9L-128.8,511L-127.5,512.9L-125.4,511.4L-123.6,509.3L-121.1,508.9L-116.8,509.8L-110.8,510L-104.9,511.4L-96.7,518.9L-96.9,521.3L-98.5,525.6L-99.2,529.1L-97.8,530.4L-95.6,533.9L-96,538L-98.3,540.9L-99,543.3L-99,544.8L-98.3,546L-96.5,547L-84.4,548.6L-73.2,547L-66.1,542.9L-65,538.7L-63,533.7L-58.9,529.4L-55.9,528L-53.2,529.7L-57.7,547.2L-54.5,551.7L-54.1,558.3L-52.7,564.1L-48.8,563.9L-44,565L-40.6,567.2L-36.5,570.6L-30.8,573.8L-26.7,574.8L-25.3,577.5L-21.9,580.6L-16.9,586.9L-12.3,591.1L-10.1,591.1L-5.7,589.4L0.7,588.4L5.7,588.6L7.7,591.8L12.7,593.1L14.3,594.5L16.4,596.7L19.6,597.5L23.7,596.7L26.4,593.6L30.3,592.3L34.2,592.8L36.4,594.5L40.8,596.9L43.1,596.3L47.8,597.9L52.9,602.4L54.7,607.2L55.4,609.7L57.4,612.6L65.4,625.2L68.1,625.9L70.9,623.8L72.7,621.1L75.4,620.6L79.5,621.8L82.3,623.3L83.6,628.9L84.6,629.9L86.4,628.7L89.8,628.4L94.8,629.7L102.1,628.2L107.8,625.9L110.8,626L115.6,632.4L121,634.8L132.9,636.6L145.7,639.6L150.7,642.1L154.1,643.3L154.5,651.7L153.4,653L140.6,669.7L135.4,675.7L132.7,684.3L130.6,697.3L127,709.7L121.3,721.4L119.2,730.3L120.8,736L119.9,745.2L116.5,757.7L115.8,767.2L118.1,773.4ZM-435.7,930.8L-438,938.7L-442.1,931.4L-447.8,924.9L-448.9,919.1L-448.9,917.5L-442.3,921.8ZM2500.1,5039.3L2496.2,5039.9L2494.4,5038.2L2493.2,5034.2L2494.4,5030.2L2494.6,5027L2491.4,5021.5L2494.6,5018.4L2497.3,5022L2498.7,5022.2L2502.8,5024.8L2501.7,5029.5L2501.9,5031L2500.1,5035.7ZM3172.6,5594.3L3163.5,5596.3L3157.4,5595.6L3145.1,5589.8L3141.6,5585.9L3136.8,5575.2L3138,5571.4L3141.9,5564.7L3150.5,5562L3159.9,5563.1L3164,5564.8L3168.8,5572.6L3175.1,5580.6L3174.2,5590ZM-4213.2,3282.6L-4213.7,3286.3L-4215.3,3287L-4217.8,3284L-4228.1,3284.4L-4229.7,3281.6L-4229.9,3280.3L-4224.9,3275.5L-4230.8,3274.3L-4233.1,3272.3L-4238.1,3262.4L-4237.6,3259.4L-4235.6,3257.9L-4232.2,3257.7L-4225.8,3260.9L-4221.2,3265.4L-4219.6,3265.5L-4218.9,3266.8L-4219.9,3270.1L-4217.1,3272.8L-4216,3274.8ZM-4244.9,3168.6L-4252.2,3169.3L-4257.2,3168.7L-4258.4,3164L-4255.9,3160L-4257.7,3155.2L-4256.6,3152.3L-4254,3150.4L-4249.9,3152.9L-4249.3,3156.5L-4246.8,3159.9L-4235.1,3166.9ZM-4261.6,3183.3L-4266.6,3186.3L-4269.1,3185.4L-4272.3,3179.7L-4274.3,3163.9L-4272.7,3161.4L-4271.6,3160.3L-4264.8,3162.3L-4262,3164.4L-4259.1,3165.9L-4260.7,3168.8L-4259.7,3180.6ZM-4238.8,3191L-4242.2,3191.2L-4243.8,3190.7L-4244.2,3186.8L-4241.5,3184L-4239.9,3183.3L-4237.6,3186.4L-4236.9,3188.9ZM-3820,4063.1L-3819,4062.5L-3816.8,4062.1L-3814.7,4062.1L-3811.5,4057.5L-3806.3,4054.5L-3797.2,4038.5L-3793.3,4031.9L-3792.8,4028.3L-3791.7,4020.8L-3793.7,4011.7L-3792.8,4009L-3784.9,3998L-3781.4,3992L-3781.2,3986.8L-3780.3,3983L-3781.2,3981.1L-3783,3980.5L-3786,3975.7L-3788,3971.6L-3793.3,3967.5L-3796.9,3963.2L-3803.1,3953.5L-3802.4,3948.1L-3804.2,3946.1L-3806.1,3944.1L-3805.8,3941.6L-3807.2,3935.5L-3808.8,3929.8L-3809.2,3926.2L-3807.9,3919.9L-3808.8,3913L-3810.6,3909.4L-3811.3,3903.8L-3810.8,3898.8L-3809,3896L-3809.5,3892.5L-3801.7,3881.5L-3796,3875.1L-3790.8,3870.5L-3786.2,3867.2L-3780.1,3850.4L-3775.7,3844.5L-3771.2,3843.7L-3746.3,3857.6L-3734.7,3858.8L-3711.2,3866.4L-3702.5,3876.1L-3682.9,3892.1L-3672.7,3897L-3672.5,3901.3L-3674.7,3908L-3668.1,3902.1L-3657.9,3911.4L-3654.9,3915.9L-3651.7,3924.3L-3652.8,3929.7L-3654.2,3932.4L-3654.4,3934.5L-3651.3,3931.6L-3649.7,3929.3L-3649,3923.6L-3646.7,3916.7L-3643.3,3916.6L-3640.5,3920.8L-3635.1,3938.7L-3633,3942.4L-3632.1,3948.1L-3632.6,3950.6L-3632.1,3953.1L-3634.2,3954.4L-3639.4,3957.4L-3641.9,3961.4L-3643.3,3965.2L-3646.5,3967.8L-3649.7,3971.1L-3650.6,3973.8L-3653.5,3975.9L-3654.2,3979.4L-3661.5,3991.7L-3664.5,3997.2L-3668.8,4003.2L-3671.3,4005.4L-3675,4008.9L-3676.8,4012.9L-3676.8,4017.2L-3679.3,4022.1L-3680.7,4026.5L-3682.9,4029.1L-3689.3,4042.7L-3689.6,4047.4L-3691.1,4050.3L-3695.5,4056.8L-3698.4,4060.8L-3703.7,4063.7L-3709.4,4066.9L-3711.4,4070.3L-3715.3,4072.2L-3718.1,4072.3L-3722.6,4071L-3729,4070.4L-3732,4070.8L-3733.6,4069L-3735.6,4065L-3738.6,4062.3L-3740.6,4063.3L-3745,4066L-3749.7,4067.7L-3753.2,4067.1L-3760.7,4065.3L-3764.1,4064.3L-3765,4062.5L-3766.2,4061.3L-3767.8,4061.9L-3770,4063.9L-3773,4066.1L-3777.3,4069L-3786.4,4074.3L-3789,4076.2L-3791.5,4075.1L-3795.3,4074.1L-3799.4,4074L-3808.3,4070.7L-3813.3,4068.2L-3815.6,4065.2L-3818.4,4063.9ZM435,-65.2L435,-53.9L433.4,-50.6L431.1,-48.5L424.7,-46.3L419.2,-43L414.2,-37.4L412.6,-29.4L416.3,-23.6L423.3,-20.5L425.2,-9.3L419.2,-3.9L404.6,1.5L403.1,14.6L403.5,24.9L403.3,32.4L402.1,42.7L390.3,47.3L382.5,31.6L382.5,25.3L380,18L379.8,11.7L377.1,1.7L365.7,-1L361.3,-1.4L355.2,0.3L353.8,-0.2L346.3,-14.1L347.6,-29.4L343.8,-37.2L343.1,-40.7L343.3,-44.6L340.1,-47.7L336,-49.4L334.2,-58L338.8,-60.2L349.7,-59.2L353.1,-59.8L356.1,-61.5L365,-75.8L364.7,-79L365.7,-83.1L375.2,-84.6L379.6,-79.1L378.9,-70.1L379.3,-59L385.3,-55.9L387.5,-55.3L389.8,-63.7L391.7,-67.8L393.9,-70.1L394.8,-77.8L393.5,-82.5L390.5,-85.8L401.5,-95.5L412.9,-102.9L419.5,-103.3L426.1,-101.6L432.2,-99L435.7,-96.8L437.5,-93.3L433.4,-84.8L432.2,-80.3ZM255.8,41.6L254.9,41.6L250.8,40.6L248,38.3L240.5,39.9L230.5,43.7L225,43.5L220.7,39.5L202.9,33.7L199.9,33.2L188.1,33L187.4,23.8L186,17.3L181.9,7.5L188.1,5.2L186.9,-14.1L184.6,-24.2L167.5,-34.5L153.9,-44.4L157.1,-78.4L158.4,-87.4L153.2,-105.3L153.9,-126.1L155.9,-158.7L160.2,-160.1L163.4,-159.9L175.5,-153.9L180.5,-153.3L184,-148.1L188.1,-146L191,-151.5L192.2,-161.1L201.7,-173.5L208.6,-178.1L213.1,-180.3L217.7,-175.3L221.3,-169.7L222.3,-181.9L225,-205.5L215.9,-209.3L208.3,-206.1L201.1,-191.2L194.4,-172.3L183.7,-170.7L175.3,-165.3L167.5,-170.9L162.5,-175.7L162.5,-182.8L163.7,-187.2L172.6,-202.5L184.9,-217.2L196.9,-217L205.8,-221.7L211.3,-222.3L227.7,-221.3L236.4,-224.5L243.9,-231.4L260.6,-260.2L269.9,-272.3L288.6,-276.6L305.9,-290.5L310.9,-290.7L302.7,-280.3L301.4,-276.4L300.5,-270.2L306.2,-256.7L305,-248.5L305.5,-232.7L300,-224.3L293.6,-206.7L290.9,-204.1L290.4,-183.8L291.1,-178.7L290.2,-160.3L296.6,-152.7L303.2,-148.7L325.8,-148.9L328,-145.8L331,-140L329,-130.2L326.4,-123.1L320.1,-117L311.6,-112.4L306.4,-112.2L299.3,-120.9L295.9,-118.2L292.5,-113.6L286.5,-90.1L283.8,-74.2L282.4,-72.9L279,-75.2L273.3,-75.4L266.3,-71.7L269.9,-68.4L273.8,-62.5L272.2,-59.6L265.8,-56.5L260.3,-50.2L257.8,-45.3L250.8,-39.7L246.4,-32.5L248.5,-23.6L249.4,-15.9L251.4,-7.2L249.6,-0.4L241,9.4L237.8,18L245.1,17.8L249.8,19.8L252.6,22.3L255.3,25.9L253.5,30.3ZM313,-45.5L315.7,-39.7L318.9,-27.3L324.2,-13.3L321.9,-7.6L323.5,-0.2L321.9,7.7L311.9,16.5L300.2,16.9L288.4,12.7L271.5,4.2L270.1,-0.4L267.9,-2.9L263.3,-17.2L263.5,-35L272,-37.2L290.4,-45.5L294.5,-44.4L299.1,-39.9L304.3,-39.7L311.6,-45.9ZM358.4,34.3L369.8,41.2L377.3,40.8L382.3,43.5L383.7,47.9L384.1,57.6L378.7,60.4L372.7,59.5L364.5,63.1L337.8,47.3L338.3,34.1L339.2,29L352,27.6ZM318.7,49.8L316,50.3L312.1,41.6L311.6,38.7L316.2,33L318.9,26.5L326.4,16.5L330.8,4.8L332.4,5L330.6,15.5L320.7,44.4ZM433.6,26.1L431.3,27.8L421.5,26.5L410.6,34.1L406.5,31.8L408.1,26.9L409.2,25.1L412.9,23L415.4,20L416.3,15.2L418.6,17.8L425.4,18.8L428.6,20.3L431.3,22.6ZM441.1,-44L435.2,-39.3L433.8,-39.5L431.8,-46.1L435,-50L436.8,-53.3L438.2,-53.3L440,-49.6ZM303,39.1L298.6,40.2L293.8,37.9L285.9,28.8L285,26.5L289.1,28L294.3,32.8L298.4,33.7L304.1,37.8ZM276.1,34.9L269.4,36.4L266.3,33.7L259.9,32.8L257.8,15.7L258.3,14.8L261.5,15.9L272.2,23.8L275.8,32.4ZM310.7,-65L309.6,-62.9L305.7,-65L305.2,-72.3L306.6,-79L305,-84.8L306.8,-88.6L312.5,-79.7L314.1,-75.6L312.1,-70.7ZM339,-233.7L336.3,-231L327.6,-234.9L331.5,-240.2L341,-242.8L346.5,-242L340.4,-236.5ZM594.3,20L592.1,21.9L581.6,18.6L568.8,10.9L570.8,-4.1L574,-10.6L597.3,6.3L597.5,12.7ZM831.7,591.1L830.1,591.3L826.4,592.8L821.6,593.3L816.6,593.1L812.7,595.7L809.1,599.9L805.2,602.8L803.2,605.5L802,608.2L789,615.8L787.2,619L785.8,623.3L785.2,629.2L784.2,634.4L782.2,637.3L775.1,639.6L773.3,640.8L772.2,643.5L768.1,647.7L763.5,651.5L755.1,656L746.2,657.4L734.3,655.8L727.5,654.2L724.1,656L719.5,661.9L714.7,671.9L712.7,679.3L711.1,677.2L708.1,669.2L704.9,668.2L700.6,667.5L697.4,666.4L690.3,661.7L686.7,660.4L682.6,660L678.5,662.7L675.5,665.9L666.1,665.9L655.9,664.4L641.1,653.8L637.4,653.7L633.3,654.2L626.9,651.7L614.4,644.8L608.5,643.3L604.8,644.1L601.6,645.6L599.1,646L597.8,643.6L593.2,641L588.4,640.6L587,642.3L585.7,657.4L584.1,662.7L577.7,662.5L575.4,665L570.4,672.4L569.3,679.2L560.6,677.8L556.5,676.7L552.8,677.7L548.7,681.5L537.6,681.2L528.7,679L524.8,670.4L520.7,666.9L515.7,663.9L513.9,663.2L510.9,658.5L505.6,652.7L497,644.6L490.1,645L487.6,643L486.5,640L483.8,634.9L480.6,631.2L476.7,629.9L471.2,625.3L463.7,615.6L456.9,608.7L450.5,608.8L446.4,605.3L442,600.6L438.8,596L434.1,584.8L430.6,578.6L427.9,574.6L424.7,571.4L423.6,568.9L427.4,562.9L428.8,559.8L430.4,557.6L431.3,555.2L431.3,553.5L427.9,547.6L423.3,543.3L416.5,539L412.2,533.5L410.3,528.5L409.9,525.8L406.9,522.2L404.6,516.7L404.6,513.4L405.1,512.4L407.4,512.4L409.9,514.6L413.5,519.1L416.5,525.3L418.3,522.9L421.5,516.2L427.7,508.6L433.6,504.3L439.1,503.9L443.6,502.7L447.3,500.5L453.9,501.4L458.7,502.9L460,502.1L462.1,498.1L463.2,494.6L473.7,492.7L477.4,486L479.2,486.2L481.7,485.1L483.8,482.5L486,481.5L487.6,482.9L489.9,483.6L492.2,482L495.6,474.4L497.4,473.3L506.6,472.1L519.1,467.6L525.5,463.6L531.6,461.5L538.2,457.5L549,453.8L549.4,452.3L544.6,448.4L542.8,446L541.7,443.4L543.5,440.7L545.8,439.9L548.7,440.9L557.6,442.7L560.1,444.2L561,448.3L563.3,451.7L565.1,452.3L564.5,458.2L567.2,460.5L571.3,462.2L574,461.9L576.1,459.4L576.8,457.8L582.2,457.5L587.7,455.1L588.2,450.9L587.9,443.4L588.4,442.1L596.8,444.4L605.3,447.7L606.4,455.4L608.7,459.1L611.4,462.5L613.9,464.1L618.3,464.3L629.7,468.8L635.1,469.7L640.8,472.8L645.4,476.1L649,476.6L650.6,480.3L652.7,482.5L656.3,480.8L670,478.2L675,481.6L678.2,485.3L678.7,486.3L677.1,489.6L676.2,492L674.8,493.6L670,495.3L667.5,498.3L665.5,501.2L666.8,504.3L670.7,506.4L673.4,506.9L674.4,509.1L683,518.6L690.1,531.1L692.6,533.2L695.3,533.5L698.1,531.8L701.5,527.7L705.6,524.8L709,523.2L714.9,519.8L715.2,517.6L710.1,509.1L707.2,502.2L707.9,501L714.3,502.1L725.2,505.8L741.8,518.1L744.8,518.1L750.7,517L757.1,515.1L760.1,512.9L761.2,513.8L762.1,520.5L760.5,524.1L752.8,527.7L753.2,529.4L755.3,531.8L758.7,533.3L762.8,537.6L765.8,542.6L768.3,544.8L771,546L777.9,543.3L779.9,541.2L780.6,539.7L782,540L784.5,542.4L785.2,544L791.8,546.7L795.6,550.1L798.2,551.7L800.9,550.1L811.6,552.8L814.6,555.1L815.5,558.8L814.8,561L816.6,567L830.1,581.1L831.4,588.2ZM-93.5,404.6L-88.5,407.1L-84.2,407.6L-82.1,406.5L-83.5,400.4L-79.8,397.2L-76,395.6L-74.1,398.3L-70.5,400.9L-67.5,401.1L-59.8,394L-58.2,395.4L-56.3,397.9L-56.1,399.8L-55.7,402L-54.1,402.8L-47.9,402.5L-44.9,398.6L-42.4,396.1L-40.6,397.9L-39.7,402.5L-38.1,408.7L-30.8,415.5L-24.7,417.4L-17.1,416L-14.2,414.8L-12.1,415.9L-10.3,419.6L-6,423.6L3.2,426.6L6.1,428.1L7.9,431L7.5,435L3.2,444.8L2.5,447.7L3.2,448.6L2.2,450.5L-3.5,457L-3.9,459.4L-2.1,463.1L-0.5,466.2L2.9,467.8L6.1,468.3L12.1,468.5L18.4,468.6L19.3,470.5L26.4,475.8L28.7,479.9L33.9,484.1L29.6,489.1L30.3,491.5L31.9,493.8L37.6,495.1L40.6,498.4L40.8,503.6L41.9,511.9L30.1,520.3L26.6,529.4L26.4,531.3L26,530.9L24.6,528L22.3,528L17.5,526.7L10.5,535.1L7.3,541.9L5.4,547L2.7,551.1L2.2,555.4L2.5,557.3L1.6,559.7L1.6,562.1L5.4,566.8L6.6,569.5L11.4,578L9.8,581.3L8.6,584.5L7.3,587L5.7,588.6L0.7,588.4L-5.7,589.4L-10.1,591.1L-12.3,591.1L-16.9,586.9L-21.9,580.6L-25.3,577.5L-26.7,574.8L-30.8,573.8L-36.5,570.6L-40.6,567.2L-44,565L-48.8,563.9L-52.7,564.1L-54.1,558.3L-54.5,551.7L-57.7,547.2L-53.2,529.7L-55.9,528L-58.9,529.4L-63,533.7L-65,538.7L-66.1,542.9L-73.2,547L-84.4,548.6L-96.5,547L-98.3,546L-99,544.8L-99,543.3L-98.3,540.9L-96,538L-95.6,533.9L-97.8,530.4L-99.2,529.1L-98.5,525.6L-96.9,521.3L-96.7,518.9L-104.9,511.4L-110.8,510L-116.8,509.8L-121.1,508.9L-123.6,509.3L-125.4,511.4L-127.5,512.9L-128.8,511L-131.4,497.9L-133.4,496L-140.9,493.8L-151,492.9L-153.7,490.5L-155.3,484.6L-156.2,477.5L-159.6,470.5L-161.2,468.8L-164.2,465.9L-169.7,467.1L-176,471.1L-179.7,472.1L-181.3,472.6L-186.3,468.6L-192,462.5L-196.6,456.1L-197.7,452.4L-196.3,448.1L-197.9,444.8L-200.4,438.7L-201.1,433.9L-173.5,416.9L-156.9,408.1L-148.9,405.5L-147.1,414.3L-145.5,417.1L-143.7,418.8L-141.2,419.2L-138.4,417.1L-134.3,414.8L-127.9,415.9L-123.1,418L-121.5,420.1L-118.4,422.2L-114,422.7L-105.1,418.7L-96.7,412.7L-94.4,408.5ZM242.3,804.9L247.6,793.5L248.5,786.5L243.9,782.3L242.1,781.2L243.7,780.2L250.1,781L254.2,778.6L256.5,776.3L262.2,778.6L270.4,783L274.5,785.9L276.1,788.2L277,790.1L276.5,793.4L278.3,794.7L282.2,795.2L285,796.1L284,800.5L283.8,804.1L287.5,803.6L292,800.8L295.7,796L297.7,791.1L299.5,779.5L300,778.6L302.7,779.5L313.9,778.9L319.2,781.2L327.6,781.5L327.4,783.3L329,786.2L332.6,790.3L334.4,792.9L338.3,793.4L344.2,791.9L347.6,790.4L349,791.4L354.5,790.4L359.3,787.2L360.4,784.6L365.4,782.8L371.8,778.7L380.9,775.6L410.6,772.2L411.7,769.6L411.3,763.7L412.2,762.9L415.8,764.4L422,765.7L426.5,767.8L429.5,770.6L432.2,770.6L436.6,768.8L442.3,767.5L447.7,770.3L449.3,773.4L448.4,775L448.4,777.4L450.2,779.4L454.6,782.8L460.3,785.7L463.2,785.4L464.2,782.6L465.3,776L465.7,768.8L464.4,764.7L461.4,763.7L457.8,763.4L455.7,762.6L456.4,760.3L459.4,754.4L459.4,746.7L452.8,737.7L447.1,729.1L447.1,726.2L450.5,721.1L455.7,716.9L467.3,710.2L471.2,708.8L475.8,707.7L482.6,704.9L486,701.9L488.1,698.9L491.3,682.5L492.2,681.8L493.1,680.8L505,686.5L506.1,685.7L508.2,684.7L512,680.3L512.7,677.2L512.7,670.9L513.2,665L513.9,663.2L515.7,663.9L520.7,666.9L524.8,670.4L528.7,679L537.6,681.2L548.7,681.5L552.8,677.7L556.5,676.7L560.6,677.8L569.3,679.2L570.4,672.4L575.4,665L577.7,662.5L584.1,662.7L585.7,657.4L587,642.3L588.4,640.6L593.2,641L597.8,643.6L599.1,646L601.6,645.6L604.8,644.1L608.5,643.3L614.4,644.8L626.9,651.7L633.3,654.2L637.4,653.7L641.1,653.8L655.9,664.4L666.1,665.9L675.5,665.9L678.5,662.7L682.6,660L686.7,660.4L690.3,661.7L697.4,666.4L700.6,667.5L704.9,668.2L708.1,669.2L711.1,677.2L712.7,679.3L712.2,680.3L712,683.8L709.5,688.5L707,694.3L707,699.6L713.8,717.6L720,728.5L721.1,732.6L725,735.7L721.1,739.8L720.4,745.7L718.1,748.3L717.4,751.6L718.4,754.7L718.4,758.7L719.7,763.9L713.8,765L707,764.9L704.4,765.2L701.9,766.7L699.7,765.8L693.3,760.9L689.6,759.8L687.1,760.1L685.3,762.3L681.9,765L678.9,767L679.6,768.8L692.8,773.2L695.1,780L692.6,785.6L691.7,788.3L688.5,790.4L684.8,792.4L680.3,792.9L679.8,795.8L681.4,804.6L680.1,806.5L678.7,809.3L680.1,816.5L682.8,817L683.5,818.6L683,821.5L682.3,824.6L681.4,828L681,829.5L679.1,830.3L673.2,829.8L668.2,832.7L658.2,842.7L654.5,844.4L650.6,848.4L650.9,857.3L650.4,858.1L649.5,859.8L637.4,856.8L637,856.8L629,857.9L623.5,862.1L616.7,864.3L602.5,863L588.9,864.6L585.7,865.8L582,866.6L578.8,868.8L576.8,872.2L573.6,876.3L568.6,879.7L563.3,882.2L562.2,884.3L560.4,885.4L557.4,883.8L555.1,884L552.2,882.9L542.6,881.7L531.9,879.8L526.8,877.9L521.1,876.5L515,875.2L509.3,874.9L506.6,874.4L493.3,871.2L484.4,870.9L472.8,869.6L450,864.6L443.2,862.7L436.8,862.1L429.3,860.3L423.6,857.6L419.7,852.3L415.8,845.2L408.8,836.1L407.2,831.4L409.4,827.4L411.7,824.5L411.5,823L409.7,822.4L396.9,826.4L384.6,831.4L379.8,831.5L375.2,830.4L369.1,830.3L362.9,831.5L351.1,832.4L344,835.9L339.7,843.1L337.2,848.9L335.1,850.7L331,851.3L324.6,850.8L320.3,849.2L316,844.3L308.9,843.6L302.5,843.5L300.9,842.5L301.1,839.4L298.6,833.3L294.3,831.4L283.6,842.8L280.6,843.8L272,840.7L264.4,835.9L263.8,832.4L262.4,829.3L256,826.5L248.2,824.8L245.7,824.8L246.7,823L247.6,820.1L246.9,817.8L245.1,815.4L244.1,812.8L243.9,810.2L243.2,808.3L243,806.3Z"};
+
+/* ---------- Texts ---------- */
+var T = {
+  de:{
+    nav_events:'Events', nav_map:'Karte', nav_artists:'Artists', nav_connect:'Connect', nav_me:'Profil',
+    banner:'Prototyp: Events und Clubs sind echt (Stand 10.11.2026, mit Quelle). Profile, Chats und Teilnehmende sind Beispiele.',
+    events_title:'Raves in Deutschland', events_sub:'Finde Nächte, DJs und Leute, die auch hinwollen.',
+    search:'Suche', search_ph:'Event, Club oder DJ', city:'Stadt', all_cities:'Alle Städte', when:'Zeitraum',
+    when_all:'Alle Termine', when_week:'Nächste 7 Tage', when_month:'Nächste 30 Tage', genre_all:'Alle Genres',
+    n_events:'{n} Events', none_found:'Keine Events gefunden. Probier weniger Filter.',
+    going_n:'{n} aus der Community', back:'Zurück', date:'Datum', time:'Beginn', venue:'Ort', price:'Eintritt',
+    tba:'siehe Quelle', lineup:'Line-up', who_goes:'Wer geht hin', nobody:'Noch niemand aus der Community. Sei die erste Person.',
+    go:'Ich gehe hin', going:'Du gehst hin', say_hi:'Hi sagen', open_chat:'Chat öffnen',
+    nophone_t:'Foto- und Videoverbot', nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
+    lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.', and_more:'und {n} weitere',
+    show_map:'Auf der Karte zeigen', source_t:'Quelle', source_note:'Stand 10.11.2026. Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',
+    verified:'Verifizierter Artist', artists_title:'Artists', artists_sub:'DJs und Live-Acts mit eigenem Profil. Das rote Häkchen bedeutet: Identität geprüft.',
+    demo_artists:'Diese Profile sind erfunden und zeigen, wie Artist-Seiten aussehen. Echte Artists kommen mit Registrierung und Verifizierung.',
+    only_verified:'Nur verifizierte', about:'Über', socials:'Socials', tour:'Termine', no_tour:'Keine Termine eingetragen.',
+    on_app:'In der App', external:'Extern', add_event:'Event eintragen',
+    connect_title:'Connect', connect_sub:'Du gehst zu denselben Events wie diese Leute. Sag Hi, bevor ihr euch auf dem Floor verpasst.',
+    shared:'Gleiche Events wie du', inbox:'Nachrichten', no_threads:'Noch keine Unterhaltungen.', goes_to:'geht zu',
+    msg_ph:'Nachricht schreiben', send:'Senden', chat_note:'Chat ist für davor und danach. Auf dem Event bleibt das Handy aus.',
+    me_title:'Mein Profil', name:'Name', bio:'Über mich', bio_ph:'Was hörst du, wo tanzt du?', save:'Speichern', saved:'Gespeichert',
+    soc_hint:'Socials verlinken', role_demo:'Demo-Ansicht', role_fan:'Normaler Account', role_artist:'Artist (verifiziert)',
+    verif_t:'Artist-Verifizierung', verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung, dann bekommst du das rote Häkchen und kannst Tourtermine eintragen.',
+    verif_btn:'Verifizierung beantragen', verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',
+    verif_ok:'Dein Profil ist verifiziert.', tour_add:'Tourtermin eintragen', tour_event:'Event oder Club', tour_add_btn:'Termin hinzufügen',
+    tour_added:'Termin eingetragen', my_tour:'Meine Termine',
+    new_title:'Event eintragen', new_sub:'Trag eine Nacht ein. Verifizierte Artists erscheinen sofort, alle anderen Einträge werden kurz geprüft.',
+    f_title:'Name des Events', f_venue:'Club oder Ort', f_date:'Datum', f_time:'Beginn', f_genres:'Genres', f_lineup:'Line-up (Namen mit Komma trennen)',
+    f_link:'Link zu Tickets oder Flyer', f_nophone:'Auf dem Event gilt ein Foto- und Videoverbot', f_submit:'Event veröffentlichen',
+    f_err:'Bitte Name, Ort und Datum ausfüllen.', pending:'In Prüfung', new_tag:'Neu', published:'Event ist eingetragen',
+    footer:'Rave Strangers · Prototyp · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Konten und Chats existieren nur in diesem Fenster.',
+    sources_t:'So kommen Events rein', sources_d:'Aktuell von Hand aus öffentlichen Kalendern zusammengetragen. Später tragen Veranstalter und Artists selbst ein, dazu kommen Kalender-Feeds und offizielle Schnittstellen.',
+    no_artist:'Dieser Artist existiert nicht.', no_event:'Dieses Event existiert nicht.',
+    map_title:'Karte', map_sub:'Alle Clubs und Events auf einen Blick. Ziehen zum Verschieben, Mausrad oder Plus und Minus zum Zoomen.',
+    only_events:'Nur Orte mit Events', venues_t:'Alle Orte', ev_one:'1 Event', ev_many:'{n} Events', pick_marker:'Tippe auf einen Marker, um Events und Details zu sehen.',
+    summary_map:'{v} Orte mit {e} Events im gewählten Zeitraum.', no_ev_here:'Keine Events an diesem Ort im gewählten Zeitraum.',
+    approx:'Position ungefähr', zoom_in:'Vergrößern', zoom_out:'Verkleinern', zoom_reset:'Ganz Deutschland', leg_ev:'Mit Events', leg_none:'Ohne Events', zero:'keine Events'
+    ,save_ev:'Merken', saved_ev:'Gemerkt', remind:'Erinnern', reminded:'Erinnerung an', ics:'In Google Kalender', tickets:'Tickets & Infos',
+    rides_t:'Mitfahrgelegenheiten', rides_none:'Noch keine Fahrten angeboten.', ride_from:'ab {c}, Abfahrt {t}', seats:'{n} Plätze frei', seat_req:'Platz anfragen', seat_reqd:'Angefragt',
+    ride_offer:'Fahrt anbieten', ride_city:'Abfahrt in', ride_time:'Abfahrtszeit', ride_seats:'Freie Plätze', ride_added:'Fahrt eingetragen', ride_msg:'Hi, hast du noch einen Platz frei zu {e}?', ride_mine:'Deine Fahrt',
+    crew_t:'Crew-Suche', crew_none:'Noch niemand sucht hier eine Crew.', crew_join:'Bin dabei', crew_joined:'Angefragt', crew_ph:'z. B. Suche 2 Leute, bin ab 1 Uhr da', crew_new:'Crew suchen', crew_post:'Posten', crew_msg:'Hi, ich wär bei deiner Crew dabei!', crew_all:'Leute suchen eine Crew', crew_posted:'Gepostet', crew_mine:'dein Post',
+    rules_t:'Regeln & Infos', r_phone:'Handy & Fotos', r_door:'Einlass', r_age:'Alter', r_access:'Barrierefreiheit', r_aware:'Awareness', not_set:'Noch nicht vom Club hinterlegt', photo_ban:'Fotoverbot, Handykamera wird am Einlass abgeklebt',
+    aware_t:'Awareness & Sicherheit', aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.', aware_team:'Awareness vor Ort: {x}',
+    upcoming:'Kommende Events', reviews_t:'Berichte & Bewertungen', reviews_none:'Noch keine Berichte. Schreib den ersten.', review_ph:'Wie waren Sound, Crowd, Tür, Awareness?', review_post:'Bericht posten', review_posted:'Danke für deinen Bericht', stars:'Bewertung', review_txt:'Dein Bericht',
+    rev_after:'Berichte und Bewertungen öffnen am Tag nach dem Event.', club_claim:'Du gehörst zum Team dieses Clubs? Mit einem Veranstalter-Account pflegst du Regeln und Events selbst.', club_claim_btn:'Als Veranstalter verwalten', open_club:'Club-Seite', no_club:'Diesen Club gibt es nicht.',
+    report:'Melden', block:'Blockieren', unblock:'Aufheben', blocked:'Blockiert. Du siehst diese Person nicht mehr.', report_reason:'Grund', rr1:'Belästigung', rr2:'Spam oder Fake-Profil', rr3:'Gefährliches Verhalten', rr4:'Sonstiges', report_txt:'Was ist passiert? (optional)', report_send:'Meldung senden', report_sent:'Danke. Unser Team prüft die Meldung vertraulich.', report_ev:'Falsche Angaben melden', blocked_list:'Blockierte Personen', safety_note:'Melden und Blockieren bleibt anonym. Die Person erfährt nichts davon.',
+    role_org:'Veranstalter', org_t:'Veranstalter-Bereich', org_pick:'Welchen Club verwaltest du?', org_note:'Im Prototyp kannst du jeden Club wählen. In der echten App prüfen wir vorher, ob du wirklich zum Team gehörst.', org_rules:'Club-Infos bearbeiten', org_saved:'Club-Infos gespeichert', org_add:'Event für diesen Club eintragen', org_tag:'Veranstalter', org_view:'Club-Seite ansehen',
+    import_t:'Kalender-Feed importieren', import_d:'Füg den Inhalt einer .ics-Datei ein oder lade die Datei hoch. Später holt die App Feeds und offizielle Schnittstellen automatisch ab.', import_file:'.ics-Datei', import_sample:'Beispiel-Feed einfügen', import_parse:'Vorschau', import_go:'{n} Events importieren', import_none:'Keine Events im Feed gefunden.', import_done:'{n} Events importiert', import_tag:'Import', import_txt:'Feed-Inhalt',
+    notifs_t:'Benachrichtigungen', notifs_none:'Noch nichts Neues.', saved_t:'Merkliste', saved_none:'Noch nichts gemerkt. Auf Eventseiten gibt es den Merken-Knopf.', ics_all:'Alle in Kalender (.ics)', follows_t:'Du folgst', follows_none:'Du folgst noch niemandem.', follow:'Folgen', following:'Du folgst',
+    n_follow:'{a} spielt am {d}: {c}', n_follow0:'Du folgst jetzt {a}. Neue Termine landen hier.', n_remind:'Erinnerung gesetzt: {e}, einen Tag vorher', n_ride:'Platzanfrage gesendet: {e}', push_note:'In der echten App kommen diese als Push-Nachricht aufs Handy.',
+    type_all:'Alles', type_club:'Clubnächte', type_fest:'Festivals & Open Airs', fest_note:'Gerade ist Indoor-Saison. Open Airs für 2027 kommen rein, sobald die Veranstalter Termine bestätigen.', fest_tag:'Festival'
+
+  },
+  en:{
+    nav_events:'Events', nav_map:'Map', nav_artists:'Artists', nav_connect:'Connect', nav_me:'Profile',
+    banner:'Prototype: events and clubs are real (as of 10 Nov 2026, with source). Profiles, chats and attendees are samples.',
+    events_title:'Raves in Germany', events_sub:'Find nights, DJs and people who are heading there too.',
+    search:'Search', search_ph:'Event, club or DJ', city:'City', all_cities:'All cities', when:'When',
+    when_all:'Any date', when_week:'Next 7 days', when_month:'Next 30 days', genre_all:'All genres',
+    n_events:'{n} events', none_found:'No events found. Try fewer filters.',
+    going_n:'{n} from the community', back:'Back', date:'Date', time:'Starts', venue:'Venue', price:'Entry',
+    tba:'see source', lineup:'Line-up', who_goes:"Who's going", nobody:'Nobody from the community yet. Be the first.',
+    go:"I'm going", going:"You're going", say_hi:'Say hi', open_chat:'Open chat',
+    nophone_t:'No photos or video', nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
+    lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.', and_more:'and {n} more',
+    show_map:'Show on map', source_t:'Source', source_note:'As of 10 Nov 2026. Please check time, line-up and price with the organiser.',
+    verified:'Verified artist', artists_title:'Artists', artists_sub:'DJs and live acts with their own profile. The red tick means identity checked.',
+    demo_artists:'These profiles are made up to show what artist pages look like. Real artists come with sign-up and verification.',
+    only_verified:'Verified only', about:'About', socials:'Socials', tour:'Dates', no_tour:'No dates listed.',
+    on_app:'On the app', external:'External', add_event:'Add event',
+    connect_title:'Connect', connect_sub:"You're going to the same events as these people. Say hi before you miss each other on the floor.",
+    shared:'Same events as you', inbox:'Messages', no_threads:'No conversations yet.', goes_to:'going to',
+    msg_ph:'Write a message', send:'Send', chat_note:'Chat is for before and after. At the event the phone stays off.',
+    me_title:'My profile', name:'Name', bio:'About me', bio_ph:'What do you listen to, where do you dance?', save:'Save', saved:'Saved',
+    soc_hint:'Link your socials', role_demo:'Demo view', role_fan:'Regular account', role_artist:'Artist (verified)',
+    verif_t:'Artist verification', verif_none:'Are you a DJ or live act? Request verification to get the red tick and add tour dates.',
+    verif_btn:'Request verification', verif_pending:"Request received. We'll check your profile and get back to you.",
+    verif_ok:'Your profile is verified.', tour_add:'Add a tour date', tour_event:'Event or club', tour_add_btn:'Add date',
+    tour_added:'Date added', my_tour:'My dates',
+    new_title:'Add an event', new_sub:'List a night. Verified artists appear right away, all other entries get a quick check.',
+    f_title:'Event name', f_venue:'Club or venue', f_date:'Date', f_time:'Start', f_genres:'Genres', f_lineup:'Line-up (separate names with commas)',
+    f_link:'Link to tickets or flyer', f_nophone:'This event has a no-photo, no-video rule', f_submit:'Publish event',
+    f_err:'Please fill in name, venue and date.', pending:'Under review', new_tag:'New', published:'Event added',
+    footer:'Rave Strangers · Prototype · Event data from public sources, no guarantee. Accounts and chats only live in this window.',
+    sources_t:'How events get in', sources_d:'Currently collected by hand from public calendars. Later organisers and artists add their own, plus calendar feeds and official partner interfaces.',
+    no_artist:'This artist does not exist.', no_event:'This event does not exist.',
+    map_title:'Map', map_sub:'All clubs and events at a glance. Drag to move, mouse wheel or plus and minus to zoom.',
+    only_events:'Only places with events', venues_t:'All places', ev_one:'1 event', ev_many:'{n} events', pick_marker:'Tap a marker to see events and details.',
+    summary_map:'{v} places with {e} events in the chosen period.', no_ev_here:'No events at this place in the chosen period.',
+    approx:'Approximate position', zoom_in:'Zoom in', zoom_out:'Zoom out', zoom_reset:'All of Germany', leg_ev:'With events', leg_none:'No events', zero:'no events'
+    ,save_ev:'Save', saved_ev:'Saved', remind:'Remind me', reminded:'Reminder on', ics:'Add to Google Calendar', tickets:'Tickets & info',
+    rides_t:'Ride sharing', rides_none:'No rides offered yet.', ride_from:'from {c}, leaving {t}', seats:'{n} seats free', seat_req:'Request seat', seat_reqd:'Requested',
+    ride_offer:'Offer a ride', ride_city:'Leaving from', ride_time:'Departure', ride_seats:'Free seats', ride_added:'Ride added', ride_msg:'Hi, do you still have a seat to {e}?', ride_mine:'Your ride',
+    crew_t:'Crew finder', crew_none:'Nobody is looking for a crew here yet.', crew_join:"I'm in", crew_joined:'Requested', crew_ph:'e.g. Looking for 2 people, there from 1 am', crew_new:'Find a crew', crew_post:'Post', crew_msg:"Hi, I'd like to join your crew!", crew_all:'People looking for a crew', crew_posted:'Posted', crew_mine:'your post',
+    rules_t:'Rules & info', r_phone:'Phones & photos', r_door:'Door', r_age:'Age', r_access:'Accessibility', r_aware:'Awareness', not_set:'Not provided by the club yet', photo_ban:'No photos, phone cameras get taped at the door',
+    aware_t:'Awareness & safety', aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.', aware_team:'Awareness on site: {x}',
+    upcoming:'Upcoming events', reviews_t:'Reports & ratings', reviews_none:'No reports yet. Write the first one.', review_ph:'How were sound, crowd, door, awareness?', review_post:'Post report', review_posted:'Thanks for your report', stars:'Rating', review_txt:'Your report',
+    rev_after:'Reports and ratings open the day after the event.', club_claim:'Part of this club’s team? With an organiser account you keep rules and events up to date yourself.', club_claim_btn:'Manage as organiser', open_club:'Club page', no_club:'This club does not exist.',
+    report:'Report', block:'Block', unblock:'Unblock', blocked:'Blocked. You will not see this person any more.', report_reason:'Reason', rr1:'Harassment', rr2:'Spam or fake profile', rr3:'Dangerous behaviour', rr4:'Other', report_txt:'What happened? (optional)', report_send:'Send report', report_sent:'Thanks. Our team reviews the report confidentially.', report_ev:'Report wrong details', blocked_list:'Blocked people', safety_note:'Reporting and blocking are anonymous. The person is not told.',
+    role_org:'Organiser', org_t:'Organiser area', org_pick:'Which club do you manage?', org_note:'In the prototype you can pick any club. In the real app we first check that you are really on the team.', org_rules:'Edit club info', org_saved:'Club info saved', org_add:'Add an event for this club', org_tag:'Organiser', org_view:'View club page',
+    import_t:'Import a calendar feed', import_d:'Paste the contents of an .ics file or upload it. Later the app fetches feeds and official partner interfaces automatically.', import_file:'.ics file', import_sample:'Insert sample feed', import_parse:'Preview', import_go:'Import {n} events', import_none:'No events found in the feed.', import_done:'{n} events imported', import_tag:'Import', import_txt:'Feed contents',
+    notifs_t:'Notifications', notifs_none:'Nothing new yet.', saved_t:'Saved', saved_none:'Nothing saved yet. Event pages have a save button.', ics_all:'All to calendar (.ics)', follows_t:'Following', follows_none:'You are not following anyone yet.', follow:'Follow', following:'Following',
+    n_follow:'{a} plays on {d}: {c}', n_follow0:'You now follow {a}. New dates show up here.', n_remind:'Reminder set: {e}, one day before', n_ride:'Seat request sent: {e}', push_note:'In the real app these arrive as push notifications on your phone.',
+    type_all:'All', type_club:'Club nights', type_fest:'Festivals & open airs', fest_note:'It is indoor season right now. Open airs for 2027 get added once organisers confirm dates.', fest_tag:'Festival'
+
+  }
+};
+
+/* ---------- Data: cities, venues, events (real, collected 10 Nov 2026), demo artists and people ---------- */
+var CITIES = [
+  {name:'Berlin',lat:52.520,lon:13.405},{name:'Hamburg',lat:53.551,lon:9.994},{name:'München',lat:48.137,lon:11.576},
+  {name:'Köln',lat:50.938,lon:6.960},{name:'Frankfurt',lat:50.111,lon:8.682},{name:'Stuttgart',lat:48.776,lon:9.183},
+  {name:'Düsseldorf',lat:51.228,lon:6.774},{name:'Leipzig',lat:51.340,lon:12.373},{name:'Dresden',lat:51.050,lon:13.737},
+  {name:'Karlsruhe',lat:49.007,lon:8.404},{name:'Hannover',lat:52.376,lon:9.732},{name:'Nürnberg',lat:49.452,lon:11.077},{name:'Bremen',lat:53.079,lon:8.802}
+];
+var EVENT_CITIES = ['Berlin','Dresden','Düsseldorf','Frankfurt','Hamburg','Karlsruhe','Köln','Leipzig','München','Stuttgart'];
+var GENRES = ['Techno','Hard Techno','Acid','Trance','House','Minimal','Drum & Bass','Electronic'];
+var SOC = [['instagram','Instagram'],['soundcloud','SoundCloud'],['ra','Resident Advisor'],['spotify','Spotify'],['mixcloud','Mixcloud'],['tiktok','TikTok']];
+
+var VENUES = [
+  {id:1,name:'Tresor',city:'Berlin',addr:'Köpenicker Str. 70, 10179 Berlin',lat:52.5107,lon:13.4200},
+  {id:2,name:'Berghain',city:'Berlin',addr:'Am Wriezener Bahnhof, 10243 Berlin',lat:52.5111,lon:13.4430},
+  {id:3,name:'Sisyphos',city:'Berlin',addr:'Hauptstr. 15, 10317 Berlin',lat:52.4962,lon:13.4935,approx:true},
+  {id:4,name:'About Blank',city:'Berlin',addr:'Markgrafendamm 24c, 10245 Berlin',lat:52.5019,lon:13.4680},
+  {id:5,name:'Bootshaus',city:'Köln',addr:'Auenweg 173, 51063 Köln',lat:50.9540,lon:6.9880,approx:true},
+  {id:6,name:'Distillery',city:'Leipzig',addr:'Eggebrechtstr. 2, 04103 Leipzig',lat:51.3370,lon:12.3880,approx:true},
+  {id:7,name:'Sky Club',city:'Leipzig',addr:'Riesaer Str. 56-64, 04328 Leipzig',lat:51.3400,lon:12.4540,approx:true},
+  {id:8,name:'elipamanoke',city:'Leipzig',addr:null,lat:51.3300,lon:12.3300,approx:true},
+  {id:9,name:'Docks',city:'Hamburg',addr:'Spielbudenplatz 19, 20359 Hamburg',lat:53.5497,lon:9.9566},
+  {id:10,name:'Uebel & Gefährlich',city:'Hamburg',addr:'Feldstr. 66, 20359 Hamburg',lat:53.5632,lon:9.9693},
+  {id:11,name:'Edelfettwerk',city:'Hamburg',addr:'Schnackenburgallee 202, 22525 Hamburg',lat:53.5960,lon:9.9040,approx:true},
+  {id:12,name:'Beat Boutique',city:'Hamburg',addr:null,lat:53.5500,lon:9.9600,approx:true},
+  {id:13,name:'Rote Sonne',city:'München',addr:'Maximiliansplatz 5, 80333 München',lat:48.1412,lon:11.5662},
+  {id:14,name:'Bahnwärter Thiel',city:'München',addr:null,lat:48.1240,lon:11.5420,approx:true},
+  {id:15,name:'Tanzhaus West',city:'Frankfurt',addr:'Gutleutstr. 294, 60327 Frankfurt',lat:50.0990,lon:8.6340,approx:true},
+  {id:16,name:'Zoom Club',city:'Frankfurt',addr:'Brönnerstr. 5-9, 60313 Frankfurt',lat:50.1146,lon:8.6838},
+  {id:17,name:'Pracht',city:'Frankfurt',addr:'Niddastr. 54, 60327 Frankfurt',lat:50.1065,lon:8.6585},
+  {id:18,name:'Airport Club (Dorian Lounge)',city:'Frankfurt',addr:'Hugo-Eckener-Ring, 60549 Frankfurt',lat:50.0510,lon:8.5700,approx:true},
+  {id:19,name:'Gotec',city:'Karlsruhe',addr:'Gablonzer Str. 11, 76185 Karlsruhe',lat:49.0125,lon:8.3720,approx:true},
+  {id:20,name:'dm-arena (Rheinstetten)',city:'Karlsruhe',addr:null,lat:48.9830,lon:8.3330,approx:true},
+  {id:21,name:'Stromwerk',city:'Dresden',addr:null,lat:51.0600,lon:13.7090,approx:true},
+  {id:22,name:'Arteum',city:'Dresden',addr:null,lat:51.0640,lon:13.7380,approx:true},
+  {id:23,name:'Stahlwerk',city:'Düsseldorf',addr:'Ronsdorfer Str. 134, 40233 Düsseldorf',lat:51.2040,lon:6.8060,approx:true},
+  {id:24,name:'Stutyard',city:'Stuttgart',addr:null,lat:48.8100,lon:9.2250,approx:true}
+];
+
+var TA='https://www.technoairlines.com/';
+var EVENTS = [
+  {id:1,title:'Tresor New Faces hosted by Tresor.West',v:1,date:'2026-11-11',time:'23:00',genres:['Techno'],lineup:['Frontspin','ananda priori','Mariami','Sparkling Water Dreams'],src:TA+'event/tresor-new-faces-hosted-by-tresor-west-tresor-2026-11-11'},
+  {id:2,title:'garryklein',v:13,date:'2026-11-11',time:'22:00',genres:['Electronic'],lineup:null,src:TA+'event/garryklein-rote-sonne-2026-11-11'},
+  {id:3,title:'135+ mit XOXO & Secret Trance Frequencies',v:14,date:'2026-11-12',time:'22:00',genres:['Trance'],lineup:['Atzlina'],src:TA+'event/135-mit-xoxo-secret-trance-frequencies-bahnwarter-thiel-2026-11-12'},
+  {id:4,title:'S.D.H.Q. presents: Sonic Dimensions #2',v:6,date:'2026-11-13',time:'20:00',genres:['Techno'],lineup:['Emeveka','Kalitos','Die Ruhe','OutWithJane'],src:TA+'event/s-d-h-q-presents-sonic-dimensions-2-distillery-2026-11-13'},
+  {id:5,title:'Tresor meets DJ Bone: FURTHER',v:1,date:'2026-11-13',time:'23:00',genres:['Techno'],lineup:['DJ Bone','DAIYAH','LYZA','madwoman','Mark Williams','Yeti Mind Tricks'],src:TA+'event/tresor-meets-dj-bone-further-tresor-2026-11-13'},
+  {id:6,title:'Tresor Klubnacht',v:1,date:'2026-11-14',time:'23:00',genres:['Techno'],lineup:['Cecilia Tosh','James Ruskin','NEUX','UVB','Hamish & Toby','JAXX TMS','Nat Wendell'],src:TA+'event/tresor-klubnacht-tresor-2026-11-14'},
+  {id:7,title:'Klubnacht',v:2,date:'2026-11-14',time:'23:59',genres:['Techno'],lineup:['Efdemin','Ian Pooley','Alexander Skancke','Alinka','Bryan Kessler','Cinthie','Dresden','Gabrielle Kwarteng'],more:1,src:TA+'event/klubnacht-berghain-2026-11-14'},
+  {id:8,title:'VER x TELETECH',v:11,date:'2026-11-14',time:'23:00',genres:['Techno','Trance','Hard Techno'],lineup:['A.N.I.','NIKOLINA','EVA CHARLEY','Charleen Herzig','HOOM','AH-NICE','BARBIIE','MKHXR'],nophone:true,src:'https://xceed.me/en/hamburg/event/ver-x-teletech-w-ani-nikolina-eva-charley-charleen-herzig-uvm/241364'},
+  {id:9,title:'Chrome',v:5,date:'2026-11-14',time:null,genres:['Techno'],lineup:null,src:'https://edmli.com/?p=55724'},
+  {id:10,title:'DJ Hell & Lars Eidinger',v:21,date:'2026-11-14',time:'22:00',genres:['Techno'],lineup:['DJ Hell','Lars Eidinger','Mike Buké'],src:TA+'events/dresden'},
+  {id:11,title:'Hasardeur Indoor',v:20,date:'2026-11-14',time:null,genres:['Techno'],lineup:['Fantasm','Klofama','Winson'],src:TA+'festival/hasardeur-indoor-rheinstetten-germany-2026'},
+  {id:12,title:'Unreleased Hamburg',v:9,date:'2026-11-18',time:null,genres:['Techno'],lineup:null,src:'https://xceed.me/hamburg/events/all/today/filters--music-genres_hard-techno'},
+  {id:13,title:'Tresor New Faces hosted by ENIGMA',v:1,date:'2026-11-18',time:'23:00',genres:['Techno'],lineup:['Adriano.','DAHRAXT','KEROSENE (ZA)','Miss Italia'],src:TA+'event/tresor-new-faces-hosted-by-enigma-tresor-2026-11-18'},
+  {id:14,title:'HEELIX',v:2,date:'2026-11-19',time:'22:00',genres:['Techno'],lineup:['Innersha','Abo Abo','Marco Maldarella','Seta Loto','Marie Midori','vp allowed'],src:TA+'event/heelix-berghain-2026-11-19'},
+  {id:15,title:'Pracht pres. Marc Werner, AMacowicz & Merna',v:17,date:'2026-11-20',time:'22:00',genres:['Techno'],lineup:['Marc Werner','AMacowicz','Merna'],src:'https://ra.co/events/2575985'},
+  {id:16,title:'Red Zone – Hardtekk Fest Dresden',v:22,date:'2026-11-20',time:'22:00',genres:['Hard Techno'],lineup:null,src:TA+'events/dresden'},
+  {id:17,title:'RA25 x Tresor Berlin',v:1,date:'2026-11-21',time:'20:00',genres:['Electronic'],lineup:['Appleblim','Beatrice M.','Peverelist','Chloe Lula','gyrofield','Nídia'],more:6,src:TA+'event/ra25-x-tresor-berlin-tresor-2026-11-21'},
+  {id:18,title:'Roman Flügel × nebula',v:6,date:'2026-11-21',time:'21:00',genres:['Techno'],lineup:['Roman Flügel','Cynthia Matisse','Lea Jessen','a:tok','moraine','morphin','noxsonos'],src:TA+'event/roman-flugel-x-nebula-distillery-2026-11-21'},
+  {id:19,title:'Berghain / Panorama Bar',v:2,date:'2026-11-27',time:'22:00',genres:['House'],lineup:['Danilo Plessow aka MCDE'],src:'https://de.ra.co/events/2543878'},
+  {id:20,title:'Clubnight mit Talla 2XLC & DJ Taucher',v:18,date:'2026-11-27',time:'22:00',genres:['Trance'],lineup:['Talla 2XLC','DJ Taucher'],src:'https://www.regioactive.de/party/clubnight-mit-talla-2xlc-dj-taucher-frankfurt-am-main-airport-club-dorian-lounge-2026-11-27-ng54lm4Fm8'},
+  {id:21,title:'Poltergst x Karla Blum',v:21,date:'2026-11-27',time:'22:00',genres:['Techno'],lineup:['Poltergeist','Karla Blum','Michael Klotz'],src:TA+'events/dresden'},
+  {id:22,title:'23 Jahre Tanzhaus West',v:15,date:'2026-11-28',time:'22:00',genres:['Techno'],lineup:['CEM','Fabe','HOTBOI2300','Nene H','MËRO','stargurl'],more:6,src:TA+'event/23-jahre-tanzhaus-west-tanzhaus-west-2026-11-28'},
+  {id:23,title:'Fuchsbau zum satten Bass',v:7,date:'2026-11-28',time:'22:00',genres:['Hard Techno'],lineup:null,src:'https://de.ra.co/events/2521533'},
+  {id:24,title:'newfaces – weekend edition',v:8,date:'2026-11-28',time:'23:59',genres:['Techno'],lineup:null,src:TA+'event/newfaces-weekend-edition-elipamanoke-2026-11-28'},
+  {id:25,title:'EarlyBeats – Part 11',v:12,date:'2026-11-28',time:'20:00',genres:['Techno'],lineup:['STOECKER_','NoraDrenalin'],src:TA+'events/hamburg'},
+  {id:26,title:'AREA51 Techno – Hart an der Grenze 3 x Ampere',v:23,date:'2026-11-28',time:'22:00',genres:['Hard Techno'],lineup:['HOEHENANGST','DØPAIR','LIO','DUTCHMAN','SEELSORGER'],src:'https://de.ra.co/events/2563747'},
+  {id:27,title:'HARDRAISE',v:21,date:'2026-12-04',time:'22:00',genres:['Hard Techno'],lineup:null,src:TA+'events/dresden'},
+  {id:28,title:'240KM/H x Heat x Face2Face Frankfurt',v:16,date:'2026-12-05',time:'23:00',genres:['Hard Techno'],lineup:null,src:TA+'event/240km-h-x-heat-x-face2face-frankfurt-zoom-club-2026-12-05'},
+  {id:29,title:'44 Label x Stutyard',v:24,date:'2026-12-12',time:null,genres:['Hard Techno'],lineup:null,src:TA+'festival/44-label-x-stutyard-stuttgart-germany-2026'},
+  {id:30,title:'Unreal x Stutyard',v:24,date:'2026-12-18',time:null,genres:['Hard Techno'],lineup:null,src:TA+'festival/unreal-x-stutyard-stuttgart-germany-2026'},
+  {id:31,title:'Bootshaus & Loonyland pres. NYE 2026',v:5,date:'2026-12-31',time:'21:00',genres:['Electronic'],lineup:null,src:'https://www.bootshaus.tv/events/bootshaus-loonyland-pres-nye-2026'}
+];
+
+var ARTISTS = [
+  {id:1,name:'Mira Halden',city:'Berlin',genres:['Techno','Acid'],verified:true,
+   bio:{de:'Acid-lastiger Techno, lange Übergänge, selten unter 135 BPM.',en:'Acid-heavy techno, long blends, rarely under 135 BPM.'},
+   soc:{instagram:'@mira.halden',soundcloud:'mirahalden',ra:'mira-halden'},
+   tour:[{off:21,city:'Wien',venue:'Fabrikhalle',ext:true}]},
+  {id:2,name:'KASIMIR',city:'Leipzig',genres:['Hard Techno'],verified:true,
+   bio:{de:'Hard Techno mit Industrial-Kanten. Resident in Leipzig.',en:'Hard techno with industrial edges. Leipzig resident.'},
+   soc:{instagram:'@kasimir.live',soundcloud:'kasimir-live',spotify:'KASIMIR'},tour:[]},
+  {id:3,name:'Nova Kress',city:'Köln',genres:['Trance','Hard Techno'],verified:true,
+   bio:{de:'Trance für Leute, die Techno lieben. Open Air bevorzugt.',en:'Trance for people who love techno. Open air preferred.'},
+   soc:{instagram:'@novakress',mixcloud:'novakress',tiktok:'@novakress'},
+   tour:[{off:27,city:'Zürich',venue:'Gerberei',ext:true}]},
+  {id:4,name:'TRVSS',city:'Hamburg',genres:['Minimal','House'],verified:true,
+   bio:{de:'Minimal und House für die späte Stunde.',en:'Minimal and house for the late hours.'},
+   soc:{instagram:'@trvss.hh',soundcloud:'trvss',ra:'trvss'},tour:[]},
+  {id:5,name:'Lio Brandt',city:'München',genres:['Techno'],verified:false,
+   bio:{de:'Hobby-DJ aus München. Noch nicht verifiziert.',en:'Hobby DJ from Munich. Not verified yet.'},
+   soc:{instagram:'@lio.brandt'},tour:[]},
+  {id:6,name:'Ida Wolter',city:'Dresden',genres:['Acid','Techno'],verified:true,
+   bio:{de:'Acid, 303 und Hardware-Live-Sets.',en:'Acid, 303s and hardware live sets.'},
+   soc:{instagram:'@idawolter',soundcloud:'ida-wolter',spotify:'Ida Wolter'},tour:[]},
+  {id:7,name:'Sektor 9',city:'Frankfurt',genres:['Drum & Bass'],verified:true,
+   bio:{de:'Duo aus Frankfurt. Drum & Bass, dunkel und schnell.',en:'Frankfurt duo. Drum and bass, dark and fast.'},
+   soc:{instagram:'@sektor9',soundcloud:'sektor9',mixcloud:'sektor9'},tour:[]},
+  {id:8,name:'Juno Falk',city:'Stuttgart',genres:['House'],verified:false,
+   bio:{de:'House, Disco-Edits, Sonntagabend-Sets.',en:'House, disco edits, Sunday evening sets.'},
+   soc:{instagram:'@juno.falk'},tour:[]}
+];
+
+var PEOPLE = [
+  {id:1,name:'Lea',city:'Berlin',goes:[6,7,17]},
+  {id:2,name:'Tobi',city:'Leipzig',goes:[4,6,18]},
+  {id:3,name:'Samira',city:'Köln',goes:[9,22]},
+  {id:4,name:'Jonas',city:'Hamburg',goes:[8,12,25]},
+  {id:5,name:'Mia',city:'Dresden',goes:[10,16,21]},
+  {id:6,name:'Felix',city:'Berlin',goes:[6,7,13,14]},
+  {id:7,name:'Nora',city:'Stuttgart',goes:[29,30]},
+  {id:8,name:'Can',city:'Frankfurt',goes:[15,22,28]}
+];
+
+var REPLIES = {
+  de:['Hey, cool dass du auch hingehst! Wo treffen wir uns vorher?','Ich bin ab Mitternacht am Eingang zum Hauptfloor.','Mega, bis dann. Handy bleibt aus.'],
+  en:['Hey, nice that you are going too! Where do we meet beforehand?','I will be at the main floor entrance from midnight.','Great, see you there. Phone stays off.']
+};
+
+/* ---------- State ---------- */
+var S = {
+  lang:'de',
+  q:'', city:'', genre:'', when:'all',
+  onlyVerified:false, onlyEvents:false,
+  me:{name:'Du',city:'Berlin',bio:'',soc:{},role:'fan',verif:'none',goes:[6,7]},
+  myTour:[],
+  threads:{2:[{from:2,de:'Hey, gehst du auch zum Tresor Klubnacht?',en:'Hey, are you going to the Tresor Klubnacht?'}]},
+  nextId:100, nextVenue:100, type:'', saved:[], remind:[], follows:[], blocked:[], notifs:[], rideReq:[], crewJoined:[], org:null, clubEdits:{}, reviews:{}, importPreview:[],
+  map:null, mapSel:null, mapHash:null
+};
+var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+
+/* ---------- Helpers ---------- */
+function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.replace('{'+x+'}',v[x]); } } return s; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function dayOf(off){ var d=new Date(TODAY.getTime()); d.setDate(d.getDate()+off); return d; }
+function locale(){ return S.lang==='de'?'de-DE':'en-GB'; }
+function fmtMonth(d){ return d.toLocaleDateString(locale(),{month:'short'}).replace('.',''); }
+function fmtLong(d){ return d.toLocaleDateString(locale(),{weekday:'long',day:'numeric',month:'long'}); }
+function fmtShort(d){ return d.toLocaleDateString(locale(),{weekday:'short',day:'numeric',month:'short'}); }
+function offFromISO(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return Math.round((d-TODAY)/86400000); }
+function isoOf(off){ var d=dayOf(off); var m=('0'+(d.getMonth()+1)).slice(-2), dd=('0'+d.getDate()).slice(-2); return d.getFullYear()+'-'+m+'-'+dd; }
+function hue(name){ var h=0; for(var i=0;i<name.length;i++){ h=(h*31+name.charCodeAt(i))%360; } return h; }
+function initials(name){ var p=name.trim().split(/\s+/); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
+function av(name,size){ return '<span class="av" style="--h:'+hue(name)+';--s:'+(size||40)+'px" aria-hidden="true">'+esc(initials(name||'?'))+'</span>'; }
+var VB='<svg class="vb" viewBox="0 0 24 24" role="img" aria-label="verified"><circle cx="12" cy="12" r="11" fill="#e4262e"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function artistById(id){ for(var i=0;i<ARTISTS.length;i++){ if(ARTISTS[i].id===id) return ARTISTS[i]; } return null; }
+function artistByName(n){ var l=n.toLowerCase(); for(var i=0;i<ARTISTS.length;i++){ if(ARTISTS[i].name.toLowerCase()===l) return ARTISTS[i]; } return null; }
+function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return EVENTS[i]; } return null; }
+function venue(id){ for(var i=0;i<VENUES.length;i++){ if(VENUES[i].id===id) return VENUES[i]; } return null; }
+function person(id){ for(var i=0;i<PEOPLE.length;i++){ if(PEOPLE[i].id===id) return PEOPLE[i]; } return null; }
+function amGoing(id){ return S.me.goes.indexOf(id)>-1; }
+function blocked(pid){ return S.blocked.indexOf(pid)>-1; }
+function attendees(id){ return PEOPLE.filter(function(p){ return p.goes.indexOf(id)>-1 && !blocked(p.id); }); }
+function goingCount(e){ return attendees(e.id).length+(amGoing(e.id)?1:0); }
+function genreTags(g){ return g.map(function(x){ return '<span class="tag">'+esc(x)+'</span>'; }).join(' '); }
+function host(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
+function inWindow(e){ if(e.off<0) return false; if(S.when==='week' && e.off>7) return false; if(S.when==='month' && e.off>30) return false; return true; }
+function sortedEvents(){ return EVENTS.slice().sort(function(a,b){ return a.off-b.off || (a.time||'').localeCompare(b.time||''); }); }
+var toastTimer;
+function toast(msg){ var el=document.getElementById('toast'); el.textContent=msg; el.className='show'; clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.className=''; },2200); }
+
+function proj(lon,lat){ var l=lon*Math.PI/180, p=lat*Math.PI/180; return [GEO.tx+GEO.k*l, GEO.ty-GEO.k*Math.log(Math.tan(Math.PI/4+p/2))]; }
+VENUES.forEach(function(v){ var p=proj(v.lon,v.lat); v.x=p[0]; v.y=p[1]; });
+CITIES.forEach(function(c){ var p=proj(c.lon,c.lat); c.x=p[0]; c.y=p[1]; });
+EVENTS.forEach(function(e){ e.off=offFromISO(e.date); });
+[11,29,30].forEach(function(id){ evt(id).type='festival'; });
+var RIDES=[{id:1,ev:6,by:2,from:'Leipzig',time:'20:30',seats:2},{id:2,ev:22,by:3,from:'Köln',time:'19:00',seats:3}];
+var CREW=[
+  {id:1,ev:7,by:6,text:{de:'Suche 1–2 Leute für die Klubnacht, bin ab 1 Uhr da.',en:'Looking for 1–2 people for Klubnacht, there from 1 am.'}},
+  {id:2,ev:17,by:1,text:{de:'Wer geht zu RA25? Wir wollen vorher zusammen essen.',en:'Who is going to RA25? We want to grab food together before.'}},
+  {id:3,ev:8,by:4,text:{de:'Erstes Mal Teletech, wer nimmt mich in die Crew auf?',en:'First time at Teletech, who takes me into their crew?'}}
+];
+var CLUB_INFO={1:{phone:'photo_ban'},2:{phone:'photo_ban'}};
+
+/* ---------- Views: events ---------- */
+function eventCard(e){
+  var d=dayOf(e.off), v=venue(e.v);
+  var ppl=attendees(e.id).slice(0,3), n=goingCount(e);
+  var tag=e.pending?' <span class="tag hot">'+t('pending')+'</span>':(e.isNew?' <span class="tag hot">'+t('new_tag')+'</span>':'');
+  if(e.type==='festival') tag+=' <span class="tag">'+t('fest_tag')+'</span>';
+  if(e.imported) tag+=' <span class="tag">'+t('import_tag')+'</span>'; else if(e.byOrg) tag+=' <span class="tag">'+t('org_tag')+'</span>';
+  if(S.saved.indexOf(e.id)>-1) tag+=' <span class="stars" title="'+t('saved_ev')+'">★</span>';
+  return '<a class="ev" href="#event-'+e.id+'">'+
+    '<div class="date"><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
+    '<div><h3>'+esc(e.title)+tag+'</h3><p class="meta">'+esc(v.name)+' · '+esc(v.city)+(e.time?' · '+esc(e.time):'')+'</p><div class="chips">'+genreTags(e.genres)+'</div></div>'+
+    '<div class="side">'+(n?'<div class="avs">'+ppl.map(function(p){ return av(p.name,28); }).join('')+'</div><span>'+t('going_n',{n:n})+'</span>':'')+'</div>'+
+    '</a>';
+}
+function filteredEvents(){
+  var q=S.q.trim().toLowerCase();
+  return sortedEvents().filter(function(e){
+    var v=venue(e.v);
+    if(e.off<0) return false;
+    if(S.city && v.city!==S.city) return false;
+    if(S.genre && e.genres.indexOf(S.genre)<0) return false;
+    if(S.type==='festival' && e.type!=='festival') return false;
+    if(S.type==='club' && e.type==='festival') return false;
+    if(S.when==='week' && e.off>7) return false;
+    if(S.when==='month' && e.off>30) return false;
+    if(q){
+      var hay=(e.title+' '+v.name+' '+v.city+' '+(e.lineup||[]).join(' ')).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  });
+}
+function eventsListHTML(){
+  var list=filteredEvents();
+  if(!list.length) return '<div class="empty">'+t('none_found')+'</div>';
+  return '<p class="count">'+t('n_events',{n:list.length})+'</p><div class="list">'+list.map(eventCard).join('')+'</div>';
+}
+function whenOptions(){
+  return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join('');
+}
+function genreChips(){
+  return '<button type="button" class="chip" data-act="genre" data-id="" aria-pressed="'+(S.genre===''?'true':'false')+'">'+t('genre_all')+'</button>'+
+    GENRES.map(function(g){ return '<button type="button" class="chip" data-act="genre" data-id="'+esc(g)+'" aria-pressed="'+(S.genre===g?'true':'false')+'">'+esc(g)+'</button>'; }).join('');
+}
+function viewEvents(){
+  var cityOpts='<option value="">'+t('all_cities')+'</option>'+EVENT_CITIES.map(function(c){ return '<option'+(S.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  return '<div class="row" style="justify-content:space-between;align-items:flex-end"><div><h1>'+t('events_title')+'</h1><p class="sub">'+t('events_sub')+'</p></div>'+
+    '<div class="row"><a class="btn" href="#map">'+t('nav_map')+'</a><a class="btn primary" href="#new-event">+ '+t('add_event')+'</a></div></div>'+
+    '<div class="filters">'+
+      '<div class="field f-q"><label for="f-q">'+t('search')+'</label><input id="f-q" type="text" value="'+esc(S.q)+'" placeholder="'+esc(t('search_ph'))+'" autocomplete="off"></div>'+
+      '<div class="field"><label for="f-city">'+t('city')+'</label><select id="f-city" data-sel="city">'+cityOpts+'</select></div>'+
+      '<div class="field"><label for="f-when">'+t('when')+'</label><select id="f-when" data-sel="when">'+whenOptions()+'</select></div>'+
+    '</div>'+
+    '<div class="chips" style="margin-top:12px">'+typeChips()+'</div>'+
+    '<div class="chips" style="margin-top:8px">'+genreChips()+'</div>'+
+    (S.type==='festival'?'<p class="sub">'+t('fest_note')+'</p>':'')+
+    '<div id="evlist">'+eventsListHTML()+'</div>'+
+    '<div class="card" style="margin-top:24px"><p><b style="color:var(--text)">'+t('sources_t')+'</b></p><p>'+t('sources_d')+'</p></div>';
+}
+function viewEvent(id){
+  var e=evt(id);
+  if(!e) return '<a class="back" href="#events">← '+t('back')+'</a><div class="empty">'+t('no_event')+'</div>';
+  var d=dayOf(e.off), go=amGoing(e.id), ppl=attendees(e.id), v=venue(e.v);
+  var sv=S.saved.indexOf(e.id)>-1, rm=S.remind.indexOf(e.id)>-1;
+  var lineup;
+  if(e.lineup&&e.lineup.length){
+    lineup=e.lineup.map(function(n){ var a=artistByName(n);
+      var inner=av(n)+'<div class="grow"><strong>'+esc(n)+(a&&a.verified?VB:'')+'</strong></div>';
+      return a?'<a class="person" href="#artist-'+a.id+'">'+inner+'</a>':'<div class="person">'+inner+'</div>'; }).join('');
+    if(e.more) lineup+='<p class="sub" style="margin:4px 0 0">'+t('and_more',{n:e.more})+'</p>';
+  } else lineup='<div class="empty" style="margin-top:0">'+t('lineup_tba')+'</div>';
+  var who=ppl.length?ppl.map(function(p){
+    return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(p.city)+'</p></div><button type="button" class="btn small" data-act="chat" data-id="'+p.id+'">'+t('say_hi')+'</button></div>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('nobody')+'</div>';
+  var n=goingCount(e);
+  return '<a class="back" href="#events">← '+t('back')+'</a>'+
+    '<h1>'+esc(e.title)+(e.pending?' <span class="tag hot">'+t('pending')+'</span>':'')+'</h1>'+
+    '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+
+    '<dl class="facts">'+
+      '<div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+'</dd></div>'+
+      '<div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
+      '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div>'+
+    '</dl>'+
+    (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
+    '<div class="row" style="margin-top:20px">'+
+      '<button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
+      '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button>'+
+      '<button type="button" class="btn'+(rm?' on':'')+'" data-act="remind" data-id="'+e.id+'" aria-pressed="'+rm+'">'+(rm?'✓ '+t('reminded'):t('remind'))+'</button>'+
+    '</div>'+
+    '<div class="row" style="margin-top:10px">'+
+      '<a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('ics')+' ↗</a>'+
+      (e.src?'<a class="btn" href="'+esc(e.src)+'" target="_blank" rel="noopener">'+t('tickets')+' ↗</a>':'')+
+      '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a>'+
+    '</div>'+
+    (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
+    '<div class="sec"><h2>'+t('lineup')+'</h2><div class="people">'+lineup+'</div></div>'+
+    '<div class="sec"><h2>'+t('who_goes')+'</h2><div class="people">'+who+'</div></div>'+
+    crewHTML(e)+ridesHTML(e)+
+    '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v.id)+'</div>'+
+    '<div class="sec"><h2>'+t('reviews_t')+'</h2><div class="empty" style="margin-top:0">'+t('rev_after')+'</div></div>'+
+    '<p class="srcbox">'+(e.src?t('source_t')+': <a class="link" href="'+esc(e.src)+'" target="_blank" rel="noopener">'+esc(host(e.src))+'</a>. '+t('source_note')+' ':'')+
+      '<button type="button" class="linkbtn" data-act="repev">'+t('report_ev')+'</button></p>';
+}
+
+/* ---------- Views: artists (demo profiles) ---------- */
+function viewArtists(){
+  var list=ARTISTS.filter(function(a){ return !S.onlyVerified||a.verified; });
+  var cards=list.map(function(a){
+    return '<a class="acard" href="#artist-'+a.id+'">'+av(a.name,52)+'<div><strong>'+esc(a.name)+(a.verified?VB:'')+'</strong><p>'+esc(a.city)+'</p><p>'+esc(a.genres.join(' · '))+'</p></div></a>'; }).join('');
+  return '<h1>'+t('artists_title')+'</h1><p class="sub">'+t('artists_sub')+'</p>'+
+    '<div class="nophone"><div>'+t('demo_artists')+'</div></div>'+
+    '<div class="row" style="margin-top:16px"><button type="button" class="chip" data-act="onlyv" aria-pressed="'+S.onlyVerified+'">'+t('only_verified')+'</button></div>'+
+    '<div class="grid">'+cards+'</div>';
+}
+function socialsHTML(soc){
+  var items=SOC.filter(function(s){ return soc&&soc[s[0]]; });
+  if(!items.length) return '';
+  return '<div class="socials">'+items.map(function(s){ return '<span class="soc"><em>'+esc(s[1])+'</em>'+esc(soc[s[0]])+'</span>'; }).join('')+'</div>';
+}
+function tourRows(a){
+  var rows=[];
+  EVENTS.forEach(function(e){ if(e.lineup && e.lineup.some(function(n){ return n.toLowerCase()===(a.name||'').toLowerCase(); })){ var v=venue(e.v); rows.push({off:e.off,title:e.title,sub:v.name+', '+v.city,href:'#event-'+e.id,kind:'app'}); } });
+  (a.tour||[]).forEach(function(x){ rows.push({off:x.off,title:x.venue,sub:x.city,kind:'ext'}); });
+  rows.sort(function(x,y){ return x.off-y.off; });
+  return rows;
+}
+function tourHTML(rows){
+  if(!rows.length) return '<div class="empty" style="margin-top:0">'+t('no_tour')+'</div>';
+  return '<div class="tour">'+rows.map(function(r){
+    var inner='<div class="d">'+esc(fmtShort(dayOf(r.off)))+'</div><div><strong>'+esc(r.title)+'</strong><p>'+esc(r.sub)+'</p></div><span class="tag">'+(r.kind==='app'?t('on_app'):t('external'))+'</span>';
+    return r.href?'<a class="t" href="'+r.href+'">'+inner+'</a>':'<div class="t">'+inner+'</div>';
+  }).join('')+'</div>';
+}
+function viewArtist(id){
+  var a=artistById(id);
+  if(!a) return '<a class="back" href="#artists">← '+t('back')+'</a><div class="empty">'+t('no_artist')+'</div>';
+  return '<a class="back" href="#artists">← '+t('back')+'</a>'+
+    '<div class="hero">'+av(a.name,84)+'<div><h1>'+esc(a.name)+(a.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1><p class="sub" style="margin-top:6px">'+esc(a.city)+' · '+esc(a.genres.join(' · '))+(a.verified?' · '+t('verified'):'')+'</p></div></div>'+
+    '<div class="row" style="margin-top:16px"><button type="button" class="btn'+(S.follows.indexOf(a.id)>-1?' on':' primary')+'" data-act="follow" data-id="'+a.id+'" aria-pressed="'+(S.follows.indexOf(a.id)>-1)+'">'+(S.follows.indexOf(a.id)>-1?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>'+
+    '<div class="sec"><h2>'+t('about')+'</h2><p class="sub" style="margin-top:0">'+esc(a.bio[S.lang])+'</p></div>'+
+    '<div class="sec"><h2>'+t('socials')+'</h2>'+socialsHTML(a.soc)+'</div>'+
+    '<div class="sec"><h2>'+t('tour')+'</h2>'+tourHTML(tourRows(a))+'</div>';
+}
+
+/* ---------- Views: connect, chat ---------- */
+function sharedEvents(p){ return p.goes.filter(function(g){ return amGoing(g); }); }
+function viewConnect(){
+  var shared=PEOPLE.filter(function(p){ return !blocked(p.id) && sharedEvents(p).length; });
+  var rows=shared.map(function(p){
+    var names=sharedEvents(p).map(function(g){ return evt(g).title; }).join(', ');
+    return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(p.city)+' · '+t('goes_to')+' '+esc(names)+'</p></div><button type="button" class="btn small" data-act="chat" data-id="'+p.id+'">'+t('say_hi')+'</button></div>'; }).join('');
+  var ids=Object.keys(S.threads).filter(function(pid){ return !blocked(+pid); });
+  var inbox=ids.length?ids.map(function(pid){ var p=person(+pid); var m=S.threads[pid]; var last=m[m.length-1]; var txt=last?(last[S.lang]||last.de):'';
+    return '<a class="person" href="#chat-'+pid+'">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong><p>'+esc(txt)+'</p></div></a>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('no_threads')+'</div>';
+  var crew=CREW.filter(function(c){ return !blocked(c.by) && evt(c.ev).off>=0; }).sort(function(a,b){ return evt(a.ev).off-evt(b.ev).off; });
+  return '<h1>'+t('connect_title')+'</h1><p class="sub">'+t('connect_sub')+'</p>'+
+    '<div class="sec"><h2>'+t('inbox')+'</h2><div class="people">'+inbox+'</div></div>'+
+    '<div class="sec"><h2>'+t('crew_all')+'</h2><div class="people">'+(crew.length?crew.map(function(c){ return crewRow(c,true); }).join(''):'<div class="empty" style="margin-top:0">'+t('crew_none')+'</div>')+'</div></div>'+
+    '<div class="sec"><h2>'+t('shared')+'</h2><div class="people">'+(rows||'<div class="empty" style="margin-top:0">'+t('nobody')+'</div>')+'</div></div>';
+}
+function chatHTML(pid){
+  var msgs=S.threads[pid]||[];
+  return msgs.map(function(m){ return '<div class="msg'+(m.from===0?' me':'')+'">'+esc(m[S.lang]||m.de)+'</div>'; }).join('');
+}
+function viewChat(pid){
+  var p=person(pid);
+  if(!p||blocked(pid)) return '<a class="back" href="#connect">← '+t('back')+'</a>';
+  var reasons=['rr1','rr2','rr3','rr4'].map(function(k){ return '<option>'+t(k)+'</option>'; }).join('');
+  return '<a class="back" href="#connect">← '+t('back')+'</a>'+
+    '<div class="row">'+av(p.name,52)+'<div><h1 style="font-size:34px">'+esc(p.name)+'</h1><p class="sub" style="margin:2px 0 0">'+esc(p.city)+'</p></div></div>'+
+    '<div class="nophone"><div>'+t('chat_note')+'</div></div>'+
+    '<div class="chat" id="chatbox" aria-live="polite">'+chatHTML(pid)+'</div>'+
+    '<form class="composer" data-form="msg" data-id="'+pid+'"><label for="msg-in" style="position:absolute;left:-9999px">'+t('msg_ph')+'</label><input id="msg-in" type="text" placeholder="'+esc(t('msg_ph'))+'" autocomplete="off"><button class="btn primary" type="submit">'+t('send')+'</button></form>'+
+    '<div class="sec"><div class="row"><button type="button" class="btn small" data-act="block" data-id="'+pid+'">'+t('block')+'</button></div>'+
+    '<details class="more"><summary>'+t('report')+'</summary><form class="form" data-form="report" data-id="'+pid+'" style="margin-top:8px">'+
+      '<div class="field"><label for="rp-r">'+t('report_reason')+'</label><select id="rp-r" name="reason">'+reasons+'</select></div>'+
+      '<div class="field"><label for="rp-t">'+t('report_txt')+'</label><textarea id="rp-t" name="text"></textarea></div>'+
+      '<div><button class="btn primary" type="submit">'+t('report_send')+'</button></div></form></details>'+
+    '<p class="sub">'+t('safety_note')+'</p></div>';
+}
+
+/* ---------- Views: profile, new event ---------- */
+function viewMe(){
+  var m=S.me, isArtist=m.role==='artist', isOrg=m.role==='org';
+  var cityOpts=EVENT_CITIES.map(function(c){ return '<option'+(m.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  var soc=SOC.map(function(s){ return '<div class="field"><label for="soc-'+s[0]+'">'+esc(s[1])+'</label><input id="soc-'+s[0]+'" name="soc-'+s[0]+'" type="text" value="'+esc(m.soc[s[0]]||'')+'" placeholder="@handle"></div>'; }).join('');
+  var verif;
+  if(isArtist||m.verif==='verified') verif='<p>'+t('verif_ok')+'</p>';
+  else if(m.verif==='pending') verif='<p>'+t('verif_pending')+'</p>';
+  else verif='<p>'+t('verif_none')+'</p><button type="button" class="btn" data-act="verify">'+t('verif_btn')+'</button>';
+  var tourBlock='';
+  if(isArtist){
+    tourBlock='<div class="sec"><h2>'+t('tour_add')+'</h2>'+
+      '<form class="form" data-form="tour"><div class="form2"><div class="field"><label for="t-date">'+t('date')+'</label><input id="t-date" name="date" type="date" min="'+isoOf(0)+'" required></div>'+
+      '<div class="field"><label for="t-city">'+t('city')+'</label><select id="t-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="field"><label for="t-venue">'+t('tour_event')+'</label><input id="t-venue" name="venue" type="text" required></div>'+
+      '<div><button class="btn primary" type="submit">'+t('tour_add_btn')+'</button></div></form>'+
+      '<h2 style="margin-top:24px">'+t('my_tour')+'</h2>'+tourHTML(tourRows({name:'',tour:S.myTour}))+'</div>';
+  }
+  var saved=S.saved.map(evt).filter(Boolean).sort(function(a,b){ return a.off-b.off; });
+  var savedHTML=saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('saved_none')+'</div>';
+  var notifs=S.notifs.length?'<div class="people">'+S.notifs.map(function(n){ return '<div class="person"><div class="grow"><p style="color:var(--text)">'+esc(notifText(n))+'</p></div></div>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('notifs_none')+'</div>';
+  var fol=ARTISTS.filter(function(a){ return S.follows.indexOf(a.id)>-1; });
+  var folHTML=fol.length?'<div class="grid" style="margin-top:0">'+fol.map(function(a){ return '<a class="acard" href="#artist-'+a.id+'">'+av(a.name,44)+'<div><strong>'+esc(a.name)+(a.verified?VB:'')+'</strong><p>'+esc(a.city)+'</p></div></a>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('follows_none')+'</div>';
+  var bl=S.blocked.length?'<div class="sec"><h2>'+t('blocked_list')+'</h2><div class="people">'+S.blocked.map(function(pid){ var p=person(pid); return '<div class="person">'+av(p.name)+'<div class="grow"><strong>'+esc(p.name)+'</strong></div><button type="button" class="btn small" data-act="unblock" data-id="'+pid+'">'+t('unblock')+'</button></div>'; }).join('')+'</div></div>':'';
+  return '<h1>'+t('me_title')+'</h1>'+
+    '<div class="hero" style="margin-top:16px">'+av(m.name||'?',72)+'<div><h2 style="font-size:30px">'+esc(m.name)+(isArtist?VB:'')+'</h2><p class="sub" style="margin:2px 0 0">'+esc(m.city)+(isArtist?' · '+t('verified'):'')+(isOrg?' · '+t('role_org'):'')+'</p></div></div>'+
+    '<div class="sec"><h2>'+t('role_demo')+'</h2><div class="seg" role="group" aria-label="'+t('role_demo')+'">'+
+      '<button type="button" data-act="role" data-id="fan" aria-pressed="'+(m.role==='fan')+'">'+t('role_fan')+'</button>'+
+      '<button type="button" data-act="role" data-id="artist" aria-pressed="'+isArtist+'">'+t('role_artist')+'</button>'+
+      '<button type="button" data-act="role" data-id="org" aria-pressed="'+isOrg+'">'+t('role_org')+'</button></div></div>'+
+    tourBlock+(isOrg?orgPanel():'')+
+    '<div class="sec"><h2>'+t('notifs_t')+'</h2>'+notifs+(S.notifs.length?'<p class="sub">'+t('push_note')+'</p>':'')+'</div>'+
+    '<div class="sec"><h2>'+t('saved_t')+'</h2>'+savedHTML+'</div>'+
+    '<div class="sec"><h2>'+t('follows_t')+'</h2>'+folHTML+'</div>'+
+    '<div class="sec"><h2>'+t('me_title')+'</h2><form class="form" data-form="me" style="margin-top:0">'+
+      '<div class="form2"><div class="field"><label for="me-name">'+t('name')+'</label><input id="me-name" name="name" type="text" value="'+esc(m.name)+'"></div>'+
+      '<div class="field"><label for="me-city">'+t('city')+'</label><select id="me-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="field"><label for="me-bio">'+t('bio')+'</label><textarea id="me-bio" name="bio" placeholder="'+esc(t('bio_ph'))+'">'+esc(m.bio)+'</textarea></div>'+
+      '<div><b>'+t('soc_hint')+'</b></div><div class="form2">'+soc+'</div>'+
+      '<div><button class="btn primary" type="submit">'+t('save')+'</button></div>'+
+    '</form></div>'+
+    (isOrg?'':'<div class="sec"><h2>'+t('verif_t')+'</h2><div class="card">'+verif+'</div></div>')+
+    bl;
+}
+function viewNew(){
+  var ov=(S.me.role==='org'&&S.org)?venue(S.org):null;
+  var cityOpts=EVENT_CITIES.map(function(c){ return '<option'+(ov&&ov.city===c?' selected':'')+'>'+esc(c)+'</option>'; }).join('');
+  var g=GENRES.map(function(x){ return '<label class="chipcheck"><input type="checkbox" name="genre" value="'+esc(x)+'"><span>'+esc(x)+'</span></label>'; }).join('');
+  var dl=VENUES.map(function(v){ return '<option value="'+esc(v.name)+'"></option>'; }).join('');
+  return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><p class="sub">'+t('new_sub')+'</p>'+
+    '<form class="form" data-form="event" novalidate>'+
+      '<div class="field"><label for="n-title">'+t('f_title')+'</label><input id="n-title" name="title" type="text"></div>'+
+      '<div class="form2"><div class="field"><label for="n-venue">'+t('f_venue')+'</label><input id="n-venue" name="venue" type="text" list="venue-list" autocomplete="off" value="'+(ov?esc(ov.name):'')+'"><datalist id="venue-list">'+dl+'</datalist></div>'+
+      '<div class="field"><label for="n-city">'+t('city')+'</label><select id="n-city" name="city">'+cityOpts+'</select></div></div>'+
+      '<div class="form2"><div class="field"><label for="n-date">'+t('f_date')+'</label><input id="n-date" name="date" type="date" min="'+isoOf(0)+'"></div>'+
+      '<div class="field"><label for="n-time">'+t('f_time')+'</label><input id="n-time" name="time" type="time" value="23:00"></div></div>'+
+      '<div class="field"><label>'+t('f_genres')+'</label><div class="chips">'+g+'</div></div>'+
+      '<div class="field"><label for="n-lineup">'+t('f_lineup')+'</label><input id="n-lineup" name="lineup" type="text"></div>'+
+      '<div class="field"><label for="n-link">'+t('f_link')+'</label><input id="n-link" name="link" type="url" placeholder="https://"></div>'+
+      '<label class="row" style="gap:10px"><input type="checkbox" name="nophone" style="width:20px;height:20px;accent-color:#e4262e"> '+t('f_nophone')+'</label>'+
+      '<div id="form-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div>'+
+      '<div><button class="btn primary" type="submit">'+t('f_submit')+'</button></div>'+
+    '</form>';
+}
+
+/* ---------- Community extras: crew, rides, clubs, safety, calendar, organisers ---------- */
+var RULE_KEYS=['phone','door','age','access','aware'];
+function toggle(arr,x){ var i=arr.indexOf(x); if(i>-1){ arr.splice(i,1); return false; } arr.push(x); return true; }
+function notify(k,v,off){ S.notifs.unshift({k:k,v:v||{},off:off}); }
+function notifText(n){ var v={}; for(var k in n.v) v[k]=n.v[k]; if(n.off!=null) v.d=fmtShort(dayOf(n.off)); return t(n.k,v); }
+function rideById(id){ for(var i=0;i<RIDES.length;i++){ if(RIDES[i].id===id) return RIDES[i]; } return null; }
+function crewById(id){ for(var i=0;i<CREW.length;i++){ if(CREW[i].id===id) return CREW[i]; } return null; }
+function nameOf(pid){ return pid===0?S.me.name:person(pid).name; }
+function msgTo(pid,key,e){
+  if(!S.threads[pid]) S.threads[pid]=[];
+  S.threads[pid].push({from:0,de:T.de[key].replace('{e}',e),en:T.en[key].replace('{e}',e)});
+  sendReply(pid); location.hash='#chat-'+pid;
+}
+function crewRow(c,showEv){
+  var e=evt(c.ev), mine=c.by===0, name=nameOf(c.by), j=S.crewJoined.indexOf(c.id)>-1;
+  return '<div class="person">'+av(name)+'<div class="grow"><strong>'+esc(name)+(mine?' · '+t('crew_mine'):'')+'</strong><p>'+esc(c.text[S.lang]||c.text.de)+'</p>'+
+    (showEv?'<p><a class="link" href="#event-'+e.id+'">'+esc(e.title)+'</a> · '+esc(fmtShort(dayOf(e.off)))+'</p>':'')+'</div>'+
+    (mine?'':'<button type="button" class="btn small" data-act="crewjoin" data-id="'+c.id+'"'+(j?' disabled':'')+'>'+(j?t('crew_joined'):t('crew_join'))+'</button>')+'</div>';
+}
+function crewHTML(e){
+  var list=CREW.filter(function(c){ return c.ev===e.id && !blocked(c.by); });
+  return '<div class="sec"><h2>'+t('crew_t')+'</h2><div class="people">'+(list.length?list.map(function(c){ return crewRow(c,false); }).join(''):'<div class="empty" style="margin-top:0">'+t('crew_none')+'</div>')+'</div>'+
+    '<details class="more"><summary>+ '+t('crew_new')+'</summary><form class="composer" data-form="crew" data-id="'+e.id+'"><label for="c-in" style="position:absolute;left:-9999px">'+t('crew_new')+'</label><input id="c-in" name="text" type="text" placeholder="'+esc(t('crew_ph'))+'" autocomplete="off"><button class="btn primary" type="submit">'+t('crew_post')+'</button></form></details></div>';
+}
+function ridesHTML(e){
+  var list=RIDES.filter(function(r){ return r.ev===e.id && !blocked(r.by); });
+  var rows=list.length?list.map(function(r){
+    var mine=r.by===0, name=nameOf(r.by), req=S.rideReq.indexOf(r.id)>-1;
+    var btn=mine?'<span class="tag">'+t('ride_mine')+'</span>':'<button type="button" class="btn small" data-act="seat" data-id="'+r.id+'"'+(req||r.seats<1?' disabled':'')+'>'+(req?t('seat_reqd'):t('seat_req'))+'</button>';
+    return '<div class="person">'+av(name)+'<div class="grow"><strong>'+esc(name)+'</strong><p>'+t('ride_from',{c:esc(r.from),t:esc(r.time)})+' · '+t('seats',{n:r.seats})+'</p></div>'+btn+'</div>'; }).join(''):'<div class="empty" style="margin-top:0">'+t('rides_none')+'</div>';
+  var cityOpts=CITIES.map(function(c){ return '<option'+(S.me.city===c.name?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('');
+  return '<div class="sec"><h2>'+t('rides_t')+'</h2><div class="people">'+rows+'</div>'+
+    '<details class="more"><summary>+ '+t('ride_offer')+'</summary><form class="form" data-form="ride" data-id="'+e.id+'" style="margin-top:8px">'+
+    '<div class="form2"><div class="field"><label for="r-city">'+t('ride_city')+'</label><select id="r-city" name="from">'+cityOpts+'</select></div>'+
+    '<div class="field"><label for="r-time">'+t('ride_time')+'</label><input id="r-time" name="time" type="time" value="20:00"></div></div>'+
+    '<div class="field"><label for="r-seats">'+t('ride_seats')+'</label><select id="r-seats" name="seats"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>'+
+    '<div><button class="btn primary" type="submit">'+t('ride_offer')+'</button></div></form></details></div>';
+}
+function clubRules(id){ var base=CLUB_INFO[id]||{}, ed=S.clubEdits[id]||{}, r={}; RULE_KEYS.forEach(function(k){ r[k]=ed[k]?ed[k]:(base[k]||''); }); return r; }
+function ruleVal(x){ return x==='photo_ban'?t('photo_ban'):x; }
+function awareHTML(vid){ var r=clubRules(vid); return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(r.aware?'<br><b>'+esc(t('aware_team',{x:r.aware}))+'</b>':'')+'</div></div>'; }
+function viewClub(id){
+  var v=venue(id);
+  if(!v) return '<a class="back" href="#map">← '+t('back')+'</a><div class="empty">'+t('no_club')+'</div>';
+  var r=clubRules(id), evs=sortedEvents().filter(function(e){ return e.v===id && e.off>=0; });
+  var labels={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
+  var facts=RULE_KEYS.map(function(k){ var x=r[k]; return '<div><dt>'+t(labels[k])+'</dt><dd'+(x?'':' style="color:var(--muted);font-weight:400"')+'>'+(x?esc(ruleVal(x)):t('not_set'))+'</dd></div>'; }).join('');
+  var revs=S.reviews[id]||[];
+  var revHTML=revs.length?'<div class="people">'+revs.map(function(rv){ return '<div class="person">'+av(rv.name)+'<div class="grow"><strong>'+esc(rv.name)+' <span class="stars" aria-label="'+rv.stars+'/5">'+'★★★★★'.slice(0,rv.stars)+'</span></strong><p>'+esc(rv.text)+'</p></div></div>'; }).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('reviews_none')+'</div>';
+  var starOpts=[5,4,3,2,1].map(function(n){ return '<option value="'+n+'">'+'★★★★★'.slice(0,n)+'</option>'; }).join('');
+  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a>'+
+    '<h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+
+    '<div class="row" style="margin-top:16px"><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
+    '<div class="sec"><h2>'+t('rules_t')+'</h2><dl class="facts" style="margin-top:0">'+facts+'</dl></div>'+
+    '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(id)+'</div>'+
+    '<div class="sec"><h2>'+t('upcoming')+'</h2>'+(evs.length?'<div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div>':'<div class="empty" style="margin-top:0">'+t('no_ev_here')+'</div>')+'</div>'+
+    '<div class="sec"><h2>'+t('reviews_t')+'</h2>'+revHTML+
+      '<details class="more"><summary>+ '+t('review_post')+'</summary><form class="form" data-form="review" data-id="'+id+'" style="margin-top:8px">'+
+      '<div class="field"><label for="rv-s">'+t('stars')+'</label><select id="rv-s" name="stars">'+starOpts+'</select></div>'+
+      '<div class="field"><label for="rv-t">'+t('review_txt')+'</label><textarea id="rv-t" name="text" placeholder="'+esc(t('review_ph'))+'"></textarea></div>'+
+      '<div><button class="btn primary" type="submit">'+t('review_post')+'</button></div></form></details></div>'+
+    ((S.me.role==='org'&&S.org===id)?'':'<div class="card" style="margin-top:32px"><p>'+t('club_claim')+'</p><button type="button" class="btn" data-act="claim" data-id="'+id+'">'+t('club_claim_btn')+'</button></div>');
+}
+function typeChips(){ return [['','type_all'],['club','type_club'],['festival','type_fest']].map(function(x){ return '<button type="button" class="chip" data-act="type" data-id="'+x[0]+'" aria-pressed="'+(S.type===x[0])+'">'+t(x[1])+'</button>'; }).join(''); }
+
+/* calendar export: Google Calendar link works inside the preview; icsFor() is kept for the real app (the preview blocks .ics downloads) */
+function gcalUrl(e){
+  var v=venue(e.v), d=e.date.replace(/-/g,''), dates;
+  if(e.time){ var st=new Date(e.date+'T'+e.time+':00'), en=new Date(st.getTime()+6*3600000);
+    function f(x){ return x.getFullYear()+('0'+(x.getMonth()+1)).slice(-2)+('0'+x.getDate()).slice(-2)+'T'+('0'+x.getHours()).slice(-2)+('0'+x.getMinutes()).slice(-2)+'00'; }
+    dates=f(st)+'/'+f(en); }
+  else dates=d+'/'+isoOf(e.off+1).replace(/-/g,'');
+  var details=(e.lineup?'Line-up: '+e.lineup.join(', ')+'\n':'')+(e.src?e.src:'');
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+'&ctz=Europe/Berlin&location='+encodeURIComponent(v.name+', '+(v.addr||v.city))+'&details='+encodeURIComponent(details);
+}
+function icsEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/([,;])/g,'\\$1'); }
+function icsFor(list){
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Rave Strangers//Prototype//DE','CALSCALE:GREGORIAN'];
+  var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  list.forEach(function(e){
+    var v=venue(e.v), d=e.date.replace(/-/g,'');
+    L.push('BEGIN:VEVENT','UID:rs-'+e.id+'-'+d+'@ravestrangers.app','DTSTAMP:'+stamp);
+    if(e.time) L.push('DTSTART;TZID=Europe/Berlin:'+d+'T'+e.time.replace(':','')+'00','DURATION:PT6H');
+    else L.push('DTSTART;VALUE=DATE:'+d,'DTEND;VALUE=DATE:'+isoOf(e.off+1).replace(/-/g,''));
+    L.push('SUMMARY:'+icsEsc(e.title),'LOCATION:'+icsEsc(v.name+', '+(v.addr||v.city)));
+    if(e.lineup) L.push('DESCRIPTION:'+icsEsc('Line-up: '+e.lineup.join(', ')));
+    if(e.src) L.push('URL:'+e.src);
+    L.push('END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n')+'\r\n';
+}
+/* calendar import */
+function parseICS(txt){
+  var lines=String(txt||'').replace(/\r?\n[ \t]/g,'').split(/\r?\n/), out=[], cur=null;
+  lines.forEach(function(l){
+    l=l.trim();
+    if(l==='BEGIN:VEVENT'){ cur={}; return; }
+    if(l==='END:VEVENT'){ if(cur&&cur.summary&&cur.date) out.push(cur); cur=null; return; }
+    if(!cur) return;
+    var i=l.indexOf(':'); if(i<0) return;
+    var key=l.slice(0,i).split(';')[0].toUpperCase(), val=l.slice(i+1).replace(/\\n/gi,' ').replace(/\\([,;\\])/g,'$1');
+    if(key==='SUMMARY') cur.summary=val;
+    else if(key==='LOCATION') cur.location=val;
+    else if(key==='URL') cur.url=val;
+    else if(key==='DTSTART'){
+      var m=val.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2}))?/); if(!m) return;
+      if(m[4]&&/Z$/.test(val)){
+        var dt=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]));
+        cur.date=dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);
+        cur.time=('0'+dt.getHours()).slice(-2)+':'+('0'+dt.getMinutes()).slice(-2);
+      } else { cur.date=m[1]+'-'+m[2]+'-'+m[3]; cur.time=m[4]?m[4]+':'+m[5]:null; }
+    }
+  });
+  return out;
+}
+function sampleICS(){
+  var v=venue(S.org)||VENUES[0];
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Beispiel//DE',
+    'BEGIN:VEVENT','SUMMARY:Testimport – Clubnacht','DTSTART:'+isoOf(24).replace(/-/g,'')+'T230000','LOCATION:'+v.name,'END:VEVENT',
+    'BEGIN:VEVENT','SUMMARY:Testimport – Sonntagsrave','DTSTART:'+isoOf(32).replace(/-/g,'')+'T140000','LOCATION:'+v.name,'END:VEVENT',
+    'END:VCALENDAR'].join('\n');
+}
+function impPrevHTML(){
+  var p=S.importPreview;
+  if(!p.length) return '<p class="sub">'+t('import_none')+'</p>';
+  return '<div class="people" style="margin-top:12px">'+p.map(function(x){ return '<div class="person"><div class="grow"><strong>'+esc(x.summary)+'</strong><p>'+esc(x.date)+(x.time?' · '+esc(x.time):'')+(x.location?' · '+esc(x.location):'')+'</p></div></div>'; }).join('')+'</div>'+
+    '<div class="row" style="margin-top:10px"><button type="button" class="btn primary" data-act="imp-go">'+t('import_go',{n:p.length})+'</button></div>';
+}
+function importEvents(){
+  var n=0;
+  S.importPreview.forEach(function(x){
+    var vid=S.org, loc=(x.location||'').toLowerCase();
+    VENUES.forEach(function(v){ if(loc && loc.indexOf(v.name.toLowerCase())>-1) vid=v.id; });
+    if(!vid) return;
+    EVENTS.push({id:S.nextId++,title:x.summary,v:vid,date:x.date,off:offFromISO(x.date),time:x.time,genres:['Electronic'],lineup:null,src:x.url||null,imported:true,byOrg:true});
+    n++;
+  });
+  S.importPreview=[];
+  return n;
+}
+function orgPanel(){
+  var opts='<option value="">–</option>'+VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); }).map(function(v){ return '<option value="'+v.id+'"'+(S.org===v.id?' selected':'')+'>'+esc(v.name)+' · '+esc(v.city)+'</option>'; }).join('');
+  var h='<div class="sec"><h2>'+t('org_t')+'</h2><div class="card"><p>'+t('org_note')+'</p><div class="field"><label for="org-v">'+t('org_pick')+'</label><select id="org-v" data-sel="org">'+opts+'</select></div></div>';
+  if(S.org){
+    var v=venue(S.org), r=clubRules(v.id), labels={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
+    var fields=RULE_KEYS.map(function(k){ return '<div class="field"><label for="ru-'+k+'">'+t(labels[k])+'</label><input id="ru-'+k+'" name="'+k+'" type="text" value="'+esc(ruleVal(r[k]))+'"></div>'; }).join('');
+    h+='<div class="row" style="margin-top:12px"><a class="btn primary" href="#new-event">+ '+t('org_add')+'</a><a class="btn" href="#club-'+v.id+'">'+t('org_view')+'</a></div>'+
+      '<h3 style="margin-top:24px">'+t('org_rules')+'</h3><form class="form" data-form="rules" style="margin-top:8px"><div class="form2">'+fields+'</div><div><button class="btn primary" type="submit">'+t('save')+'</button></div></form>'+
+      '<h3 style="margin-top:28px">'+t('import_t')+'</h3><p class="sub">'+t('import_d')+'</p>'+
+      '<div class="form" style="margin-top:12px">'+
+        '<div class="field"><label for="imp-txt">'+t('import_txt')+'</label><textarea id="imp-txt" spellcheck="false" style="font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:120px" placeholder="BEGIN:VCALENDAR …"></textarea></div>'+
+        '<div class="field"><label for="imp-file">'+t('import_file')+'</label><input id="imp-file" type="file" accept=".ics,text/calendar"></div>'+
+        '<div class="row"><button type="button" class="btn" data-act="imp-sample">'+t('import_sample')+'</button><button type="button" class="btn primary" data-act="imp-parse">'+t('import_parse')+'</button></div>'+
+        '<div id="imp-prev"></div></div>';
+  }
+  return h+'</div>';
+}
+
+/* ---------- Map ---------- */
+var CL=[];   /* cluster centres of the last draw */
+function mapEvents(){ return EVENTS.filter(function(e){ return inWindow(e) && (!S.genre || e.genres.indexOf(S.genre)>-1); }).sort(function(a,b){ return a.off-b.off; }); }
+function venueEvents(id,list){ return (list||mapEvents()).filter(function(e){ return e.v===id; }); }
+function evCountLabel(n){ return n===1?t('ev_one'):t('ev_many',{n:n}); }
+
+function panelHTML(){
+  var list=mapEvents();
+  var v=S.mapSel?venue(S.mapSel):null;
+  if(!v){
+    var vs={}; list.forEach(function(e){ vs[e.v]=1; });
+    return '<p class="sub" style="margin:0">'+t('pick_marker')+'</p><p class="sub">'+t('summary_map',{v:Object.keys(vs).length,e:list.length})+'</p>';
+  }
+  var evs=venueEvents(v.id,list);
+  var rows=evs.map(function(e){ var d=dayOf(e.off);
+    return '<a class="evrow" href="#event-'+e.id+'"><b>'+d.getDate()+'. '+esc(fmtMonth(d))+'</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+' · '+esc(e.genres.join(', '))+'</p></div></a>'; }).join('');
+  return '<h2><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h2>'+
+    '<p class="addr">'+esc(v.addr||v.city)+(v.addr?'':'')+'</p>'+
+    (v.approx?'<p class="addr">'+t('approx')+'</p>':'')+
+    '<p class="addr" style="color:var(--text)">'+evCountLabel(evs.length)+'</p>'+
+    (rows||'<p class="sub">'+t('no_ev_here')+'</p>')+
+    '<div class="row" style="margin-top:12px"><a class="btn small" href="#club-'+v.id+'">'+t('open_club')+' →</a></div>';
+}
+function venueListHTML(){
+  var list=mapEvents();
+  var vs=VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); });
+  return vs.map(function(v){ var n=venueEvents(v.id,list).length;
+    return '<button type="button" class="person" data-act="mapvenue" data-id="'+v.id+'"><div class="grow"><strong>'+esc(v.name)+'</strong><p>'+esc(v.city)+' · '+(n?evCountLabel(n):t('zero'))+'</p></div></button>'; }).join('');
+}
+function viewMap(){
+  return '<h1>'+t('map_title')+'</h1><p class="sub">'+t('map_sub')+'</p>'+
+    '<div class="filters two">'+
+      '<div class="field"><label for="m-when">'+t('when')+'</label><select id="m-when" data-sel="when">'+whenOptions()+'</select></div>'+
+      '<div class="field" style="align-self:end"><button type="button" class="chip" data-act="onlyev" aria-pressed="'+S.onlyEvents+'" style="min-height:44px">'+t('only_events')+'</button></div>'+
+    '</div>'+
+    '<div class="chips" style="margin-top:12px">'+genreChips()+'</div>'+
+    '<div class="mapgrid">'+
+      '<div class="mapbox" id="mapbox">'+
+        '<svg id="mapsvg" viewBox="0 0 '+GEO.W+' '+GEO.H+'" role="img" aria-label="'+esc(t('map_title'))+'">'+
+          '<rect x="-6000" y="-6000" width="12000" height="12000" fill="#08080a"/>'+
+          '<g class="land nb"><path d="'+GEO.nb+'"/></g>'+
+          '<g class="land de"><path d="'+GEO.de+'"/></g>'+
+          '<g id="mapdyn"></g>'+
+        '</svg>'+
+        '<div class="mapctl">'+
+          '<button type="button" data-act="zin" aria-label="'+esc(t('zoom_in'))+'">+</button>'+
+          '<button type="button" data-act="zout" aria-label="'+esc(t('zoom_out'))+'">−</button>'+
+          '<button type="button" data-act="zfit" aria-label="'+esc(t('zoom_reset'))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>'+
+        '</div>'+
+        '<div class="maplegend"><span><i></i>'+t('leg_ev')+'</span><span><i class="off"></i>'+t('leg_none')+'</span></div>'+
+      '</div>'+
+      '<aside class="mappanel" id="mappanel" aria-live="polite">'+panelHTML()+'</aside>'+
+    '</div>'+
+    '<div class="sec"><h2>'+t('venues_t')+'</h2><div class="people" id="venuelist">'+venueListHTML()+'</div></div>';
+}
+
+function mapEl(){ return document.getElementById('mapsvg'); }
+function mapSize(){ var r=mapEl().getBoundingClientRect(); return {cw:Math.max(r.width,1),ch:Math.max(r.height,1),left:r.left,top:r.top}; }
+function fitView(){ var z=mapSize(); return {cx:GEO.W/2,cy:GEO.H/2,w:Math.max(GEO.W,GEO.H*z.cw/z.ch)}; }
+function clampView(m){
+  var minW=GEO.W/22, maxW=Math.max(fitView().w*1.25,GEO.W);
+  m.w=Math.min(maxW,Math.max(minW,m.w));
+  m.cx=Math.min(GEO.W+80,Math.max(-80,m.cx)); m.cy=Math.min(GEO.H+80,Math.max(-80,m.cy));
+  return m;
+}
+function viewBoxOf(){ var z=mapSize(), h=S.map.w*z.ch/z.cw; return [S.map.cx-S.map.w/2,S.map.cy-h/2,S.map.w,h]; }
+
+function drawMap(){
+  var svg=mapEl(); if(!svg) return;
+  if(!S.map) S.map=fitView();
+  var vb=viewBoxOf(), z=mapSize(), s=S.map.w/z.cw;
+  svg.setAttribute('viewBox',vb[0]+' '+vb[1]+' '+vb[2]+' '+vb[3]);
+  var list=mapEvents(), out='';
+  /* city labels */
+  CITIES.forEach(function(c){
+    out+='<circle class="cdot" cx="'+c.x+'" cy="'+c.y+'" r="'+(2.2*s)+'"/>'+
+         '<text class="clabel" x="'+(c.x+6*s)+'" y="'+(c.y-5*s)+'" font-size="'+(11*s)+'" stroke-width="'+(3*s)+'">'+esc(c.name)+'</text>';
+  });
+  /* clusters */
+  var items=[];
+  VENUES.forEach(function(v){
+    var n=venueEvents(v.id,list).length;
+    if(S.onlyEvents && !n) return;
+    items.push({v:v,n:n,px:(v.x-vb[0])/s,py:(v.y-vb[1])/s});
+  });
+  items.sort(function(a,b){ return b.n-a.n; });
+  var cls=[];
+  items.forEach(function(it){
+    var c=null;
+    for(var i=0;i<cls.length;i++){ var dx=cls[i].px-it.px, dy=cls[i].py-it.py; if(dx*dx+dy*dy<20*20){ c=cls[i]; break; } }
+    if(c){ c.items.push(it); c.n+=it.n; } else cls.push({items:[it],n:it.n,px:it.px,py:it.py,x:it.v.x,y:it.v.y});
+  });
+  cls.forEach(function(c){ if(c.items.length>1){ var sx=0,sy=0; c.items.forEach(function(i){ sx+=i.v.x; sy+=i.v.y; }); c.x=sx/c.items.length; c.y=sy/c.items.length; } });
+  cls.sort(function(a,b){ return (a.n>0)-(b.n>0); });
+  CL=[];
+  var showNames=S.map.w<GEO.W/2.4;
+  cls.forEach(function(c){
+    if(c.items.length>1){
+      CL.push({x:c.x,y:c.y});
+      var r=(15+Math.min(6,c.items.length))*s;
+      var label=c.n||c.items.length;
+      out+='<g class="cl" data-cluster="'+(CL.length-1)+'" tabindex="0" role="button" aria-label="'+esc(c.items.length+' · '+evCountLabel(c.n))+'" transform="translate('+c.x+' '+c.y+')">'+
+        '<circle class="dot" r="'+r+'"/><text font-size="'+(13*s)+'" dy="'+(4.5*s)+'">'+label+'</text></g>';
+    } else {
+      var it=c.items[0], v=it.v, sel=S.mapSel===v.id;
+      out+='<g class="mk'+(it.n?'':' off')+'" data-venue="'+v.id+'" tabindex="0" role="button" aria-label="'+esc(v.name+', '+v.city+', '+(it.n?evCountLabel(it.n):t('zero')))+'" transform="translate('+v.x+' '+v.y+')">'+
+        '<title>'+esc(v.name)+'</title>'+
+        (sel?'<circle class="ring" r="'+(15*s)+'"/>':'')+
+        '<circle class="dot" r="'+((it.n?9:6)*s)+'"/>'+
+        (it.n>1?'<text font-size="'+(10*s)+'" dy="'+(3.6*s)+'">'+it.n+'</text>':'')+
+        (showNames?'<text class="vname" x="'+(13*s)+'" dy="'+(4*s)+'" font-size="'+(12*s)+'" stroke-width="'+(3.5*s)+'">'+esc(v.name)+'</text>':'')+
+        '</g>';
+    }
+  });
+  document.getElementById('mapdyn').innerHTML=out;
+}
+function setPanel(){
+  var p=document.getElementById('mappanel'); if(p) p.innerHTML=panelHTML();
+}
+var animTok=0;
+function animateTo(target){
+  var from={cx:S.map.cx,cy:S.map.cy,w:S.map.w};
+  var to=clampView({cx:target.cx!=null?target.cx:from.cx,cy:target.cy!=null?target.cy:from.cy,w:target.w!=null?target.w:from.w});
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tok=++animTok;
+  if(reduce){ S.map=to; drawMap(); return; }
+  var t0=null, dur=240;
+  function step(ts){
+    if(tok!==animTok||!mapEl()) return;
+    if(t0===null) t0=ts;
+    var k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
+    S.map={cx:from.cx+(to.cx-from.cx)*e,cy:from.cy+(to.cy-from.cy)*e,w:from.w*Math.pow(to.w/from.w,e)};
+    drawMap();
+    if(k<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function zoomAt(clientX,clientY,f){
+  var z=mapSize(), vb=viewBoxOf(), s=S.map.w/z.cw;
+  var px=clientX-z.left, py=clientY-z.top;
+  var sx=vb[0]+px*s, sy=vb[1]+py*s;
+  var w=Math.min(Math.max(fitView().w*1.25,GEO.W),Math.max(GEO.W/22,S.map.w*f)), s2=w/z.cw, h=w*z.ch/z.cw;
+  S.map=clampView({cx:sx-px*s2+w/2,cy:sy-py*s2+h/2,w:w});
+  drawMap();
+}
+function selectVenue(id,center){
+  S.mapSel=id; setPanel(); drawMap();
+  var v=venue(id);
+  if(center&&v){ animateTo({cx:v.x,cy:v.y,w:Math.min(S.map.w,GEO.W/14)}); }
+  var p=document.getElementById('mappanel');
+  if(p&&window.innerWidth<=860&&p.scrollIntoView){ p.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+}
+function initMap(){
+  var svg=mapEl(); if(!svg) return;
+  var ptrs={}, moved=0, last=null;
+  drawMap();
+  svg.addEventListener('wheel',function(e){ e.preventDefault(); zoomAt(e.clientX,e.clientY,Math.exp(e.deltaY*0.0015)); },{passive:false});
+  svg.addEventListener('dblclick',function(e){ zoomAt(e.clientX,e.clientY,0.5); });
+  svg.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0&&e.pointerType==='mouse') return;
+    ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; moved=0; animTok++;
+    svg.classList.add('drag');
+    var n=Object.keys(ptrs).length;
+    if(n===2){ var k=Object.keys(ptrs); last={d:Math.hypot(ptrs[k[0]].x-ptrs[k[1]].x,ptrs[k[0]].y-ptrs[k[1]].y)}; }
+    function mv(ev){
+      if(!ptrs[ev.pointerId]) return;
+      var prev=ptrs[ev.pointerId], dx=ev.clientX-prev.x, dy=ev.clientY-prev.y;
+      ptrs[ev.pointerId]={x:ev.clientX,y:ev.clientY};
+      moved+=Math.abs(dx)+Math.abs(dy);
+      var ks=Object.keys(ptrs);
+      if(ks.length===1){
+        var z=mapSize(), s=S.map.w/z.cw;
+        S.map=clampView({cx:S.map.cx-dx*s,cy:S.map.cy-dy*s,w:S.map.w}); drawMap();
+      } else if(ks.length===2&&last){
+        var a=ptrs[ks[0]], b=ptrs[ks[1]], d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(last.d>0&&d>0) zoomAt((a.x+b.x)/2,(a.y+b.y)/2,last.d/d);
+        last.d=d;
+      }
+    }
+    function up(ev){
+      delete ptrs[ev.pointerId];
+      if(Object.keys(ptrs).length<2) last=null;
+      if(!Object.keys(ptrs).length){
+        svg.classList.remove('drag');
+        window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up);
+      }
+    }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+  });
+  svg.addEventListener('click',function(e){
+    if(moved>6) return;
+    var m=e.target.closest('[data-venue]'), c=e.target.closest('[data-cluster]');
+    if(m){ selectVenue(+m.getAttribute('data-venue'),false); }
+    else if(c){ var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
+  });
+  svg.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ') return;
+    var m=e.target.closest&&e.target.closest('[data-venue]'), c=e.target.closest&&e.target.closest('[data-cluster]');
+    if(m){ e.preventDefault(); selectVenue(+m.getAttribute('data-venue'),false); }
+    else if(c){ e.preventDefault(); var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
+  });
+}
+function focusVenueFromHash(id){
+  var v=venue(id); if(!v) return;
+  S.mapSel=id;
+  S.map={cx:v.x,cy:v.y,w:GEO.W/14};
+}
+
+/* ---------- Router ---------- */
+var ICONS={
+  events:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  map:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.800-6.500 11-6.500 11z"/><circle cx="12" cy="10" r="2.400"/></svg>',
+  artists:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>',
+  connect:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  me:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
+};
+function route(){
+  var h=(location.hash||'#events').slice(1);
+  if(h==='new-event') return {tab:'events',html:viewNew()};
+  var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
+  switch(name){
+    case 'event': return {tab:'events',html:viewEvent(+arg)};
+    case 'map':
+      if(arg){ if(S.mapHash!==h){ S.mapHash=h; focusVenueFromHash(+arg); } } else { S.mapHash=null; }
+      return {tab:'map',html:viewMap(),map:true};
+    case 'club': return {tab:'map',html:viewClub(+arg)};
+    case 'artists': return {tab:'artists',html:viewArtists()};
+    case 'artist': return {tab:'artists',html:viewArtist(+arg)};
+    case 'connect': return {tab:'connect',html:viewConnect()};
+    case 'chat': return {tab:'connect',html:viewChat(+arg)};
+    case 'me': return {tab:'me',html:viewMe()};
+    default: return {tab:'events',html:viewEvents()};
+  }
+}
+function render(scroll){
+  var r=route();
+  document.documentElement.lang=S.lang;
+  document.getElementById('banner').textContent=t('banner');
+  document.getElementById('tabs').innerHTML=['events','map','artists','connect','me'].map(function(k){
+    return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
+  var langBtns=document.querySelectorAll('.lang button');
+  for(var i=0;i<langBtns.length;i++){ langBtns[i].setAttribute('aria-pressed', langBtns[i].getAttribute('data-id')===S.lang?'true':'false'); }
+  document.getElementById('view').innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
+  if(r.map){ if(S.map&&!mapEl()){ } initMap(); }
+  if(scroll){ window.scrollTo(0,0); }
+}
+
+/* ---------- Actions ---------- */
+function openChat(pid){ if(!S.threads[pid]) S.threads[pid]=[]; location.hash='#chat-'+pid; }
+function sendReply(pid){
+  var n=S.threads[pid].filter(function(m){ return m.from!==0; }).length;
+  var de=REPLIES.de[n%3], en=REPLIES.en[n%3];
+  setTimeout(function(){
+    S.threads[pid].push({from:pid,de:de,en:en});
+    if(location.hash==='#chat-'+pid){ var box=document.getElementById('chatbox'); if(box){ box.innerHTML=chatHTML(pid); } }
+  },1200);
+}
+document.addEventListener('click',function(ev){
+  var el=ev.target.closest('[data-act]'); if(!el) return;
+  var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
+  if(act==='lang'){ S.lang=id; render(false); }
+  else if(act==='genre'){ S.genre=id; render(false); }
+  else if(act==='onlyv'){ S.onlyVerified=!S.onlyVerified; render(false); }
+  else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
+  else if(act==='go'){ var n=+id, ix=S.me.goes.indexOf(n); if(ix>-1){ S.me.goes.splice(ix,1); } else { S.me.goes.push(n); } render(false); }
+  else if(act==='chat'){ openChat(+id); }
+  else if(act==='verify'){ S.me.verif='pending'; render(false); }
+  else if(act==='role'){ S.me.role=id; S.me.verif=id==='artist'?'verified':'none'; render(false); }
+  else if(act==='type'){ S.type=id; render(false); }
+  else if(act==='save'){ toggle(S.saved,+id); render(false); }
+  else if(act==='remind'){ var rid=+id; if(toggle(S.remind,rid)){ notify('n_remind',{e:evt(rid).title}); toast(t('reminded')); } render(false); }
+  else if(act==='follow'){ var aid=+id; if(toggle(S.follows,aid)){ var a=artistById(aid), rows=tourRows(a); if(rows.length){ rows.slice().reverse().forEach(function(r){ notify('n_follow',{a:a.name,c:r.title+', '+r.sub},r.off); }); } else notify('n_follow0',{a:a.name}); toast(t('following')+': '+a.name); } render(false); }
+  else if(act==='seat'){ var r1=rideById(+id); if(r1&&S.rideReq.indexOf(r1.id)<0&&r1.seats>0){ r1.seats--; S.rideReq.push(r1.id); var ev1=evt(r1.ev); notify('n_ride',{e:ev1.title}); msgTo(r1.by,'ride_msg',ev1.title); } }
+  else if(act==='crewjoin'){ var c1=crewById(+id); if(c1&&S.crewJoined.indexOf(c1.id)<0){ S.crewJoined.push(c1.id); msgTo(c1.by,'crew_msg',''); } }
+  else if(act==='block'){ var b1=+id; if(!blocked(b1)) S.blocked.push(b1); toast(t('blocked')); location.hash='#connect'; }
+  else if(act==='unblock'){ var ib=S.blocked.indexOf(+id); if(ib>-1) S.blocked.splice(ib,1); render(false); }
+  else if(act==='repev'){ toast(t('report_sent')); }
+  else if(act==='claim'){ S.me.role='org'; S.me.verif='none'; S.org=+id; S.importPreview=[]; location.hash='#me'; }
+  else if(act==='imp-sample'){ var ta=document.getElementById('imp-txt'); if(ta) ta.value=sampleICS(); }
+  else if(act==='imp-parse'){ var ta2=document.getElementById('imp-txt'); S.importPreview=parseICS(ta2?ta2.value:''); var pv=document.getElementById('imp-prev'); if(pv) pv.innerHTML=impPrevHTML(); }
+  else if(act==='imp-go'){ var cnt=importEvents(); toast(t('import_done',{n:cnt})); render(false); }
+  else if(act==='zin'){ animateTo({w:S.map.w/1.8}); }
+  else if(act==='zout'){ animateTo({w:S.map.w*1.8}); }
+  else if(act==='zfit'){ S.mapSel=null; setPanel(); animateTo(fitView()); }
+  else if(act==='mapvenue'){ selectVenue(+id,true); var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView){ b.scrollIntoView({block:'nearest',behavior:'smooth'}); } }
+});
+document.addEventListener('change',function(ev){
+  var el=ev.target; var sel=el.getAttribute&&el.getAttribute('data-sel');
+  if(el.id==='imp-file'&&el.files&&el.files[0]){ var fr=new FileReader(); fr.onload=function(){ var ta=document.getElementById('imp-txt'); if(ta) ta.value=fr.result; }; fr.readAsText(el.files[0]); return; }
+  if(sel==='org'){ S.org=+el.value||null; S.importPreview=[]; render(false); return; }
+  if(sel){ S[sel]=el.value; render(false); }
+});
+document.addEventListener('input',function(ev){
+  if(ev.target.id==='f-q'){ S.q=ev.target.value; var l=document.getElementById('evlist'); if(l){ l.innerHTML=eventsListHTML(); } }
+});
+document.addEventListener('submit',function(ev){
+  var f=ev.target.closest('form[data-form]'); if(!f) return;
+  ev.preventDefault();
+  var kind=f.getAttribute('data-form'), fd=new FormData(f);
+  if(kind==='msg'){
+    var pid=+f.getAttribute('data-id'), input=document.getElementById('msg-in'), txt=input.value.trim();
+    if(!txt) return;
+    S.threads[pid].push({from:0,de:txt,en:txt});
+    document.getElementById('chatbox').innerHTML=chatHTML(pid);
+    input.value='';
+    sendReply(pid);
+  } else if(kind==='me'){
+    S.me.name=(fd.get('name')||'').trim()||'Du'; S.me.city=fd.get('city'); S.me.bio=fd.get('bio')||'';
+    SOC.forEach(function(s){ var v=(fd.get('soc-'+s[0])||'').trim(); if(v){ S.me.soc[s[0]]=v; } else { delete S.me.soc[s[0]]; } });
+    render(false); toast(t('saved'));
+  } else if(kind==='tour'){
+    var date=fd.get('date'), venueName=(fd.get('venue')||'').trim();
+    if(!date||!venueName) return;
+    S.myTour.push({off:offFromISO(date),city:fd.get('city'),venue:venueName,ext:true});
+    render(false); toast(t('tour_added'));
+  } else if(kind==='ride'){
+    RIDES.push({id:S.nextId++,ev:+f.getAttribute('data-id'),by:0,from:fd.get('from'),time:fd.get('time')||'20:00',seats:+fd.get('seats')||1});
+    render(false); toast(t('ride_added'));
+  } else if(kind==='crew'){
+    var tx=(fd.get('text')||'').trim(); if(!tx) return;
+    CREW.push({id:S.nextId++,ev:+f.getAttribute('data-id'),by:0,text:{de:tx,en:tx}});
+    render(false); toast(t('crew_posted'));
+  } else if(kind==='rules'){
+    var ed={}; RULE_KEYS.forEach(function(k){ ed[k]=(fd.get(k)||'').trim(); }); S.clubEdits[S.org]=ed;
+    render(false); toast(t('org_saved'));
+  } else if(kind==='review'){
+    var vid=+f.getAttribute('data-id'), txr=(fd.get('text')||'').trim(); if(!txr) return;
+    (S.reviews[vid]=S.reviews[vid]||[]).unshift({name:S.me.name,stars:+fd.get('stars')||5,text:txr});
+    render(false); toast(t('review_posted'));
+  } else if(kind==='report'){
+    f.reset(); var dt=f.closest('details'); if(dt) dt.open=false; toast(t('report_sent'));
+  } else if(kind==='event'){
+    var title=(fd.get('title')||'').trim(), vname=(fd.get('venue')||'').trim(), date2=fd.get('date');
+    if(!title||!vname||!date2){ document.getElementById('form-err').textContent=t('f_err'); return; }
+    var city=fd.get('city'), v=null;
+    VENUES.forEach(function(x){ if(x.name.toLowerCase()===vname.toLowerCase()) v=x; });
+    if(!v){
+      var c=CITIES.filter(function(x){ return x.name===city; })[0]||CITIES[0], p=proj(c.lon+(Math.random()-.5)*0.04,c.lat+(Math.random()-.5)*0.03);
+      v={id:S.nextVenue++,name:vname,city:city,addr:null,lat:c.lat,lon:c.lon,approx:true,x:p[0],y:p[1]};
+      VENUES.push(v);
+    }
+    var genres=fd.getAll('genre'); if(!genres.length) genres=['Techno'];
+    var names=(fd.get('lineup')||'').split(',').map(function(x){ return x.trim(); }).filter(Boolean);
+    EVENTS.push({id:S.nextId++,title:title,v:v.id,date:date2,off:offFromISO(date2),time:fd.get('time')||null,genres:genres,lineup:names.length?names:null,nophone:!!fd.get('nophone'),src:(fd.get('link')||'').trim()||null,isNew:true,pending:S.me.role==='fan',byOrg:S.me.role==='org'});
+    S.q=''; S.city=''; S.genre=''; S.when='all';
+    location.hash='#events'; toast(t('published'));
+  }
+});
+window.addEventListener('hashchange',function(){ render(true); });
+window.addEventListener('resize',function(){ if(mapEl()) drawMap(); });
+render(false);
+})();
+</script>
+</body>
+</html>
