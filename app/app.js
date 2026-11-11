@@ -688,12 +688,12 @@ function popHTML(id){
   var v=venue(id); if(!v) return '';
   var evs=venueEvents(v.id).slice(0,2), more=venueEvents(v.id).length-evs.length;
   var rows=evs.map(function(e){ var d=dayOf(e.off);
-    return '<a class="evrow" href="#event-'+e.id+'"><b>'+esc(fmtDow(d))+' '+d.getDate()+'.'+(d.getMonth()+1)+'.</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+'</p></div></a>'; }).join('');
+    return '<a class="evrow" href="#event-'+e.id+'"><b>'+esc(fmtDow(d))+' '+d.getDate()+'.'+(d.getMonth()+1)+'. · '+(e.time?esc(e.time):t('tba'))+'</b><div><strong>'+esc(e.title)+'</strong></div></a>'; }).join('');
   return '<p class="kicker" style="margin:0 0 4px">'+esc(v.city)+(v.kind!=='club'?' · '+esc(t('kind_'+v.kind)):'')+'</p>'+
     '<h3 class="pop-t"><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h3>'+ratingLine(v.id)+
     '<p class="addr">'+esc(v.addr||v.city)+'</p>'+
     (rows?'<div class="sheet-evs">'+rows+'</div>'+(more>0?'<p class="addr">+ '+evCountLabel(more)+'</p>':''):'<p class="addr">'+t('no_ev_here')+'</p>')+
-    (MLPINNED?'<div class="row" style="margin-top:10px"><a class="btn small primary" href="#club-'+v.id+'">'+t('open_club')+' →</a><a class="btn small" href="'+esc(routeUrl(v))+'" target="_blank" rel="noopener">'+t('route')+' ↗</a></div>':'<p class="addr pop-hint">'+t('pop_hint')+'</p>');
+    '<div class="row" style="margin-top:10px"><a class="btn small primary" href="#club-'+v.id+'">'+t('open_club')+' →</a><a class="btn small" href="'+esc(routeUrl(v))+'" target="_blank" rel="noopener">'+t('route')+' ↗</a></div>';
 }
 function closePop(){ clearTimeout(MLHOVERT); if(MLPOP){ MLPOP.remove(); MLPOP=null; } MLPINNED=false; }
 function showPopup(id,pinned){
@@ -702,9 +702,12 @@ function showPopup(id,pinned){
   if(MLPOP&&MLPINNED&&!pinned) return;
   if(MLPOP){ MLPOP.remove(); MLPOP=null; }
   MLPINNED=!!pinned; S.mapSel=pinned?id:S.mapSel; markSel();
-  MLPOP=new maplibregl.Popup({anchor:isFine()?undefined:'bottom',closeButton:!!pinned,closeOnClick:false,closeOnMove:false,offset:14,maxWidth:'290px',className:'rs-pop'+(pinned?' pinned':'')})
+  MLPOP=new maplibregl.Popup({focusAfterOpen:false,anchor:(ML.project([v.lon,v.lat]).y>360?'bottom':'top'),closeButton:true,closeOnClick:false,closeOnMove:false,offset:14,maxWidth:'290px',className:'rs-pop'+(pinned?' pinned':'')})
     .setLngLat([v.lon,v.lat]).setHTML(popHTML(id)).addTo(ML);
-  MLPOP.on('close',function(){ if(MLPINNED){ MLPINNED=false; MLPOP=null; S.mapSel=null; markSel(); } });
+  var pe=MLPOP.getElement();
+  pe.addEventListener('mouseenter',function(){ clearTimeout(MLHOVERT); });
+  pe.addEventListener('mouseleave',function(){ if(!MLPINNED){ clearTimeout(MLHOVERT); MLHOVERT=setTimeout(closePop,250); } });
+  MLPOP.on('close',function(){ MLPINNED=false; MLPOP=null; S.mapSel=null; markSel(); });
 }
 function setSheet(){ if(!S.mapSel) closePop();
   return;
@@ -786,10 +789,10 @@ function addVenueLayers(){
   });
   m.addLayer({id:'pt-hit',type:'circle',source:'venues',filter:['!',['has','point_count']],paint:{'circle-radius':20,'circle-color':'#000','circle-opacity':0}});
   var fine=isFine();
-  m.on('click','pt-hit',function(e){ var f=e.features[0]; var id=+f.properties.id; var v=venue(id); if(v) m.easeTo({center:[v.lon,v.lat],offset:isFine()?[0,0]:[0,110],duration:300}); showPopup(id,true); });
+  m.on('click','pt-hit',function(e){ var f=e.features[0]; var id=+f.properties.id; var v=venue(id); if(v) m.easeTo({center:[v.lon,v.lat],offset:[0,110],duration:300}); showPopup(id,true); });
   if(fine){
     m.on('mouseenter','pt-hit',function(e){ m.getCanvas().style.cursor='pointer'; showPopup(+e.features[0].properties.id,false); });
-    m.on('mouseleave','pt-hit',function(){ m.getCanvas().style.cursor=''; clearTimeout(MLHOVERT); MLHOVERT=setTimeout(function(){ if(!MLPINNED) closePop(); },120); });
+    m.on('mouseleave','pt-hit',function(){ m.getCanvas().style.cursor=''; clearTimeout(MLHOVERT); MLHOVERT=setTimeout(function(){ if(!MLPINNED) closePop(); },300); });
   }
   m.on('click',function(e){ var hit=m.queryRenderedFeatures(e.point,{layers:['pt-hit','cl']}); if(!hit.length&&MLPOP){ closePop(); S.mapSel=null; markSel(); } });
   m.on('mouseenter','cl',function(){ m.getCanvas().style.cursor='pointer'; }); m.on('mouseleave','cl',function(){ m.getCanvas().style.cursor=''; });
@@ -822,7 +825,7 @@ function markSel(){ if(ML&&MLREADY){ try{ ML.setFilter('pt-sel',['==',['get','id
 function flyToVenue(id){
   var v=venue(id); if(!v) return;
   if(!ML||!MLREADY){ MLWANT=id; return; }
-  ML.flyTo({center:[v.lon,v.lat],zoom:Math.max(ML.getZoom(),13.5),speed:1.6,offset:[0,isFine()?30:110]});
+  ML.flyTo({center:[v.lon,v.lat],zoom:Math.max(ML.getZoom(),13.5),speed:1.6,offset:[0,110]});
   ML.once('moveend',function(){ showPopup(id,true); });
 }
 function selectVenue(id,center){
