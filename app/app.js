@@ -12,7 +12,12 @@ var GEO=window.GEO;
 /* ---------- Texts ---------- */
 var T={
   de:{
-    nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
+    nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
+    home_hi:'Was geht',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
+    home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
+    home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
+    no_posts:'Noch keine Beiträge.',post_write:'Beitrag schreiben',post_title:'Überschrift',post_body:'Text',post_link:'Link (optional)',post_publish:'Veröffentlichen',post_done:'Beitrag ist online',
+    kind_news:'Redaktion',kind_artist:'Artist',kind_club:'Club',home_artists:'Verifizierte Artists entdecken',ago_now:'gerade eben',ago_min:'vor {n} Min.',ago_h:'vor {n} Std.',ago_d:'vor {n} Tagen',ago_1d:'gestern',
     banner:'Beta: Events aus öffentlichen Kalendern (ohne Gewähr). Konten sind echt.',
     loading:'Lädt …',load_err:'Die Daten konnten nicht geladen werden. Prüf deine Verbindung und lade neu.',retry:'Neu laden',
     events_title:'Raves in Deutschland',events_sub:'Finde Nächte, DJs und Leute, die auch hinwollen.',
@@ -62,7 +67,12 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
-    nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
+    nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
+    home_hi:'What’s up',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
+    home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
+    home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
+    no_posts:'No posts yet.',post_write:'Write a post',post_title:'Headline',post_body:'Text',post_link:'Link (optional)',post_publish:'Publish',post_done:'Post is live',
+    kind_news:'Editorial',kind_artist:'Artist',kind_club:'Club',home_artists:'Discover verified artists',ago_now:'just now',ago_min:'{n} min ago',ago_h:'{n} h ago',ago_d:'{n} days ago',ago_1d:'yesterday',
     banner:'Beta: events from public calendars (no guarantee). Accounts are real.',
     loading:'Loading …',load_err:'Could not load the data. Check your connection and reload.',retry:'Reload',
     events_title:'Raves in Germany',events_sub:'Find nights, DJs and people who are heading there too.',
@@ -134,13 +144,13 @@ var RULE_LABEL={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',awar
 var VENUES=[], EVENTS=[];
 var S={
   lang:(navigator.language||'de').slice(0,2)==='de'?'de':'en',
-  q:'',city:'',genre:'',when:'all',type:'',onlyEvents:false,
+  q:'',city:'',genre:'',when:'all',type:'',onlyEvents:false,homeCity:null,
   map:null,mapSel:null,mapHash:null,
   ready:false,loadErr:false,
   user:null,me:null,going:[],saved:[],counts:{},verif:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -193,14 +203,14 @@ function mapEvent(r){
   var lu=(r.event_lineup||[]).slice().sort(function(a,b){ return a.position-b.position; }).map(function(x){ return x.name; });
   return {id:r.id,title:r.title,v:r.venue_id,date:p.date,time:r.time_known?p.time:null,off:offOf(p.date),endDate:pe?pe.date:null,endOff:pe?Math.max(offOf(pe.date),offOf(p.date)):offOf(p.date),genres:r.genres||[],
     lineup:lu.length?lu:null,more:r.lineup_more||0,nophone:r.no_phone,src:safeUrl(r.source_url),ticket:safeUrl(r.ticket_url),
-    type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by};
+    type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by,createdAt:r.created_at};
 }
 function mapVenue(r){ var p=proj(r.lon,r.lat); return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,kind:r.kind||'club',rules:r.rules||{},x:p[0],y:p[1]}; }
 function loadBase(){
   var since=berlinToISO(isoOf(-14),'00:00');   /* a little back, so festivals that are still running are included */
   return Promise.all([
     data(sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules')),
-    data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,event_lineup(position,name)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
+    data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,created_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,event_lineup(position,name)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
   ]).then(function(res){
     VENUES=res[0].map(mapVenue);
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
@@ -223,7 +233,7 @@ function loadMine(){
     S.verif=r[3][0]||null;
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -328,6 +338,61 @@ function loadAttendees(id){
     cache.att[id]=rows.filter(function(r){ return r.profiles; }).map(function(r){ return r.profiles; });
     if(location.hash==='#event-'+id) render(false);
   }).catch(function(err){ cache.att[id]=[]; fail(err); });
+}
+
+/* ---------- Views: home ---------- */
+function relTime(iso){
+  var m=Math.max(0,Math.round((Date.now()-new Date(iso).getTime())/60000));
+  if(m<2) return t('ago_now'); if(m<60) return t('ago_min',{n:m});
+  var h=Math.round(m/60); if(h<24) return t('ago_h',{n:h});
+  var d=Math.round(h/24); return d===1?t('ago_1d'):t('ago_d',{n:d});
+}
+function weekendRange(){ var wd=dayOf(0).getDay(); var start=(wd===5||wd===6||wd===0)?0:5-wd; var end=(7-wd)%7; if(end<start) end=start+2; return [start,end]; }
+function loadHome(){
+  cache.home='loading';
+  Promise.all([
+    data(sb.from('posts').select('id,kind,title,body,link,created_at,author,profiles!posts_author_fkey(handle,display_name,verified)').eq('published',true).order('created_at',{ascending:false}).limit(10)),
+    data(sb.from('headlines').select('url,source,title,published_at').order('published_at',{ascending:false}).limit(8))
+  ]).then(function(r){ cache.home={posts:r[0],headlines:r[1]}; if(route().tab==='home') render(false); })
+    .catch(function(err){ cache.home={posts:[],headlines:[]}; fail(err); });
+}
+function postHTML(p){
+  var a=p.profiles||{};
+  return '<article class="card" style="margin-bottom:10px"><p class="sub" style="margin:0 0 6px;font-size:13px"><span class="tag'+(p.kind==='news'?' hot':'')+'">'+t('kind_'+p.kind)+'</span> '+
+    (a.handle?'<a class="link" href="#u-'+esc(a.handle)+'">'+esc(a.display_name)+'</a>'+(a.verified?VB:''):'')+' · '+esc(relTime(p.created_at))+'</p>'+
+    '<h3 style="margin:0 0 6px">'+esc(p.title)+'</h3>'+(p.body?'<p style="color:var(--text);white-space:pre-line;margin:0">'+esc(p.body)+'</p>':'')+
+    (safeUrl(p.link)?'<p style="margin:8px 0 0"><a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener nofollow">'+esc(host(p.link))+' ↗</a></p>':'')+'</article>';
+}
+function viewHome(){
+  if(cache.home===null) loadHome();
+  var city=S.homeCity!==null?S.homeCity:((S.me&&S.me.city)||'');
+  var cities={}; EVENTS.forEach(function(e){ var v=venue(e.v); if(upcoming(e)) cities[v.city]=(cities[v.city]||0)+1; });
+  var top=Object.keys(cities).sort(function(a,b){ return cities[b]-cities[a]; }).slice(0,8);
+  if(city&&top.indexOf(city)<0) top.unshift(city);
+  var chips='<button type="button" class="chip" data-act="homecity" data-id="" aria-pressed="'+(city==='')+'">'+t('home_all')+'</button>'+top.map(function(c){ return '<button type="button" class="chip" data-act="homecity" data-id="'+esc(c)+'" aria-pressed="'+(city===c)+'">'+esc(c)+'</button>'; }).join('');
+  function inCity(e){ return !city||venue(e.v).city===city; }
+  var rg=weekendRange();
+  var wk=sortedEvents().filter(function(e){ return upcoming(e)&&inCity(e)&&e.off>=rg[0]&&e.off<=rg[1]; })
+    .sort(function(a,b){ return (S.counts[b.id]||0)-(S.counts[a.id]||0)||a.off-b.off||(a.time||'').localeCompare(b.time||''); }).slice(0,8);
+  var soon=S.user?S.going.map(evt).filter(function(e){ return e&&e.off>=0&&e.off<=1; }):[];
+  var fresh=EVENTS.filter(function(e){ return upcoming(e)&&inCity(e)&&e.createdAt; }).sort(function(a,b){ return b.createdAt.localeCompare(a.createdAt)||a.off-b.off; }).slice(0,4);
+  var h=cache.home, isAdmin=S.me&&S.me.role==='admin', canPost=isAdmin||(S.me&&S.me.role==='artist'&&S.me.verified);
+  var news=h==='loading'||!h?loadingBox():(h.posts.length?h.posts.map(postHTML).join(''):emptyBox(t('no_posts')));
+  var ticker=h==='loading'||!h?'':(h.headlines.length?'<div class="people">'+h.headlines.map(function(x){ return '<a class="person" href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><div class="grow"><strong>'+esc(x.title)+'</strong><p>'+esc(x.source)+(x.published_at?' · '+esc(relTime(x.published_at)):'')+'</p></div><span aria-hidden="true">↗</span></a>'; }).join('')+'</div><p class="sub" style="font-size:13px">'+t('ticker_note')+'</p>':'');
+  var form=canPost?'<details class="more"><summary>+ '+t('post_write')+'</summary><form class="form" data-form="post" style="margin-top:8px">'+
+    '<div class="field"><label for="p-title">'+t('post_title')+'</label><input id="p-title" name="title" type="text" maxlength="140" required></div>'+
+    '<div class="field"><label for="p-body">'+t('post_body')+'</label><textarea id="p-body" name="body" maxlength="4000"></textarea></div>'+
+    '<div class="field"><label for="p-link">'+t('post_link')+'</label><input id="p-link" name="link" type="url" placeholder="https://"></div>'+
+    '<div><button class="btn primary" type="submit">'+t('post_publish')+'</button></div></form></details>':'';
+  return '<h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
+    '<div class="chips" style="margin-top:14px">'+chips+'</div>'+
+    (soon.length?'<div class="sec"><h2>'+t('home_remind')+'</h2><div class="list" style="margin-top:0">'+soon.map(eventCard).join('')+'</div></div>':'')+
+    '<div class="sec"><h2>'+(rg[0]===0?t('home_today'):t('home_weekend'))+'</h2>'+(wk.length?'<div class="list" style="margin-top:0">'+wk.map(eventCard).join('')+'</div>':emptyBox(t('home_weekend_none')))+
+      '<div class="row" style="margin-top:10px"><a class="btn small" href="#events">'+t('home_all_events')+' →</a><a class="btn small" href="#map">'+t('nav_map')+' →</a></div></div>'+
+    '<div class="sec"><h2>'+t('home_news')+'</h2>'+form+'<div style="margin-top:10px">'+news+'</div></div>'+
+    (ticker?'<div class="sec"><h2>'+t('home_ticker')+'</h2>'+ticker+'</div>':'')+
+    (fresh.length?'<div class="sec"><h2>'+t('home_new')+'</h2><div class="list" style="margin-top:0">'+fresh.map(eventCard).join('')+'</div></div>':'')+
+    '<div class="sec"><a class="btn" href="#artists">'+t('home_artists')+' →</a></div>';
 }
 
 /* ---------- Views: club ---------- */
@@ -715,6 +780,7 @@ function focusVenueFromHash(id){
 
 /* ---------- Router ---------- */
 var ICONS={
+  home:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
   events:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
   map:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>',
   artists:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>',
@@ -722,7 +788,7 @@ var ICONS={
   me:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
 };
 function route(){
-  var h=decodeURIComponent((location.hash||'#events').slice(1));
+  var h=decodeURIComponent((location.hash||'#home').slice(1));
   if(h==='new-event') return {tab:'events',html:viewNew()};
   var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
   switch(name){
@@ -731,13 +797,14 @@ function route(){
       if(arg){ if(S.mapHash!==h){ S.mapHash=h; focusVenueFromHash(+arg); } } else S.mapHash=null;
       return {tab:'map',html:viewMap(),map:true};
     case 'club': return {tab:'map',html:viewClub(+arg)};
-    case 'artists': return {tab:'artists',html:viewArtists()};
-    case 'u': return {tab:'artists',html:viewProfile(arg)};
+    case 'artists': return {tab:'home',html:viewArtists()};
+    case 'u': return {tab:'home',html:viewProfile(arg)};
     case 'connect': return {tab:'connect',html:viewConnect()};
     case 'me': return {tab:'me',html:viewMe()};
     case 'login': return {tab:'me',html:viewLogin()};
     case 'admin': return {tab:'me',html:viewAdmin()};
-    default: return {tab:'events',html:viewEvents()};
+    case 'events': return {tab:'events',html:viewEvents()};
+    default: return {tab:'home',html:viewHome()};
   }
 }
 function render(scroll){
@@ -749,7 +816,7 @@ function render(scroll){
   if(S.loadErr){ view.innerHTML='<div class="empty">'+t('load_err')+'<div class="row" style="justify-content:center;margin-top:12px"><button type="button" class="btn primary" data-act="reload">'+t('retry')+'</button></div></div>'; return; }
   if(!S.ready){ view.innerHTML=loadingBox(); return; }
   var r=route();
-  document.getElementById('tabs').innerHTML=['events','map','artists','connect','me'].map(function(k){
+  document.getElementById('tabs').innerHTML=['home','events','map','connect','me'].map(function(k){
     return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
   view.innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
   if(r.map) initMap();
@@ -773,6 +840,7 @@ document.addEventListener('click',function(ev){
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
   else if(act==='type'){ S.type=id; render(false); }
+  else if(act==='homecity'){ S.homeCity=id; render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
   else if(act==='go'){ toggleRow('attendance',+id,S.going); }
   else if(act==='save'){ toggleRow('bookmarks',+id,S.saved); }
@@ -782,7 +850,7 @@ document.addEventListener('click',function(ev){
     if(!mail){ document.getElementById('auth-err').textContent=t('email')+'?'; return; }
     sb.auth.resetPasswordForEmail(mail,{redirectTo:location.origin+location.pathname+'#me'}).then(function(){ S.authMsg=t('reset_sent'); render(false); });
   }
-  else if(act==='logout'){ sb.auth.signOut().then(function(){ location.hash='#events'; }); }
+  else if(act==='logout'){ sb.auth.signOut().then(function(){ location.hash='#home'; }); }
   else if(act==='block'){
     if(needLogin()) return;
     data(sb.from('blocks').insert({blocker:S.user.id,blocked:id})).then(function(){ toast(t('blocked')); resetCaches(); location.hash='#events'; }).catch(fail);
@@ -844,6 +912,12 @@ document.addEventListener('submit',function(ev){
     busy(true);
     data(sb.from('artist_verifications').insert({profile_id:S.user.id,artist_name:String(fd.get('name')||'').trim(),proof_links:links}).select('id,status,created_at').single())
       .then(function(r){ S.verif=r; render(false); }).catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='post'){
+    var pt=String(fd.get('title')||'').trim(); if(pt.length<3) return;
+    var kindP=(S.me.role==='admin')?'news':'artist';
+    busy(true);
+    data(sb.from('posts').insert({author:S.user.id,kind:kindP,title:pt,body:String(fd.get('body')||'').trim()||null,link:safeUrl(String(fd.get('link')||'').trim())}))
+      .then(function(){ toast(t('post_done')); loadHome(); }).catch(function(err){ busy(false); fail(err); });
   } else if(kind==='report'){
     if(needLogin()) return;
     var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
