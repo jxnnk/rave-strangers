@@ -28,7 +28,7 @@ var T={
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
     who_goes:'Wer geht hin',nobody:'Noch niemand aus der Community. Sei die erste Person.',login_to_see:'Melde dich an, um zu sehen, wer hingeht.',
-    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
+    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Preisobergrenze und Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Nie mehr als den Originalpreis zahlen. Wer Druck macht („nur noch heute“), ist meistens Betrug.',scam_4:'Wir prüfen Angebote nicht. Verdächtig? Melde das Profil sofort.',board_t:'Ticketbörse der Community',board_sub:'Biete oder suche Tickets, höchstens zum Originalpreis. Kontakt läuft über das Profil.',board_login:'Melde dich an, um die Ticketbörse zu sehen.',board_empty:'Noch keine Einträge.',board_offer:'Biete',board_want:'Suche',board_qty:'Anzahl',board_price:'Dein Preis pro Ticket (€)',board_face:'Originalpreis pro Ticket (€)',board_note:'Notiz (optional)',board_post:'Eintragen',board_done:'Erledigt',board_posted:'Eingetragen. Achte auf sichere Übergabe.',board_err_price:'Der Preis darf nicht über dem Originalpreis liegen.',board_err_limit:'Du hast schon 3 offene Einträge.',board_contact:'Trag in deinem Profil einen Kontakt ein (z. B. Instagram), sonst kann dich niemand erreichen.',board_report:'Melden',board_mine:'Dein Eintrag',per_ticket:'pro Ticket',face:'Originalpreis',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
     nophone_t:'Foto- und Videoverbot',nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
     source_t:'Quelle',source_note:'Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',report_ev:'Falsche Angaben melden',
     aware_t:'Awareness & Sicherheit',aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.',aware_team:'Awareness vor Ort: {x}',
@@ -83,7 +83,7 @@ var T={
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
     who_goes:"Who's going",nobody:'Nobody from the community yet. Be the first.',login_to_see:"Log in to see who's going.",
-    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
+    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with a price cap and buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Never pay more than face value. Pressure (“today only”) is usually a scam.',scam_4:'We do not check listings. Suspicious? Report the profile right away.',board_t:'Community ticket board',board_sub:'Offer or look for tickets, at face value at most. Contact goes through the profile.',board_login:'Log in to see the ticket board.',board_empty:'No listings yet.',board_offer:'Offering',board_want:'Looking for',board_qty:'Quantity',board_price:'Your price per ticket (€)',board_face:'Face value per ticket (€)',board_note:'Note (optional)',board_post:'Post',board_done:'Done',board_posted:'Posted. Make sure the hand-over is safe.',board_err_price:'Your price cannot be above face value.',board_err_limit:'You already have 3 open listings.',board_contact:'Add a contact to your profile (e.g. Instagram), otherwise nobody can reach you.',board_report:'Report',board_mine:'Your listing',per_ticket:'per ticket',face:'face value',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
     nophone_t:'No photos or video',nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
     source_t:'Source',source_note:'Please check time, line-up and price with the organiser.',report_ev:'Report wrong details',
     aware_t:'Awareness & safety',aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.',aware_team:'Awareness on site: {x}',
@@ -147,10 +147,10 @@ var S={
   q:'',city:'',genre:'',when:'all',type:'',onlyEvents:false,homeCity:null,
   map:null,mapSel:null,mapHash:null,
   ready:false,loadErr:false,
-  user:null,me:null,going:[],saved:[],counts:{},verif:null,
+  user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,offers:{}};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -194,24 +194,46 @@ var toastTimer;
 function toast(msg){ var el=document.getElementById('toast'); el.textContent=msg; el.className='show'; clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.className=''; },2600); }
 function data(p){ return p.then(function(r){ if(r.error) throw r.error; return r.data; }); }
 function fail(err){ if(window.console) console.error(err); toast(t('err_generic')); }
-function needLogin(){ if(S.user) return false; toast(t('login_need')); location.hash='#login'; return true; }
+function needLogin(){ if(S.user) return false; try{ sessionStorage.setItem('rs-after',location.hash||'#home'); }catch(e){} toast(t('login_need')); location.hash='#login'; return true; }
+function after(){ try{ return sessionStorage.getItem('rs-after'); }catch(e){ return null; } }
+function buzz(){ try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){} }
+function followsP(id){ for(var i=0;i<S.follow.length;i++){ if(S.follow[i].id===id) return S.follow[i]; } return null; }
+function friendsAt(eid){ if(!S.user||!S.follow.length) return []; var out=[]; S.attRows.forEach(function(a){ if(a.event_id===eid){ var f=followsP(a.profile_id); if(f) out.push(f); } }); return out; }
+function forYou(e){
+  if(!S.user) return false;
+  if(has(S.vfollow,e.v)) return true;
+  for(var i=0;i<S.follow.length;i++){ var f=S.follow[i]; if(has(e.lineupIds,f.id)) return true; if(f.role==='artist'&&has(e.lineupLc,String(f.display_name).toLowerCase())) return true; }
+  return false;
+}
+function isNew(e){ return S.lastSeen&&e.createdAt&&e.createdAt>S.lastSeen; }
+function cdText(e){
+  var st=new Date(e.startsAt).getTime(), en=e.endsAt?new Date(e.endsAt).getTime():st+12*3600e3, now=Date.now();
+  if(now>=st&&now<=en) return t('cd_live');
+  if(now>st) return '';
+  var m=Math.floor((st-now)/60000), d=Math.floor(m/1440), h=Math.floor((m%1440)/60);
+  if(m>4*1440) return '';
+  return t('cd_in',{t:d?t('cd_d',{d:d,h:h}):t('cd_h',{h:h,m:m%60})});
+}
+function cdHTML(e){ var x=e.time?cdText(e):''; return x?'<span class="cd" data-cd="'+e.id+'">'+esc(x)+'</span>':''; }
+function tixTag(e){ return e.tstatus==='sold_out'?' <span class="tag hot">'+t('tix_sold_out')+'</span>':(e.tstatus==='few'?' <span class="tag hot">'+t('tix_few')+'</span>':''); }
 function emptyBox(txt){ return '<div class="empty" style="margin-top:0">'+txt+'</div>'; }
 function loadingBox(){ return '<p class="sub" aria-busy="true">'+t('loading')+'</p>'; }
 
 /* ---------- Data loading ---------- */
 function mapEvent(r){
   var p=berlinParts(new Date(r.starts_at)), pe=r.ends_at?berlinParts(new Date(r.ends_at)):null;
-  var lu=(r.event_lineup||[]).slice().sort(function(a,b){ return a.position-b.position; }).map(function(x){ return x.name; });
+  var lus=(r.event_lineup||[]).slice().sort(function(a,b){ return a.position-b.position; }), lu=lus.map(function(x){ return x.name; });
   return {id:r.id,title:r.title,v:r.venue_id,date:p.date,time:r.time_known?p.time:null,off:offOf(p.date),endDate:pe?pe.date:null,endOff:pe?Math.max(offOf(pe.date),offOf(p.date)):offOf(p.date),genres:r.genres||[],
     lineup:lu.length?lu:null,more:r.lineup_more||0,nophone:r.no_phone,src:safeUrl(r.source_url),ticket:safeUrl(r.ticket_url),
-    type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by,createdAt:r.created_at};
+    type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by,createdAt:r.created_at,startsAt:r.starts_at,endsAt:r.ends_at,
+    price:r.price_text||null,tstatus:r.ticket_status||null,resale:safeUrl(r.resale_url),lineupIds:lus.map(function(x){ return x.artist_id; }).filter(Boolean),lineupLc:lu.map(function(x){ return x.toLowerCase(); })};
 }
 function mapVenue(r){ var p=proj(r.lon,r.lat); return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,kind:r.kind||'club',rules:r.rules||{},x:p[0],y:p[1]}; }
 function loadBase(){
   var since=berlinToISO(isoOf(-14),'00:00');   /* a little back, so festivals that are still running are included */
   return Promise.all([
     data(sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules')),
-    data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,created_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,event_lineup(position,name)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
+    data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,created_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,price_text,ticket_status,resale_url,event_lineup(position,name,artist_id)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
   ]).then(function(res){
     VENUES=res[0].map(mapVenue);
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
@@ -219,22 +241,27 @@ function loadBase(){
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
 }
 function loadMine(){
-  if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.counts={}; S.verif=null; return Promise.resolve(); }
+  if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
   var uid=S.user.id;
   return Promise.all([
     data(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
     data(sb.from('attendance').select('event_id,profile_id')),
     data(sb.from('bookmarks').select('event_id').eq('profile_id',uid)),
-    data(sb.from('artist_verifications').select('id,status,created_at').eq('profile_id',uid).order('created_at',{ascending:false}).limit(1))
+    data(sb.from('artist_verifications').select('id,status,created_at').eq('profile_id',uid).order('created_at',{ascending:false}).limit(1)),
+    data(sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,role)').eq('follower',uid)),
+    data(sb.from('venue_follows').select('venue_id').eq('profile_id',uid))
   ]).then(function(r){
     S.me=r[0];
     S.counts={}; S.going=[];
     r[1].forEach(function(a){ S.counts[a.event_id]=(S.counts[a.event_id]||0)+1; if(a.profile_id===uid) S.going.push(a.event_id); });
     S.saved=r[2].map(function(b){ return b.event_id; });
     S.verif=r[3][0]||null;
+    S.follow=r[4].map(function(x){ return x.profiles; }).filter(Boolean);
+    S.vfollow=r[5].map(function(x){ return x.venue_id; });
+    S.attRows=r[1];
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,offers:{}}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -244,11 +271,11 @@ function genreChips(){
 }
 function typeChips(){ return [['','type_all'],['club','type_club'],['festival','type_fest']].map(function(x){ return '<button type="button" class="chip" data-act="type" data-id="'+x[0]+'" aria-pressed="'+(S.type===x[0])+'">'+t(x[1])+'</button>'; }).join(''); }
 function eventCard(e){
-  var d=dayOf(e.off), v=venue(e.v), n=S.counts[e.id]||0;
-  var tag=(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
+  var d=dayOf(e.off), v=venue(e.v), n=S.counts[e.id]||0, fr=friendsAt(e.id);
+  var tag=tixTag(e)+(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
   return '<a class="ev" href="#event-'+e.id+'"><div class="date"><em>'+esc(fmtDow(d))+'</em><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
     '<div><h3>'+esc(e.title)+tag+'</h3><p class="meta">'+esc(v?v.name:'')+(v?' · '+esc(v.city):'')+(e.time?' · '+esc(e.time):'')+'</p><div class="chips">'+genreTags(e.genres)+'</div></div>'+
-    '<div class="side">'+(n?'<span>'+(has(S.going,e.id)?'✓ ':'')+t('going_n',{n:n})+'</span>':'')+'</div></a>';
+    '<div class="side">'+(isNew(e)&&forYou(e)?'<span class="newb">'+t('new_badge')+'</span>':'')+cdHTML(e)+(fr.length?'<span class="fr">'+t('fr_n',{n:fr.length})+'</span>':'')+(n?'<span>'+(has(S.going,e.id)?'✓ ':'')+t('going_n',{n:n})+'</span>':'')+'</div></a>';
 }
 function socialsHTML(soc){
   var items=SOC.filter(function(s){ return soc&&soc[s[0]]; });
@@ -268,9 +295,48 @@ function gcalUrl(e){
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+'&location='+encodeURIComponent(v.name+', '+(v.addr||v.city))+'&details='+encodeURIComponent(details);
 }
 function ruleVal(x){ return x==='photo_ban'?t('photo_ban'):x; }
+function swapUrl(e){ return 'https://www.ticketswap.com/search?query='+encodeURIComponent(e.title); }
+function scamHTML(){ return '<div class="warn" role="note"><b>⚠ '+t('scam_t')+'</b><ul><li>'+t('scam_1')+'</li><li>'+t('scam_2')+'</li><li>'+t('scam_3')+'</li><li>'+t('scam_4')+'</li></ul></div>'; }
+function eur(x){ return x==null?'':Number(x).toLocaleString(locale(),{style:'currency',currency:'EUR'}); }
+function ticketsHTML(e){
+  var st=e.tstatus||'unknown', off=e.ticket||e.src;
+  var head='<div class="tix tix-'+st+'"><span class="tix-dot" aria-hidden="true"></span><strong>'+t('tix_'+st)+'</strong>'+(e.price?'<span class="tix-price">'+t('tix_price')+': '+esc(e.price)+'</span>':'')+'</div>';
+  var links='<div class="row" style="margin-top:12px">'+(off?'<a class="btn'+(st!=='sold_out'?' primary':'')+'" href="'+esc(off)+'" target="_blank" rel="noopener">'+t('tix_official')+' ↗</a>':'')+
+    (e.resale?'<a class="btn" href="'+esc(e.resale)+'" target="_blank" rel="noopener">'+t('tix_resale_off')+' ↗</a>':'')+
+    '<a class="btn" href="'+esc(swapUrl(e))+'" target="_blank" rel="noopener nofollow">'+t('tix_swap')+' ↗</a></div><p class="sub" style="font-size:13px">'+t('tix_swap_note')+'</p>';
+  return head+links+scamHTML()+'<h3 style="margin-top:22px">'+t('board_t')+'</h3><p class="sub" style="margin-top:4px">'+t('board_sub')+'</p>'+boardHTML(e);
+}
+function loadOffers(id){
+  cache.offers[id]='loading';
+  data(sb.from('ticket_offers').select('id,profile_id,kind,qty,price,face_price,note,created_at,profiles(handle,display_name,verified)').eq('event_id',id).eq('status','open').order('created_at',{ascending:false}).limit(50))
+    .then(function(r){ cache.offers[id]=r; if(location.hash==='#event-'+id) render(false); }).catch(function(err){ cache.offers[id]=[]; fail(err); });
+}
+function boardHTML(e){
+  if(!S.user) return emptyBox('<a class="link" href="#login" data-act="loginhere">'+t('board_login')+'</a>');
+  if(cache.offers[e.id]===undefined){ loadOffers(e.id); return loadingBox(); }
+  if(cache.offers[e.id]==='loading') return loadingBox();
+  var rows=cache.offers[e.id];
+  var list=rows.length?'<div class="people">'+rows.map(function(o){
+    var p=o.profiles||{}, mine=o.profile_id===S.user.id;
+    return '<div class="person offer"><span class="okind'+(o.kind==='offer'?' on':'')+'">'+t(o.kind==='offer'?'board_offer':'board_want')+'</span><div class="grow"><strong>'+o.qty+' × '+(o.kind==='offer'?esc(eur(o.price))+' '+t('per_ticket'):'Ticket')+'</strong>'+
+      '<p>'+(o.kind==='offer'?t('face')+' '+esc(eur(o.face_price))+' · ':'')+(mine?t('board_mine'):'<a class="link" href="#u-'+esc(p.handle)+'">'+esc(p.display_name||'?')+'</a>'+(p.verified?VB:''))+' · '+esc(relTime(o.created_at))+'</p>'+
+      (o.note?'<p style="color:var(--text);font-family:var(--body);font-size:14px">'+esc(o.note)+'</p>':'')+'</div>'+
+      (mine?'<button type="button" class="btn small" data-act="offer-done" data-id="'+o.id+'" data-ev="'+e.id+'">'+t('board_done')+'</button>':'<button type="button" class="btn small" data-act="offer-report" data-id="'+o.id+'" data-p="'+esc(o.profile_id)+'">'+t('board_report')+'</button>')+'</div>';
+  }).join('')+'</div>':emptyBox(t('board_empty'));
+  var hasContact=S.me&&S.me.socials&&Object.keys(S.me.socials).length;
+  var form='<details class="more"><summary>+ '+t('board_post')+'</summary><form class="form" data-form="offer" data-ev="'+e.id+'" style="margin-top:8px" novalidate>'+
+    (hasContact?'':'<p class="sub" style="color:var(--accent);margin:0">'+t('board_contact')+' <a class="link" href="#me">'+t('me_title')+'</a></p>')+
+    '<div class="form2"><div class="field"><label for="o-kind">'+t('board_offer')+' / '+t('board_want')+'</label><select id="o-kind" name="kind"><option value="offer">'+t('board_offer')+'</option><option value="want">'+t('board_want')+'</option></select></div>'+
+    '<div class="field"><label for="o-qty">'+t('board_qty')+'</label><select id="o-qty" name="qty"><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>'+
+    '<div class="form2"><div class="field"><label for="o-price">'+t('board_price')+'</label><input id="o-price" name="price" type="number" min="0" max="1000" step="0.5" inputmode="decimal"></div>'+
+    '<div class="field"><label for="o-face">'+t('board_face')+'</label><input id="o-face" name="face" type="number" min="0" max="1000" step="0.5" inputmode="decimal"></div></div>'+
+    '<div class="field"><label for="o-note">'+t('board_note')+'</label><input id="o-note" name="note" type="text" maxlength="300"></div>'+
+    '<div id="offer-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('board_post')+'</button></div></form></details>';
+  return list+form;
+}
 function awareHTML(v){ var a=v&&v.rules&&v.rules.aware; return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(a?'<br><b>'+esc(t('aware_team',{x:a}))+'</b>':'')+'</div></div>'; }
 function reportForm(kind,id){
-  var reasons=['rr1','rr2','rr3','rr4','rr5'].map(function(k){ return '<option>'+t(k)+'</option>'; }).join('');
+  var reasons=['rr1','rr2','rr6','rr3','rr4','rr5'].map(function(k){ return '<option>'+t(k)+'</option>'; }).join('');
   return '<details class="more"><summary>'+(kind==='event'?t('report_ev'):t('report'))+'</summary><form class="form" data-form="report" data-kind="'+kind+'" data-id="'+esc(id)+'" style="margin-top:8px">'+
     '<div class="field"><label for="rp-r">'+t('report_reason')+'</label><select id="rp-r" name="reason">'+reasons+'</select></div>'+
     '<div class="field"><label for="rp-t">'+t('report_txt')+'</label><textarea id="rp-t" name="text" maxlength="1000"></textarea></div>'+
@@ -314,11 +380,11 @@ function viewEvent(id){
   var d=dayOf(e.off), v=venue(e.v), go=has(S.going,e.id), sv=has(S.saved,e.id), n=S.counts[e.id]||0;
   var lineup=e.lineup?e.lineup.map(function(x){ return '<div class="person">'+av(x)+'<div class="grow"><strong>'+esc(x)+'</strong></div></div>'; }).join('')+(e.more?'<p class="sub" style="margin:4px 0 0">'+t('and_more',{n:e.more})+'</p>':''):emptyBox(t('lineup_tba'));
   var who;
-  if(!S.user) who=emptyBox('<a class="link" href="#login">'+t('login_to_see')+'</a>');
+  if(!S.user) who=emptyBox('<a class="link" href="#login" data-act="loginhere">'+t('login_to_see')+'</a>');
   else if(cache.att[e.id]===undefined){ who=loadingBox(); loadAttendees(e.id); }
   else who=cache.att[e.id].length?cache.att[e.id].map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p.display_name)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+'</p></div></a>'; }).join(''):emptyBox(t('nobody'));
-  var tix=e.ticket||e.src;
-  return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+esc(e.title)+'</h1>'+
+  var fr=friendsAt(e.id), cdx=cdHTML(e);
+  return '<a class="back" href="#events">← '+t('back')+'</a>'+(cdx?'<p class="kicker">'+cdx+'</p>':'')+'<h1>'+esc(e.title)+'</h1>'+
     '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+
     '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+(e.endDate&&e.endDate!==e.date?' – '+esc(fmtLong(dayOf(e.endOff))):'')+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
     '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div></dl>'+
@@ -326,8 +392,10 @@ function viewEvent(id){
     '<div class="row" style="margin-top:20px"><button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
     '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button></div>'+
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
-    (tix?'<a class="btn" href="'+esc(tix)+'" target="_blank" rel="noopener">'+t('tickets')+' ↗</a>':'')+'<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a><button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('share')+'</button></div>'+
+    '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a><button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('share')+'</button></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
+    (fr.length?'<div class="frline"><span class="fr">'+t('fr_going')+'</span>'+fr.slice(0,6).map(function(p){ return '<a href="#u-'+esc(p.handle)+'" title="'+esc(p.display_name)+'">'+av(p.display_name,30)+'</a>'; }).join('')+'<span class="sub" style="margin:0">'+esc(fr.slice(0,3).map(function(p){ return p.display_name; }).join(', '))+(fr.length>3?' +'+(fr.length-3):'')+'</span></div>':'')+
+    '<div class="sec"><h2>'+t('tix_t')+'</h2>'+ticketsHTML(e)+'</div>'+
     '<div class="sec"><h2>'+t('lineup')+'</h2><div class="people">'+lineup+'</div></div>'+
     '<div class="sec"><h2>'+t('who_goes')+'</h2><div class="people">'+who+'</div></div>'+
     '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v)+'</div>'+
@@ -377,6 +445,9 @@ function viewHome(){
     .sort(function(a,b){ return (S.counts[b.id]||0)-(S.counts[a.id]||0)||a.off-b.off||(a.time||'').localeCompare(b.time||''); }).slice(0,8);
   var soon=S.user?S.going.map(evt).filter(function(e){ return e&&e.off>=0&&e.off<=1; }):[];
   var fresh=EVENTS.filter(function(e){ return upcoming(e)&&inCity(e)&&e.createdAt; }).sort(function(a,b){ return b.createdAt.localeCompare(a.createdAt)||a.off-b.off; }).slice(0,4);
+  var friendEv=S.user?sortedEvents().filter(function(e){ return upcoming(e)&&friendsAt(e.id).length; }).slice(0,6):[];
+  var fy=S.user?sortedEvents().filter(function(e){ return upcoming(e)&&forYou(e); }):[], fyNew=fy.filter(isNew).length;
+  fy.sort(function(a,b){ return (isNew(b)?1:0)-(isNew(a)?1:0)||a.off-b.off; }); fy=fy.slice(0,6);
   var h=cache.home, isAdmin=S.me&&S.me.role==='admin', canPost=isAdmin||(S.me&&S.me.role==='artist'&&S.me.verified);
   var news=h==='loading'||!h?loadingBox():(h.posts.length?h.posts.map(postHTML).join(''):emptyBox(t('no_posts')));
   var ticker=h==='loading'||!h?'':(h.headlines.length?'<div class="people">'+h.headlines.map(function(x){ return '<a class="person" href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><div class="grow"><strong>'+esc(x.title)+'</strong><p>'+esc(x.source)+(x.published_at?' · '+esc(relTime(x.published_at)):'')+'</p></div><span aria-hidden="true">↗</span></a>'; }).join('')+'</div><p class="sub" style="font-size:13px">'+t('ticker_note')+'</p>':'');
@@ -389,6 +460,8 @@ function viewHome(){
   return marq+'<p class="kicker">'+esc(t('home_kicker'))+'</p><h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
     '<div class="chips" style="margin-top:14px">'+chips+'</div>'+
     (soon.length?'<div class="sec"><h2>'+t('home_remind')+'</h2><div class="list" style="margin-top:0">'+soon.map(eventCard).join('')+'</div></div>':'')+
+    (friendEv.length?'<div class="sec"><h2>'+t('home_friends')+'</h2><div class="list" style="margin-top:0">'+friendEv.map(eventCard).join('')+'</div></div>':'')+
+    (S.user?'<div class="sec"><h2>'+t('home_foryou')+'</h2>'+(fy.length?(fyNew?'<p class="kicker">● '+t('n_new',{n:fyNew})+'</p>':'<p class="sub" style="margin:0 0 10px">'+t('foryou_note')+'</p>')+'<div class="list" style="margin-top:0">'+fy.map(eventCard).join('')+'</div>':emptyBox(t('foryou_empty')+' <a class="link" href="#artists">'+t('home_artists')+'</a>'))+'</div>':'')+
     '<div class="sec"><h2>'+(rg[0]===0?t('home_today'):t('home_weekend'))+'</h2>'+(wk.length?'<div class="list" style="margin-top:0">'+wk.map(eventCard).join('')+'</div>':emptyBox(t('home_weekend_none')))+
       '<div class="row" style="margin-top:10px"><a class="btn small" href="#events">'+t('home_all_events')+' →</a><a class="btn small" href="#map">'+t('nav_map')+' →</a></div></div>'+
     '<div class="sec"><h2>'+t('home_news')+'</h2>'+form+'<div style="margin-top:10px">'+news+'</div></div>'+
@@ -403,8 +476,9 @@ function viewClub(id){
   if(!v) return '<a class="back" href="#map">← '+t('back')+'</a><div class="empty">'+t('no_club')+'</div>';
   var evs=sortedEvents().filter(function(e){ return e.v===id&&upcoming(e); });
   var facts=RULE_KEYS.map(function(k){ var x=v.rules[k]; return '<div><dt>'+t(RULE_LABEL[k])+'</dt><dd'+(x?'':' style="color:var(--muted);font-weight:400"')+'>'+(x?esc(ruleVal(x)):t('not_set'))+'</dd></div>'; }).join('');
+  var vf=has(S.vfollow,v.id);
   return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a><h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+(v.kind!=='club'?'<p class="sub"><span class="tag">'+t('kind_'+v.kind)+'</span> '+t('kind_note')+'</p>':'')+
-    '<div class="row" style="margin-top:16px"><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
+    '<div class="row" style="margin-top:16px"><button type="button" class="btn '+(vf?'on':'primary')+'" data-act="vfollow" data-id="'+v.id+'" aria-pressed="'+vf+'">'+(vf?'✓ '+t('followed_club'):'+ '+t('follow_club'))+'</button><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+(vf?'<p class="sub" style="font-size:13px">'+t('push_note')+'</p>':'')+
     '<div class="sec"><h2>'+t('rules_t')+'</h2><dl class="facts" style="margin-top:0">'+facts+'</dl></div>'+
     '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v)+'</div>'+
     '<div class="sec"><h2>'+t('upcoming')+'</h2>'+(evs.length?'<div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div>':emptyBox(t('no_ev_here')))+'</div>';
@@ -435,10 +509,11 @@ function viewProfile(handle){
   var back='<a class="back" href="javascript:history.back()">← '+t('back')+'</a>';
   if(p==='loading') return back+loadingBox();
   if(!p) return back+'<div class="empty">'+t('profile_nf')+'</div>';
-  var mine=S.user&&S.user.id===p.id;
+  var mine=S.user&&S.user.id===p.id, fo=!!followsP(p.id);
   var evs=(p.goes||[]).map(evt).filter(Boolean).sort(function(a,b){ return a.off-b.off; });
   return back+'<div class="hero">'+av(p.display_name,84)+'<div><h1>'+esc(p.display_name)+(p.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1>'+
     '<p class="sub" style="margin-top:6px">@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+(p.verified?' · '+t('verified'):'')+'</p></div></div>'+
+    (mine?'':'<div class="row" style="margin-top:16px"><button type="button" class="btn '+(fo?'on':'primary')+'" data-act="follow" data-id="'+esc(p.id)+'" data-h="'+esc(p.handle)+'" aria-pressed="'+fo+'">'+(fo?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>')+
     (p.bio?'<p class="sub" style="margin-top:16px">'+esc(p.bio)+'</p>':'')+socialsHTML(p.socials)+
     (evs.length?'<div class="sec"><h2>'+t('upcoming_going')+'</h2><div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div></div>':'')+
     (S.user&&!mine?'<div class="sec"><div class="row"><button type="button" class="btn small" data-act="block" data-id="'+esc(p.id)+'">'+t('block')+'</button></div>'+reportForm('profile',p.id)+'<p class="sub">'+t('safety_note')+'</p></div>':'')+
@@ -449,7 +524,7 @@ function viewProfile(handle){
 function viewConnect(){
   var head='<h1>'+t('connect_title')+'</h1><p class="sub">'+t('connect_sub')+'</p>';
   var soon='<div class="card" style="margin-top:24px"><p>'+t('chat_soon')+'</p></div>';
-  if(!S.user) return head+'<div class="empty">'+t('connect_login')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login">'+t('to_login')+'</a></div></div>'+soon;
+  if(!S.user) return head+'<div class="empty">'+t('connect_login')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login" data-act="loginhere">'+t('to_login')+'</a></div></div>'+soon;
   if(cache.connect===null){
     cache.connect='loading';
     var mine=S.going.slice();
@@ -475,11 +550,11 @@ function viewLogin(){
   return '<h1>'+(login?t('login_t'):t('signup_t'))+'</h1>'+
     '<div class="seg" role="group" style="margin-top:16px"><button type="button" data-act="authtab" data-id="login" aria-pressed="'+login+'">'+t('login_t')+'</button><button type="button" data-act="authtab" data-id="signup" aria-pressed="'+(!login)+'">'+t('signup_t')+'</button></div>'+
     (S.authMsg?'<div class="nophone"><div>'+esc(S.authMsg)+'</div></div>':'')+
-    '<form class="form" data-form="'+(login?'login':'signup')+'" novalidate>'+
+    (after()?'<p class="sub">'+t('login_why')+'</p>':'')+'<form class="form" data-form="'+(login?'login':'signup')+'" novalidate>'+
     (login?'':'<div class="field"><label for="a-name">'+t('display_name')+'</label><input id="a-name" name="name" type="text" maxlength="60" autocomplete="nickname" required></div>')+
     '<div class="field"><label for="a-mail">'+t('email')+'</label><input id="a-mail" name="email" type="email" autocomplete="email" required></div>'+
     '<div class="field"><label for="a-pw">'+t('password')+'</label><input id="a-pw" name="password" type="password" minlength="8" autocomplete="'+(login?'current-password':'new-password')+'" required>'+(login?'':'<p class="sub" style="margin:4px 0 0;font-size:13px">'+t('pw_hint')+'</p>')+'</div>'+
-    (login?'':'<label class="row" style="gap:10px"><input type="checkbox" name="age" required style="width:20px;height:20px;accent-color:#e4262e"> '+t('age_ok')+'</label>')+
+    (login?'':'<label class="row" style="gap:10px"><input type="checkbox" name="age" required style="width:20px;height:20px;accent-color:var(--accent)"> '+t('age_ok')+'</label>')+
     '<div id="auth-err" class="sub" style="color:var(--accent);margin:0" role="alert">'+esc(S.authErr)+'</div>'+
     '<div class="row"><button class="btn primary" type="submit">'+(login?t('login_btn'):t('signup_btn'))+'</button>'+(login?'<button type="button" class="linkbtn" data-act="forgot">'+t('forgot')+'</button>':'')+'</div></form>';
 }
@@ -524,7 +599,7 @@ function viewMe(){
 
 /* ---------- Views: new event ---------- */
 function viewNew(){
-  if(!S.user) return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><div class="empty">'+t('login_need')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login">'+t('to_login')+'</a></div></div>';
+  if(!S.user) return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><div class="empty">'+t('login_need')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login" data-act="loginhere">'+t('to_login')+'</a></div></div>';
   var vopts='<option value="">'+t('f_venue_pick')+'</option>'+VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); }).map(function(v){ return '<option value="'+v.id+'">'+esc(v.city)+' · '+esc(v.name)+'</option>'; }).join('');
   var g=GENRES.map(function(x){ return '<label class="chipcheck"><input type="checkbox" name="genre" value="'+esc(x)+'"><span>'+esc(x)+'</span></label>'; }).join('');
   return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><p class="sub">'+t('new_sub')+'</p>'+
@@ -538,6 +613,8 @@ function viewNew(){
     '<div class="field"><label>'+t('f_genres')+'</label><div class="chips">'+g+'</div></div>'+
     '<div class="field"><label for="n-lineup">'+t('f_lineup')+'</label><input id="n-lineup" name="lineup" type="text"></div>'+
     '<div class="field"><label for="n-link">'+t('f_link')+'</label><input id="n-link" name="link" type="url" placeholder="https://"></div>'+
+    '<div class="form2"><div class="field"><label for="n-price">'+t('f_price')+'</label><input id="n-price" name="price" type="text" maxlength="40"></div>'+
+    '<div class="field"><label for="n-ts">'+t('f_tstatus')+'</label><select id="n-ts" name="tstatus"><option value="">'+t('tix_unknown')+'</option><option value="available">'+t('tix_available')+'</option><option value="few">'+t('tix_few')+'</option><option value="sold_out">'+t('tix_sold_out')+'</option></select></div></div>'+
     '<label class="row" style="gap:10px"><input type="checkbox" name="nophone" style="width:20px;height:20px;accent-color:#e4262e"> '+t('f_nophone')+'</label>'+
     '<div id="form-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('f_submit')+'</button></div></form>';
 }
@@ -848,8 +925,19 @@ document.addEventListener('click',function(ev){
     else toast(url); }
   else if(act==='homecity'){ S.homeCity=id; render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
-  else if(act==='go'){ toggleRow('attendance',+id,S.going); }
-  else if(act==='save'){ toggleRow('bookmarks',+id,S.saved); }
+  else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
+  else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h');
+    var pq=fp?data(sb.from('follows').delete().eq('follower',S.user.id).eq('artist',id)):data(sb.from('follows').insert({follower:S.user.id,artist:id}));
+    if(fp) S.follow=S.follow.filter(function(x){ return x.id!==id; }); else { var cp=cache.profile[String(hk).toLowerCase()]; S.follow.push({id:id,handle:hk,display_name:cp&&cp.display_name||hk,verified:cp&&cp.verified,role:cp&&cp.role}); }
+    render(false); pq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
+  else if(act==='vfollow'){ if(needLogin()) return; buzz(); var vid2=+id, on2=has(S.vfollow,vid2);
+    var vq=on2?data(sb.from('venue_follows').delete().eq('profile_id',S.user.id).eq('venue_id',vid2)):data(sb.from('venue_follows').insert({profile_id:S.user.id,venue_id:vid2}));
+    if(on2) S.vfollow.splice(S.vfollow.indexOf(vid2),1); else S.vfollow.push(vid2);
+    render(false); vq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
+  else if(act==='offer-done'){ var evid=+el.getAttribute('data-ev'); data(sb.from('ticket_offers').update({status:'done'}).eq('id',+id)).then(function(){ delete cache.offers[evid]; render(false); }).catch(fail); }
+  else if(act==='offer-report'){ if(needLogin()) return; data(sb.from('reports').insert({reporter:S.user.id,target_profile:el.getAttribute('data-p'),reason:t('rr6'),details:'ticket_offer #'+id})).then(function(){ toast(t('report_sent')); }).catch(fail); }
+  else if(act==='loginhere'){ try{ sessionStorage.setItem('rs-after',location.hash); }catch(e){} }
+  else if(act==='save'){ if(S.user) buzz(); toggleRow('bookmarks',+id,S.saved); }
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
   else if(act==='forgot'){
     var mail=(document.getElementById('a-mail')||{}).value;
@@ -924,6 +1012,16 @@ document.addEventListener('submit',function(ev){
     busy(true);
     data(sb.from('posts').insert({author:S.user.id,kind:kindP,title:pt,body:String(fd.get('body')||'').trim()||null,link:safeUrl(String(fd.get('link')||'').trim())}))
       .then(function(){ toast(t('post_done')); loadHome(); }).catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='offer'){
+    if(needLogin()) return;
+    var oe=+f.getAttribute('data-ev'), ok=fd.get('kind')==='want'?'want':'offer', oerr=document.getElementById('offer-err');
+    var pr=fd.get('price')===''?null:Number(fd.get('price')), fc=fd.get('face')===''?null:Number(fd.get('face'));
+    if(ok==='offer'&&(pr==null||fc==null||isNaN(pr)||isNaN(fc))){ oerr.textContent=t('f_err'); return; }
+    if(ok==='offer'&&pr>fc){ oerr.textContent=t('board_err_price'); return; }
+    busy(true);
+    data(sb.from('ticket_offers').insert({event_id:oe,profile_id:S.user.id,kind:ok,qty:+fd.get('qty')||1,price:ok==='offer'?pr:null,face_price:ok==='offer'?fc:null,note:String(fd.get('note')||'').trim()||null}))
+      .then(function(){ toast(t('board_posted')); delete cache.offers[oe]; render(false); })
+      .catch(function(err){ busy(false); if(String(err&&err.message).indexOf('too many')>=0) oerr.textContent=t('board_err_limit'); else fail(err); });
   } else if(kind==='report'){
     if(needLogin()) return;
     var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
@@ -937,7 +1035,7 @@ document.addEventListener('submit',function(ev){
     var names=String(fd.get('lineup')||'').split(',').map(function(x){ return x.trim(); }).filter(Boolean).slice(0,40);
     var genres=fd.getAll('genre'); if(!genres.length) genres=['Techno'];
     busy(true);
-    data(sb.from('events').insert({venue_id:vid,title:title,starts_at:berlinToISO(date,fd.get('time')||'22:00'),ends_at:(fd.get('end')&&fd.get('end')>date)?berlinToISO(fd.get('end'),'23:59'):null,time_known:!!fd.get('time'),kind:fd.get('kind')==='festival'?'festival':'club',genres:genres,no_phone:!!fd.get('nophone'),ticket_url:link,source_url:link}).select('id,status').single())
+    data(sb.from('events').insert({venue_id:vid,title:title,starts_at:berlinToISO(date,fd.get('time')||'22:00'),ends_at:(fd.get('end')&&fd.get('end')>date)?berlinToISO(fd.get('end'),'23:59'):null,time_known:!!fd.get('time'),kind:fd.get('kind')==='festival'?'festival':'club',genres:genres,no_phone:!!fd.get('nophone'),ticket_url:link,source_url:link,price_text:String(fd.get('price')||'').trim()||null,ticket_status:fd.get('tstatus')||null}).select('id,status').single())
       .then(function(row){
         var lp=names.length?data(sb.from('event_lineup').insert(names.map(function(n,i){ return {event_id:row.id,position:i,name:n}; }))):Promise.resolve();
         return lp.then(function(){ return row; });
@@ -951,6 +1049,8 @@ document.addEventListener('submit',function(ev){
 
 /* ---------- Start ---------- */
 try{ var savedLang=localStorage.getItem('rs-lang'); if(savedLang==='de'||savedLang==='en') S.lang=savedLang; }catch(e){}
+try{ S.lastSeen=localStorage.getItem('rs-seen'); localStorage.setItem('rs-seen',new Date().toISOString()); }catch(e){}
+setInterval(function(){ var els=document.querySelectorAll('[data-cd]'); for(var i=0;i<els.length;i++){ var ce=evt(+els[i].getAttribute('data-cd')); if(ce) els[i].textContent=cdText(ce); } },30000);
 window.addEventListener('hashchange',function(){ render(true); });
 window.addEventListener('resize',function(){ if(mapEl()) drawMap(); });
 render(false);
@@ -962,7 +1062,7 @@ sb.auth.onAuthStateChange(function(evName,session){
   first=false;
   resetCaches();
   /* supabase-js: do not call the client synchronously inside this callback */
-  setTimeout(function(){ loadMine().then(function(){ if(S.user&&location.hash==='#login') location.hash='#me'; else render(false); }); },0);
+  setTimeout(function(){ loadMine().then(function(){ if(S.user&&location.hash==='#login'){ var a=after(); try{ sessionStorage.removeItem('rs-after'); }catch(e){} location.hash=a&&a!=='#login'?a:'#me'; } else render(false); }); },0);
 });
 loadBase().then(function(){ render(false); });
 })();

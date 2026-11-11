@@ -243,3 +243,28 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* ---------- Social, countdown, tickets ---------- */
+.fr{display:inline-flex;align-items:center;gap:6px;color:var(--text);font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.fr::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.ev .side{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+@media (max-width:560px){.ev .side{align-items:flex-start;flex-direction:row;flex-wrap:wrap;gap:10px}}
+.newb{background:var(--accent);color:var(--accent-ink);padding:2px 6px;font-weight:700;letter-spacing:.12em}
+.cd{color:var(--accent);font-family:var(--mono);font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.frline{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:16px;padding:12px 14px;border:1px solid var(--line);background:var(--surface)}
+.frline .av{border-color:var(--accent)}
+.tix{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding:14px 16px;border:1px solid var(--line-2);background:var(--surface)}
+.tix strong{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
+.tix-dot{width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.tix-available .tix-dot{background:#3ddc84}
+.tix-few .tix-dot{background:#ffb020}
+.tix-sold_out{border-color:var(--accent)}
+.tix-sold_out .tix-dot{background:var(--accent)}
+.tix-price{color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-left:auto}
+.warn{margin-top:16px;border:1px solid var(--accent);border-left-width:4px;padding:14px 16px 6px;background:rgba(255,43,28,.06)}
+.warn b{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.warn ul{margin:10px 0 8px;padding-left:18px;color:var(--text);font-size:14.5px}
+.warn li{margin-bottom:6px}
+.offer{align-items:flex-start}
+.okind{flex:none;min-width:64px;text-align:center;border:1px solid var(--line-2);padding:4px 6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.okind.on{border-color:var(--accent);color:var(--accent)}
