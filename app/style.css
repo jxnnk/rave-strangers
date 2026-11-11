@@ -265,6 +265,3 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 .warn b{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .warn ul{margin:10px 0 8px;padding-left:18px;color:var(--text);font-size:14.5px}
 .warn li{margin-bottom:6px}
-.offer{align-items:flex-start}
-.okind{flex:none;min-width:64px;text-align:center;border:1px solid var(--line-2);padding:4px 6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.okind.on{border-color:var(--accent);color:var(--accent)}

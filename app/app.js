@@ -28,7 +28,7 @@ var T={
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
     who_goes:'Wer geht hin',nobody:'Noch niemand aus der Community. Sei die erste Person.',login_to_see:'Melde dich an, um zu sehen, wer hingeht.',
-    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Preisobergrenze und Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Nie mehr als den Originalpreis zahlen. Wer Druck macht („nur noch heute“), ist meistens Betrug.',scam_4:'Wir prüfen Angebote nicht. Verdächtig? Melde das Profil sofort.',board_t:'Ticketbörse der Community',board_sub:'Biete oder suche Tickets, höchstens zum Originalpreis. Kontakt läuft über das Profil.',board_login:'Melde dich an, um die Ticketbörse zu sehen.',board_empty:'Noch keine Einträge.',board_offer:'Biete',board_want:'Suche',board_qty:'Anzahl',board_price:'Dein Preis pro Ticket (€)',board_face:'Originalpreis pro Ticket (€)',board_note:'Notiz (optional)',board_post:'Eintragen',board_done:'Erledigt',board_posted:'Eingetragen. Achte auf sichere Übergabe.',board_err_price:'Der Preis darf nicht über dem Originalpreis liegen.',board_err_limit:'Du hast schon 3 offene Einträge.',board_contact:'Trag in deinem Profil einen Kontakt ein (z. B. Instagram), sonst kann dich niemand erreichen.',board_report:'Melden',board_mine:'Dein Eintrag',per_ticket:'pro Ticket',face:'Originalpreis',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
+    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Wer Druck macht („nur noch heute“, „schnell zahlen“), ist meistens Betrug.',scam_4:'Kauf am besten über offizielle Shops oder Plattformen mit Käuferschutz.',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
     nophone_t:'Foto- und Videoverbot',nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
     source_t:'Quelle',source_note:'Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',report_ev:'Falsche Angaben melden',
     aware_t:'Awareness & Sicherheit',aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.',aware_team:'Awareness vor Ort: {x}',
@@ -83,7 +83,7 @@ var T={
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
     who_goes:"Who's going",nobody:'Nobody from the community yet. Be the first.',login_to_see:"Log in to see who's going.",
-    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with a price cap and buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Never pay more than face value. Pressure (“today only”) is usually a scam.',scam_4:'We do not check listings. Suspicious? Report the profile right away.',board_t:'Community ticket board',board_sub:'Offer or look for tickets, at face value at most. Contact goes through the profile.',board_login:'Log in to see the ticket board.',board_empty:'No listings yet.',board_offer:'Offering',board_want:'Looking for',board_qty:'Quantity',board_price:'Your price per ticket (€)',board_face:'Face value per ticket (€)',board_note:'Note (optional)',board_post:'Post',board_done:'Done',board_posted:'Posted. Make sure the hand-over is safe.',board_err_price:'Your price cannot be above face value.',board_err_limit:'You already have 3 open listings.',board_contact:'Add a contact to your profile (e.g. Instagram), otherwise nobody can reach you.',board_report:'Report',board_mine:'Your listing',per_ticket:'per ticket',face:'face value',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
+    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Pressure (“today only”, “pay fast”) is usually a scam.',scam_4:'Buy through official shops or platforms with buyer protection.',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
     nophone_t:'No photos or video',nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
     source_t:'Source',source_note:'Please check time, line-up and price with the organiser.',report_ev:'Report wrong details',
     aware_t:'Awareness & safety',aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.',aware_team:'Awareness on site: {x}',
@@ -150,7 +150,7 @@ var S={
   user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,offers:{}};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -261,7 +261,7 @@ function loadMine(){
     S.attRows=r[1];
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,offers:{}}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -304,35 +304,7 @@ function ticketsHTML(e){
   var links='<div class="row" style="margin-top:12px">'+(off?'<a class="btn'+(st!=='sold_out'?' primary':'')+'" href="'+esc(off)+'" target="_blank" rel="noopener">'+t('tix_official')+' ↗</a>':'')+
     (e.resale?'<a class="btn" href="'+esc(e.resale)+'" target="_blank" rel="noopener">'+t('tix_resale_off')+' ↗</a>':'')+
     '<a class="btn" href="'+esc(swapUrl(e))+'" target="_blank" rel="noopener nofollow">'+t('tix_swap')+' ↗</a></div><p class="sub" style="font-size:13px">'+t('tix_swap_note')+'</p>';
-  return head+links+scamHTML()+'<h3 style="margin-top:22px">'+t('board_t')+'</h3><p class="sub" style="margin-top:4px">'+t('board_sub')+'</p>'+boardHTML(e);
-}
-function loadOffers(id){
-  cache.offers[id]='loading';
-  data(sb.from('ticket_offers').select('id,profile_id,kind,qty,price,face_price,note,created_at,profiles(handle,display_name,verified)').eq('event_id',id).eq('status','open').order('created_at',{ascending:false}).limit(50))
-    .then(function(r){ cache.offers[id]=r; if(location.hash==='#event-'+id) render(false); }).catch(function(err){ cache.offers[id]=[]; fail(err); });
-}
-function boardHTML(e){
-  if(!S.user) return emptyBox('<a class="link" href="#login" data-act="loginhere">'+t('board_login')+'</a>');
-  if(cache.offers[e.id]===undefined){ loadOffers(e.id); return loadingBox(); }
-  if(cache.offers[e.id]==='loading') return loadingBox();
-  var rows=cache.offers[e.id];
-  var list=rows.length?'<div class="people">'+rows.map(function(o){
-    var p=o.profiles||{}, mine=o.profile_id===S.user.id;
-    return '<div class="person offer"><span class="okind'+(o.kind==='offer'?' on':'')+'">'+t(o.kind==='offer'?'board_offer':'board_want')+'</span><div class="grow"><strong>'+o.qty+' × '+(o.kind==='offer'?esc(eur(o.price))+' '+t('per_ticket'):'Ticket')+'</strong>'+
-      '<p>'+(o.kind==='offer'?t('face')+' '+esc(eur(o.face_price))+' · ':'')+(mine?t('board_mine'):'<a class="link" href="#u-'+esc(p.handle)+'">'+esc(p.display_name||'?')+'</a>'+(p.verified?VB:''))+' · '+esc(relTime(o.created_at))+'</p>'+
-      (o.note?'<p style="color:var(--text);font-family:var(--body);font-size:14px">'+esc(o.note)+'</p>':'')+'</div>'+
-      (mine?'<button type="button" class="btn small" data-act="offer-done" data-id="'+o.id+'" data-ev="'+e.id+'">'+t('board_done')+'</button>':'<button type="button" class="btn small" data-act="offer-report" data-id="'+o.id+'" data-p="'+esc(o.profile_id)+'">'+t('board_report')+'</button>')+'</div>';
-  }).join('')+'</div>':emptyBox(t('board_empty'));
-  var hasContact=S.me&&S.me.socials&&Object.keys(S.me.socials).length;
-  var form='<details class="more"><summary>+ '+t('board_post')+'</summary><form class="form" data-form="offer" data-ev="'+e.id+'" style="margin-top:8px" novalidate>'+
-    (hasContact?'':'<p class="sub" style="color:var(--accent);margin:0">'+t('board_contact')+' <a class="link" href="#me">'+t('me_title')+'</a></p>')+
-    '<div class="form2"><div class="field"><label for="o-kind">'+t('board_offer')+' / '+t('board_want')+'</label><select id="o-kind" name="kind"><option value="offer">'+t('board_offer')+'</option><option value="want">'+t('board_want')+'</option></select></div>'+
-    '<div class="field"><label for="o-qty">'+t('board_qty')+'</label><select id="o-qty" name="qty"><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>'+
-    '<div class="form2"><div class="field"><label for="o-price">'+t('board_price')+'</label><input id="o-price" name="price" type="number" min="0" max="1000" step="0.5" inputmode="decimal"></div>'+
-    '<div class="field"><label for="o-face">'+t('board_face')+'</label><input id="o-face" name="face" type="number" min="0" max="1000" step="0.5" inputmode="decimal"></div></div>'+
-    '<div class="field"><label for="o-note">'+t('board_note')+'</label><input id="o-note" name="note" type="text" maxlength="300"></div>'+
-    '<div id="offer-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('board_post')+'</button></div></form></details>';
-  return list+form;
+  return head+links+scamHTML();
 }
 function awareHTML(v){ var a=v&&v.rules&&v.rules.aware; return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(a?'<br><b>'+esc(t('aware_team',{x:a}))+'</b>':'')+'</div></div>'; }
 function reportForm(kind,id){
@@ -934,8 +906,6 @@ document.addEventListener('click',function(ev){
     var vq=on2?data(sb.from('venue_follows').delete().eq('profile_id',S.user.id).eq('venue_id',vid2)):data(sb.from('venue_follows').insert({profile_id:S.user.id,venue_id:vid2}));
     if(on2) S.vfollow.splice(S.vfollow.indexOf(vid2),1); else S.vfollow.push(vid2);
     render(false); vq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
-  else if(act==='offer-done'){ var evid=+el.getAttribute('data-ev'); data(sb.from('ticket_offers').update({status:'done'}).eq('id',+id)).then(function(){ delete cache.offers[evid]; render(false); }).catch(fail); }
-  else if(act==='offer-report'){ if(needLogin()) return; data(sb.from('reports').insert({reporter:S.user.id,target_profile:el.getAttribute('data-p'),reason:t('rr6'),details:'ticket_offer #'+id})).then(function(){ toast(t('report_sent')); }).catch(fail); }
   else if(act==='loginhere'){ try{ sessionStorage.setItem('rs-after',location.hash); }catch(e){} }
   else if(act==='save'){ if(S.user) buzz(); toggleRow('bookmarks',+id,S.saved); }
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
@@ -1012,16 +982,6 @@ document.addEventListener('submit',function(ev){
     busy(true);
     data(sb.from('posts').insert({author:S.user.id,kind:kindP,title:pt,body:String(fd.get('body')||'').trim()||null,link:safeUrl(String(fd.get('link')||'').trim())}))
       .then(function(){ toast(t('post_done')); loadHome(); }).catch(function(err){ busy(false); fail(err); });
-  } else if(kind==='offer'){
-    if(needLogin()) return;
-    var oe=+f.getAttribute('data-ev'), ok=fd.get('kind')==='want'?'want':'offer', oerr=document.getElementById('offer-err');
-    var pr=fd.get('price')===''?null:Number(fd.get('price')), fc=fd.get('face')===''?null:Number(fd.get('face'));
-    if(ok==='offer'&&(pr==null||fc==null||isNaN(pr)||isNaN(fc))){ oerr.textContent=t('f_err'); return; }
-    if(ok==='offer'&&pr>fc){ oerr.textContent=t('board_err_price'); return; }
-    busy(true);
-    data(sb.from('ticket_offers').insert({event_id:oe,profile_id:S.user.id,kind:ok,qty:+fd.get('qty')||1,price:ok==='offer'?pr:null,face_price:ok==='offer'?fc:null,note:String(fd.get('note')||'').trim()||null}))
-      .then(function(){ toast(t('board_posted')); delete cache.offers[oe]; render(false); })
-      .catch(function(err){ busy(false); if(String(err&&err.message).indexOf('too many')>=0) oerr.textContent=t('board_err_limit'); else fail(err); });
   } else if(kind==='report'){
     if(needLogin()) return;
     var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
