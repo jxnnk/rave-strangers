@@ -279,3 +279,16 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 .warn b{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .warn ul{margin:10px 0 8px;padding-left:18px;color:var(--text);font-size:14.5px}
 .warn li{margin-bottom:6px}
+
+/* ---------- Map popup (hover on desktop, tap on phones) ---------- */
+.rs-pop .maplibregl-popup-content{background:var(--surface);color:var(--text);border:1px solid var(--line-2);border-top:2px solid var(--accent);border-radius:0;padding:12px 14px 12px;box-shadow:0 14px 36px rgba(0,0,0,.55);font-family:var(--body);min-width:230px}
+.rs-pop .maplibregl-popup-tip{display:none}
+.rs-pop .maplibregl-popup-close-button{color:var(--muted);font-size:20px;width:34px;height:34px;right:0;top:0}
+.rs-pop .maplibregl-popup-close-button:hover{background:none;color:var(--text)}
+.rs-pop:not(.pinned){pointer-events:none}
+.pop-t{font-family:var(--display);text-transform:uppercase;font-size:17px;font-weight:700;line-height:1.1;padding-right:22px;margin:0}
+.rs-pop .addr{color:var(--muted);margin:6px 0 0;font-family:var(--mono);font-size:11px;letter-spacing:.03em}
+.rs-pop .sheet-evs{margin-top:8px}
+.rs-pop .evrow{grid-template-columns:62px 1fr}
+.pop-hint{color:var(--accent)!important;text-transform:uppercase;letter-spacing:.1em}
+@media (max-width:720px){.rs-pop .maplibregl-popup-content{min-width:0}}

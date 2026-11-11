@@ -27,14 +27,14 @@ var T={
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
     who_goes:'Wer geht hin',nobody:'Noch niemand aus der Community. Sei die erste Person.',login_to_see:'Melde dich an, um zu sehen, wer hingeht.',
-    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Wer Druck macht („nur noch heute“, „schnell zahlen“), ist meistens Betrug.',scam_4:'Kauf am besten über offizielle Shops oder Plattformen mit Käuferschutz.',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',no_rating:'Noch keine Bewertung',route:'Route',close:'Schließen',map_fail:'Die Karte kann auf diesem Gerät nicht geladen werden. Unten findest du alle Orte als Liste.',rev_t:'Bewertungen',rev_none:'Noch keine Bewertungen. Sei die erste Person!',rev_write:'Club bewerten',rev_edit:'Deine Bewertung ändern',rev_overall:'Gesamt',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Tür & Einlass',rev_safety:'Awareness & Sicherheit',rev_body:'Was sollten andere wissen? (optional)',rev_send:'Bewertung speichern',rev_saved:'Danke für deine Bewertung!',rev_need_star:'Bitte gib mindestens eine Gesamtwertung.',rev_login:'Melde dich an, um den Club zu bewerten.',rev_n:'{n} Bewertungen',rev_one:'1 Bewertung',rev_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
+    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Wer Druck macht („nur noch heute“, „schnell zahlen“), ist meistens Betrug.',scam_4:'Kauf am besten über offizielle Shops oder Plattformen mit Käuferschutz.',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',no_rating:'Noch keine Bewertung',route:'Route',close:'Schließen',map_fail:'Die Karte kann auf diesem Gerät nicht geladen werden. Unten findest du alle Orte als Liste.',rev_t:'Bewertungen',rev_none:'Noch keine Bewertungen. Sei die erste Person!',rev_write:'Club bewerten',rev_edit:'Deine Bewertung ändern',rev_overall:'Gesamt',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Tür & Einlass',rev_safety:'Awareness & Sicherheit',rev_body:'Was sollten andere wissen? (optional)',rev_send:'Bewertung speichern',rev_saved:'Danke für deine Bewertung!',rev_need_star:'Bitte gib mindestens eine Gesamtwertung.',rev_login:'Melde dich an, um den Club zu bewerten.',rev_n:'{n} Bewertungen',rev_one:'1 Bewertung',rev_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen.',pop_hint:'Tippen für Details',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
     nophone_t:'Foto- und Videoverbot',nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
     source_t:'Quelle',source_note:'Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',report_ev:'Falsche Angaben melden',
     aware_t:'Awareness & Sicherheit',aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.',aware_team:'Awareness vor Ort: {x}',
     pending:'In Prüfung',no_event:'Dieses Event gibt es nicht (mehr).',
     rules_t:'Regeln & Infos',r_phone:'Handy & Fotos',r_door:'Einlass',r_age:'Alter',r_access:'Barrierefreiheit',r_aware:'Awareness',not_set:'Noch nicht vom Club hinterlegt',photo_ban:'Fotoverbot, Handykamera wird am Einlass abgeklebt',
     upcoming:'Kommende Events',open_club:'Club-Seite',no_club:'Diesen Club gibt es nicht.',
-    map_title:'Karte',map_sub:'Alle Clubs und Events auf einen Blick. Tippe auf einen Club für die Vorschau.',
+    map_title:'Karte',map_sub:'Alle Clubs und Events auf einen Blick. Mit der Maus über einen Punkt fahren oder auf dem Handy antippen zeigt die Vorschau.',
     only_events:'Nur Orte mit Events',venues_t:'Alle Orte',ev_one:'1 Event',ev_many:'{n} Events',pick_marker:'Tippe auf einen Marker, um Events und Details zu sehen.',
     summary_map:'{v} Orte mit {e} Events im gewählten Zeitraum.',no_ev_here:'Keine Events an diesem Ort im gewählten Zeitraum.',
     approx:'Position ungefähr',zoom_in:'Vergrößern',zoom_out:'Verkleinern',zoom_reset:'Ganz Deutschland',leg_ev:'Mit Events',leg_none:'Ohne Events',zero:'keine Events',
@@ -82,14 +82,14 @@ var T={
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
     who_goes:"Who's going",nobody:'Nobody from the community yet. Be the first.',login_to_see:"Log in to see who's going.",
-    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Pressure (“today only”, “pay fast”) is usually a scam.',scam_4:'Buy through official shops or platforms with buyer protection.',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',no_rating:'No rating yet',route:'Directions',close:'Close',map_fail:'The map cannot be loaded on this device. All places are listed below.',rev_t:'Ratings',rev_none:'No ratings yet. Be the first!',rev_write:'Rate this club',rev_edit:'Edit your rating',rev_overall:'Overall',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Door & entry',rev_safety:'Awareness & safety',rev_body:'What should others know? (optional)',rev_send:'Save rating',rev_saved:'Thanks for your rating!',rev_need_star:'Please give at least an overall rating.',rev_login:'Log in to rate this club.',rev_n:'{n} ratings',rev_one:'1 rating',rev_rules:'Rate fairly and from your own experience. No names of door staff or guests.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
+    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Pressure (“today only”, “pay fast”) is usually a scam.',scam_4:'Buy through official shops or platforms with buyer protection.',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',no_rating:'No rating yet',route:'Directions',close:'Close',map_fail:'The map cannot be loaded on this device. All places are listed below.',rev_t:'Ratings',rev_none:'No ratings yet. Be the first!',rev_write:'Rate this club',rev_edit:'Edit your rating',rev_overall:'Overall',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Door & entry',rev_safety:'Awareness & safety',rev_body:'What should others know? (optional)',rev_send:'Save rating',rev_saved:'Thanks for your rating!',rev_need_star:'Please give at least an overall rating.',rev_login:'Log in to rate this club.',rev_n:'{n} ratings',rev_one:'1 rating',rev_rules:'Rate fairly and from your own experience. No names of door staff or guests.',pop_hint:'Tap for details',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
     nophone_t:'No photos or video',nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
     source_t:'Source',source_note:'Please check time, line-up and price with the organiser.',report_ev:'Report wrong details',
     aware_t:'Awareness & safety',aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.',aware_team:'Awareness on site: {x}',
     pending:'Under review',no_event:'This event does not exist (any more).',
     rules_t:'Rules & info',r_phone:'Phones & photos',r_door:'Door',r_age:'Age',r_access:'Accessibility',r_aware:'Awareness',not_set:'Not provided by the club yet',photo_ban:'No photos, phone cameras get taped at the door',
     upcoming:'Upcoming events',open_club:'Club page',no_club:'This club does not exist.',
-    map_title:'Map',map_sub:'All clubs and events at a glance. Tap a club for a preview.',
+    map_title:'Map',map_sub:'All clubs and events at a glance. Hover a dot with the mouse or tap it on your phone for a preview.',
     only_events:'Only places with events',venues_t:'All places',ev_one:'1 event',ev_many:'{n} events',pick_marker:'Tap a marker to see events and details.',
     summary_map:'{v} places with {e} events in the chosen period.',no_ev_here:'No events at this place in the chosen period.',
     approx:'Approximate position',zoom_in:'Zoom in',zoom_out:'Zoom out',zoom_reset:'All of Germany',leg_ev:'With events',leg_none:'No events',zero:'no events',
@@ -682,7 +682,32 @@ function sheetHTML(){
     '<a class="btn small" href="'+esc(routeUrl(v))+'" target="_blank" rel="noopener">'+t('route')+' ↗</a>'+
     '<button type="button" class="btn small'+(vf?' on':'')+'" data-act="vfollow" data-id="'+v.id+'" aria-pressed="'+vf+'">'+(vf?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>';
 }
-function setSheet(){
+var MLPOP=null, MLPINNED=false, MLHOVERT=null;
+function isFine(){ return !!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches); }
+function popHTML(id){
+  var v=venue(id); if(!v) return '';
+  var evs=venueEvents(v.id).slice(0,2), more=venueEvents(v.id).length-evs.length;
+  var rows=evs.map(function(e){ var d=dayOf(e.off);
+    return '<a class="evrow" href="#event-'+e.id+'"><b>'+esc(fmtDow(d))+' '+d.getDate()+'.'+(d.getMonth()+1)+'.</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+'</p></div></a>'; }).join('');
+  return '<p class="kicker" style="margin:0 0 4px">'+esc(v.city)+(v.kind!=='club'?' · '+esc(t('kind_'+v.kind)):'')+'</p>'+
+    '<h3 class="pop-t"><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h3>'+ratingLine(v.id)+
+    '<p class="addr">'+esc(v.addr||v.city)+'</p>'+
+    (rows?'<div class="sheet-evs">'+rows+'</div>'+(more>0?'<p class="addr">+ '+evCountLabel(more)+'</p>':''):'<p class="addr">'+t('no_ev_here')+'</p>')+
+    (MLPINNED?'<div class="row" style="margin-top:10px"><a class="btn small primary" href="#club-'+v.id+'">'+t('open_club')+' →</a><a class="btn small" href="'+esc(routeUrl(v))+'" target="_blank" rel="noopener">'+t('route')+' ↗</a></div>':'<p class="addr pop-hint">'+t('pop_hint')+'</p>');
+}
+function closePop(){ clearTimeout(MLHOVERT); if(MLPOP){ MLPOP.remove(); MLPOP=null; } MLPINNED=false; }
+function showPopup(id,pinned){
+  var v=venue(id); if(!v||!ML) return;
+  clearTimeout(MLHOVERT);
+  if(MLPOP&&MLPINNED&&!pinned) return;
+  if(MLPOP){ MLPOP.remove(); MLPOP=null; }
+  MLPINNED=!!pinned; S.mapSel=pinned?id:S.mapSel; markSel();
+  MLPOP=new maplibregl.Popup({anchor:isFine()?undefined:'bottom',closeButton:!!pinned,closeOnClick:false,closeOnMove:false,offset:14,maxWidth:'290px',className:'rs-pop'+(pinned?' pinned':'')})
+    .setLngLat([v.lon,v.lat]).setHTML(popHTML(id)).addTo(ML);
+  MLPOP.on('close',function(){ if(MLPINNED){ MLPINNED=false; MLPOP=null; S.mapSel=null; markSel(); } });
+}
+function setSheet(){ if(!S.mapSel) closePop();
+  return;
   var s=document.getElementById('sheet'); if(!s) return;
   var h=sheetHTML(); s.innerHTML=h; s.classList.toggle('open',!!h);
 }
@@ -711,7 +736,7 @@ function viewMap(){
         '<button type="button" data-act="zfit" aria-label="'+esc(t('zoom_reset'))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>'+
       '</div>'+
       '<div class="maplegend"><span><i></i>'+t('leg_ev')+'</span><span><i class="off"></i>'+t('leg_none')+'</span></div>'+
-      '<div class="sheet" id="sheet" aria-live="polite"></div>'+
+      
     '</div>'+
     '<div class="sec"><h2>'+t('venues_t')+'</h2><div class="people" id="venuelist">'+venueListHTML()+'</div></div>';
 }
@@ -759,9 +784,15 @@ function addVenueLayers(){
     var f=e.features[0], src=m.getSource('venues');
     Promise.resolve(src.getClusterExpansionZoom(f.properties.cluster_id)).then(function(z){ m.easeTo({center:f.geometry.coordinates,zoom:Math.min(z+0.3,15),duration:450}); });
   });
-  m.on('click','pt',function(e){ selectVenue(+e.features[0].properties.id,false); });
-  m.on('click',function(e){ var hit=m.queryRenderedFeatures(e.point,{layers:['pt','cl']}); if(!hit.length&&S.mapSel){ S.mapSel=null; setSheet(); markSel(); } });
-  ['cl','pt'].forEach(function(id){ m.on('mouseenter',id,function(){ m.getCanvas().style.cursor='pointer'; }); m.on('mouseleave',id,function(){ m.getCanvas().style.cursor=''; }); });
+  m.addLayer({id:'pt-hit',type:'circle',source:'venues',filter:['!',['has','point_count']],paint:{'circle-radius':20,'circle-color':'#000','circle-opacity':0}});
+  var fine=isFine();
+  m.on('click','pt-hit',function(e){ var f=e.features[0]; var id=+f.properties.id; var v=venue(id); if(v) m.easeTo({center:[v.lon,v.lat],offset:isFine()?[0,0]:[0,110],duration:300}); showPopup(id,true); });
+  if(fine){
+    m.on('mouseenter','pt-hit',function(e){ m.getCanvas().style.cursor='pointer'; showPopup(+e.features[0].properties.id,false); });
+    m.on('mouseleave','pt-hit',function(){ m.getCanvas().style.cursor=''; clearTimeout(MLHOVERT); MLHOVERT=setTimeout(function(){ if(!MLPINNED) closePop(); },120); });
+  }
+  m.on('click',function(e){ var hit=m.queryRenderedFeatures(e.point,{layers:['pt-hit','cl']}); if(!hit.length&&MLPOP){ closePop(); S.mapSel=null; markSel(); } });
+  m.on('mouseenter','cl',function(){ m.getCanvas().style.cursor='pointer'; }); m.on('mouseleave','cl',function(){ m.getCanvas().style.cursor=''; });
   MLREADY=true; markSel();
   if(MLWANT){ var w=MLWANT; MLWANT=null; flyToVenue(w); }
 }
@@ -780,22 +811,23 @@ function createMap(){
 function mountMap(){
   var slot=document.getElementById('mapslot'); if(!slot) return;
   if(MLFAIL){ slot.innerHTML='<div class="empty" style="margin:20px">'+t('map_fail')+'</div>'; return; }
-  setSheet();
   if(!window.maplibregl) return loadML(mountMap);
   if(!ML){ if(!MLDIV) createMap(); else document.getElementById('mapslot').appendChild(MLDIV); return; }
-  slot.appendChild(MLDIV); ML.resize();
+  closePop(); slot.appendChild(MLDIV); ML.resize();
   if(MLREADY){ try{ ML.getSource('venues').setData(venueGeo()); }catch(e){} markSel(); }
   if(MLWANT&&MLREADY){ var w=MLWANT; MLWANT=null; flyToVenue(w); }
 }
+window.__rsMap=function(){ return ML; }; // debug/test hook
 function markSel(){ if(ML&&MLREADY){ try{ ML.setFilter('pt-sel',['==',['get','id'],S.mapSel||-1]); }catch(e){} } }
 function flyToVenue(id){
   var v=venue(id); if(!v) return;
   if(!ML||!MLREADY){ MLWANT=id; return; }
-  ML.flyTo({center:[v.lon,v.lat],zoom:Math.max(ML.getZoom(),13.5),speed:1.6,offset:[0,window.innerWidth<=720?-90:0]});
+  ML.flyTo({center:[v.lon,v.lat],zoom:Math.max(ML.getZoom(),13.5),speed:1.6,offset:[0,isFine()?30:110]});
+  ML.once('moveend',function(){ showPopup(id,true); });
 }
 function selectVenue(id,center){
-  S.mapSel=id; setSheet(); markSel();
-  if(center) flyToVenue(id);
+  S.mapSel=id; markSel();
+  if(center) flyToVenue(id); else showPopup(id,true);
 }
 function focusVenueFromHash(id){ S.mapSel=id; MLWANT=id; }
 
@@ -892,8 +924,8 @@ document.addEventListener('click',function(ev){
   else if(act==='reload'){ location.reload(); }
   else if(act==='zin'){ if(ML) ML.zoomIn(); }
   else if(act==='zout'){ if(ML) ML.zoomOut(); }
-  else if(act==='zfit'){ S.mapSel=null; setSheet(); markSel(); if(ML) ML.fitBounds(DE_BOUNDS,{padding:20}); }
-  else if(act==='sheetclose'){ S.mapSel=null; setSheet(); markSel(); }
+  else if(act==='zfit'){ S.mapSel=null; closePop(); markSel(); if(ML) ML.fitBounds(DE_BOUNDS,{padding:20}); }
+  
   else if(act==='mapvenue'){ var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView) b.scrollIntoView({block:'center',behavior:'smooth'}); selectVenue(+id,true); }
   else if(act==='adm-approve'){ adminAct(data(sb.rpc('approve_artist',{req_id:+id}))); }
   else if(act==='adm-reject'){ adminAct(data(sb.from('artist_verifications').update({status:'rejected',reviewed_by:S.user.id,reviewed_at:new Date().toISOString()}).eq('id',+id))); }
