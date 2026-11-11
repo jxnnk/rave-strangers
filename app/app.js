@@ -7,7 +7,6 @@
 var SB_URL='https://wnmxloykrnbrpvzxhnsb.supabase.co';
 var SB_KEY='sb_publishable_4vHWXBP7d04RUXs7lOQ9nA_yys9gxdN';   /* publishable key: safe in the browser, protected by Row Level Security */
 var sb=window.supabase.createClient(SB_URL,SB_KEY);
-var GEO=window.GEO;
 
 /* ---------- Texts ---------- */
 var T={
@@ -28,14 +27,14 @@ var T={
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
     who_goes:'Wer geht hin',nobody:'Noch niemand aus der Community. Sei die erste Person.',login_to_see:'Melde dich an, um zu sehen, wer hingeht.',
-    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Wer Druck macht („nur noch heute“, „schnell zahlen“), ist meistens Betrug.',scam_4:'Kauf am besten über offizielle Shops oder Plattformen mit Käuferschutz.',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
+    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',fr_n:'{n} deiner Leute',fr_going:'Von deinen Leuten gehen hin',home_friends:'Deine Leute gehen hin',home_foryou:'Für dich',foryou_note:'Events von Artists und Clubs, denen du folgst.',foryou_empty:'Folge Artists und Clubs, dann landen ihre Termine hier.',new_badge:'Neu',n_new:'{n} neu seit deinem letzten Besuch',follow:'Folgen',following:'Folge ich',follow_club:'Club folgen',followed_club:'Du folgst dem Club',push_note:'Push-Benachrichtigungen kommen mit der Handy-App. Bis dahin siehst du Neues unter „Für dich“ auf Home.',cd_in:'Noch {t}',cd_live:'Läuft gerade',cd_h:'{h} Std {m} Min',cd_d:'{d} T {h} Std',tix_t:'Tickets',tix_available:'Tickets verfügbar',tix_few:'Nur noch wenige Tickets',tix_sold_out:'Ausverkauft',tix_unknown:'Ticketstatus unbekannt',tix_price:'Preis',tix_official:'Offizieller Ticketshop',tix_resale_off:'Offizieller Wiederverkauf',tix_swap:'Auf TicketSwap suchen',tix_swap_note:'TicketSwap ist ein Fan-zu-Fan-Marktplatz mit Käuferschutz. Wir haben keine Verbindung zu TicketSwap und sehen dort nichts ein.',scam_t:'Achtung vor Ticket-Betrug',scam_1:'Zahl nie per PayPal „Freunde & Familie“, Überweisung oder Gutscheinkarten an Fremde. Dann ist dein Geld weg.',scam_2:'Screenshots oder PDFs von Tickets können zigfach verkauft werden. Sicher ist nur eine offizielle Umschreibung auf deinen Namen.',scam_3:'Wer Druck macht („nur noch heute“, „schnell zahlen“), ist meistens Betrug.',scam_4:'Kauf am besten über offizielle Shops oder Plattformen mit Käuferschutz.',rr6:'Ticket-Betrug',f_price:'Preis (z. B. 15–20 €)',f_tstatus:'Ticketstatus',share_more:'',login_why:'Danach geht es direkt dort weiter, wo du warst.',no_rating:'Noch keine Bewertung',route:'Route',close:'Schließen',map_fail:'Die Karte kann auf diesem Gerät nicht geladen werden. Unten findest du alle Orte als Liste.',rev_t:'Bewertungen',rev_none:'Noch keine Bewertungen. Sei die erste Person!',rev_write:'Club bewerten',rev_edit:'Deine Bewertung ändern',rev_overall:'Gesamt',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Tür & Einlass',rev_safety:'Awareness & Sicherheit',rev_body:'Was sollten andere wissen? (optional)',rev_send:'Bewertung speichern',rev_saved:'Danke für deine Bewertung!',rev_need_star:'Bitte gib mindestens eine Gesamtwertung.',rev_login:'Melde dich an, um den Club zu bewerten.',rev_n:'{n} Bewertungen',rev_one:'1 Bewertung',rev_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen.',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
     nophone_t:'Foto- und Videoverbot',nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
     source_t:'Quelle',source_note:'Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',report_ev:'Falsche Angaben melden',
     aware_t:'Awareness & Sicherheit',aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.',aware_team:'Awareness vor Ort: {x}',
     pending:'In Prüfung',no_event:'Dieses Event gibt es nicht (mehr).',
     rules_t:'Regeln & Infos',r_phone:'Handy & Fotos',r_door:'Einlass',r_age:'Alter',r_access:'Barrierefreiheit',r_aware:'Awareness',not_set:'Noch nicht vom Club hinterlegt',photo_ban:'Fotoverbot, Handykamera wird am Einlass abgeklebt',
     upcoming:'Kommende Events',open_club:'Club-Seite',no_club:'Diesen Club gibt es nicht.',
-    map_title:'Karte',map_sub:'Alle Clubs und Events auf einen Blick. Ziehen zum Verschieben, Mausrad oder Plus und Minus zum Zoomen.',
+    map_title:'Karte',map_sub:'Alle Clubs und Events auf einen Blick. Tippe auf einen Club für die Vorschau.',
     only_events:'Nur Orte mit Events',venues_t:'Alle Orte',ev_one:'1 Event',ev_many:'{n} Events',pick_marker:'Tippe auf einen Marker, um Events und Details zu sehen.',
     summary_map:'{v} Orte mit {e} Events im gewählten Zeitraum.',no_ev_here:'Keine Events an diesem Ort im gewählten Zeitraum.',
     approx:'Position ungefähr',zoom_in:'Vergrößern',zoom_out:'Verkleinern',zoom_reset:'Ganz Deutschland',leg_ev:'Mit Events',leg_none:'Ohne Events',zero:'keine Events',
@@ -83,14 +82,14 @@ var T={
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
     who_goes:"Who's going",nobody:'Nobody from the community yet. Be the first.',login_to_see:"Log in to see who's going.",
-    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Pressure (“today only”, “pay fast”) is usually a scam.',scam_4:'Buy through official shops or platforms with buyer protection.',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
+    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',fr_n:'{n} of your people',fr_going:'Your people going',home_friends:'Your people are going',home_foryou:'For you',foryou_note:'Events by artists and clubs you follow.',foryou_empty:'Follow artists and clubs and their dates will show up here.',new_badge:'New',n_new:'{n} new since your last visit',follow:'Follow',following:'Following',follow_club:'Follow club',followed_club:'You follow this club',push_note:'Push notifications arrive with the phone app. Until then, new dates show up under “For you” on Home.',cd_in:'In {t}',cd_live:'Happening now',cd_h:'{h} h {m} min',cd_d:'{d} d {h} h',tix_t:'Tickets',tix_available:'Tickets available',tix_few:'Only a few tickets left',tix_sold_out:'Sold out',tix_unknown:'Ticket status unknown',tix_price:'Price',tix_official:'Official ticket shop',tix_resale_off:'Official resale',tix_swap:'Search on TicketSwap',tix_swap_note:'TicketSwap is a fan-to-fan marketplace with buyer protection. We are not affiliated with TicketSwap and cannot see its listings.',scam_t:'Watch out for ticket scams',scam_1:'Never pay strangers via PayPal “Friends & Family”, bank transfer or gift cards. That money is gone.',scam_2:'Screenshots or PDFs of tickets can be sold many times. Only an official name transfer to you is safe.',scam_3:'Pressure (“today only”, “pay fast”) is usually a scam.',scam_4:'Buy through official shops or platforms with buyer protection.',rr6:'Ticket scam',f_price:'Price (e.g. €15–20)',f_tstatus:'Ticket status',share_more:'',login_why:'Afterwards you continue right where you were.',no_rating:'No rating yet',route:'Directions',close:'Close',map_fail:'The map cannot be loaded on this device. All places are listed below.',rev_t:'Ratings',rev_none:'No ratings yet. Be the first!',rev_write:'Rate this club',rev_edit:'Edit your rating',rev_overall:'Overall',rev_sound:'Sound',rev_crowd:'Crowd',rev_door:'Door & entry',rev_safety:'Awareness & safety',rev_body:'What should others know? (optional)',rev_send:'Save rating',rev_saved:'Thanks for your rating!',rev_need_star:'Please give at least an overall rating.',rev_login:'Log in to rate this club.',rev_n:'{n} ratings',rev_one:'1 rating',rev_rules:'Rate fairly and from your own experience. No names of door staff or guests.',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
     nophone_t:'No photos or video',nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
     source_t:'Source',source_note:'Please check time, line-up and price with the organiser.',report_ev:'Report wrong details',
     aware_t:'Awareness & safety',aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.',aware_team:'Awareness on site: {x}',
     pending:'Under review',no_event:'This event does not exist (any more).',
     rules_t:'Rules & info',r_phone:'Phones & photos',r_door:'Door',r_age:'Age',r_access:'Accessibility',r_aware:'Awareness',not_set:'Not provided by the club yet',photo_ban:'No photos, phone cameras get taped at the door',
     upcoming:'Upcoming events',open_club:'Club page',no_club:'This club does not exist.',
-    map_title:'Map',map_sub:'All clubs and events at a glance. Drag to move, mouse wheel or plus and minus to zoom.',
+    map_title:'Map',map_sub:'All clubs and events at a glance. Tap a club for a preview.',
     only_events:'Only places with events',venues_t:'All places',ev_one:'1 event',ev_many:'{n} events',pick_marker:'Tap a marker to see events and details.',
     summary_map:'{v} places with {e} events in the chosen period.',no_ev_here:'No events at this place in the chosen period.',
     approx:'Approximate position',zoom_in:'Zoom in',zoom_out:'Zoom out',zoom_reset:'All of Germany',leg_ev:'With events',leg_none:'No events',zero:'no events',
@@ -150,7 +149,7 @@ var S={
   user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{}};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -188,8 +187,6 @@ function upcoming(e){ if(e.endOff<0) return false; if(isTemporary(e)&&e.off>LEAD
 function inWindow(e){ if(!upcoming(e)) return false; if(S.when==='week'&&e.off>7) return false; if(S.when==='month'&&e.off>30) return false; return true; }
 function sortedEvents(){ return EVENTS.slice().sort(function(a,b){ return a.off-b.off||(a.time||'').localeCompare(b.time||''); }); }
 function has(arr,x){ return arr.indexOf(x)>-1; }
-function proj(lon,lat){ var l=lon*Math.PI/180,p=lat*Math.PI/180; return [GEO.tx+GEO.k*l,GEO.ty-GEO.k*Math.log(Math.tan(Math.PI/4+p/2))]; }
-CITIES.forEach(function(c){ var p=proj(c.lon,c.lat); c.x=p[0]; c.y=p[1]; });
 var toastTimer;
 function toast(msg){ var el=document.getElementById('toast'); el.textContent=msg; el.className='show'; clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.className=''; },2600); }
 function data(p){ return p.then(function(r){ if(r.error) throw r.error; return r.data; }); }
@@ -228,7 +225,9 @@ function mapEvent(r){
     type:r.kind==='club'?'club':'festival',status:r.status,createdBy:r.created_by,createdAt:r.created_at,startsAt:r.starts_at,endsAt:r.ends_at,
     price:r.price_text||null,tstatus:r.ticket_status||null,resale:safeUrl(r.resale_url),lineupIds:lus.map(function(x){ return x.artist_id; }).filter(Boolean),lineupLc:lu.map(function(x){ return x.toLowerCase(); })};
 }
-function mapVenue(r){ var p=proj(r.lon,r.lat); return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,kind:r.kind||'club',rules:r.rules||{},x:p[0],y:p[1]}; }
+function mapVenue(r){ return {id:r.id,name:r.name,city:r.city,addr:r.address,lat:r.lat,lon:r.lon,approx:r.approx,kind:r.kind||'club',rules:r.rules||{}}; }
+var RATINGS={};
+function loadRatings(){ return data(sb.from('venue_ratings').select('*')).then(function(r){ RATINGS={}; r.forEach(function(x){ RATINGS[x.venue_id]=x; }); }).catch(function(){}); }
 function loadBase(){
   var since=berlinToISO(isoOf(-14),'00:00');   /* a little back, so festivals that are still running are included */
   return Promise.all([
@@ -238,6 +237,7 @@ function loadBase(){
     VENUES=res[0].map(mapVenue);
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
+    loadRatings().then(function(){ if(S.ready) render(false); });
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
 }
 function loadMine(){
@@ -261,7 +261,7 @@ function loadMine(){
     S.attRows=r[1];
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{}}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -443,14 +443,44 @@ function viewHome(){
 }
 
 /* ---------- Views: club ---------- */
+function revStars(name,val,label,req){
+  var h='<div class="field"><label>'+label+'</label><div class="starpick" role="radiogroup" aria-label="'+esc(label)+'">';
+  for(var i=5;i>=1;i--) h+='<input type="radio" id="'+name+i+'" name="'+name+'" value="'+i+'"'+(val===i?' checked':'')+'><label for="'+name+i+'" title="'+i+'">★</label>';
+  return h+'</div></div>';
+}
+function loadReviews(id){
+  cache.reviews[id]='loading';
+  data(sb.from('reviews').select('id,author,stars,sound,crowd,door,safety,body,created_at,profiles(handle,display_name,verified)').eq('venue_id',id).is('event_id',null).order('created_at',{ascending:false}).limit(30))
+    .then(function(r){ cache.reviews[id]=r; if(location.hash==='#club-'+id) render(false); }).catch(function(err){ cache.reviews[id]=[]; fail(err); });
+}
+function bar(label,x){ return x?'<div class="rbar"><span>'+label+'</span><i><b style="width:'+(x/5*100)+'%"></b></i><em>'+String(x).replace('.',S.lang==='de'?',':'.')+'</em></div>':''; }
+function reviewsHTML(v){
+  var r=RATINGS[v.id], list=cache.reviews[v.id];
+  if(list===undefined){ loadReviews(v.id); list='loading'; }
+  var sum=r&&r.n?'<div class="rsum"><div class="rbig"><b>'+String(r.avg).replace('.',S.lang==='de'?',':'.')+'</b>'+starsHTML(r.avg)+'<em>'+(r.n===1?t('rev_one'):t('rev_n',{n:r.n}))+'</em></div><div class="rbars">'+
+    bar(t('rev_sound'),r.sound)+bar(t('rev_crowd'),r.crowd)+bar(t('rev_door'),r.door)+bar(t('rev_safety'),r.safety)+'</div></div>':emptyBox(t('rev_none'));
+  var mine=S.user&&list!=='loading'?list.filter(function(x){ return x.author===S.user.id; })[0]:null;
+  var items=list==='loading'?loadingBox():list.filter(function(x){ return x.body; }).slice(0,10).map(function(x){ var p=x.profiles||{};
+    return '<div class="review">'+starsHTML(x.stars)+'<p>'+esc(x.body)+'</p><p class="addr">'+(p.handle?'<a class="link" href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>'+(p.verified?VB:''):'')+' · '+esc(relTime(x.created_at))+'</p></div>'; }).join('');
+  var form=!S.user?'<p class="sub"><a class="link" href="#login" data-act="loginhere">'+t('rev_login')+'</a></p>':
+    '<details class="more"'+(mine?'':'')+'><summary>'+(mine?'✎ '+t('rev_edit'):'★ '+t('rev_write'))+'</summary><form class="form" data-form="review" data-v="'+v.id+'" data-rid="'+(mine?mine.id:'')+'" style="margin-top:8px" novalidate>'+
+    '<p class="sub" style="margin:0;font-size:13px">'+t('rev_rules')+'</p>'+
+    revStars('r-stars',mine&&mine.stars,t('rev_overall'))+
+    '<div class="form2">'+revStars('r-sound',mine&&mine.sound,t('rev_sound'))+revStars('r-crowd',mine&&mine.crowd,t('rev_crowd'))+'</div>'+
+    '<div class="form2">'+revStars('r-door',mine&&mine.door,t('rev_door'))+revStars('r-safety',mine&&mine.safety,t('rev_safety'))+'</div>'+
+    '<div class="field"><label for="r-body">'+t('rev_body')+'</label><textarea id="r-body" name="body" maxlength="2000">'+esc(mine&&mine.body||'')+'</textarea></div>'+
+    '<div id="rev-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('rev_send')+'</button></div></form></details>';
+  return sum+form+(items?'<div class="reviews">'+items+'</div>':'');
+}
 function viewClub(id){
   var v=venue(id);
   if(!v) return '<a class="back" href="#map">← '+t('back')+'</a><div class="empty">'+t('no_club')+'</div>';
   var evs=sortedEvents().filter(function(e){ return e.v===id&&upcoming(e); });
   var facts=RULE_KEYS.map(function(k){ var x=v.rules[k]; return '<div><dt>'+t(RULE_LABEL[k])+'</dt><dd'+(x?'':' style="color:var(--muted);font-weight:400"')+'>'+(x?esc(ruleVal(x)):t('not_set'))+'</dd></div>'; }).join('');
   var vf=has(S.vfollow,v.id);
-  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a><h1>'+esc(v.name)+'</h1><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+(v.kind!=='club'?'<p class="sub"><span class="tag">'+t('kind_'+v.kind)+'</span> '+t('kind_note')+'</p>':'')+
+  return '<a class="back" href="#map-'+v.id+'">← '+t('back')+'</a><h1>'+esc(v.name)+'</h1><p style="margin:10px 0 0">'+ratingLine(v.id)+'</p><p class="sub">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+(v.kind!=='club'?'<p class="sub"><span class="tag">'+t('kind_'+v.kind)+'</span> '+t('kind_note')+'</p>':'')+
     '<div class="row" style="margin-top:16px"><button type="button" class="btn '+(vf?'on':'primary')+'" data-act="vfollow" data-id="'+v.id+'" aria-pressed="'+vf+'">'+(vf?'✓ '+t('followed_club'):'+ '+t('follow_club'))+'</button><a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+(vf?'<p class="sub" style="font-size:13px">'+t('push_note')+'</p>':'')+
+    '<div class="sec"><h2>'+t('rev_t')+'</h2>'+reviewsHTML(v)+'</div>'+
     '<div class="sec"><h2>'+t('rules_t')+'</h2><dl class="facts" style="margin-top:0">'+facts+'</dl></div>'+
     '<div class="sec"><h2>'+t('aware_t')+'</h2>'+awareHTML(v)+'</div>'+
     '<div class="sec"><h2>'+t('upcoming')+'</h2>'+(evs.length?'<div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div>':emptyBox(t('no_ev_here')))+'</div>';
@@ -620,214 +650,149 @@ function viewAdmin(){
     '<div class="sec"><h2>'+t('adm_verif')+'</h2>'+ver+'</div><div class="sec"><h2>'+t('adm_events')+'</h2>'+evs+'</div><div class="sec"><h2>'+t('adm_reports')+'</h2>'+reps+'</div>';
 }
 
-/* ---------- Map (shared with the prototype) ---------- */
-var CL=[];   /* cluster centres of the last draw */
+/* ---------- Map: MapLibre GL (GPU) on OpenFreeMap vector tiles, restyled grey ---------- */
+var ML=null, MLDIV=null, MLREADY=false, MLFAIL=false, MLWANT=null;
+var DE_BOUNDS=[[5.6,47.1],[15.3,55.1]];
+var MAPSTYLE='https://tiles.openfreemap.org/styles/positron';
 function mapEvents(){ return EVENTS.filter(function(e){ return inWindow(e) && (!S.genre || e.genres.indexOf(S.genre)>-1); }).sort(function(a,b){ return a.off-b.off; }); }
 function venueEvents(id,list){ return (list||mapEvents()).filter(function(e){ return e.v===id; }); }
 function evCountLabel(n){ return n===1?t('ev_one'):t('ev_many',{n:n}); }
+function starsHTML(x){ var r=Math.round(x||0), s=''; for(var i=1;i<=5;i++) s+='<span class="'+(i<=r?'on':'')+'">★</span>'; return '<span class="stars5" aria-label="'+(x||0)+' / 5">'+s+'</span>'; }
+function ratingLine(id){ var r=RATINGS[id]; return r&&r.n?'<span class="rate">'+starsHTML(r.avg)+' <b>'+String(r.avg).replace('.',S.lang==='de'?',':'.')+'</b> <em>('+r.n+')</em></span>':'<span class="rate none">'+t('no_rating')+'</span>'; }
+function routeUrl(v){ return 'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lon; }
 
-function panelHTML(){
-  var list=mapEvents();
+function sheetHTML(){
   var v=S.mapSel?venue(S.mapSel):null;
-  if(!v){
-    var vs={}; list.forEach(function(e){ vs[e.v]=1; });
-    return '<p class="sub" style="margin:0">'+t('pick_marker')+'</p><p class="sub">'+t('summary_map',{v:Object.keys(vs).length,e:list.length})+'</p>';
-  }
-  var evs=venueEvents(v.id,list);
+  if(!v) return '';
+  var evs=venueEvents(v.id).slice(0,3), vf=has(S.vfollow,v.id);
   var rows=evs.map(function(e){ var d=dayOf(e.off);
-    return '<a class="evrow" href="#event-'+e.id+'"><b>'+d.getDate()+'. '+esc(fmtMonth(d))+'</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+' · '+esc(e.genres.join(', '))+'</p></div></a>'; }).join('');
-  return '<h2><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h2>'+
-    '<p class="addr">'+esc(v.addr||v.city)+'</p>'+(v.kind!=='club'?'<p class="addr"><span class="tag">'+t('kind_'+v.kind)+'</span></p>':'')+
-    (v.approx?'<p class="addr">'+t('approx')+'</p>':'')+
-    '<p class="addr" style="color:var(--text)">'+evCountLabel(evs.length)+'</p>'+
-    (rows||'<p class="sub">'+t('no_ev_here')+'</p>')+
-    '<div class="row" style="margin-top:12px"><a class="btn small" href="#club-'+v.id+'">'+t('open_club')+' →</a></div>';
+    return '<a class="evrow" href="#event-'+e.id+'"><b>'+esc(fmtDow(d))+' '+d.getDate()+'. '+esc(fmtMonth(d))+'</b><div><strong>'+esc(e.title)+'</strong><p>'+(e.time?esc(e.time):t('tba'))+' · '+esc(e.genres.join(', '))+'</p></div></a>'; }).join('');
+  var more=venueEvents(v.id).length-evs.length;
+  return '<div class="sheet-grip" aria-hidden="true"></div><button type="button" class="sheet-x" data-act="sheetclose" aria-label="'+esc(t('close'))+'">✕</button>'+
+    '<p class="kicker" style="margin:0 0 6px">'+esc(v.city)+(v.kind!=='club'?' · '+esc(t('kind_'+v.kind)):'')+'</p>'+
+    '<h2><a href="#club-'+v.id+'">'+esc(v.name)+'</a></h2>'+ratingLine(v.id)+
+    '<p class="addr">'+esc(v.addr||v.city)+(v.approx?' · '+t('approx'):'')+'</p>'+
+    (rows?'<div class="sheet-evs">'+rows+'</div>'+(more>0?'<p class="addr">+ '+evCountLabel(more)+'</p>':''):'<p class="sub" style="font-size:14px">'+t('no_ev_here')+'</p>')+
+    '<div class="row" style="margin-top:12px"><a class="btn small primary" href="#club-'+v.id+'">'+t('open_club')+' →</a>'+
+    '<a class="btn small" href="'+esc(routeUrl(v))+'" target="_blank" rel="noopener">'+t('route')+' ↗</a>'+
+    '<button type="button" class="btn small'+(vf?' on':'')+'" data-act="vfollow" data-id="'+v.id+'" aria-pressed="'+vf+'">'+(vf?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>';
+}
+function setSheet(){
+  var s=document.getElementById('sheet'); if(!s) return;
+  var h=sheetHTML(); s.innerHTML=h; s.classList.toggle('open',!!h);
 }
 function venueListHTML(){
   var list=mapEvents();
   var vs=VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); });
   return vs.map(function(v){ var n=venueEvents(v.id,list).length;
     if(v.kind!=='club'&&!n) return '';
-    return '<button type="button" class="person" data-act="mapvenue" data-id="'+v.id+'"><div class="grow"><strong>'+esc(v.name)+'</strong><p>'+esc(v.city)+' · '+(n?evCountLabel(n):t('zero'))+'</p></div></button>'; }).join('');
+    var r=RATINGS[v.id];
+    return '<button type="button" class="person" data-act="mapvenue" data-id="'+v.id+'"><div class="grow"><strong>'+esc(v.name)+'</strong><p>'+esc(v.city)+' · '+(n?evCountLabel(n):t('zero'))+(r&&r.n?' · ★ '+r.avg:'')+'</p></div></button>'; }).join('');
 }
 function viewMap(){
+  var list=mapEvents(), vs={}; list.forEach(function(e){ vs[e.v]=1; });
   return '<h1>'+t('map_title')+'</h1><p class="sub">'+t('map_sub')+'</p>'+
     '<div class="filters two">'+
       '<div class="field"><label for="m-when">'+t('when')+'</label><select id="m-when" data-sel="when">'+whenOptions()+'</select></div>'+
       '<div class="field" style="align-self:end"><button type="button" class="chip" data-act="onlyev" aria-pressed="'+S.onlyEvents+'" style="min-height:44px">'+t('only_events')+'</button></div>'+
     '</div>'+
     '<div class="chips" style="margin-top:12px">'+genreChips()+'</div>'+
-    '<div class="mapgrid">'+
-      '<div class="mapbox" id="mapbox">'+
-        '<svg id="mapsvg" viewBox="0 0 '+GEO.W+' '+GEO.H+'" role="img" aria-label="'+esc(t('map_title'))+'">'+
-          '<rect x="-6000" y="-6000" width="12000" height="12000" fill="#08080a"/>'+
-          '<g class="land nb"><path d="'+GEO.nb+'"/></g>'+
-          '<g class="land de"><path d="'+GEO.de+'"/></g>'+
-          '<g id="mapdyn"></g>'+
-        '</svg>'+
-        '<div class="mapctl">'+
-          '<button type="button" data-act="zin" aria-label="'+esc(t('zoom_in'))+'">+</button>'+
-          '<button type="button" data-act="zout" aria-label="'+esc(t('zoom_out'))+'">−</button>'+
-          '<button type="button" data-act="zfit" aria-label="'+esc(t('zoom_reset'))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>'+
-        '</div>'+
-        '<div class="maplegend"><span><i></i>'+t('leg_ev')+'</span><span><i class="off"></i>'+t('leg_none')+'</span></div>'+
+    '<p class="count">'+t('summary_map',{v:Object.keys(vs).length,e:list.length})+'</p>'+
+    '<div class="mapbox" id="mapbox">'+
+      '<div id="mapslot" class="mapslot"></div>'+
+      '<div class="mapctl">'+
+        '<button type="button" data-act="zin" aria-label="'+esc(t('zoom_in'))+'">+</button>'+
+        '<button type="button" data-act="zout" aria-label="'+esc(t('zoom_out'))+'">−</button>'+
+        '<button type="button" data-act="zfit" aria-label="'+esc(t('zoom_reset'))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>'+
       '</div>'+
-      '<aside class="mappanel" id="mappanel" aria-live="polite">'+panelHTML()+'</aside>'+
+      '<div class="maplegend"><span><i></i>'+t('leg_ev')+'</span><span><i class="off"></i>'+t('leg_none')+'</span></div>'+
+      '<div class="sheet" id="sheet" aria-live="polite"></div>'+
     '</div>'+
     '<div class="sec"><h2>'+t('venues_t')+'</h2><div class="people" id="venuelist">'+venueListHTML()+'</div></div>';
 }
-
-function mapEl(){ return document.getElementById('mapsvg'); }
-function mapSize(){ var r=mapEl().getBoundingClientRect(); return {cw:Math.max(r.width,1),ch:Math.max(r.height,1),left:r.left,top:r.top}; }
-function fitView(){ var z=mapSize(); return {cx:GEO.W/2,cy:GEO.H/2,w:Math.max(GEO.W,GEO.H*z.cw/z.ch)}; }
-function clampView(m){
-  var minW=GEO.W/90, maxW=Math.max(fitView().w*1.25,GEO.W);
-  m.w=Math.min(maxW,Math.max(minW,m.w));
-  m.cx=Math.min(GEO.W+80,Math.max(-80,m.cx)); m.cy=Math.min(GEO.H+80,Math.max(-80,m.cy));
-  return m;
-}
-function viewBoxOf(){ var z=mapSize(), h=S.map.w*z.ch/z.cw; return [S.map.cx-S.map.w/2,S.map.cy-h/2,S.map.w,h]; }
-
-function drawMap(){
-  var svg=mapEl(); if(!svg) return;
-  if(!S.map) S.map=fitView();
-  var vb=viewBoxOf(), z=mapSize(), s=S.map.w/z.cw;
-  svg.setAttribute('viewBox',vb[0]+' '+vb[1]+' '+vb[2]+' '+vb[3]);
-  var list=mapEvents(), out='';
-  /* city labels */
-  CITIES.forEach(function(c){
-    out+='<circle class="cdot" cx="'+c.x+'" cy="'+c.y+'" r="'+(2.2*s)+'"/>'+
-         '<text class="clabel" x="'+(c.x+6*s)+'" y="'+(c.y-5*s)+'" font-size="'+(11*s)+'" stroke-width="'+(3*s)+'">'+esc(c.name)+'</text>';
-  });
-  /* clusters */
-  var items=[];
-  VENUES.forEach(function(v){
+function venueGeo(){
+  var list=mapEvents();
+  return {type:'FeatureCollection',features:VENUES.map(function(v){
     var n=venueEvents(v.id,list).length;
-    if((S.onlyEvents||v.kind!=='club') && !n) return;   /* festival grounds and open airs only show up around their events */
-    items.push({v:v,n:n,px:(v.x-vb[0])/s,py:(v.y-vb[1])/s});
-  });
-  items.sort(function(a,b){ return b.n-a.n; });
-  var cls=[];
-  items.forEach(function(it){
-    var c=null;
-    for(var i=0;i<cls.length;i++){ var dx=cls[i].px-it.px, dy=cls[i].py-it.py; if(dx*dx+dy*dy<20*20){ c=cls[i]; break; } }
-    if(c){ c.items.push(it); c.n+=it.n; } else cls.push({items:[it],n:it.n,px:it.px,py:it.py,x:it.v.x,y:it.v.y});
-  });
-  cls.forEach(function(c){ if(c.items.length>1){ var sx=0,sy=0; c.items.forEach(function(i){ sx+=i.v.x; sy+=i.v.y; }); c.x=sx/c.items.length; c.y=sy/c.items.length; } });
-  cls.sort(function(a,b){ return (a.n>0)-(b.n>0); });
-  CL=[];
-  var showNames=S.map.w<GEO.W/14;
-  cls.forEach(function(c){
-    if(c.items.length>1){
-      CL.push({x:c.x,y:c.y});
-      var r=(15+Math.min(6,c.items.length))*s;
-      var label=c.items.length;
-      out+='<g class="cl'+(c.n?'':' off')+'" data-cluster="'+(CL.length-1)+'" tabindex="0" role="button" aria-label="'+esc(c.items.length+' · '+evCountLabel(c.n))+'" transform="translate('+c.x+' '+c.y+')">'+
-        '<circle class="dot" r="'+r+'"/><text font-size="'+(13*s)+'" dy="'+(4.5*s)+'">'+label+'</text></g>';
-    } else {
-      var it=c.items[0], v=it.v, sel=S.mapSel===v.id;
-      out+='<g class="mk'+(it.n?'':' off')+'" data-venue="'+v.id+'" tabindex="0" role="button" aria-label="'+esc(v.name+', '+v.city+', '+(it.n?evCountLabel(it.n):t('zero')))+'" transform="translate('+v.x+' '+v.y+')">'+
-        '<title>'+esc(v.name)+'</title>'+
-        (sel?'<circle class="ring" r="'+(15*s)+'"/>':'')+
-        '<circle class="dot" r="'+((it.n?9:6)*s)+'"/>'+
-        (it.n>1?'<text font-size="'+(10*s)+'" dy="'+(3.6*s)+'">'+it.n+'</text>':'')+
-        (showNames?'<text class="vname" x="'+(13*s)+'" dy="'+(4*s)+'" font-size="'+(12*s)+'" stroke-width="'+(3.5*s)+'">'+esc(v.name)+'</text>':'')+
-        '</g>';
-    }
-  });
-  document.getElementById('mapdyn').innerHTML=out;
+    if((S.onlyEvents||v.kind!=='club')&&!n) return null;
+    return {type:'Feature',geometry:{type:'Point',coordinates:[v.lon,v.lat]},properties:{id:v.id,name:v.name,n:n,ev:n?1:0}};
+  }).filter(Boolean)};
 }
-function setPanel(){
-  var p=document.getElementById('mappanel'); if(p) p.innerHTML=panelHTML();
+/* Turn the light "positron" style into a steel-grey night map (not pitch black). */
+function greyStyle(st){
+  var C={bg:'#2a2a2f',water:'#1b1d22',green:'#2f3133',build:'#34343a',road:'#45454d',major:'#56565f',rail:'#3c3c44',border:'#77767c',text:'#bdbab3',halo:'#2a2a2f'};
+  (st.layers||[]).forEach(function(l){
+    var id=l.id, p=l.paint=l.paint||{};
+    if(l.type==='background') p['background-color']=C.bg;
+    else if(l.type==='fill'){ p['fill-color']=/water|ocean|lake|river/.test(id)?C.water:/build/.test(id)?C.build:/park|wood|forest|grass|landcover|landuse/.test(id)?C.green:C.bg; delete p['fill-pattern']; p['fill-outline-color']=p['fill-color']; }
+    else if(l.type==='line'){ p['line-color']=/water|river|stream|canal/.test(id)?C.water:/boundary|admin/.test(id)?C.border:/rail|transit/.test(id)?C.rail:/motorway|trunk|primary/.test(id)?C.major:C.road; }
+    else if(l.type==='symbol'&&l.layout&&l.layout['text-field']){ p['text-color']=/water/.test(id)?'#6d7480':C.text; p['text-halo-color']=C.halo; p['text-halo-width']=1.2; }
+    else if(l.type==='fill-extrusion'){ p['fill-extrusion-color']=C.build; }
+  });
+  return st;
 }
-var animTok=0;
-function animateTo(target){
-  var from={cx:S.map.cx,cy:S.map.cy,w:S.map.w};
-  var to=clampView({cx:target.cx!=null?target.cx:from.cx,cy:target.cy!=null?target.cy:from.cy,w:target.w!=null?target.w:from.w});
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var tok=++animTok;
-  if(reduce){ S.map=to; drawMap(); return; }
-  var t0=null, dur=240;
-  function step(ts){
-    if(tok!==animTok||!mapEl()) return;
-    if(t0===null) t0=ts;
-    var k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
-    S.map={cx:from.cx+(to.cx-from.cx)*e,cy:from.cy+(to.cy-from.cy)*e,w:from.w*Math.pow(to.w/from.w,e)};
-    drawMap();
-    if(k<1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+var FALLBACK_STYLE={version:8,glyphs:'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',sources:{},layers:[{id:'bg',type:'background',paint:{'background-color':'#2a2a2f'}}]};
+function loadML(cb){
+  if(window.maplibregl) return cb();
+  var css=document.createElement('link'); css.rel='stylesheet'; css.href='vendor/maplibre-gl.css'; document.head.appendChild(css);
+  var s=document.createElement('script'); s.src='vendor/maplibre-gl.js'; s.onload=cb; s.onerror=function(){ MLFAIL=true; mountMap(); }; document.head.appendChild(s);
 }
-function zoomAt(clientX,clientY,f){
-  var z=mapSize(), vb=viewBoxOf(), s=S.map.w/z.cw;
-  var px=clientX-z.left, py=clientY-z.top;
-  var sx=vb[0]+px*s, sy=vb[1]+py*s;
-  var w=Math.min(Math.max(fitView().w*1.25,GEO.W),Math.max(GEO.W/90,S.map.w*f)), s2=w/z.cw, h=w*z.ch/z.cw;
-  S.map=clampView({cx:sx-px*s2+w/2,cy:sy-py*s2+h/2,w:w});
-  drawMap();
+function addVenueLayers(){
+  var m=ML; if(MLREADY||m.getSource('venues')) return;
+  var font=['Noto Sans Bold'];
+  m.addSource('venues',{type:'geojson',data:venueGeo(),cluster:true,clusterRadius:42,clusterMaxZoom:12,clusterProperties:{ev:['+',['get','ev']],n:['+',['get','n']]}});
+  m.addLayer({id:'cl',type:'circle',source:'venues',filter:['has','point_count'],paint:{
+    'circle-color':['case',['>',['get','ev'],0],'#ff2b1c','#5a5a62'],'circle-stroke-color':'#111113','circle-stroke-width':2,
+    'circle-radius':['step',['get','point_count'],15,5,19,15,24]}});
+  m.addLayer({id:'cl-n',type:'symbol',source:'venues',filter:['has','point_count'],layout:{'text-field':['to-string',['get','point_count']],'text-font':font,'text-size':13,'text-allow-overlap':true},paint:{'text-color':['case',['>',['get','ev'],0],'#0a0a0a','#efece6']}});
+  m.addLayer({id:'pt-sel',type:'circle',source:'venues',filter:['==',['get','id'],-1],paint:{'circle-radius':16,'circle-color':'rgba(255,43,28,.18)','circle-stroke-color':'#efece6','circle-stroke-width':2}});
+  m.addLayer({id:'pt',type:'circle',source:'venues',filter:['!',['has','point_count']],paint:{
+    'circle-color':['case',['>',['get','n'],0],'#ff2b1c','#6b6b73'],'circle-radius':['case',['>',['get','n'],0],8,5.5],
+    'circle-stroke-color':'#111113','circle-stroke-width':1.5}});
+  m.addLayer({id:'pt-name',type:'symbol',source:'venues',filter:['!',['has','point_count']],minzoom:10.5,layout:{'text-field':['get','name'],'text-font':font,'text-size':12,'text-offset':[0.9,0],'text-anchor':'left','text-optional':true},paint:{'text-color':'#efece6','text-halo-color':'#1a1a1d','text-halo-width':1.5}});
+  m.on('click','cl',function(e){
+    var f=e.features[0], src=m.getSource('venues');
+    Promise.resolve(src.getClusterExpansionZoom(f.properties.cluster_id)).then(function(z){ m.easeTo({center:f.geometry.coordinates,zoom:Math.min(z+0.3,15),duration:450}); });
+  });
+  m.on('click','pt',function(e){ selectVenue(+e.features[0].properties.id,false); });
+  m.on('click',function(e){ var hit=m.queryRenderedFeatures(e.point,{layers:['pt','cl']}); if(!hit.length&&S.mapSel){ S.mapSel=null; setSheet(); markSel(); } });
+  ['cl','pt'].forEach(function(id){ m.on('mouseenter',id,function(){ m.getCanvas().style.cursor='pointer'; }); m.on('mouseleave',id,function(){ m.getCanvas().style.cursor=''; }); });
+  MLREADY=true; markSel();
+  if(MLWANT){ var w=MLWANT; MLWANT=null; flyToVenue(w); }
+}
+function createMap(){
+  MLDIV=document.createElement('div'); MLDIV.className='glmap';
+  document.getElementById('mapslot').appendChild(MLDIV);
+  var go=function(style){
+    try{
+      ML=new maplibregl.Map({container:MLDIV,style:style,bounds:DE_BOUNDS,fitBoundsOptions:{padding:20},maxBounds:[[1.5,45],[19.5,57]],minZoom:4.5,maxZoom:17,attributionControl:{compact:true},dragRotate:false,pitchWithRotate:false,touchPitch:false});
+      ML.touchZoomRotate.disableRotation();
+      ML.on('load',function(){ ML.resize(); addVenueLayers(); });
+    }catch(err){ MLFAIL=true; ML=null; mountMap(); }
+  };
+  fetch(MAPSTYLE).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(st){ go(greyStyle(st)); }).catch(function(){ go(FALLBACK_STYLE); });
+}
+function mountMap(){
+  var slot=document.getElementById('mapslot'); if(!slot) return;
+  if(MLFAIL){ slot.innerHTML='<div class="empty" style="margin:20px">'+t('map_fail')+'</div>'; return; }
+  setSheet();
+  if(!window.maplibregl) return loadML(mountMap);
+  if(!ML){ if(!MLDIV) createMap(); else document.getElementById('mapslot').appendChild(MLDIV); return; }
+  slot.appendChild(MLDIV); ML.resize();
+  if(MLREADY){ try{ ML.getSource('venues').setData(venueGeo()); }catch(e){} markSel(); }
+  if(MLWANT&&MLREADY){ var w=MLWANT; MLWANT=null; flyToVenue(w); }
+}
+function markSel(){ if(ML&&MLREADY){ try{ ML.setFilter('pt-sel',['==',['get','id'],S.mapSel||-1]); }catch(e){} } }
+function flyToVenue(id){
+  var v=venue(id); if(!v) return;
+  if(!ML||!MLREADY){ MLWANT=id; return; }
+  ML.flyTo({center:[v.lon,v.lat],zoom:Math.max(ML.getZoom(),13.5),speed:1.6,offset:[0,window.innerWidth<=720?-90:0]});
 }
 function selectVenue(id,center){
-  S.mapSel=id; setPanel(); drawMap();
-  var v=venue(id);
-  if(center&&v){ animateTo({cx:v.x,cy:v.y,w:Math.min(S.map.w,GEO.W/45)}); }
-  var p=document.getElementById('mappanel');
-  if(p&&window.innerWidth<=860&&p.scrollIntoView){ p.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+  S.mapSel=id; setSheet(); markSel();
+  if(center) flyToVenue(id);
 }
-function initMap(){
-  var svg=mapEl(); if(!svg) return;
-  var ptrs={}, moved=0, last=null;
-  drawMap();
-  svg.addEventListener('wheel',function(e){ e.preventDefault(); zoomAt(e.clientX,e.clientY,Math.exp(e.deltaY*0.0015)); },{passive:false});
-  svg.addEventListener('dblclick',function(e){ zoomAt(e.clientX,e.clientY,0.5); });
-  svg.addEventListener('pointerdown',function(e){
-    if(e.button!==undefined&&e.button!==0&&e.pointerType==='mouse') return;
-    ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; moved=0; animTok++;
-    svg.classList.add('drag');
-    var n=Object.keys(ptrs).length;
-    if(n===2){ var k=Object.keys(ptrs); last={d:Math.hypot(ptrs[k[0]].x-ptrs[k[1]].x,ptrs[k[0]].y-ptrs[k[1]].y)}; }
-    function mv(ev){
-      if(!ptrs[ev.pointerId]) return;
-      var prev=ptrs[ev.pointerId], dx=ev.clientX-prev.x, dy=ev.clientY-prev.y;
-      ptrs[ev.pointerId]={x:ev.clientX,y:ev.clientY};
-      moved+=Math.abs(dx)+Math.abs(dy);
-      var ks=Object.keys(ptrs);
-      if(ks.length===1){
-        var z=mapSize(), s=S.map.w/z.cw;
-        S.map=clampView({cx:S.map.cx-dx*s,cy:S.map.cy-dy*s,w:S.map.w}); drawMap();
-      } else if(ks.length===2&&last){
-        var a=ptrs[ks[0]], b=ptrs[ks[1]], d=Math.hypot(a.x-b.x,a.y-b.y);
-        if(last.d>0&&d>0) zoomAt((a.x+b.x)/2,(a.y+b.y)/2,last.d/d);
-        last.d=d;
-      }
-    }
-    function up(ev){
-      delete ptrs[ev.pointerId];
-      if(Object.keys(ptrs).length<2) last=null;
-      if(!Object.keys(ptrs).length){
-        svg.classList.remove('drag');
-        window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up);
-      }
-    }
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
-  });
-  svg.addEventListener('click',function(e){
-    if(moved>6) return;
-    var m=e.target.closest('[data-venue]'), c=e.target.closest('[data-cluster]');
-    if(m){ selectVenue(+m.getAttribute('data-venue'),false); }
-    else if(c){ var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
-  });
-  svg.addEventListener('keydown',function(e){
-    if(e.key!=='Enter'&&e.key!==' ') return;
-    var m=e.target.closest&&e.target.closest('[data-venue]'), c=e.target.closest&&e.target.closest('[data-cluster]');
-    if(m){ e.preventDefault(); selectVenue(+m.getAttribute('data-venue'),false); }
-    else if(c){ e.preventDefault(); var cc=CL[+c.getAttribute('data-cluster')]; if(cc) animateTo({cx:cc.x,cy:cc.y,w:S.map.w/2.6}); }
-  });
-}
-function focusVenueFromHash(id){
-  var v=venue(id); if(!v) return;
-  S.mapSel=id;
-  S.map={cx:v.x,cy:v.y,w:GEO.W/45};
-}
+function focusVenueFromHash(id){ S.mapSel=id; MLWANT=id; }
 
 /* ---------- Router ---------- */
 var ICONS={
@@ -870,7 +835,7 @@ function render(scroll){
   document.getElementById('tabs').innerHTML=['home','events','map','connect','me'].map(function(k){
     return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
   view.innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
-  if(r.map) initMap();
+  if(r.map) mountMap();
   if(scroll) window.scrollTo(0,0);
 }
 
@@ -920,10 +885,11 @@ document.addEventListener('click',function(ev){
     data(sb.from('blocks').insert({blocker:S.user.id,blocked:id})).then(function(){ toast(t('blocked')); resetCaches(); location.hash='#events'; }).catch(fail);
   }
   else if(act==='reload'){ location.reload(); }
-  else if(act==='zin'){ animateTo({w:S.map.w/1.8}); }
-  else if(act==='zout'){ animateTo({w:S.map.w*1.8}); }
-  else if(act==='zfit'){ S.mapSel=null; setPanel(); animateTo(fitView()); }
-  else if(act==='mapvenue'){ selectVenue(+id,true); var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView) b.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+  else if(act==='zin'){ if(ML) ML.zoomIn(); }
+  else if(act==='zout'){ if(ML) ML.zoomOut(); }
+  else if(act==='zfit'){ S.mapSel=null; setSheet(); markSel(); if(ML) ML.fitBounds(DE_BOUNDS,{padding:20}); }
+  else if(act==='sheetclose'){ S.mapSel=null; setSheet(); markSel(); }
+  else if(act==='mapvenue'){ var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView) b.scrollIntoView({block:'center',behavior:'smooth'}); selectVenue(+id,true); }
   else if(act==='adm-approve'){ adminAct(data(sb.rpc('approve_artist',{req_id:+id}))); }
   else if(act==='adm-reject'){ adminAct(data(sb.from('artist_verifications').update({status:'rejected',reviewed_by:S.user.id,reviewed_at:new Date().toISOString()}).eq('id',+id))); }
   else if(act==='adm-publish'){ adminAct(data(sb.from('events').update({status:'published'}).eq('id',+id)).then(function(){ return loadBase(); })); }
@@ -982,6 +948,16 @@ document.addEventListener('submit',function(ev){
     busy(true);
     data(sb.from('posts').insert({author:S.user.id,kind:kindP,title:pt,body:String(fd.get('body')||'').trim()||null,link:safeUrl(String(fd.get('link')||'').trim())}))
       .then(function(){ toast(t('post_done')); loadHome(); }).catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='review'){
+    if(needLogin()) return;
+    var rv=+f.getAttribute('data-v'), rid=f.getAttribute('data-rid'), rerr=document.getElementById('rev-err');
+    function num(n){ var x=fd.get(n); return x?+x:null; }
+    var row={stars:num('r-stars'),sound:num('r-sound'),crowd:num('r-crowd'),door:num('r-door'),safety:num('r-safety'),body:String(fd.get('body')||'').trim()||null};
+    if(!row.stars){ rerr.textContent=t('rev_need_star'); return; }
+    busy(true);
+    var q=rid?sb.from('reviews').update(Object.assign(row,{updated_at:new Date().toISOString()})).eq('id',+rid):sb.from('reviews').insert(Object.assign(row,{venue_id:rv,author:S.user.id}));
+    data(q).then(function(){ toast(t('rev_saved')); delete cache.reviews[rv]; return loadRatings(); }).then(function(){ render(false); })
+      .catch(function(err){ busy(false); fail(err); });
   } else if(kind==='report'){
     if(needLogin()) return;
     var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
@@ -1012,7 +988,7 @@ try{ var savedLang=localStorage.getItem('rs-lang'); if(savedLang==='de'||savedLa
 try{ S.lastSeen=localStorage.getItem('rs-seen'); localStorage.setItem('rs-seen',new Date().toISOString()); }catch(e){}
 setInterval(function(){ var els=document.querySelectorAll('[data-cd]'); for(var i=0;i<els.length;i++){ var ce=evt(+els[i].getAttribute('data-cd')); if(ce) els[i].textContent=cdText(ce); } },30000);
 window.addEventListener('hashchange',function(){ render(true); });
-window.addEventListener('resize',function(){ if(mapEl()) drawMap(); });
+
 render(false);
 var first=true;
 sb.auth.onAuthStateChange(function(evName,session){
