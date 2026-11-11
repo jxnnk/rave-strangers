@@ -15,7 +15,7 @@ var T={
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
     home_hi:'Was geht',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
     home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
-    home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
+    home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',home_kicker:'Techno · Deutschland · Heute Nacht',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
     no_posts:'Noch keine Beiträge.',post_write:'Beitrag schreiben',post_title:'Überschrift',post_body:'Text',post_link:'Link (optional)',post_publish:'Veröffentlichen',post_done:'Beitrag ist online',
     kind_news:'Redaktion',kind_artist:'Artist',kind_club:'Club',home_artists:'Verifizierte Artists entdecken',ago_now:'gerade eben',ago_min:'vor {n} Min.',ago_h:'vor {n} Std.',ago_d:'vor {n} Tagen',ago_1d:'gestern',
     banner:'Beta: Events aus öffentlichen Kalendern (ohne Gewähr). Konten sind echt.',
@@ -28,7 +28,7 @@ var T={
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
     who_goes:'Wer geht hin',nobody:'Noch niemand aus der Community. Sei die erste Person.',login_to_see:'Melde dich an, um zu sehen, wer hingeht.',
-    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',gcal:'In Google Kalender',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
+    go:'Ich gehe hin',going:'Du gehst hin',save_ev:'Merken',saved_ev:'Gemerkt',gcal:'In Google Kalender',share:'Teilen',copied:'Link kopiert',tickets:'Tickets & Infos',show_map:'Auf der Karte zeigen',
     nophone_t:'Foto- und Videoverbot',nophone_d:'Der Veranstalter nennt ein Foto- und Videoverbot. Das Handy bleibt in der Tasche, Connect davor und danach.',
     source_t:'Quelle',source_note:'Bitte Zeit, Line-up und Preis beim Veranstalter prüfen.',report_ev:'Falsche Angaben melden',
     aware_t:'Awareness & Sicherheit',aware_d:'Wenn es dir oder anderen nicht gut geht: Sprich das Awareness-Team, die Security oder das Barpersonal an. Im Notfall 112 anrufen.',aware_team:'Awareness vor Ort: {x}',
@@ -70,7 +70,7 @@ var T={
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
     home_hi:'What’s up',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
     home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
-    home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
+    home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',home_kicker:'Techno · Germany · Tonight',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
     no_posts:'No posts yet.',post_write:'Write a post',post_title:'Headline',post_body:'Text',post_link:'Link (optional)',post_publish:'Publish',post_done:'Post is live',
     kind_news:'Editorial',kind_artist:'Artist',kind_club:'Club',home_artists:'Discover verified artists',ago_now:'just now',ago_min:'{n} min ago',ago_h:'{n} h ago',ago_d:'{n} days ago',ago_1d:'yesterday',
     banner:'Beta: events from public calendars (no guarantee). Accounts are real.',
@@ -83,7 +83,7 @@ var T={
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
     who_goes:"Who's going",nobody:'Nobody from the community yet. Be the first.',login_to_see:"Log in to see who's going.",
-    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',gcal:'Add to Google Calendar',tickets:'Tickets & info',show_map:'Show on map',
+    go:"I'm going",going:"You're going",save_ev:'Save',saved_ev:'Saved',gcal:'Add to Google Calendar',share:'Share',copied:'Link copied',tickets:'Tickets & info',show_map:'Show on map',
     nophone_t:'No photos or video',nophone_d:'The organiser states a no-photo, no-video rule. Phones stay in your pocket. Connect before and after.',
     source_t:'Source',source_note:'Please check time, line-up and price with the organiser.',report_ev:'Report wrong details',
     aware_t:'Awareness & safety',aware_d:'If you or someone else is not okay: talk to the awareness team, security or bar staff. In an emergency call 112.',aware_team:'Awareness on site: {x}',
@@ -171,6 +171,7 @@ function offOf(date){ return Math.round(dayNum(date)-dayNum(TODAY)); }
 function dayOf(off){ var a=TODAY.split('-').map(Number); return new Date(a[0],a[1]-1,a[2]+off); }
 function isoOf(off){ var d=dayOf(off); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
 function fmtMonth(d){ return d.toLocaleDateString(locale(),{month:'short'}).replace('.',''); }
+function fmtDow(d){ return d.toLocaleDateString(locale(),{weekday:'short'}).replace('.',''); }
 function fmtLong(d){ return d.toLocaleDateString(locale(),{weekday:'long',day:'numeric',month:'long'}); }
 function fmtShort(d){ return d.toLocaleDateString(locale(),{weekday:'short',day:'numeric',month:'short'}); }
 function hue(n){ var h=0; for(var i=0;i<n.length;i++){ h=(h*31+n.charCodeAt(i))%360; } return h; }
@@ -245,7 +246,7 @@ function typeChips(){ return [['','type_all'],['club','type_club'],['festival','
 function eventCard(e){
   var d=dayOf(e.off), v=venue(e.v), n=S.counts[e.id]||0;
   var tag=(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
-  return '<a class="ev" href="#event-'+e.id+'"><div class="date"><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
+  return '<a class="ev" href="#event-'+e.id+'"><div class="date"><em>'+esc(fmtDow(d))+'</em><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
     '<div><h3>'+esc(e.title)+tag+'</h3><p class="meta">'+esc(v?v.name:'')+(v?' · '+esc(v.city):'')+(e.time?' · '+esc(e.time):'')+'</p><div class="chips">'+genreTags(e.genres)+'</div></div>'+
     '<div class="side">'+(n?'<span>'+(has(S.going,e.id)?'✓ ':'')+t('going_n',{n:n})+'</span>':'')+'</div></a>';
 }
@@ -325,7 +326,7 @@ function viewEvent(id){
     '<div class="row" style="margin-top:20px"><button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
     '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button></div>'+
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
-    (tix?'<a class="btn" href="'+esc(tix)+'" target="_blank" rel="noopener">'+t('tickets')+' ↗</a>':'')+'<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
+    (tix?'<a class="btn" href="'+esc(tix)+'" target="_blank" rel="noopener">'+t('tickets')+' ↗</a>':'')+'<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a><button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('share')+'</button></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
     '<div class="sec"><h2>'+t('lineup')+'</h2><div class="people">'+lineup+'</div></div>'+
     '<div class="sec"><h2>'+t('who_goes')+'</h2><div class="people">'+who+'</div></div>'+
@@ -384,7 +385,8 @@ function viewHome(){
     '<div class="field"><label for="p-body">'+t('post_body')+'</label><textarea id="p-body" name="body" maxlength="4000"></textarea></div>'+
     '<div class="field"><label for="p-link">'+t('post_link')+'</label><input id="p-link" name="link" type="url" placeholder="https://"></div>'+
     '<div><button class="btn primary" type="submit">'+t('post_publish')+'</button></div></form></details>':'';
-  return '<h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
+  var marq=(h&&h!=='loading'&&h.headlines.length)?(function(){ var items=h.headlines.map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><b>'+esc(x.source)+'</b>'+esc(x.title)+'</a>'; }).join(''); return '<div class="marquee" aria-label="'+esc(t('home_ticker'))+'"><div class="track">'+items+'<span aria-hidden="true" style="display:inline-flex;gap:40px">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</span></div></div>'; })():'';
+  return marq+'<p class="kicker">'+esc(t('home_kicker'))+'</p><h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
     '<div class="chips" style="margin-top:14px">'+chips+'</div>'+
     (soon.length?'<div class="sec"><h2>'+t('home_remind')+'</h2><div class="list" style="margin-top:0">'+soon.map(eventCard).join('')+'</div></div>':'')+
     '<div class="sec"><h2>'+(rg[0]===0?t('home_today'):t('home_weekend'))+'</h2>'+(wk.length?'<div class="list" style="margin-top:0">'+wk.map(eventCard).join('')+'</div>':emptyBox(t('home_weekend_none')))+
@@ -840,6 +842,10 @@ document.addEventListener('click',function(ev){
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
   else if(act==='type'){ S.type=id; render(false); }
+  else if(act==='share'){ var se=evt(+id), sv2=se&&venue(se.v), url=location.href.split('#')[0]+'#event-'+id, txt=se?se.title+' · '+(sv2?sv2.name:''):'';
+    if(navigator.share) navigator.share({title:txt,text:txt,url:url}).catch(function(){});
+    else if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ toast(t('copied')); },function(){ toast(url); });
+    else toast(url); }
   else if(act==='homecity'){ S.homeCity=id; render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
   else if(act==='go'){ toggleRow('attendance',+id,S.going); }
