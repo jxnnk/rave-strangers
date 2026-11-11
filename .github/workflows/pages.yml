@@ -1,9 +1,8 @@
-# Publishes the web app in app/ to GitHub Pages on every push to main.
+# Publishes the web app in app/ to GitHub Pages. Manual only for now:
+# GitHub Pages does not work for private repos on the free plan.
+# Once published, switch back to automatic: on: push: branches: [main]
 name: Deploy app to GitHub Pages
 on:
-  push:
-    branches: [main]
-    paths: ['app/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
