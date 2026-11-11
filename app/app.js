@@ -393,7 +393,7 @@ function loadHome(){
   cache.home='loading';
   Promise.all([
     data(sb.from('posts').select('id,kind,title,body,link,created_at,author,profiles!posts_author_fkey(handle,display_name,verified)').eq('published',true).order('created_at',{ascending:false}).limit(10)),
-    data(sb.from('headlines').select('url,source,title,published_at').order('published_at',{ascending:false}).limit(8))
+    data(sb.from('headlines').select('url,source,title,published_at,lang').order('published_at',{ascending:false}).limit(40))
   ]).then(function(r){ cache.home={posts:r[0],headlines:r[1]}; if(route().tab==='home') render(false); })
     .catch(function(err){ cache.home={posts:[],headlines:[]}; fail(err); });
 }
@@ -403,6 +403,11 @@ function postHTML(p){
     (a.handle?'<a class="link" href="#u-'+esc(a.handle)+'">'+esc(a.display_name)+'</a>'+(a.verified?VB:''):'')+' · '+esc(relTime(p.created_at))+'</p>'+
     '<h3 style="margin:0 0 6px">'+esc(p.title)+'</h3>'+(p.body?'<p style="color:var(--text);white-space:pre-line;margin:0">'+esc(p.body)+'</p>':'')+
     (safeUrl(p.link)?'<p style="margin:8px 0 0"><a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener nofollow">'+esc(host(p.link))+' ↗</a></p>':'')+'</article>';
+}
+function headlinesFor(h){
+  var all=(h&&h!=='loading')?h.headlines:[], mine=all.filter(function(x){ return x.lang===S.lang; }).slice(0,8);
+  if(mine.length<5) mine=mine.concat(all.filter(function(x){ return x.lang!==S.lang; }).slice(0,5-mine.length));
+  return mine;
 }
 function viewHome(){
   if(cache.home===null) loadHome();
@@ -422,13 +427,13 @@ function viewHome(){
   fy.sort(function(a,b){ return (isNew(b)?1:0)-(isNew(a)?1:0)||a.off-b.off; }); fy=fy.slice(0,6);
   var h=cache.home, isAdmin=S.me&&S.me.role==='admin', canPost=isAdmin||(S.me&&S.me.role==='artist'&&S.me.verified);
   var news=h==='loading'||!h?loadingBox():(h.posts.length?h.posts.map(postHTML).join(''):emptyBox(t('no_posts')));
-  var ticker=h==='loading'||!h?'':(h.headlines.length?'<div class="people">'+h.headlines.map(function(x){ return '<a class="person" href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><div class="grow"><strong>'+esc(x.title)+'</strong><p>'+esc(x.source)+(x.published_at?' · '+esc(relTime(x.published_at)):'')+'</p></div><span aria-hidden="true">↗</span></a>'; }).join('')+'</div><p class="sub" style="font-size:13px">'+t('ticker_note')+'</p>':'');
+  var ticker=h==='loading'||!h?'':(headlinesFor(h).length?'<div class="people">'+headlinesFor(h).map(function(x){ return '<a class="person" href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><div class="grow"><strong>'+esc(x.title)+'</strong><p>'+esc(x.source)+(x.published_at?' · '+esc(relTime(x.published_at)):'')+'</p></div><span aria-hidden="true">↗</span></a>'; }).join('')+'</div><p class="sub" style="font-size:13px">'+t('ticker_note')+'</p>':'');
   var form=canPost?'<details class="more"><summary>+ '+t('post_write')+'</summary><form class="form" data-form="post" style="margin-top:8px">'+
     '<div class="field"><label for="p-title">'+t('post_title')+'</label><input id="p-title" name="title" type="text" maxlength="140" required></div>'+
     '<div class="field"><label for="p-body">'+t('post_body')+'</label><textarea id="p-body" name="body" maxlength="4000"></textarea></div>'+
     '<div class="field"><label for="p-link">'+t('post_link')+'</label><input id="p-link" name="link" type="url" placeholder="https://"></div>'+
     '<div><button class="btn primary" type="submit">'+t('post_publish')+'</button></div></form></details>':'';
-  var marq=(h&&h!=='loading'&&h.headlines.length)?(function(){ var items=h.headlines.map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><b>'+esc(x.source)+'</b>'+esc(x.title)+'</a>'; }).join(''); return '<div class="marquee" aria-label="'+esc(t('home_ticker'))+'"><div class="track">'+items+'<span aria-hidden="true" style="display:inline-flex;gap:40px">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</span></div></div>'; })():'';
+  var marq=(h&&h!=='loading'&&headlinesFor(h).length)?(function(){ var items=headlinesFor(h).map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><b>'+esc(x.source)+'</b>'+esc(x.title)+'</a>'; }).join(''); return '<div class="marquee" aria-label="'+esc(t('home_ticker'))+'"><div class="track">'+items+'<span aria-hidden="true" style="display:inline-flex;gap:40px">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</span></div></div>'; })():'';
   return marq+'<p class="kicker">'+esc(t('home_kicker'))+'</p><h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
     '<div class="chips" style="margin-top:14px">'+chips+'</div>'+
     (soon.length?'<div class="sec"><h2>'+t('home_remind')+'</h2><div class="list" style="margin-top:0">'+soon.map(eventCard).join('')+'</div></div>':'')+
