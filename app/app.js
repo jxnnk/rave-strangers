@@ -22,7 +22,7 @@ var T={
     events_title:'Raves in Deutschland',events_sub:'Finde Nächte, DJs und Leute, die auch hinwollen.',
     search:'Suche',search_ph:'Event, Club oder DJ',city:'Stadt',all_cities:'Alle Städte',when:'Zeitraum',
     when_all:'Alle Termine',when_week:'Nächste 7 Tage',when_month:'Nächste 30 Tage',genre_all:'Alle Genres',
-    type_all:'Alles',type_club:'Clubnächte',type_fest:'Festivals & Open Airs',fest_tag:'Festival',fest_note:'Festivals erscheinen etwa zwei Monate vorher und verschwinden, sobald sie vorbei sind. Gerade ist Indoor-Saison, Open Airs für 2027 kommen rein, sobald Termine bestätigt sind.',kind_event_site:'Festival- und Event-Gelände',kind_seasonal:'Open Air, nur in der Saison',kind_note:'Erscheint auf der Karte nur, wenn hier etwas ansteht.',f_end:'Ende (optional, bei mehrtägigen Events)',
+    type_all:'Alles',type_club:'Clubnächte',type_fest:'Festivals & Open Airs',fest_tag:'Festival',fest_note:'Alle bestätigten Festivals in Deutschland und Europa für die nächsten Monate. Im normalen Kalender tauchen sie etwa zwei Monate vorher auf.',kind_event_site:'Festival- und Event-Gelände',kind_seasonal:'Open Air, nur in der Saison',kind_note:'Erscheint auf der Karte nur, wenn hier etwas ansteht.',f_end:'Ende (optional, bei mehrtägigen Events)',
     n_events:'{n} Events',none_found:'Keine Events gefunden. Probier weniger Filter.',going_n:'{n} aus der Community',
     back:'Zurück',date:'Datum',time:'Beginn',venue:'Ort',tba:'siehe Quelle',lineup:'Line-up',and_more:'und {n} weitere',
     lineup_tba:'Das Line-up steht noch nicht fest oder liegt uns nicht vor. Details über die Quelle.',
@@ -78,7 +78,7 @@ var T={
     events_title:'Raves in Germany',events_sub:'Find nights, DJs and people who are heading there too.',
     search:'Search',search_ph:'Event, club or DJ',city:'City',all_cities:'All cities',when:'When',
     when_all:'Any date',when_week:'Next 7 days',when_month:'Next 30 days',genre_all:'All genres',
-    type_all:'All',type_club:'Club nights',type_fest:'Festivals & open airs',fest_tag:'Festival',fest_note:'Festivals show up about two months ahead and disappear once they are over. It is indoor season; open airs for 2027 get added once dates are confirmed.',kind_event_site:'Festival and event grounds',kind_seasonal:'Open air, in season only',kind_note:'Shows on the map only when something is coming up here.',f_end:'End (optional, for multi-day events)',
+    type_all:'All',type_club:'Club nights',type_fest:'Festivals & open airs',fest_tag:'Festival',fest_note:'All confirmed festivals in Germany and Europe for the coming months. In the regular calendar they show up about two months ahead.',kind_event_site:'Festival and event grounds',kind_seasonal:'Open air, in season only',kind_note:'Shows on the map only when something is coming up here.',f_end:'End (optional, for multi-day events)',
     n_events:'{n} events',none_found:'No events found. Try fewer filters.',going_n:'{n} from the community',
     back:'Back',date:'Date',time:'Starts',venue:'Venue',tba:'see source',lineup:'Line-up',and_more:'and {n} more',
     lineup_tba:'The line-up is not announced yet or we do not have it. Check the source.',
@@ -186,7 +186,7 @@ function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return
 function genreTags(g){ return g.map(function(x){ return '<span class="tag">'+esc(x)+'</span>'; }).join(' '); }
 function isTemporary(e){ var v=venue(e.v); return e.type==='festival'||(v&&v.kind!=='club'); }
 function upcoming(e){ if(e.endOff<0) return false; if(isTemporary(e)&&e.off>LEAD_DAYS) return false; return true; }
-function inWindow(e){ if(!upcoming(e)) return false; if(S.when==='week'&&e.off>7) return false; if(S.when==='month'&&e.off>30) return false; return true; }
+function inWindow(e){ if(!upcoming(e)&&!(S.type==='festival'&&e.endOff>=0&&isTemporary(e))) return false; if(S.when==='week'&&e.off>7) return false; if(S.when==='month'&&e.off>30) return false; return true; }
 function sortedEvents(){ return EVENTS.slice().sort(function(a,b){ return a.off-b.off||(a.time||'').localeCompare(b.time||''); }); }
 function has(arr,x){ return arr.indexOf(x)>-1; }
 var toastTimer;
