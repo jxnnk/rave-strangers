@@ -297,3 +297,10 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 .rs-pop .evrow b{font-size:10.5px;color:var(--accent)}
 .rs-pop .evrow p{display:none}
 .rs-pop .evrow strong{font-size:13.5px;line-height:1.25}
+
+/* event banner: official flyer behind the title */
+.evbanner{position:relative;margin:12px -18px 0;aspect-ratio:16/10;max-height:380px;overflow:hidden;background:var(--surface)}
+.evbanner img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;filter:saturate(.9)}
+.evbanner::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(17,17,19,.15),rgba(17,17,19,.95))}
+.evbanner figcaption{position:absolute;right:10px;bottom:8px;z-index:1;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#9a978f)}
+.evbanner+.kicker,.evbanner+h1{margin-top:-64px;position:relative;z-index:1}
