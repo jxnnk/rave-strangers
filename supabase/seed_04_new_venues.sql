@@ -21,3 +21,7 @@ insert into venues(name,city,address,lat,lon,approx,website,kind) values
 insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Flugplatz Neustadt-Glewe (Airbeat One)','Neustadt-Glewe','Flugplatz, 19306 Neustadt-Glewe',53.3613328,11.6141158,false,'https://airbeat-one.de/','event_site'),
  ('Fira Gran Via','Barcelona (ES)','Av. Joan Carles I 64, 08908 L''Hospitalet de Llobregat',41.3567099,2.1259534,true,'https://sonar.es/','event_site');
+
+-- 2026-11-13: SonneMondSterne-Gelände
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Saalburg Beach (SonneMondSterne)','Saalburg-Ebersdorf','Wetteraweg 2, 07929 Saalburg-Ebersdorf',50.5092166,11.7212712,false,'https://www.sonnemondsterne.de/','event_site');
