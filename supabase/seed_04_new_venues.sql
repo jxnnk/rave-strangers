@@ -16,3 +16,8 @@ insert into venues(name,city,address,lat,lon,approx,website,kind) values
  ('Parco Dora','Turin (IT)','Parco Dora, Corso Mortara, Torino, Italien',45.0897221,7.6666862,false,'https://www.kappafuturfestival.it/','event_site'),
  ('Beekse Bergen (Awakenings)','Hilvarenbeek (NL)','Beekse Bergen, 5081 NV Hilvarenbeek, Niederlande',51.5250552,5.1197983,true,'https://www.awakenings.com/','event_site'),
  ('The Garden Resort','Tisno (HR)','The Garden Resort, Tisno, Kroatien',43.8000969,15.6571124,false,'https://dekmantelselectors.com/','event_site');
+
+-- 2026-11-13: neue Festival-Gelände (nächtlicher Event-Updater)
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Flugplatz Neustadt-Glewe (Airbeat One)','Neustadt-Glewe','Flugplatz, 19306 Neustadt-Glewe',53.3613328,11.6141158,false,'https://airbeat-one.de/','event_site'),
+ ('Fira Gran Via','Barcelona (ES)','Av. Joan Carles I 64, 08908 L''Hospitalet de Llobregat',41.3567099,2.1259534,true,'https://sonar.es/','event_site');
