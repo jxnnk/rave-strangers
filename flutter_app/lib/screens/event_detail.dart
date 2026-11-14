@@ -141,7 +141,9 @@ class _Tickets extends StatelessWidget {
       _ => C.muted,
     };
     final official = e.ticketUrl ?? e.sourceUrl;
-    final swap = 'https://www.ticketswap.com/search?query=${Uri.encodeComponent(e.title)}';
+    // Full event titles rarely match TicketSwap's search, so search the venue instead.
+    final venueName = store.venues[e.venueId]?.name ?? e.title;
+    final swap = 'https://www.ticketswap.com/search?query=${Uri.encodeComponent(venueName)}';
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         width: double.infinity,
@@ -157,7 +159,7 @@ class _Tickets extends StatelessWidget {
       Wrap(spacing: 8, runSpacing: 8, children: [
         if (official != null)
           RsButton('${t('tix_official')} ↗', primary: st != 'sold_out', onTap: () => openUrl(official)),
-        RsButton('${t('tix_swap')} ↗', onTap: () => openUrl(swap)),
+        RsButton('${t('tix_swap', {'v': venueName})} ↗', onTap: () => openUrl(swap)),
       ]),
       const SizedBox(height: 8),
       Text(t('tix_swap_note'), style: body(13, color: C.muted)),
