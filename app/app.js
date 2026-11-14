@@ -45,7 +45,7 @@ var T={
     connect_none:'Noch niemand sonst bei deinen Events. Markier mehr Events oder lad Freunde ein.',goes_to:'geht zu',
     chat_soon:'Chat, Crew-Suche und Mitfahrgelegenheiten kommen im nächsten Schritt.',
     login_t:'Anmelden',signup_t:'Registrieren',email:'E-Mail',password:'Passwort',pw_hint:'Mindestens 8 Zeichen',display_name:'Anzeigename',
-    login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
+    login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',newpw_t:'Neues Passwort festlegen',newpw_l:'Neues Passwort (mind. 8 Zeichen)',newpw_l2:'Passwort wiederholen',newpw_btn:'Passwort speichern',newpw_ok:'Passwort geändert. Du bist eingeloggt.',newpw_mismatch:'Die Passwörter stimmen nicht überein.',newpw_need:'Öffne den Link aus der E-Mail „Passwort zurücksetzen“, um ein neues Passwort festzulegen.',change_pw:'Passwort ändern',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
     signup_done:'Fast geschafft: Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, dann bist du angemeldet.',
     login_need:'Dafür musst du angemeldet sein.',to_login:'Anmelden oder registrieren',logout:'Abmelden',
     terms:'Mit der Registrierung bestätigst du, dass du mindestens 18 Jahre alt bist.',age_ok:'Ich bin mindestens 18 Jahre alt.',
@@ -101,7 +101,7 @@ var T={
     connect_none:'Nobody else at your events yet. Mark more events or invite friends.',goes_to:'going to',
     chat_soon:'Chat, crew finder and ride sharing come in the next step.',
     login_t:'Log in',signup_t:'Sign up',email:'Email',password:'Password',pw_hint:'At least 8 characters',display_name:'Display name',
-    login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',reset_sent:'If an account with this email exists, a reset link is on its way.',
+    login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',newpw_t:'Set a new password',newpw_l:'New password (min. 8 characters)',newpw_l2:'Repeat password',newpw_btn:'Save password',newpw_ok:'Password changed. You are logged in.',newpw_mismatch:'The passwords do not match.',newpw_need:'Open the link from the reset password email to set a new password.',change_pw:'Change password',reset_sent:'If an account with this email exists, a reset link is on its way.',
     signup_done:'Almost there: we sent you an email. Click the link in it and you are logged in.',
     login_need:'You need to be logged in for this.',to_login:'Log in or sign up',logout:'Log out',
     terms:'By signing up you confirm that you are at least 18 years old.',age_ok:'I am at least 18 years old.',
@@ -591,7 +591,7 @@ function viewMe(){
   }
   var subs=cache.subs==='loading'?loadingBox():(cache.subs.length?'<div class="people">'+cache.subs.map(function(s){ var p=berlinParts(new Date(s.starts_at));
     return '<div class="person"><div class="grow"><strong>'+esc(s.title)+'</strong><p>'+esc(p.date)+'</p></div><span class="tag'+(s.status==='pending'?' hot':'')+'">'+(s.status==='pending'?t('pending'):esc(s.status))+'</span></div>'; }).join('')+'</div>':emptyBox(t('none_yet')));
-  return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><button type="button" class="btn small" data-act="logout">'+t('logout')+'</button></div>'+
+  return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#newpw">'+t('change_pw')+'</a><button type="button" class="btn small" data-act="logout">'+t('logout')+'</button></div></div>'+
     '<div class="hero" style="margin-top:16px">'+av(m.display_name,72)+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
@@ -627,6 +627,15 @@ function viewNew(){
     '<div class="field"><label for="n-ts">'+t('f_tstatus')+'</label><select id="n-ts" name="tstatus"><option value="">'+t('tix_unknown')+'</option><option value="available">'+t('tix_available')+'</option><option value="few">'+t('tix_few')+'</option><option value="sold_out">'+t('tix_sold_out')+'</option></select></div></div>'+
     '<label class="row" style="gap:10px"><input type="checkbox" name="nophone" style="width:20px;height:20px;accent-color:#e4262e"> '+t('f_nophone')+'</label>'+
     '<div id="form-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('f_submit')+'</button></div></form>';
+}
+
+function viewNewPw(){
+  if(!S.user) return '<h1>'+t('newpw_t')+'</h1><div class="empty">'+t('newpw_need')+'</div>';
+  return '<a class="back" href="#me">← '+t('back')+'</a><h1>'+t('newpw_t')+'</h1>'+
+    '<form data-form="newpw" class="card" style="margin-top:16px" autocomplete="on"><input type="email" name="username" value="'+esc(S.user.email||'')+'" autocomplete="username" hidden>'+
+    '<div class="field"><label for="np-1">'+t('newpw_l')+'</label><input id="np-1" name="pw" type="password" minlength="8" autocomplete="new-password" required></div>'+
+    '<div class="field"><label for="np-2">'+t('newpw_l2')+'</label><input id="np-2" name="pw2" type="password" minlength="8" autocomplete="new-password" required></div>'+
+    '<div id="np-err" class="sub" style="color:var(--accent);margin:0 0 10px" role="alert"></div><button class="btn primary" type="submit">'+t('newpw_btn')+'</button></form>';
 }
 
 /* ---------- Views: admin ---------- */
@@ -863,6 +872,7 @@ function route(){
     case 'connect': return {tab:'connect',html:viewConnect()};
     case 'me': return {tab:'me',html:viewMe()};
     case 'login': return {tab:'me',html:viewLogin()};
+    case 'newpw': return {tab:'me',html:viewNewPw()};
     case 'admin': return {tab:'me',html:viewAdmin()};
     case 'events': return {tab:'events',html:viewEvents()};
     default: return {tab:'home',html:viewHome()};
@@ -922,7 +932,7 @@ document.addEventListener('click',function(ev){
   else if(act==='forgot'){
     var mail=(document.getElementById('a-mail')||{}).value;
     if(!mail){ document.getElementById('auth-err').textContent=t('email')+'?'; return; }
-    sb.auth.resetPasswordForEmail(mail,{redirectTo:location.origin+location.pathname+'#me'}).then(function(){ S.authMsg=t('reset_sent'); render(false); });
+    sb.auth.resetPasswordForEmail(mail,{redirectTo:location.origin+location.pathname+'#newpw'}).then(function(){ S.authMsg=t('reset_sent'); render(false); });
   }
   else if(act==='logout'){ sb.auth.signOut().then(function(){ location.hash='#home'; }); }
   else if(act==='block'){
@@ -971,6 +981,12 @@ document.addEventListener('submit',function(ev){
       busy(true);
       sb.auth.signInWithPassword({email:email,password:pw}).then(function(r){ busy(false); if(r.error){ errEl.textContent=t('err_login'); } });
     }
+  } else if(kind==='newpw'){
+    var p1=String(fd.get('pw')||''), p2=String(fd.get('pw2')||''), npErr=document.getElementById('np-err');
+    if(p1.length<8){ npErr.textContent=t('err_pw'); return; }
+    if(p1!==p2){ npErr.textContent=t('newpw_mismatch'); return; }
+    busy(true);
+    sb.auth.updateUser({password:p1}).then(function(r){ busy(false); if(r.error){ npErr.textContent=r.error.message||t('err_generic'); return; } S.recovery=false; toast(t('newpw_ok')); location.hash='#me'; });
   } else if(kind==='me'){
     var handle=String(fd.get('handle')||'').trim().toLowerCase(), errMe=document.getElementById('me-err');
     if(!/^[a-z0-9_.]{3,30}$/.test(handle)){ errMe.textContent=t('err_handle_fmt'); return; }
@@ -1037,6 +1053,7 @@ window.addEventListener('hashchange',function(){ render(true); });
 render(false);
 var first=true;
 sb.auth.onAuthStateChange(function(evName,session){
+  if(evName==='PASSWORD_RECOVERY'){ S.recovery=true; setTimeout(function(){ location.hash='#newpw'; },0); }
   var uid=session&&session.user?session.user.id:null, prev=S.user?S.user.id:null;
   S.user=session?session.user:null;
   if(uid===prev&&!first) return;
