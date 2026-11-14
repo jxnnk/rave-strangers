@@ -56,7 +56,7 @@ var T={
     verif_t:'Artist-Verifizierung',verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung. Dann bekommst du das rote Häkchen und deine Events erscheinen sofort.',
     verif_name:'Artist-Name',verif_links:'Belege (Links, eins pro Zeile)',verif_links_ph:'z. B. Resident-Advisor-Seite, offizielles Instagram, Booking-Agentur',
     verif_btn:'Verifizierung beantragen',verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',verif_rejected:'Dein letzter Antrag wurde abgelehnt. Du kannst einen neuen stellen.',verif_ok:'Dein Profil ist verifiziert.',
-    admin_t:'Admin',admin_open:'Admin-Bereich öffnen',adm_verif:'Verifizierungs-Anträge',adm_events:'Events in Prüfung',adm_reports:'Meldungen',approve:'Freigeben',reject:'Ablehnen',publish:'Veröffentlichen',done:'Erledigt',
+    admin_t:'Admin',admin_open:'Admin-Bereich öffnen',adm_verif:'Verifizierungs-Anträge',adm_events:'Events in Prüfung',rev_unclear:'Prüf-Agent unsicher',rev_waiting:'Wartet auf Prüfung',rev_live:'online',rev_note:'Prüf-Agent',adm_reports:'Meldungen',approve:'Freigeben',reject:'Ablehnen',publish:'Veröffentlichen',done:'Erledigt',
     profile_nf:'Dieses Profil gibt es nicht.',report:'Melden',block:'Blockieren',blocked:'Blockiert. Ihr seht euch gegenseitig nicht mehr.',report_reason:'Grund',
     rr1:'Belästigung',rr2:'Spam oder Fake-Profil',rr3:'Gefährliches Verhalten',rr4:'Falsche Angaben',rr5:'Sonstiges',report_txt:'Was ist passiert? (optional)',report_send:'Meldung senden',report_sent:'Danke. Unser Team prüft die Meldung vertraulich.',
     safety_note:'Melden und Blockieren bleibt anonym.',upcoming_going:'Geht zu',
@@ -112,7 +112,7 @@ var T={
     verif_t:'Artist verification',verif_none:'Are you a DJ or live act? Request verification to get the red tick; your events then go live right away.',
     verif_name:'Artist name',verif_links:'Proof (links, one per line)',verif_links_ph:'e.g. Resident Advisor page, official Instagram, booking agency',
     verif_btn:'Request verification',verif_pending:"Request received. We'll check your profile and get back to you.",verif_rejected:'Your last request was declined. You can send a new one.',verif_ok:'Your profile is verified.',
-    admin_t:'Admin',admin_open:'Open admin area',adm_verif:'Verification requests',adm_events:'Events under review',adm_reports:'Reports',approve:'Approve',reject:'Reject',publish:'Publish',done:'Done',
+    admin_t:'Admin',admin_open:'Open admin area',adm_verif:'Verification requests',adm_events:'Events under review',rev_unclear:'Review agent unsure',rev_waiting:'Waiting for review',rev_live:'live',rev_note:'Review agent',adm_reports:'Reports',approve:'Approve',reject:'Reject',publish:'Publish',done:'Done',
     profile_nf:'This profile does not exist.',report:'Report',block:'Block',blocked:'Blocked. You no longer see each other.',report_reason:'Reason',
     rr1:'Harassment',rr2:'Spam or fake profile',rr3:'Dangerous behaviour',rr4:'Wrong details',rr5:'Other',report_txt:'What happened? (optional)',report_send:'Send report',report_sent:'Thanks. Our team reviews the report confidentially.',
     safety_note:'Reporting and blocking are anonymous.',upcoming_going:'Going to',
@@ -636,7 +636,7 @@ function viewAdmin(){
     cache.admin='loading';
     Promise.all([
       data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name)').eq('status','pending').order('created_at',{ascending:true})),
-      data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by').eq('status','pending').order('created_at',{ascending:true})),
+      data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by,status,review_state,review_note').or('status.eq.pending,review_state.eq.unclear').neq('status','cancelled').order('starts_at',{ascending:true})),
       data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true}))
     ]).then(function(r){ cache.admin={verif:r[0],events:r[1],reports:r[2]}; if(location.hash==='#admin') render(false); })
       .catch(function(err){ cache.admin={verif:[],events:[],reports:[]}; fail(err); });
@@ -648,7 +648,9 @@ function viewAdmin(){
     return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.artist_name)+'</b> · '+(x.profiles?'<a class="link" href="#u-'+esc(x.profiles.handle)+'">@'+esc(x.profiles.handle)+'</a>':'')+'</p><p>'+(links||'–')+'</p>'+
       '<div class="row"><button type="button" class="btn small primary" data-act="adm-approve" data-id="'+x.id+'">'+t('approve')+'</button><button type="button" class="btn small" data-act="adm-reject" data-id="'+x.id+'">'+t('reject')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   var evs=a.events.length?a.events.map(function(x){ var v=venue(x.venue_id), p=berlinParts(new Date(x.starts_at)), s=safeUrl(x.source_url);
-    return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.title)+'</b></p><p>'+esc(p.date)+' '+esc(p.time)+' · '+esc(v?v.name+', '+v.city:'?')+(s?' · <a class="link" href="'+esc(s)+'" target="_blank" rel="noopener nofollow">'+esc(host(s))+'</a>':'')+'</p>'+
+    var badge=x.review_state==='unclear'?' <span class="tag hot">'+t('rev_unclear')+'</span>':(x.status==='pending'?' <span class="tag">'+t('rev_waiting')+'</span>':'');
+    return '<div class="card" style="margin-bottom:8px"><p><a class="link" href="#event-'+x.id+'"><b style="color:var(--text)">'+esc(x.title)+'</b></a>'+badge+(x.status==='published'?' <span class="tag">'+t('rev_live')+'</span>':'')+'</p><p>'+esc(p.date)+' '+esc(p.time)+' · '+esc(v?v.name+', '+v.city:'?')+(s?' · <a class="link" href="'+esc(s)+'" target="_blank" rel="noopener nofollow">'+esc(host(s))+'</a>':'')+'</p>'+
+      (x.review_note?'<p class="sub" style="margin:4px 0 8px">'+t('rev_note')+': '+esc(x.review_note)+'</p>':'')+
       '<div class="row"><button type="button" class="btn small primary" data-act="adm-publish" data-id="'+x.id+'">'+t('publish')+'</button><button type="button" class="btn small" data-act="adm-cancel" data-id="'+x.id+'">'+t('reject')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   var reps=a.reports.length?a.reports.map(function(x){
     var target=x.target_event?'<a class="link" href="#event-'+x.target_event+'">Event #'+x.target_event+'</a>':'Profil '+esc(String(x.target_profile).slice(0,8));
@@ -935,8 +937,8 @@ document.addEventListener('click',function(ev){
   else if(act==='mapvenue'){ var b=document.getElementById('mapbox'); if(b&&b.scrollIntoView) b.scrollIntoView({block:'center',behavior:'smooth'}); selectVenue(+id,true); }
   else if(act==='adm-approve'){ adminAct(data(sb.rpc('approve_artist',{req_id:+id}))); }
   else if(act==='adm-reject'){ adminAct(data(sb.from('artist_verifications').update({status:'rejected',reviewed_by:S.user.id,reviewed_at:new Date().toISOString()}).eq('id',+id))); }
-  else if(act==='adm-publish'){ adminAct(data(sb.from('events').update({status:'published'}).eq('id',+id)).then(function(){ return loadBase(); })); }
-  else if(act==='adm-cancel'){ adminAct(data(sb.from('events').update({status:'cancelled'}).eq('id',+id))); }
+  else if(act==='adm-publish'){ adminAct(data(sb.from('events').update({status:'published',review_state:'ok',reviewed_at:new Date().toISOString()}).eq('id',+id)).then(function(){ return loadBase(); })); }
+  else if(act==='adm-cancel'){ adminAct(data(sb.from('events').update({status:'cancelled',review_state:'rejected',reviewed_at:new Date().toISOString()}).eq('id',+id)).then(function(){ return loadBase(); })); }
   else if(act==='adm-report'){ adminAct(data(sb.from('reports').update({status:'approved'}).eq('id',+id))); }
 });
 document.addEventListener('change',function(ev){
