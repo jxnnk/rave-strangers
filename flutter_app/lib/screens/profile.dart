@@ -5,6 +5,7 @@ import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import 'reset.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -225,11 +226,14 @@ class _AuthFormState extends State<_AuthForm> {
             padding: const EdgeInsets.only(bottom: 14),
             child: Text(_msg!, style: body(14.5, color: _msgOk ? C.green : C.accent)),
           ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: RsButton(_busy ? '…' : (_login ? t('login') : t('signup')),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          RsButton(_busy ? '…' : (_login ? t('login') : t('signup')),
               primary: true, onTap: _busy ? null : _submit),
-        ),
+          if (_login)
+            RsButton(t('reset_open'),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ResetScreen(initialEmail: _mail.text.trim())))),
+        ]),
       ],
     );
   }

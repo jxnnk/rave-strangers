@@ -33,6 +33,13 @@ const Map<String, Map<String, String>> _s = {
     'none_yet': 'Noch nichts.', 'language': 'Sprache', 'load_err': 'Laden fehlgeschlagen. Ziehen zum Neuladen.',
     'retry': 'Nochmal versuchen', 'fill_all': 'Bitte alle Felder ausfüllen.',
     'login_sub': 'Ohne Konto kannst du alles ansehen. Zum Mitmachen brauchst du ein Konto.',
+    'reset_open': 'Passwort vergessen?', 'reset_t': 'Passwort zurücksetzen', 'reset_back': 'Zurück zum Login',
+    'reset_intro': 'Kein Problem. Gib die E-Mail-Adresse deines Kontos ein, wir schicken dir einen Link.',
+    'reset_s1': 'E-Mail eingeben und Link anfordern', 'reset_s2': 'Mail öffnen und auf den neuesten Link tippen',
+    'reset_s3': 'Neues Passwort festlegen, dann hier anmelden', 'reset_btn': 'Link senden', 'reset_again': 'Nochmal senden',
+    'reset_wait': 'Nochmal senden in {n} s', 'reset_sent_t': 'Mail ist unterwegs',
+    'reset_sent_d': 'Wenn es ein Konto mit {mail} gibt, kommt gleich eine Mail. Schau auch im Spam-Ordner. Öffne nur den neuesten Link, ältere werden ungültig.',
+    'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
     'tab_home': 'Home', 'tab_events': 'Events', 'tab_map': 'Map', 'tab_me': 'Profile',
@@ -65,6 +72,13 @@ const Map<String, Map<String, String>> _s = {
     'none_yet': 'Nothing yet.', 'language': 'Language', 'load_err': 'Loading failed. Pull to refresh.',
     'retry': 'Try again', 'fill_all': 'Please fill in all fields.',
     'login_sub': 'You can browse everything without an account. To join in you need one.',
+    'reset_open': 'Forgot password?', 'reset_t': 'Reset password', 'reset_back': 'Back to login',
+    'reset_intro': 'No problem. Enter the email of your account and we will send you a link.',
+    'reset_s1': 'Enter your email and request the link', 'reset_s2': 'Open the email and tap the newest link',
+    'reset_s3': 'Set a new password, then log in here', 'reset_btn': 'Send link', 'reset_again': 'Send again',
+    'reset_wait': 'Send again in {n} s', 'reset_sent_t': 'Email is on its way',
+    'reset_sent_d': 'If an account with {mail} exists, an email is coming. Check your spam folder too. Only open the newest link, older ones stop working.',
+    'reset_limit': 'Too many emails were sent just now. Please try again in about an hour.',
   },
 };
 
