@@ -45,7 +45,7 @@ var T={
     connect_none:'Noch niemand sonst bei deinen Events. Markier mehr Events oder lad Freunde ein.',goes_to:'geht zu',
     chat_soon:'Chat, Crew-Suche und Mitfahrgelegenheiten kommen im nächsten Schritt.',
     login_t:'Anmelden',signup_t:'Registrieren',email:'E-Mail',password:'Passwort',pw_hint:'Mindestens 8 Zeichen',display_name:'Anzeigename',
-    login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',newpw_t:'Neues Passwort festlegen',newpw_l:'Neues Passwort (mind. 8 Zeichen)',newpw_l2:'Passwort wiederholen',newpw_btn:'Passwort speichern',newpw_ok:'Passwort geändert. Du bist eingeloggt.',newpw_mismatch:'Die Passwörter stimmen nicht überein.',newpw_need:'Öffne den Link aus der E-Mail „Passwort zurücksetzen“, um ein neues Passwort festzulegen.',change_pw:'Passwort ändern',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
+    login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',reset_t:'Passwort zurücksetzen',reset_intro:'Kein Problem. Gib die E-Mail-Adresse deines Kontos ein, wir schicken dir einen Link.',reset_s1:'E-Mail eingeben und Link anfordern',reset_s2:'Mail öffnen und auf den neuesten Link tippen',reset_s3:'Neues Passwort festlegen, fertig',reset_btn:'Link senden',reset_sent_t:'Mail ist unterwegs',reset_sent_d:'Wenn es ein Konto mit {mail} gibt, kommt gleich eine Mail. Schau auch im Spam-Ordner. Öffne nur den neuesten Link, ältere werden ungültig.',reset_again:'Nochmal senden',reset_wait:'Nochmal senden in {n} s',reset_limit:'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',reset_back:'Zurück zum Login',reset_open:'Passwort vergessen?',link_bad_t:'Link ungültig oder abgelaufen',link_bad_d:'Dieser Link funktioniert nicht mehr. Das passiert, wenn er älter ist oder schon ein neuerer verschickt wurde. Fordere einfach einen neuen an.',link_new:'Neuen Link anfordern',newpw_t:'Neues Passwort festlegen',newpw_l:'Neues Passwort (mind. 8 Zeichen)',newpw_l2:'Passwort wiederholen',newpw_btn:'Passwort speichern',newpw_ok:'Passwort geändert. Du bist eingeloggt.',newpw_mismatch:'Die Passwörter stimmen nicht überein.',newpw_need:'Öffne den Link aus der E-Mail „Passwort zurücksetzen“, um ein neues Passwort festzulegen.',change_pw:'Passwort ändern',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
     signup_done:'Fast geschafft: Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, dann bist du angemeldet.',
     login_need:'Dafür musst du angemeldet sein.',to_login:'Anmelden oder registrieren',logout:'Abmelden',
     terms:'Mit der Registrierung bestätigst du, dass du mindestens 18 Jahre alt bist.',age_ok:'Ich bin mindestens 18 Jahre alt.',
@@ -101,7 +101,7 @@ var T={
     connect_none:'Nobody else at your events yet. Mark more events or invite friends.',goes_to:'going to',
     chat_soon:'Chat, crew finder and ride sharing come in the next step.',
     login_t:'Log in',signup_t:'Sign up',email:'Email',password:'Password',pw_hint:'At least 8 characters',display_name:'Display name',
-    login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',newpw_t:'Set a new password',newpw_l:'New password (min. 8 characters)',newpw_l2:'Repeat password',newpw_btn:'Save password',newpw_ok:'Password changed. You are logged in.',newpw_mismatch:'The passwords do not match.',newpw_need:'Open the link from the reset password email to set a new password.',change_pw:'Change password',reset_sent:'If an account with this email exists, a reset link is on its way.',
+    login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',reset_t:'Reset password',reset_intro:'No problem. Enter the email of your account and we will send you a link.',reset_s1:'Enter your email and request the link',reset_s2:'Open the email and tap the newest link',reset_s3:'Set a new password, done',reset_btn:'Send link',reset_sent_t:'Email is on its way',reset_sent_d:'If an account with {mail} exists, an email is coming. Check your spam folder too. Only open the newest link, older ones stop working.',reset_again:'Send again',reset_wait:'Send again in {n} s',reset_limit:'Too many emails were sent just now. Please try again in about an hour.',reset_back:'Back to login',reset_open:'Forgot password?',link_bad_t:'Link invalid or expired',link_bad_d:'This link does not work any more. That happens when it is older or a newer one was sent. Just request a new one.',link_new:'Request a new link',newpw_t:'Set a new password',newpw_l:'New password (min. 8 characters)',newpw_l2:'Repeat password',newpw_btn:'Save password',newpw_ok:'Password changed. You are logged in.',newpw_mismatch:'The passwords do not match.',newpw_need:'Open the link from the reset password email to set a new password.',change_pw:'Change password',reset_sent:'If an account with this email exists, a reset link is on its way.',
     signup_done:'Almost there: we sent you an email. Click the link in it and you are logged in.',
     login_need:'You need to be logged in for this.',to_login:'Log in or sign up',logout:'Log out',
     terms:'By signing up you confirm that you are at least 18 years old.',age_ok:'I am at least 18 years old.',
@@ -566,7 +566,7 @@ function viewLogin(){
     '<div class="field"><label for="a-pw">'+t('password')+'</label><input id="a-pw" name="password" type="password" minlength="8" autocomplete="'+(login?'current-password':'new-password')+'" required>'+(login?'':'<p class="sub" style="margin:4px 0 0;font-size:13px">'+t('pw_hint')+'</p>')+'</div>'+
     (login?'':'<label class="row" style="gap:10px"><input type="checkbox" name="age" required style="width:20px;height:20px;accent-color:var(--accent)"> '+t('age_ok')+'</label>')+
     '<div id="auth-err" class="sub" style="color:var(--accent);margin:0" role="alert">'+esc(S.authErr)+'</div>'+
-    '<div class="row"><button class="btn primary" type="submit">'+(login?t('login_btn'):t('signup_btn'))+'</button>'+(login?'<button type="button" class="linkbtn" data-act="forgot">'+t('forgot')+'</button>':'')+'</div></form>';
+    '<div class="row"><button class="btn primary" type="submit">'+(login?t('login_btn'):t('signup_btn'))+'</button>'+(login?'<button type="button" class="btn" data-act="forgot">'+t('reset_open')+'</button>':'')+'</div></form>';
 }
 
 /* ---------- Views: my profile ---------- */
@@ -629,6 +629,22 @@ function viewNew(){
     '<div id="form-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('f_submit')+'</button></div></form>';
 }
 
+function resetLeft(){ var u=0; try{ u=+sessionStorage.getItem('rs-reset-until')||0; }catch(e){} return Math.max(0,Math.ceil((u-Date.now())/1000)); }
+var resetTick=null;
+function viewReset(){
+  var left=resetLeft(), sent=S.resetSent;
+  if(left&&!resetTick) resetTick=setInterval(function(){ if(location.hash!=='#reset'||!resetLeft()){ clearInterval(resetTick); resetTick=null; } if(location.hash==='#reset') render(false); },1000);
+  var steps='<ol class="steps">'+[t('reset_s1'),t('reset_s2'),t('reset_s3')].map(function(x,i){ return '<li><span>'+(i+1)+'</span>'+esc(x)+'</li>'; }).join('')+'</ol>';
+  var box=sent?'<div class="nophone"><div><b>'+t('reset_sent_t')+'</b><br>'+esc(t('reset_sent_d',{mail:sent}))+'</div></div>':'';
+  return '<a class="back" href="#login">← '+t('reset_back')+'</a><h1>'+t('reset_t')+'</h1><p class="sub">'+t('reset_intro')+'</p>'+steps+box+
+    '<form class="form" data-form="reset" novalidate><div class="field"><label for="r-mail">'+t('email')+'</label><input id="r-mail" name="email" type="email" autocomplete="email" value="'+esc(S.resetMail||'')+'" required></div>'+
+    '<div id="reset-err" class="sub" style="color:var(--accent);margin:0" role="alert">'+esc(S.resetErr||'')+'</div>'+
+    '<button class="btn primary" type="submit"'+(left?' disabled':'')+'>'+(left?t('reset_wait',{n:left}):(sent?t('reset_again'):t('reset_btn')))+'</button></form>';
+}
+function viewLinkBad(){
+  return '<h1>'+t('link_bad_t')+'</h1><div class="empty" style="text-align:left">'+t('link_bad_d')+'</div>'+
+    '<div class="row" style="margin-top:16px"><a class="btn primary" href="#reset">'+t('link_new')+'</a><a class="btn" href="#login">'+t('reset_back')+'</a></div>';
+}
 function viewNewPw(){
   if(!S.user) return '<h1>'+t('newpw_t')+'</h1><div class="empty">'+t('newpw_need')+'</div>';
   return '<a class="back" href="#me">← '+t('back')+'</a><h1>'+t('newpw_t')+'</h1>'+
@@ -859,6 +875,7 @@ var ICONS={
 };
 function route(){
   var h=decodeURIComponent((location.hash||'#home').slice(1));
+  if(/(^|[#&])error_code=|^error=/.test(h)) return {tab:'me',html:viewLinkBad()};
   if(h==='new-event') return {tab:'events',html:viewNew()};
   var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
   switch(name){
@@ -873,6 +890,7 @@ function route(){
     case 'me': return {tab:'me',html:viewMe()};
     case 'login': return {tab:'me',html:viewLogin()};
     case 'newpw': return {tab:'me',html:viewNewPw()};
+    case 'reset': return {tab:'me',html:viewReset()};
     case 'admin': return {tab:'me',html:viewAdmin()};
     case 'events': return {tab:'events',html:viewEvents()};
     default: return {tab:'home',html:viewHome()};
@@ -929,11 +947,7 @@ document.addEventListener('click',function(ev){
   else if(act==='loginhere'){ try{ sessionStorage.setItem('rs-after',location.hash); }catch(e){} }
   else if(act==='save'){ if(S.user) buzz(); toggleRow('bookmarks',+id,S.saved); }
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
-  else if(act==='forgot'){
-    var mail=(document.getElementById('a-mail')||{}).value;
-    if(!mail){ document.getElementById('auth-err').textContent=t('email')+'?'; return; }
-    sb.auth.resetPasswordForEmail(mail,{redirectTo:location.origin+location.pathname+'#newpw'}).then(function(){ S.authMsg=t('reset_sent'); render(false); });
-  }
+  else if(act==='forgot'){ S.resetMail=((document.getElementById('a-mail')||{}).value||'').trim(); S.resetErr=''; location.hash='#reset'; }
   else if(act==='logout'){ sb.auth.signOut().then(function(){ location.hash='#home'; }); }
   else if(act==='block'){
     if(needLogin()) return;
@@ -981,6 +995,19 @@ document.addEventListener('submit',function(ev){
       busy(true);
       sb.auth.signInWithPassword({email:email,password:pw}).then(function(r){ busy(false); if(r.error){ errEl.textContent=t('err_login'); } });
     }
+  } else if(kind==='reset'){
+    var rm=String(fd.get('email')||'').trim(); S.resetMail=rm;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(rm)){ S.resetErr=t('email')+'?'; render(false); return; }
+    if(resetLeft()) return;
+    busy(true);
+    sb.auth.resetPasswordForEmail(rm,{redirectTo:location.origin+location.pathname+'#newpw'}).then(function(r){
+      busy(false);
+      var err=r&&r.error;
+      if(err&&(err.status===429||/rate limit|security purposes/i.test(err.message||''))){ S.resetErr=t('reset_limit'); }
+      else if(err){ S.resetErr=err.message||t('err_generic'); }
+      else { S.resetErr=''; S.resetSent=rm; try{ sessionStorage.setItem('rs-reset-until',String(Date.now()+60000)); }catch(e){} }
+      render(false);
+    });
   } else if(kind==='newpw'){
     var p1=String(fd.get('pw')||''), p2=String(fd.get('pw2')||''), npErr=document.getElementById('np-err');
     if(p1.length<8){ npErr.textContent=t('err_pw'); return; }
