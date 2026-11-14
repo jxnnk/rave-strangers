@@ -25,3 +25,11 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
 -- 2026-11-13: SonneMondSterne-Gelände
 insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Saalburg Beach (SonneMondSterne)','Saalburg-Ebersdorf','Wetteraweg 2, 07929 Saalburg-Ebersdorf',50.5092166,11.7212712,false,'https://www.sonnemondsterne.de/','event_site');
+
+-- 2026-11-14: Contact Festival, Stone Techno, Fairground, Ruhr-in-Love, Monegros
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Zenith (Kulturhalle)','München','Lilienthalallee 29, 80939 München',48.1946864,11.6078535,false,null,'event_site'),
+ ('Zeche Zollverein','Essen','Gelsenkirchener Straße 181, 45309 Essen',51.4866151,7.0459905,false,'https://stone-techno.com/','event_site'),
+ ('Messegelände Hannover','Hannover','Messegelände, 30521 Hannover',52.3246223,9.8056327,false,'https://fairground-festival.de/','event_site'),
+ ('OLGA Park','Oberhausen','OLGA-Park, Osterfeld, 46117 Oberhausen',51.5013469,6.8746128,false,'https://www.ruhr-in-love.de/','event_site'),
+ ('Monegros Desert (Festivalgelände)','Fraga (ES)','N-II km 416, Fraga, Huesca, Spain',41.4762813,0.2035917,true,'https://monegrosfestival.com/','event_site');
