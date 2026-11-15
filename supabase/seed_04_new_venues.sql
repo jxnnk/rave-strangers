@@ -33,3 +33,8 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Messegelände Hannover','Hannover','Messegelände, 30521 Hannover',52.3246223,9.8056327,false,'https://fairground-festival.de/','event_site'),
  ('OLGA Park','Oberhausen','OLGA-Park, Osterfeld, 46117 Oberhausen',51.5013469,6.8746128,false,'https://www.ruhr-in-love.de/','event_site'),
  ('Monegros Desert (Festivalgelände)','Fraga (ES)','N-II km 416, Fraga, Huesca, Spain',41.4762813,0.2035917,true,'https://monegrosfestival.com/','event_site');
+
+-- 2026-11-15 nightly updater
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Rebstockpark','Frankfurt','Rebstockpark, Bockenheim, Frankfurt am Main',50.1105075,8.6147248,true,'https://www.lovefamilypark.com','event_site'),
+ ('Spindler & Klatt','Berlin','Köpenicker Straße 16-17, 10997 Berlin',52.5058141,13.4347954,false,null,'club');
