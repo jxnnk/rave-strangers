@@ -38,3 +38,8 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
 insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Rebstockpark','Frankfurt','Rebstockpark, Bockenheim, Frankfurt am Main',50.1105075,8.6147248,true,'https://www.lovefamilypark.com','event_site'),
  ('Spindler & Klatt','Berlin','Köpenicker Straße 16-17, 10997 Berlin',52.5058141,13.4347954,false,null,'club');
+
+-- 2026-11-16 nightly updater
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Strijkviertel (Verknipt Festival)','Utrecht (NL)','Strijkviertel, Leidsche Rijn, Utrecht',52.0734578,5.0638091,true,'https://www.verknipt.org/','event_site'),
+ ('Ziggo Dome','Amsterdam (NL)','Arena boulevard 61-75, 1101 DL Amsterdam',52.3134068,4.9371231,false,null,'event_site');
