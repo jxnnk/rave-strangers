@@ -43,3 +43,17 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
 insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Strijkviertel (Verknipt Festival)','Utrecht (NL)','Strijkviertel, Leidsche Rijn, Utrecht',52.0734578,5.0638091,true,'https://www.verknipt.org/','event_site'),
  ('Ziggo Dome','Amsterdam (NL)','Arena boulevard 61-75, 1101 DL Amsterdam',52.3134068,4.9371231,false,null,'event_site');
+
+-- 2026-11-18 nightly updater
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Melodrom','Kaufbeuren','Sudetenstraße 12, 87600 Kaufbeuren',47.8999084,10.6429401,false,'https://www.melodrom.de/','club'),
+ ('HanseMesse Rostock','Rostock','Zur HanseMesse 1, 18106 Rostock',54.1391840,12.0731330,false,null,'event_site'),
+ ('Weser-Ems-Hallen','Oldenburg','Messestraße, 26123 Oldenburg',53.1482599,8.2318406,true,null,'event_site'),
+ ('Alpincenter Wittenburg','Wittenburg','Ziggelmark, 19243 Wittenburg',53.5037331,11.0280729,true,null,'event_site'),
+ ('Brauclub','Chemnitz','Neumarkt 2, 09111 Chemnitz',50.8332536,12.9210616,false,null,'club'),
+ ('KRAFTVERKEHR','Chemnitz','Fraunhoferstraße 60, 09120 Chemnitz',50.8080012,12.9231691,false,null,'event_site'),
+ ('Clubzentrum COMMA','Gera','Heinrichstraße 47, 07545 Gera',50.8719578,12.0761582,false,null,'club'),
+ ('Stadthalle Weißenfels','Weißenfels','Beuditzstraße 69a, 06667 Weißenfels',51.2017761,11.9570982,false,null,'event_site'),
+ ('NDSM-Werf (DGTL)','Amsterdam (NL)','NDSM, Amsterdam-Noord',52.4003737,4.8929539,true,null,'event_site'),
+ ('Amsterdamse Bos','Amsterdam (NL)','Amsterdamse Bos, Amstelveen',52.3115707,4.8283374,true,null,'event_site'),
+ ('Karree','Freiburg','Fahnenbergplatz 3, 79098 Freiburg im Breisgau',47.9978301,7.8485052,false,null,'club');
