@@ -57,3 +57,8 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('NDSM-Werf (DGTL)','Amsterdam (NL)','NDSM, Amsterdam-Noord',52.4003737,4.8929539,true,null,'event_site'),
  ('Amsterdamse Bos','Amsterdam (NL)','Amsterdamse Bos, Amstelveen',52.3115707,4.8283374,true,null,'event_site'),
  ('Karree','Freiburg','Fahnenbergplatz 3, 79098 Freiburg im Breisgau',47.9978301,7.8485052,false,null,'club');
+
+-- 2026-11-18 manueller Lauf (Bayern/BW)
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('ROXY – Kultur in Ulm','Ulm','Schillerstraße, 89077 Ulm',48.3916798,9.9855877,false,null,'club'),
+ ('Hallo Werner','Augsburg','Schrannenstraße 8, 86150 Augsburg',48.3654108,10.8909229,false,null,'club');
