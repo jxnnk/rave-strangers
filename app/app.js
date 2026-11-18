@@ -12,7 +12,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var T={
   de:{
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
-    home_hi:'Was geht',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
+    home_hi:'Was geht',crew_find:'Crew finden',crew_find_sub:'Allein unterwegs oder noch Platz in der Gruppe? Schreib kurz, wer du bist. Andere können dich direkt anschreiben.',crew_ph:'z.B. Wir sind zu zweit aus Neukölln und suchen noch Leute zum Vorglühen und Hingehen',crew_post:'Eintragen',crew_del:'Löschen',crew_none:'Noch sucht niemand Anschluss. Trag dich als Erste:r ein.',crew_login:'Logg dich ein, um zu sehen, wer für diesen Abend noch Leute sucht.',crew_mine:'Dein Eintrag',msg_btn:'Nachricht',chats:'Chats',chats_none:'Noch keine Chats. Schreib Leute bei einem Event unter „Crew finden“ an.',chat_ph:'Nachricht …',send:'Senden',chat_safety:'Triff dich zuerst an öffentlichen Orten und teil nur, was du teilen willst.',rate_limited:'Zu viele Nachrichten, warte kurz.',unread_n:'{n} neu',chat_with:'Chat mit {n}',you_:'Du',block_q:'{n} blockieren? Ihr seht euch dann nicht mehr und könnt euch nicht mehr schreiben.',crew_cnt:'{n} suchen Leute',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
     home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
     home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',home_kicker:'Techno · Deutschland · Heute Nacht',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
     no_posts:'Noch keine Beiträge.',post_write:'Beitrag schreiben',post_title:'Überschrift',post_body:'Text',post_link:'Link (optional)',post_publish:'Veröffentlichen',post_done:'Beitrag ist online',
@@ -43,7 +43,7 @@ var T={
     no_artists:'Noch keine verifizierten Artists. Du legst auf? Beantrage die Verifizierung in deinem Profil.',verified:'Verifizierter Artist',
     connect_title:'Connect',connect_sub:'Leute, die zu denselben Events gehen wie du.',connect_login:'Melde dich an und markier Events mit "Ich gehe hin", dann siehst du hier, wer noch hingeht.',
     connect_none:'Noch niemand sonst bei deinen Events. Markier mehr Events oder lad Freunde ein.',goes_to:'geht zu',
-    chat_soon:'Chat, Crew-Suche und Mitfahrgelegenheiten kommen im nächsten Schritt.',
+    chat_soon:'Mitfahrgelegenheiten kommen als Nächstes.',
     login_t:'Anmelden',signup_t:'Registrieren',email:'E-Mail',password:'Passwort',pw_hint:'Mindestens 8 Zeichen',display_name:'Anzeigename',
     login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',reset_t:'Passwort zurücksetzen',reset_intro:'Kein Problem. Gib die E-Mail-Adresse deines Kontos ein, wir schicken dir einen Link.',reset_s1:'E-Mail eingeben und Link anfordern',reset_s2:'Mail öffnen und auf den neuesten Link tippen',reset_s3:'Neues Passwort festlegen, fertig',reset_btn:'Link senden',reset_sent_t:'Mail ist unterwegs',reset_sent_d:'Wenn es ein Konto mit {mail} gibt, kommt gleich eine Mail. Schau auch im Spam-Ordner. Öffne nur den neuesten Link, ältere werden ungültig.',reset_again:'Nochmal senden',reset_wait:'Nochmal senden in {n} s',reset_limit:'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',reset_back:'Zurück zum Login',reset_open:'Passwort vergessen?',link_bad_t:'Link ungültig oder abgelaufen',link_bad_d:'Dieser Link funktioniert nicht mehr. Das passiert, wenn er älter ist oder schon ein neuerer verschickt wurde. Fordere einfach einen neuen an.',link_new:'Neuen Link anfordern',newpw_t:'Neues Passwort festlegen',newpw_l:'Neues Passwort (mind. 8 Zeichen)',newpw_l2:'Passwort wiederholen',newpw_btn:'Passwort speichern',newpw_ok:'Passwort geändert. Du bist eingeloggt.',newpw_mismatch:'Die Passwörter stimmen nicht überein.',newpw_need:'Öffne den Link aus der E-Mail „Passwort zurücksetzen“, um ein neues Passwort festzulegen.',change_pw:'Passwort ändern',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
     signup_done:'Fast geschafft: Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, dann bist du angemeldet.',
@@ -68,7 +68,7 @@ var T={
   },
   en:{
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
-    home_hi:'What’s up',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
+    home_hi:'What’s up',crew_find:'Find a crew',crew_find_sub:'Going alone or room in your group? Say who you are. Others can message you directly.',crew_ph:'e.g. Two of us from Neukölln, looking for people for pre-drinks and going together',crew_post:'Post',crew_del:'Delete',crew_none:'Nobody is looking yet. Be the first.',crew_login:'Log in to see who is still looking for people for this night.',crew_mine:'Your post',msg_btn:'Message',chats:'Chats',chats_none:'No chats yet. Message people at an event under “Find a crew”.',chat_ph:'Message …',send:'Send',chat_safety:'Meet in public places first and only share what you want to share.',rate_limited:'Too many messages, wait a moment.',unread_n:'{n} new',chat_with:'Chat with {n}',you_:'You',block_q:'Block {n}? You will no longer see or message each other.',crew_cnt:'{n} looking for people',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
     home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
     home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',home_kicker:'Techno · Germany · Tonight',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
     no_posts:'No posts yet.',post_write:'Write a post',post_title:'Headline',post_body:'Text',post_link:'Link (optional)',post_publish:'Publish',post_done:'Post is live',
@@ -99,7 +99,7 @@ var T={
     no_artists:'No verified artists yet. You play? Request verification in your profile.',verified:'Verified artist',
     connect_title:'Connect',connect_sub:'People going to the same events as you.',connect_login:'Log in and mark events with "I\'m going" to see who else is going.',
     connect_none:'Nobody else at your events yet. Mark more events or invite friends.',goes_to:'going to',
-    chat_soon:'Chat, crew finder and ride sharing come in the next step.',
+    chat_soon:'Ride sharing comes next.',
     login_t:'Log in',signup_t:'Sign up',email:'Email',password:'Password',pw_hint:'At least 8 characters',display_name:'Display name',
     login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',reset_t:'Reset password',reset_intro:'No problem. Enter the email of your account and we will send you a link.',reset_s1:'Enter your email and request the link',reset_s2:'Open the email and tap the newest link',reset_s3:'Set a new password, done',reset_btn:'Send link',reset_sent_t:'Email is on its way',reset_sent_d:'If an account with {mail} exists, an email is coming. Check your spam folder too. Only open the newest link, older ones stop working.',reset_again:'Send again',reset_wait:'Send again in {n} s',reset_limit:'Too many emails were sent just now. Please try again in about an hour.',reset_back:'Back to login',reset_open:'Forgot password?',link_bad_t:'Link invalid or expired',link_bad_d:'This link does not work any more. That happens when it is older or a newer one was sent. Just request a new one.',link_new:'Request a new link',newpw_t:'Set a new password',newpw_l:'New password (min. 8 characters)',newpw_l2:'Repeat password',newpw_btn:'Save password',newpw_ok:'Password changed. You are logged in.',newpw_mismatch:'The passwords do not match.',newpw_need:'Open the link from the reset password email to set a new password.',change_pw:'Change password',reset_sent:'If an account with this email exists, a reset link is on its way.',
     signup_done:'Almost there: we sent you an email. Click the link in it and you are logged in.',
@@ -154,7 +154,7 @@ var S={
   user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{}};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},chats:null,chat:{}};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -266,7 +266,7 @@ function loadMine(){
     S.attRows=r[1];
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{}}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},chats:null,chat:{}}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -409,6 +409,7 @@ function viewEvent(id){
       '<a class="btn primary" href="'+esc(waUrl(e))+'" target="_blank" rel="noopener" data-act="crewwa" data-id="'+e.id+'">'+t('crew_wa')+' ↗</a>'+
       (navigator.share?'<button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('crew_more')+'</button>':'')+
       '<button type="button" class="btn" data-act="copylink" data-id="'+e.id+'">'+t('crew_copy')+'</button></div></div>'+
+    crewHTML(e)+
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
     '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
@@ -599,7 +600,88 @@ function viewConnect(){
   var body=c==='loading'?loadingBox():(c.length?'<div class="people">'+c.map(function(x){
     var names=x.ev.map(evt).filter(Boolean).map(function(e){ return e.title; }).join(', ');
     return '<a class="person" href="#u-'+esc(x.p.handle)+'">'+av(x.p.display_name)+'<div class="grow"><strong>'+esc(x.p.display_name)+(x.p.verified?VB:'')+'</strong><p>'+(x.p.city?esc(x.p.city)+' · ':'')+t('goes_to')+' '+esc(names)+'</p></div></a>'; }).join('')+'</div>':'<div class="empty">'+t('connect_none')+'</div>');
-  return head+'<div class="sec">'+body+'</div>'+soon;
+  var chatsBox='<div class="sec"><h2>'+t('chats')+'</h2>'+chatsHTML()+'</div>';
+  return head+chatsBox+'<div class="sec"><h2>'+t('connect_title')+'</h2>'+body+'</div>'+soon;
+}
+
+
+/* ---------- Crew finder & chat ---------- */
+function ago(iso){
+  var m=Math.round((Date.now()-new Date(iso).getTime())/60000);
+  if(m<1) return S.lang==='de'?'gerade':'now';
+  if(m<60) return m+' min';
+  var h=Math.round(m/60); if(h<24) return h+' h';
+  var p=berlinParts(new Date(iso)); return p.date;
+}
+function loadCrew(id){
+  cache.crew[id]='loading';
+  data(sb.from('crew_posts').select('id,author,body,created_at,profiles(handle,display_name,city,verified)').eq('event_id',id).order('created_at',{ascending:false}).limit(60))
+    .then(function(r){ cache.crew[id]=r||[]; if(location.hash==='#event-'+id) render(false); })
+    .catch(function(err){ cache.crew[id]=[]; fail(err); });
+}
+function crewHTML(e){
+  var head='<div class="sec crew"><h2>'+t('crew_find')+'</h2><p class="sub">'+t('crew_find_sub')+'</p>';
+  if(!S.user) return head+'<div class="empty"><a class="link" href="#login" data-act="loginhere">'+t('crew_login')+'</a></div></div>';
+  var list=cache.crew[e.id];
+  if(list===undefined){ loadCrew(e.id); list='loading'; }
+  if(list==='loading') return head+loadingBox()+'</div>';
+  var mine=list.filter(function(x){ return x.author===S.user.id; })[0];
+  var form=mine?'':'<form class="form" data-form="crew" data-id="'+e.id+'" style="margin:10px 0 14px"><label class="sr" for="crew-b">'+t('crew_find')+'</label><textarea id="crew-b" name="body" maxlength="280" minlength="2" required placeholder="'+esc(t('crew_ph'))+'"></textarea><div><button class="btn primary" type="submit">'+t('crew_post')+'</button></div></form>';
+  var items=list.length?'<div class="people">'+list.map(function(x){
+    var p=x.profiles||{display_name:'Raver',handle:''}, own=x.author===S.user.id;
+    return '<div class="person crewpost">'+av(p.display_name)+'<div class="grow"><strong>'+(p.handle?'<a href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>':esc(p.display_name))+(p.verified?VB:'')+'</strong>'+
+      '<p class="meta">'+(own?t('crew_mine')+' · ':'')+(p.city?esc(p.city)+' · ':'')+esc(ago(x.created_at))+'</p><p class="body">'+esc(x.body)+'</p></div>'+
+      (own?'<button type="button" class="btn small" data-act="crewdel" data-id="'+x.id+'" data-ev="'+e.id+'">'+t('crew_del')+'</button>'
+          :'<button type="button" class="btn small primary" data-act="dm" data-id="'+esc(x.author)+'">'+t('msg_btn')+'</button>')+'</div>';
+  }).join('')+'</div>':emptyBox(t('crew_none'));
+  return head+form+items+'</div>';
+}
+function loadChats(){
+  cache.chats='loading';
+  sb.rpc('my_chats').then(function(r){ if(r.error) throw r.error; cache.chats=r.data||[]; S.unread=(cache.chats||[]).reduce(function(a,c){ return a+(c.unread||0); },0); render(false); })
+    .catch(function(err){ cache.chats=[]; fail(err); });
+}
+function chatsHTML(){
+  var c=cache.chats;
+  if(c===null){ loadChats(); c='loading'; }
+  if(c==='loading') return loadingBox();
+  if(!c.length) return emptyBox(t('chats_none'));
+  return '<div class="people">'+c.map(function(x){
+    var last=x.last_body?((x.last_sender===S.user.id?t('you_')+': ':'')+x.last_body):'';
+    return '<a class="person" href="#chat-'+x.conversation_id+'">'+av(x.other_name)+'<div class="grow"><strong>'+esc(x.other_name)+(x.other_verified?VB:'')+'</strong><p>'+esc(last.slice(0,80))+'</p></div>'+
+      (x.unread?'<span class="tag hot">'+t('unread_n',{n:x.unread})+'</span>':(x.last_at?'<span class="meta">'+esc(ago(x.last_at))+'</span>':''))+'</a>';
+  }).join('')+'</div>';
+}
+var CHATPOLL=null;
+function loadChat(cid,quiet){
+  if(!quiet) cache.chat[cid]=cache.chat[cid]||'loading';
+  return data(sb.from('messages').select('id,sender,body,created_at').eq('conversation_id',cid).order('created_at',{ascending:true}).limit(300)).then(function(msgs){
+    var prev=cache.chat[cid], changed=!prev||prev==='loading'||prev.msgs.length!==msgs.length;
+    var other=(cache.chats||[]).filter&&(cache.chats||[]).filter(function(x){ return x.conversation_id===cid; })[0];
+    cache.chat[cid]={msgs:msgs,other:other||(prev&&prev.other)||null};
+    sb.from('conversation_members').update({last_read_at:new Date().toISOString()}).eq('conversation_id',cid).eq('profile_id',S.user.id).then(function(){},function(){});
+    if(location.hash==='#chat-'+cid&&changed){ render(false); var box=document.getElementById('msgs'); if(box) box.scrollTop=box.scrollHeight; }
+  });
+}
+function viewChat(cid){
+  if(!S.user){ setTimeout(function(){ needLogin(); },0); return loadingBox(); }
+  if(cache.chats===null) loadChats();
+  var c=cache.chat[cid];
+  if(!c){ loadChat(cid).catch(fail); c='loading'; }
+  clearInterval(CHATPOLL); CHATPOLL=setInterval(function(){ if(location.hash!=='#chat-'+cid){ clearInterval(CHATPOLL); return; } loadChat(cid,true).catch(function(){}); },5000);
+  if(c==='loading') return '<a class="back" href="#chats">← '+t('chats')+'</a>'+loadingBox();
+  var o=c.other||((cache.chats||[]).filter?(cache.chats||[]).filter(function(x){ return x.conversation_id===cid; })[0]:null);
+  var name=o?o.other_name:'Chat';
+  var msgs=c.msgs.map(function(m){ var me=m.sender===S.user.id;
+    return '<div class="msg'+(me?' me':'')+'"><p>'+esc(m.body)+'</p><span>'+esc(ago(m.created_at))+'</span></div>'; }).join('');
+  return '<a class="back" href="#chats">← '+t('chats')+'</a><h1 class="chath">'+(o&&o.other_handle?'<a href="#u-'+esc(o.other_handle)+'">'+esc(name)+'</a>':esc(name))+(o&&o.other_verified?VB:'')+'</h1>'+
+    '<p class="sub">'+t('chat_safety')+'</p><div class="msgs" id="msgs">'+(msgs||emptyBox('👋'))+'</div>'+
+    '<form class="sendbar" data-form="msg" data-id="'+cid+'"><label class="sr" for="msg-b">'+t('chat_ph')+'</label><input id="msg-b" name="body" maxlength="2000" autocomplete="off" placeholder="'+esc(t('chat_ph'))+'" required><button class="btn primary" type="submit">'+t('send')+'</button></form>'+
+    (o?'<div class="sec"><div class="row"><button type="button" class="btn small" data-act="blockq" data-id="'+esc(o.other_id)+'" data-name="'+esc(name)+'">'+t('block')+'</button></div>'+reportForm('profile',o.other_id)+'</div>':'');
+}
+function viewChats(){
+  if(!S.user){ setTimeout(function(){ needLogin(); },0); return loadingBox(); }
+  return '<a class="back" href="#connect">← '+t('connect_title')+'</a><h1>'+t('chats')+'</h1><div class="sec">'+chatsHTML()+'</div>';
 }
 
 /* ---------- Views: auth ---------- */
@@ -938,6 +1020,8 @@ function route(){
     case 'artists': return {tab:'home',html:viewArtists()};
     case 'u': return {tab:'home',html:viewProfile(arg)};
     case 'connect': return {tab:'connect',html:viewConnect()};
+    case 'chats': return {tab:'connect',html:viewChats()};
+    case 'chat': return {tab:'connect',html:viewChat(+arg)};
     case 'me': return {tab:'me',html:viewMe()};
     case 'login': return {tab:'me',html:viewLogin()};
     case 'newpw': return {tab:'me',html:viewNewPw()};
@@ -1000,6 +1084,18 @@ document.addEventListener('click',function(ev){
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
   else if(act==='forgot'){ S.resetMail=((document.getElementById('a-mail')||{}).value||'').trim(); S.resetErr=''; location.hash='#reset'; }
   else if(act==='logout'){ sb.auth.signOut().then(function(){ location.hash='#home'; }); }
+  else if(act==='dm'){
+    if(needLogin()) return;
+    sb.rpc('start_chat',{other:id}).then(function(r){ if(r.error) throw r.error; cache.chats=null; location.hash='#chat-'+r.data; })
+      .catch(function(err){ toast(/rate_limited/.test(err&&err.message||'')?t('rate_limited'):t('err_generic')); });
+  }
+  else if(act==='crewdel'){ var cev=+el.getAttribute('data-ev');
+    data(sb.from('crew_posts').delete().eq('id',+id)).then(function(){ delete cache.crew[cev]; render(false); }).catch(fail);
+  }
+  else if(act==='blockq'){
+    if(!window.confirm(t('block_q',{n:el.getAttribute('data-name')||''}))) return;
+    data(sb.from('blocks').insert({blocker:S.user.id,blocked:id})).then(function(){ toast(t('blocked')); resetCaches(); location.hash='#chats'; }).catch(fail);
+  }
   else if(act==='block'){
     if(needLogin()) return;
     data(sb.from('blocks').insert({blocker:S.user.id,blocked:id})).then(function(){ toast(t('blocked')); resetCaches(); location.hash='#events'; }).catch(fail);
@@ -1098,6 +1194,20 @@ document.addEventListener('submit',function(ev){
     var q=rid?sb.from('reviews').update(Object.assign(row,{updated_at:new Date().toISOString()})).eq('id',+rid):sb.from('reviews').insert(Object.assign(row,{venue_id:rv,author:S.user.id}));
     data(q).then(function(){ toast(t('rev_saved')); delete cache.reviews[rv]; return loadRatings(); }).then(function(){ render(false); })
       .catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='crew'){
+    if(needLogin()) return;
+    var cb=String(fd.get('body')||'').trim(), ceid=+f.getAttribute('data-id');
+    if(cb.length<2) return;
+    busy(true);
+    data(sb.from('crew_posts').insert({event_id:ceid,author:S.user.id,body:cb.slice(0,280)})).then(function(){ busy(false); delete cache.crew[ceid]; buzz(); render(false); })
+      .catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='msg'){
+    var mb=String(fd.get('body')||'').trim(), mcid=+f.getAttribute('data-id');
+    if(!mb) return;
+    var inp=f.querySelector('input'); if(inp) inp.value='';
+    data(sb.from('messages').insert({conversation_id:mcid,sender:S.user.id,body:mb.slice(0,2000)})).then(function(){ return loadChat(mcid,true); })
+      .then(function(){ var i2=document.getElementById('msg-b'); if(i2) i2.focus(); })
+      .catch(function(err){ if(inp) inp.value=mb; toast(/rate_limited/.test(err&&err.message||'')?t('rate_limited'):t('err_generic')); });
   } else if(kind==='report'){
     if(needLogin()) return;
     var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
@@ -1127,7 +1237,7 @@ document.addEventListener('submit',function(ev){
 try{ var savedLang=localStorage.getItem('rs-lang'); if(savedLang==='de'||savedLang==='en') S.lang=savedLang; }catch(e){}
 try{ S.lastSeen=localStorage.getItem('rs-seen'); localStorage.setItem('rs-seen',new Date().toISOString()); }catch(e){}
 setInterval(function(){ var els=document.querySelectorAll('[data-cd]'); for(var i=0;i<els.length;i++){ var ce=evt(+els[i].getAttribute('data-cd')); if(ce) els[i].textContent=cdText(ce); } },30000);
-window.addEventListener('hashchange',function(){ render(true); });
+window.addEventListener('hashchange',function(){ if(location.hash==='#chats'||location.hash==='#connect') cache.chats=null; render(true); });
 
 render(false);
 var first=true;

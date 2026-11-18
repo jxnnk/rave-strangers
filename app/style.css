@@ -326,3 +326,20 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 .reftab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
 .reftab th,.reftab td{padding:6px 8px;border-bottom:1px solid var(--line,#2a2a2e);text-align:right}
 .reftab th:first-child,.reftab td:first-child{text-align:left}
+
+/* crew finder */
+.crew textarea{min-height:76px}
+.crewpost{align-items:flex-start}
+.crewpost .meta{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);margin:2px 0 4px}
+.crewpost .body{color:var(--text);margin:0;white-space:pre-wrap;word-break:break-word}
+.crewpost strong a{color:inherit;text-decoration:none}
+.person .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+/* chat */
+.chath a{color:inherit;text-decoration:none}
+.msgs{display:flex;flex-direction:column;gap:8px;margin:14px 0;max-height:58vh;overflow-y:auto;padding:2px}
+.msg{max-width:82%;align-self:flex-start;background:var(--surface);border:1px solid var(--line);padding:9px 12px}
+.msg.me{align-self:flex-end;background:#2a1412;border-color:#5a1f1a}
+.msg p{margin:0;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.msg span{display:block;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.sendbar{display:flex;gap:8px;position:sticky;bottom:calc(var(--navh,64px) + 8px);background:var(--bg);padding:8px 0}
+.sendbar input{flex:1}
