@@ -14,5 +14,4 @@ begin
   return new;
 end $$;
 revoke all on function private.guard_event_update() from public, anon, authenticated;
-drop trigger if exists events_update_guard on public.events;
-create trigger events_update_guard before update on public.events for each row execute function private.guard_event_update();
+create or replace trigger events_update_guard before update on public.events for each row execute function private.guard_event_update();

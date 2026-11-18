@@ -12,7 +12,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var T={
   de:{
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
-    home_hi:'Was geht',del_t:'Konto löschen',del_sub:'Löscht dein Profil, deine Zusagen, Crew-Einträge, Nachrichten und Bewertungen endgültig. Das lässt sich nicht rückgängig machen.',del_btn:'Konto endgültig löschen',del_q:'Wirklich löschen? Tipp zur Bestätigung LÖSCHEN ein.',del_word:'LÖSCHEN',del_done:'Dein Konto wurde gelöscht.',crew_find:'Crew finden',crew_find_sub:'Allein unterwegs oder noch Platz in der Gruppe? Schreib kurz, wer du bist. Andere können dich direkt anschreiben.',crew_ph:'z.B. Wir sind zu zweit aus Neukölln und suchen noch Leute zum Vorglühen und Hingehen',crew_post:'Eintragen',crew_del:'Löschen',crew_none:'Noch sucht niemand Anschluss. Trag dich als Erste:r ein.',crew_login:'Logg dich ein, um zu sehen, wer für diesen Abend noch Leute sucht.',crew_mine:'Dein Eintrag',msg_btn:'Nachricht',chats:'Chats',chats_none:'Noch keine Chats. Schreib Leute bei einem Event unter „Crew finden“ an.',chat_ph:'Nachricht …',send:'Senden',chat_safety:'Triff dich zuerst an öffentlichen Orten und teil nur, was du teilen willst.',rate_limited:'Zu viele Nachrichten, warte kurz.',unread_n:'{n} neu',chat_with:'Chat mit {n}',you_:'Du',block_q:'{n} blockieren? Ihr seht euch dann nicht mehr und könnt euch nicht mehr schreiben.',crew_cnt:'{n} suchen Leute',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
+    home_hi:'Was geht',ride_t:'Mitfahren',ride_sub:'Fährst du mit dem Auto hin und hast Plätze frei? Oder suchst du eine Mitfahrt? Schreib den Fahrer direkt an und teilt euch die Spritkosten.',ride_from:'Abfahrt in',ride_when:'Abfahrtszeit',ride_seats:'Freie Plätze',ride_note:'Hinweis (optional)',ride_note_ph:'z.B. Rückfahrt ca. 6 Uhr, Spritkosten teilen',ride_offer:'Mitfahrt anbieten',ride_none:'Noch keine Mitfahrten. Fährst du hin? Biete Plätze an.',ride_login:'Logg dich ein, um Mitfahrten zu sehen und anzubieten.',ride_line:'{from} → {to}',ride_seats_n:'{n} Plätze frei',ride_seat_1:'1 Platz frei',ride_open:'+ Mitfahrt anbieten',ride_mine:'Deine Fahrt',del_t:'Konto löschen',del_sub:'Löscht dein Profil, deine Zusagen, Crew-Einträge, Nachrichten und Bewertungen endgültig. Das lässt sich nicht rückgängig machen.',del_btn:'Konto endgültig löschen',del_q:'Wirklich löschen? Tipp zur Bestätigung LÖSCHEN ein.',del_word:'LÖSCHEN',del_done:'Dein Konto wurde gelöscht.',crew_find:'Crew finden',crew_find_sub:'Allein unterwegs oder noch Platz in der Gruppe? Schreib kurz, wer du bist. Andere können dich direkt anschreiben.',crew_ph:'z.B. Wir sind zu zweit aus Neukölln und suchen noch Leute zum Vorglühen und Hingehen',crew_post:'Eintragen',crew_del:'Löschen',crew_none:'Noch sucht niemand Anschluss. Trag dich als Erste:r ein.',crew_login:'Logg dich ein, um zu sehen, wer für diesen Abend noch Leute sucht.',crew_mine:'Dein Eintrag',msg_btn:'Nachricht',chats:'Chats',chats_none:'Noch keine Chats. Schreib Leute bei einem Event unter „Crew finden“ an.',chat_ph:'Nachricht …',send:'Senden',chat_safety:'Triff dich zuerst an öffentlichen Orten und teil nur, was du teilen willst.',rate_limited:'Zu viele Nachrichten, warte kurz.',unread_n:'{n} neu',chat_with:'Chat mit {n}',you_:'Du',block_q:'{n} blockieren? Ihr seht euch dann nicht mehr und könnt euch nicht mehr schreiben.',crew_cnt:'{n} suchen Leute',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
     home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
     home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',home_kicker:'Techno · Deutschland · Heute Nacht',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
     no_posts:'Noch keine Beiträge.',post_write:'Beitrag schreiben',post_title:'Überschrift',post_body:'Text',post_link:'Link (optional)',post_publish:'Veröffentlichen',post_done:'Beitrag ist online',
@@ -43,7 +43,7 @@ var T={
     no_artists:'Noch keine verifizierten Artists. Du legst auf? Beantrage die Verifizierung in deinem Profil.',verified:'Verifizierter Artist',
     connect_title:'Connect',connect_sub:'Leute, die zu denselben Events gehen wie du.',connect_login:'Melde dich an und markier Events mit "Ich gehe hin", dann siehst du hier, wer noch hingeht.',
     connect_none:'Noch niemand sonst bei deinen Events. Markier mehr Events oder lad Freunde ein.',goes_to:'geht zu',
-    chat_soon:'Mitfahrgelegenheiten kommen als Nächstes.',
+    chat_soon:'Mitfahrgelegenheiten findest du direkt beim jeweiligen Event.',
     login_t:'Anmelden',signup_t:'Registrieren',email:'E-Mail',password:'Passwort',pw_hint:'Mindestens 8 Zeichen',display_name:'Anzeigename',
     login_btn:'Anmelden',signup_btn:'Konto erstellen',forgot:'Passwort vergessen?',reset_t:'Passwort zurücksetzen',reset_intro:'Kein Problem. Gib die E-Mail-Adresse deines Kontos ein, wir schicken dir einen Link.',reset_s1:'E-Mail eingeben und Link anfordern',reset_s2:'Mail öffnen und auf den neuesten Link tippen',reset_s3:'Neues Passwort festlegen, fertig',reset_btn:'Link senden',reset_sent_t:'Mail ist unterwegs',reset_sent_d:'Wenn es ein Konto mit {mail} gibt, kommt gleich eine Mail. Schau auch im Spam-Ordner. Öffne nur den neuesten Link, ältere werden ungültig.',reset_again:'Nochmal senden',reset_wait:'Nochmal senden in {n} s',reset_limit:'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',reset_back:'Zurück zum Login',reset_open:'Passwort vergessen?',link_bad_t:'Link ungültig oder abgelaufen',link_bad_d:'Dieser Link funktioniert nicht mehr. Das passiert, wenn er älter ist oder schon ein neuerer verschickt wurde. Fordere einfach einen neuen an.',link_new:'Neuen Link anfordern',newpw_t:'Neues Passwort festlegen',newpw_l:'Neues Passwort (mind. 8 Zeichen)',newpw_l2:'Passwort wiederholen',newpw_btn:'Passwort speichern',newpw_ok:'Passwort geändert. Du bist eingeloggt.',newpw_mismatch:'Die Passwörter stimmen nicht überein.',newpw_need:'Öffne den Link aus der E-Mail „Passwort zurücksetzen“, um ein neues Passwort festzulegen.',change_pw:'Passwort ändern',reset_sent:'Wenn es ein Konto mit dieser E-Mail gibt, ist ein Link zum Zurücksetzen unterwegs.',
     signup_done:'Fast geschafft: Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, dann bist du angemeldet.',
@@ -68,7 +68,7 @@ var T={
   },
   en:{
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
-    home_hi:'What’s up',del_t:'Delete account',del_sub:'Permanently deletes your profile, plans, crew posts, messages and reviews. This cannot be undone.',del_btn:'Delete account permanently',del_q:'Really delete? Type DELETE to confirm.',del_word:'DELETE',del_done:'Your account was deleted.',crew_find:'Find a crew',crew_find_sub:'Going alone or room in your group? Say who you are. Others can message you directly.',crew_ph:'e.g. Two of us from Neukölln, looking for people for pre-drinks and going together',crew_post:'Post',crew_del:'Delete',crew_none:'Nobody is looking yet. Be the first.',crew_login:'Log in to see who is still looking for people for this night.',crew_mine:'Your post',msg_btn:'Message',chats:'Chats',chats_none:'No chats yet. Message people at an event under “Find a crew”.',chat_ph:'Message …',send:'Send',chat_safety:'Meet in public places first and only share what you want to share.',rate_limited:'Too many messages, wait a moment.',unread_n:'{n} new',chat_with:'Chat with {n}',you_:'You',block_q:'Block {n}? You will no longer see or message each other.',crew_cnt:'{n} looking for people',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
+    home_hi:'What’s up',ride_t:'Ride share',ride_sub:'Driving there with free seats, or looking for a ride? Message the driver directly and split the fuel costs.',ride_from:'Leaving from',ride_when:'Departure',ride_seats:'Free seats',ride_note:'Note (optional)',ride_note_ph:'e.g. Back around 6am, split fuel',ride_offer:'Offer a ride',ride_none:'No rides yet. Driving there? Offer seats.',ride_login:'Log in to see and offer rides.',ride_line:'{from} → {to}',ride_seats_n:'{n} seats free',ride_seat_1:'1 seat free',ride_open:'+ Offer a ride',ride_mine:'Your ride',del_t:'Delete account',del_sub:'Permanently deletes your profile, plans, crew posts, messages and reviews. This cannot be undone.',del_btn:'Delete account permanently',del_q:'Really delete? Type DELETE to confirm.',del_word:'DELETE',del_done:'Your account was deleted.',crew_find:'Find a crew',crew_find_sub:'Going alone or room in your group? Say who you are. Others can message you directly.',crew_ph:'e.g. Two of us from Neukölln, looking for people for pre-drinks and going together',crew_post:'Post',crew_del:'Delete',crew_none:'Nobody is looking yet. Be the first.',crew_login:'Log in to see who is still looking for people for this night.',crew_mine:'Your post',msg_btn:'Message',chats:'Chats',chats_none:'No chats yet. Message people at an event under “Find a crew”.',chat_ph:'Message …',send:'Send',chat_safety:'Meet in public places first and only share what you want to share.',rate_limited:'Too many messages, wait a moment.',unread_n:'{n} new',chat_with:'Chat with {n}',you_:'You',block_q:'Block {n}? You will no longer see or message each other.',crew_cnt:'{n} looking for people',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
     home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
     home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',home_kicker:'Techno · Germany · Tonight',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
     no_posts:'No posts yet.',post_write:'Write a post',post_title:'Headline',post_body:'Text',post_link:'Link (optional)',post_publish:'Publish',post_done:'Post is live',
@@ -99,7 +99,7 @@ var T={
     no_artists:'No verified artists yet. You play? Request verification in your profile.',verified:'Verified artist',
     connect_title:'Connect',connect_sub:'People going to the same events as you.',connect_login:'Log in and mark events with "I\'m going" to see who else is going.',
     connect_none:'Nobody else at your events yet. Mark more events or invite friends.',goes_to:'going to',
-    chat_soon:'Ride sharing comes next.',
+    chat_soon:'Ride shares are listed on each event.',
     login_t:'Log in',signup_t:'Sign up',email:'Email',password:'Password',pw_hint:'At least 8 characters',display_name:'Display name',
     login_btn:'Log in',signup_btn:'Create account',forgot:'Forgot password?',reset_t:'Reset password',reset_intro:'No problem. Enter the email of your account and we will send you a link.',reset_s1:'Enter your email and request the link',reset_s2:'Open the email and tap the newest link',reset_s3:'Set a new password, done',reset_btn:'Send link',reset_sent_t:'Email is on its way',reset_sent_d:'If an account with {mail} exists, an email is coming. Check your spam folder too. Only open the newest link, older ones stop working.',reset_again:'Send again',reset_wait:'Send again in {n} s',reset_limit:'Too many emails were sent just now. Please try again in about an hour.',reset_back:'Back to login',reset_open:'Forgot password?',link_bad_t:'Link invalid or expired',link_bad_d:'This link does not work any more. That happens when it is older or a newer one was sent. Just request a new one.',link_new:'Request a new link',newpw_t:'Set a new password',newpw_l:'New password (min. 8 characters)',newpw_l2:'Repeat password',newpw_btn:'Save password',newpw_ok:'Password changed. You are logged in.',newpw_mismatch:'The passwords do not match.',newpw_need:'Open the link from the reset password email to set a new password.',change_pw:'Change password',reset_sent:'If an account with this email exists, a reset link is on its way.',
     signup_done:'Almost there: we sent you an email. Click the link in it and you are logged in.',
@@ -154,7 +154,7 @@ var S={
   user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
   authTab:'login',authMsg:'',authErr:''
 };
-var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},chats:null,chat:{}};
+var cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},rides:{},chats:null,chat:{}};
 
 /* ---------- Helpers ---------- */
 function t(k,v){ var s=(T[S.lang][k]!=null?T[S.lang][k]:k); if(v){ for(var x in v){ s=s.split('{'+x+'}').join(v[x]); } } return s; }
@@ -266,7 +266,7 @@ function loadMine(){
     S.attRows=r[1];
   }).catch(fail);
 }
-function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},chats:null,chat:{}}; }
+function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},rides:{},chats:null,chat:{}}; }
 
 /* ---------- Shared pieces ---------- */
 function whenOptions(){ return [['all','when_all'],['week','when_week'],['month','when_month']].map(function(w){ return '<option value="'+w[0]+'"'+(S.when===w[0]?' selected':'')+'>'+t(w[1])+'</option>'; }).join(''); }
@@ -409,7 +409,7 @@ function viewEvent(id){
       '<a class="btn primary" href="'+esc(waUrl(e))+'" target="_blank" rel="noopener" data-act="crewwa" data-id="'+e.id+'">'+t('crew_wa')+' ↗</a>'+
       (navigator.share?'<button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('crew_more')+'</button>':'')+
       '<button type="button" class="btn" data-act="copylink" data-id="'+e.id+'">'+t('crew_copy')+'</button></div></div>'+
-    crewHTML(e)+
+    crewHTML(e)+ridesHTML(e)+
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
     '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
@@ -635,6 +635,38 @@ function crewHTML(e){
           :'<button type="button" class="btn small primary" data-act="dm" data-id="'+esc(x.author)+'">'+t('msg_btn')+'</button>')+'</div>';
   }).join('')+'</div>':emptyBox(t('crew_none'));
   return head+form+items+'</div>';
+}
+
+function loadRides(id){
+  cache.rides[id]='loading';
+  data(sb.from('rides').select('id,driver,from_city,departs_at,seats,note,profiles(handle,display_name,verified)').eq('event_id',id).order('departs_at',{ascending:true}).limit(50))
+    .then(function(r){ cache.rides[id]=r||[]; if(location.hash==='#event-'+id) render(false); })
+    .catch(function(err){ cache.rides[id]=[]; fail(err); });
+}
+function ridesHTML(e){
+  var v=venue(e.v);
+  var head='<div class="sec rides"><h2>'+t('ride_t')+'</h2><p class="sub">'+t('ride_sub')+'</p>';
+  if(!S.user) return head+'<div class="empty"><a class="link" href="#login" data-act="loginhere">'+t('ride_login')+'</a></div></div>';
+  var list=cache.rides[e.id];
+  if(list===undefined){ loadRides(e.id); list='loading'; }
+  if(list==='loading') return head+loadingBox()+'</div>';
+  var mine=list.filter(function(x){ return x.driver===S.user.id; })[0];
+  var d=dayOf(e.off), dd=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  var form=mine?'':'<details class="more"><summary>'+t('ride_open')+'</summary><form class="form" data-form="ride" data-id="'+e.id+'" style="margin-top:8px">'+
+    '<div class="form2"><div class="field"><label for="r-from">'+t('ride_from')+'</label><input id="r-from" name="from" type="text" minlength="2" maxlength="60" required value="'+esc((S.me&&S.me.city)||S.homeCity||'')+'"></div>'+
+    '<div class="field"><label for="r-when">'+t('ride_when')+'</label><input id="r-when" name="when" type="datetime-local" required value="'+dd+'T21:00"></div></div>'+
+    '<div class="form2"><div class="field"><label for="r-seats">'+t('ride_seats')+'</label><select id="r-seats" name="seats">'+[1,2,3,4,5,6,7,8].map(function(n){ return '<option'+(n===3?' selected':'')+'>'+n+'</option>'; }).join('')+'</select></div>'+
+    '<div class="field"><label for="r-note">'+t('ride_note')+'</label><input id="r-note" name="note" type="text" maxlength="200" placeholder="'+esc(t('ride_note_ph'))+'"></div></div>'+
+    '<div><button class="btn primary" type="submit">'+t('ride_offer')+'</button></div></form></details>';
+  var items=list.length?'<div class="people">'+list.map(function(x){
+    var p=x.profiles||{display_name:'Raver',handle:''}, own=x.driver===S.user.id;
+    return '<div class="person crewpost">'+av(p.display_name)+'<div class="grow"><strong>'+esc(t('ride_line',{from:x.from_city,to:v?v.city:''}))+'</strong>'+
+      '<p class="meta">'+(own?t('ride_mine')+' · ':'')+esc(new Date(x.departs_at).toLocaleString(locale(),{timeZone:'Europe/Berlin',weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+(x.seats===1?t('ride_seat_1'):t('ride_seats_n',{n:x.seats}))+' · '+(p.handle?'<a href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>':esc(p.display_name))+(p.verified?VB:'')+'</p>'+
+      (x.note?'<p class="body">'+esc(x.note)+'</p>':'')+'</div>'+
+      (own?'<button type="button" class="btn small" data-act="ridedel" data-id="'+x.id+'" data-ev="'+e.id+'">'+t('crew_del')+'</button>'
+          :'<button type="button" class="btn small primary" data-act="dm" data-id="'+esc(x.driver)+'">'+t('msg_btn')+'</button>')+'</div>';
+  }).join('')+'</div>':emptyBox(t('ride_none'));
+  return head+items+form+'</div>';
 }
 function loadChats(){
   cache.chats='loading';
@@ -1095,6 +1127,9 @@ document.addEventListener('click',function(ev){
     sb.rpc('start_chat',{other:id}).then(function(r){ if(r.error) throw r.error; cache.chats=null; location.hash='#chat-'+r.data; })
       .catch(function(err){ toast(/rate_limited/.test(err&&err.message||'')?t('rate_limited'):t('err_generic')); });
   }
+  else if(act==='ridedel'){ var rev=+el.getAttribute('data-ev');
+    data(sb.from('rides').delete().eq('id',+id)).then(function(){ delete cache.rides[rev]; render(false); }).catch(fail);
+  }
   else if(act==='crewdel'){ var cev=+el.getAttribute('data-ev');
     data(sb.from('crew_posts').delete().eq('id',+id)).then(function(){ delete cache.crew[cev]; render(false); }).catch(fail);
   }
@@ -1207,6 +1242,13 @@ document.addEventListener('submit',function(ev){
     busy(true);
     data(sb.from('crew_posts').insert({event_id:ceid,author:S.user.id,body:cb.slice(0,280)})).then(function(){ busy(false); delete cache.crew[ceid]; buzz(); render(false); })
       .catch(function(err){ busy(false); fail(err); });
+  } else if(kind==='ride'){
+    if(needLogin()) return;
+    var reid=+f.getAttribute('data-id'), rfrom=String(fd.get('from')||'').trim(), rwhen=String(fd.get('when')||''), rseats=+fd.get('seats')||1, rnote=String(fd.get('note')||'').trim();
+    if(rfrom.length<2||!rwhen) return;
+    busy(true);
+    data(sb.from('rides').insert({event_id:reid,driver:S.user.id,from_city:rfrom.slice(0,60),departs_at:berlinToISO(rwhen.slice(0,10),rwhen.slice(11,16)),seats:Math.max(1,Math.min(8,rseats)),note:rnote?rnote.slice(0,200):null}))
+      .then(function(){ busy(false); delete cache.rides[reid]; buzz(); render(false); }).catch(function(err){ busy(false); fail(err); });
   } else if(kind==='msg'){
     var mb=String(fd.get('body')||'').trim(), mcid=+f.getAttribute('data-id');
     if(!mb) return;
