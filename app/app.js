@@ -12,7 +12,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var T={
   de:{
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
-    home_hi:'Was geht',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
+    home_hi:'Was geht',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
     home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
     home_remind:'Du gehst hin',home_new:'Neu in der App',home_news:'News',home_ticker:'Aus der Szene',home_kicker:'Techno · Deutschland · Heute Nacht',ticker_note:'Schlagzeilen von Groove, Mixmag und DJ Mag. Ein Tipp öffnet den Artikel beim Magazin.',
     no_posts:'Noch keine Beiträge.',post_write:'Beitrag schreiben',post_title:'Überschrift',post_body:'Text',post_link:'Link (optional)',post_publish:'Veröffentlichen',post_done:'Beitrag ist online',
@@ -68,7 +68,7 @@ var T={
   },
   en:{
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
-    home_hi:'What’s up',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
+    home_hi:'What’s up',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
     home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
     home_remind:'You are going',home_new:'New in the app',home_news:'News',home_ticker:'From the scene',home_kicker:'Techno · Germany · Tonight',ticker_note:'Headlines from Groove, Mixmag and DJ Mag. Tap to read the article on the magazine’s site.',
     no_posts:'No posts yet.',post_write:'Write a post',post_title:'Headline',post_body:'Text',post_link:'Link (optional)',post_publish:'Publish',post_done:'Post is live',
@@ -143,9 +143,12 @@ var RULE_LABEL={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',awar
 
 /* ---------- State ---------- */
 var VENUES=[], EVENTS=[];
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+var SAVED_CITY=lsGet('rs-city');
 var S={
   lang:(navigator.language||'de').slice(0,2)==='de'?'de':'en',
-  q:'',city:'',genre:'',when:'all',type:'',onlyEvents:false,homeCity:null,
+  q:'',city:SAVED_CITY||'',genre:'',when:'all',type:'',onlyEvents:false,homeCity:SAVED_CITY,
   map:null,mapSel:null,mapHash:null,
   ready:false,loadErr:false,
   user:null,me:null,going:[],saved:[],counts:{},verif:null,follow:[],vfollow:[],attRows:[],lastSeen:null,
@@ -272,6 +275,38 @@ function genreChips(){
     GENRES.map(function(g){ return '<button type="button" class="chip" data-act="genre" data-id="'+esc(g)+'" aria-pressed="'+(S.genre===g)+'">'+esc(g)+'</button>'; }).join('');
 }
 function typeChips(){ return [['','type_all'],['club','type_club'],['festival','type_fest']].map(function(x){ return '<button type="button" class="chip" data-act="type" data-id="'+x[0]+'" aria-pressed="'+(S.type===x[0])+'">'+t(x[1])+'</button>'; }).join(''); }
+
+/* ---------- sharing & where users come from ---------- */
+function appBase(){ return location.origin+location.pathname; }
+function shareMsg(e,ref){
+  if(!e) return {title:'Rave Strangers',text:'',url:appBase()};
+  var v=venue(e.v), d=dayOf(e.off), n=S.counts[e.id]||0;
+  var url=appBase()+'?ref='+ref+'#event-'+e.id;
+  var line2=fmtLong(d)+(e.time?', '+e.time:'')+' · '+(v?v.name+', '+v.city:'');
+  var text=t('crew_msg')+'\n'+e.title+'\n'+line2+(n>1?'\n'+t('crew_going',{n:n}):'');
+  return {title:e.title,text:text,url:url};
+}
+function waUrl(e){ var m=shareMsg(e,'wa'); return 'https://wa.me/?text='+encodeURIComponent(m.text+'\n'+m.url); }
+function copyText(x){
+  if(navigator.clipboard) navigator.clipboard.writeText(x).then(function(){ toast(t('copied')); },function(){ toast(x); });
+  else toast(x);
+}
+function setCity(c){ S.homeCity=c; S.city=c; lsSet('rs-city',c); }
+var REF=(function(){
+  var r=null;
+  try{ r=new URLSearchParams(location.search).get('ref'); }catch(e){}
+  r=r?String(r).toLowerCase().slice(0,40):null;
+  if(r&&!/^[a-z0-9_-]+$/.test(r)) r=null;
+  if(r){
+    if(!lsGet('rs-ref')) lsSet('rs-ref',r);              /* first touch wins for signup attribution */
+    var m=/^#event-(\d+)/.exec(location.hash||'');
+    var key='rs-ref-seen-'+r+(m?'-'+m[1]:'');
+    var seen=null; try{ seen=sessionStorage.getItem(key); sessionStorage.setItem(key,'1'); }catch(e){}
+    if(!seen){ try{ sb.rpc('track_ref',{p_ref:r,p_event:m?+m[1]:null}).then(function(){},function(){}); }catch(e){} }
+    try{ history.replaceState(null,'',location.pathname+location.hash); }catch(e){}
+  }
+  return lsGet('rs-ref');
+})();
 function eventCard(e){
   var d=dayOf(e.off), v=venue(e.v), n=S.counts[e.id]||0, fr=friendsAt(e.id);
   var tag=tixTag(e)+(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
@@ -370,8 +405,12 @@ function viewEvent(id){
     (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
     '<div class="row" style="margin-top:20px"><button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
     '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button></div>'+
+    '<div class="crewshare"><h2>'+t('crew_t')+'</h2><p class="sub">'+t('crew_sub')+'</p><div class="row">'+
+      '<a class="btn primary" href="'+esc(waUrl(e))+'" target="_blank" rel="noopener" data-act="crewwa" data-id="'+e.id+'">'+t('crew_wa')+' ↗</a>'+
+      (navigator.share?'<button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('crew_more')+'</button>':'')+
+      '<button type="button" class="btn" data-act="copylink" data-id="'+e.id+'">'+t('crew_copy')+'</button></div></div>'+
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
-    '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a><button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('share')+'</button></div>'+
+    '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
     (fr.length?'<div class="frline"><span class="fr">'+t('fr_going')+'</span>'+fr.slice(0,6).map(function(p){ return '<a href="#u-'+esc(p.handle)+'" title="'+esc(p.display_name)+'">'+av(p.display_name,30)+'</a>'; }).join('')+'<span class="sub" style="margin:0">'+esc(fr.slice(0,3).map(function(p){ return p.display_name; }).join(', '))+(fr.length>3?' +'+(fr.length-3):'')+'</span></div>':'')+
     '<div class="sec"><h2>'+t('tix_t')+'</h2>'+ticketsHTML(e)+'</div>'+
@@ -422,6 +461,12 @@ function viewHome(){
   var cities={}; EVENTS.forEach(function(e){ var v=venue(e.v); if(upcoming(e)) cities[v.city]=(cities[v.city]||0)+1; });
   var top=Object.keys(cities).sort(function(a,b){ return cities[b]-cities[a]; }).slice(0,8);
   if(city&&top.indexOf(city)<0) top.unshift(city);
+  var needPick=S.homeCity===null&&!(S.me&&S.me.city);
+  var allCities=Object.keys(cities).sort(function(a,b){ return a.localeCompare(b,'de'); });
+  var picker=needPick?'<div class="citypick"><p class="kicker">'+t('pick_kicker')+'</p><h2>'+t('pick_t')+'</h2><p class="sub">'+t('pick_sub')+'</p><div class="cpgrid">'+
+    top.slice(0,8).map(function(c){ return '<button type="button" class="btn" data-act="homecity" data-id="'+esc(c)+'">'+esc(c)+'<em>'+cities[c]+'</em></button>'; }).join('')+
+    '<button type="button" class="btn" data-act="homecity" data-id="">'+t('pick_all')+'</button></div>'+
+    '<label class="sr" for="cp-other">'+t('pick_other')+'</label><select id="cp-other"><option value="">'+t('pick_other')+' …</option>'+allCities.map(function(c){ return '<option>'+esc(c)+'</option>'; }).join('')+'</select></div>':'';
   var chips='<button type="button" class="chip" data-act="homecity" data-id="" aria-pressed="'+(city==='')+'">'+t('home_all')+'</button>'+top.map(function(c){ return '<button type="button" class="chip" data-act="homecity" data-id="'+esc(c)+'" aria-pressed="'+(city===c)+'">'+esc(c)+'</button>'; }).join('');
   function inCity(e){ return !city||venue(e.v).city===city; }
   var rg=weekendRange();
@@ -441,7 +486,7 @@ function viewHome(){
     '<div class="field"><label for="p-link">'+t('post_link')+'</label><input id="p-link" name="link" type="url" placeholder="https://"></div>'+
     '<div><button class="btn primary" type="submit">'+t('post_publish')+'</button></div></form></details>':'';
   var marq=(h&&h!=='loading'&&headlinesFor(h).length)?(function(){ var items=headlinesFor(h).map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow"><b>'+esc(x.source)+'</b>'+esc(x.title)+'</a>'; }).join(''); return '<div class="marquee" aria-label="'+esc(t('home_ticker'))+'"><div class="track">'+items+'<span aria-hidden="true" style="display:inline-flex;gap:40px">'+items.replace(/<a /g,'<a tabindex="-1" ')+'</span></div></div>'; })():'';
-  return marq+'<p class="kicker">'+esc(t('home_kicker'))+'</p><h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
+  return marq+picker+'<p class="kicker">'+esc(t('home_kicker'))+'</p><h1>'+(S.me?esc(t('home_hi_name',{n:S.me.display_name})):t('home_hi'))+'</h1><p class="sub">'+t('home_sub')+'</p>'+
     '<div class="chips" style="margin-top:14px">'+chips+'</div>'+
     (soon.length?'<div class="sec"><h2>'+t('home_remind')+'</h2><div class="list" style="margin-top:0">'+soon.map(eventCard).join('')+'</div></div>':'')+
     (friendEv.length?'<div class="sec"><h2>'+t('home_friends')+'</h2><div class="list" style="margin-top:0">'+friendEv.map(eventCard).join('')+'</div></div>':'')+
@@ -666,9 +711,10 @@ function viewAdmin(){
     Promise.all([
       data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name)').eq('status','pending').order('created_at',{ascending:true})),
       data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by,status,review_state,review_note').or('status.eq.pending,review_state.eq.unclear').neq('status','cancelled').order('starts_at',{ascending:true})),
-      data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true}))
-    ]).then(function(r){ cache.admin={verif:r[0],events:r[1],reports:r[2]}; if(location.hash==='#admin') render(false); })
-      .catch(function(err){ cache.admin={verif:[],events:[],reports:[]}; fail(err); });
+      data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true})),
+      sb.rpc('admin_ref_stats',{p_days:30}).then(function(x){ return (x&&x.data)||[]; },function(){ return []; })
+    ]).then(function(r){ cache.admin={verif:r[0],events:r[1],reports:r[2],refs:r[3]||[]}; if(location.hash==='#admin') render(false); })
+      .catch(function(err){ cache.admin={verif:[],events:[],reports:[],refs:[]}; fail(err); });
   }
   var a=cache.admin;
   if(a==='loading') return '<h1>'+t('admin_t')+'</h1>'+loadingBox();
@@ -685,8 +731,9 @@ function viewAdmin(){
     var target=x.target_event?'<a class="link" href="#event-'+x.target_event+'">Event #'+x.target_event+'</a>':'Profil '+esc(String(x.target_profile).slice(0,8));
     return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.reason)+'</b> · '+target+'</p>'+(x.details?'<p>'+esc(x.details)+'</p>':'')+
       '<div class="row"><button type="button" class="btn small" data-act="adm-report" data-id="'+x.id+'">'+t('done')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
+  var refs=(a.refs||[]).length?'<table class="reftab"><thead><tr><th></th><th>'+t('ref_visits')+'</th><th>'+t('ref_signups')+'</th></tr></thead><tbody>'+a.refs.map(function(x){ return '<tr><td>'+esc(x.ref)+'</td><td>'+(+x.visits)+'</td><td>'+(+x.signups)+'</td></tr>'; }).join('')+'</tbody></table>':emptyBox(t('none_yet'));
   return '<a class="back" href="#me">← '+t('back')+'</a><h1>'+t('admin_t')+'</h1>'+
-    '<div class="sec"><h2>'+t('adm_verif')+'</h2>'+ver+'</div><div class="sec"><h2>'+t('adm_events')+'</h2>'+evs+'</div><div class="sec"><h2>'+t('adm_reports')+'</h2>'+reps+'</div>';
+    '<div class="sec"><h2>'+t('adm_refs')+'</h2><p class="sub">'+t('adm_refs_sub')+'</p>'+refs+'</div><div class="sec"><h2>'+t('adm_verif')+'</h2>'+ver+'</div><div class="sec"><h2>'+t('adm_events')+'</h2>'+evs+'</div><div class="sec"><h2>'+t('adm_reports')+'</h2>'+reps+'</div>';
 }
 
 /* ---------- Map: MapLibre GL (GPU) on OpenFreeMap vector tiles, restyled grey ---------- */
@@ -933,11 +980,11 @@ document.addEventListener('click',function(ev){
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
   else if(act==='type'){ S.type=id; render(false); }
-  else if(act==='share'){ var se=evt(+id), sv2=se&&venue(se.v), url=location.href.split('#')[0]+'#event-'+id, txt=se?se.title+' · '+(sv2?sv2.name:''):'';
-    if(navigator.share) navigator.share({title:txt,text:txt,url:url}).catch(function(){});
-    else if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ toast(t('copied')); },function(){ toast(url); });
-    else toast(url); }
-  else if(act==='homecity'){ S.homeCity=id; render(false); }
+  else if(act==='share'){ var sm=shareMsg(evt(+id),'share');
+    if(navigator.share) navigator.share({title:sm.title,text:sm.text,url:sm.url}).catch(function(){});
+    else copyText(sm.url); }
+  else if(act==='copylink'){ copyText(shareMsg(evt(+id),'link').url); }
+  else if(act==='homecity'){ setCity(id); render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
   else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
   else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h');
@@ -972,6 +1019,7 @@ document.addEventListener('click',function(ev){
 document.addEventListener('change',function(ev){
   var sel=ev.target.getAttribute&&ev.target.getAttribute('data-sel');
   if(sel){ S[sel]=ev.target.value; render(false); }
+  if(ev.target.id==='cp-other'&&ev.target.value){ setCity(ev.target.value); render(false); }
 });
 document.addEventListener('input',function(ev){
   if(ev.target.id==='f-q'){ S.q=ev.target.value; var l=document.getElementById('evlist'); if(l) l.innerHTML=eventsListHTML(); }
@@ -990,7 +1038,7 @@ document.addEventListener('submit',function(ev){
       if(pw.length<8){ errEl.textContent=t('err_pw'); return; }
       if(!fd.get('age')){ errEl.textContent=t('terms'); return; }
       busy(true);
-      sb.auth.signUp({email:email,password:pw,options:{data:{display_name:name},emailRedirectTo:location.origin+location.pathname+'#me'}}).then(function(r){
+      sb.auth.signUp({email:email,password:pw,options:{data:REF?{display_name:name,ref:REF}:{display_name:name},emailRedirectTo:location.origin+location.pathname+'#me'}}).then(function(r){
         busy(false);
         if(r.error){ errEl.textContent=r.error.message||t('err_generic'); return; }
         if(!r.data.session){ S.authMsg=t('signup_done'); S.authTab='login'; render(false); }

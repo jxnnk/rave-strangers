@@ -309,3 +309,20 @@ footer{color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:
 .steps{list-style:none;margin:18px 0;padding:0;display:grid;gap:10px}
 .steps li{display:flex;gap:12px;align-items:center;color:var(--text)}
 .steps li span{flex:0 0 28px;height:28px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:12px;font-weight:600}
+
+/* first-visit city picker */
+.citypick{border:1px solid var(--accent);padding:16px;margin:4px 0 22px;background:var(--surface)}
+.citypick h2{margin:2px 0 6px}
+.cpgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0 10px}
+.cpgrid .btn{justify-content:space-between;width:100%}
+.cpgrid .btn em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted,#9a978f)}
+.citypick select{width:100%}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* who is coming? */
+.crewshare{margin-top:22px;padding:14px;border:1px solid var(--line,#2a2a2e);border-left:3px solid var(--accent)}
+.crewshare h2{margin:0 0 4px}
+.crewshare .row{margin-top:10px}
+/* admin sources */
+.reftab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.reftab th,.reftab td{padding:6px 8px;border-bottom:1px solid var(--line,#2a2a2e);text-align:right}
+.reftab th:first-child,.reftab td:first-child{text-align:left}
