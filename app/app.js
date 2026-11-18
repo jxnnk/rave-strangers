@@ -243,7 +243,13 @@ function loadBase(){
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
     loadRatings().then(function(){ if(S.ready) render(false); });
+    loadCrewCounts();
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
+}
+
+var CREWN={};
+function loadCrewCounts(){
+  return sb.rpc('crew_counts').then(function(r){ if(r&&r.error) throw r.error; CREWN={}; ((r&&r.data)||[]).forEach(function(x){ CREWN[x.event_id]={c:x.crew||0,r:x.rides||0}; }); if(S.ready) render(false); }).catch(function(){});
 }
 function loadMine(){
   if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
@@ -328,7 +334,7 @@ function eventCard(e){
   var tag=tixTag(e)+(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
   return '<a class="ev" href="#event-'+e.id+'"><div class="date"><em>'+esc(fmtDow(d))+'</em><b>'+d.getDate()+'</b><span>'+esc(fmtMonth(d))+'</span></div>'+
     '<div><h3>'+esc(e.title)+tag+'</h3><p class="meta">'+esc(v?v.name:'')+(v?' · '+esc(v.city):'')+(e.time?' · '+esc(e.time):'')+'</p><div class="chips">'+genreTags(e.genres)+'</div></div>'+
-    '<div class="side">'+(isNew(e)&&forYou(e)?'<span class="newb">'+t('new_badge')+'</span>':'')+cdHTML(e)+(fr.length?'<span class="fr">'+t('fr_n',{n:fr.length})+'</span>':'')+(n?'<span>'+(has(S.going,e.id)?'✓ ':'')+t('going_n',{n:n})+'</span>':'')+'</div></a>';
+    '<div class="side">'+(isNew(e)&&forYou(e)?'<span class="newb">'+t('new_badge')+'</span>':'')+cdHTML(e)+(fr.length?'<span class="fr">'+t('fr_n',{n:fr.length})+'</span>':'')+(CREWN[e.id]&&CREWN[e.id].c?'<span class="crewb">'+t('crew_cnt',{n:CREWN[e.id].c})+'</span>':'')+(n?'<span>'+(has(S.going,e.id)?'✓ ':'')+t('going_n',{n:n})+'</span>':'')+'</div></a>';
 }
 function socialsHTML(soc){
   var items=SOC.filter(function(s){ return soc&&soc[s[0]]; });
@@ -637,7 +643,7 @@ function loadCrew(id){
 }
 function crewHTML(e){
   var head='<div class="sec crew"><h2>'+t('crew_find')+'</h2><p class="sub">'+t('crew_find_sub')+'</p>';
-  if(!S.user) return head+'<div class="empty"><a class="link" href="#login" data-act="loginhere">'+t('crew_login')+'</a></div></div>';
+  if(!S.user){ var cn=(CREWN[e.id]&&CREWN[e.id].c)||0; return head+'<div class="empty">'+(cn?'<b>'+t('crew_cnt',{n:cn})+'.</b> ':'')+'<a class="link" href="#login" data-act="loginhere">'+t('crew_login')+'</a></div></div>'; }
   var list=cache.crew[e.id];
   if(list===undefined){ loadCrew(e.id); list='loading'; }
   if(list==='loading') return head+loadingBox()+'</div>';
@@ -1258,7 +1264,7 @@ document.addEventListener('submit',function(ev){
     var cb=String(fd.get('body')||'').trim(), ceid=+f.getAttribute('data-id');
     if(cb.length<2) return;
     busy(true);
-    data(sb.from('crew_posts').insert({event_id:ceid,author:S.user.id,body:cb.slice(0,280)})).then(function(){ busy(false); delete cache.crew[ceid]; buzz(); render(false); })
+    data(sb.from('crew_posts').insert({event_id:ceid,author:S.user.id,body:cb.slice(0,280)})).then(function(){ busy(false); delete cache.crew[ceid]; buzz(); loadCrewCounts(); render(false); })
       .catch(function(err){ busy(false); fail(err); });
   } else if(kind==='ride'){
     if(needLogin()) return;
