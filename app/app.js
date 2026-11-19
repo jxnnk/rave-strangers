@@ -882,7 +882,9 @@ function venueEvents(id,list){ return (list||mapEvents()).filter(function(e){ re
 function evCountLabel(n){ return n===1?t('ev_one'):t('ev_many',{n:n}); }
 function starsHTML(x){ var r=Math.round(x||0), s=''; for(var i=1;i<=5;i++) s+='<span class="'+(i<=r?'on':'')+'">★</span>'; return '<span class="stars5" aria-label="'+(x||0)+' / 5">'+s+'</span>'; }
 function ratingLine(id){ var r=RATINGS[id]; return r&&r.n?'<span class="rate">'+starsHTML(r.avg)+' <b>'+String(r.avg).replace('.',S.lang==='de'?',':'.')+'</b> <em>('+r.n+')</em></span>':'<span class="rate none">'+t('no_rating')+'</span>'; }
-function routeUrl(v){ return 'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lon; }
+function isApple(){ var u=navigator.userAgent||''; return /iPhone|iPad|iPod|Macintosh/.test(u)&&!/Android/.test(u); }
+function routeUrl(v){ /* Apple-Geräte -> Apple Karten, sonst Google Maps */
+  return isApple() ? 'https://maps.apple.com/?daddr='+v.lat+','+v.lon+'&dirflg=d' : 'https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lon; }
 
 function sheetHTML(){
   var v=S.mapSel?venue(S.mapSel):null;

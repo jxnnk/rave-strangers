@@ -1,4 +1,5 @@
 // Shared building blocks of the NACHTSCHICHT design.
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,7 +17,15 @@ Future<void> openUrl(String url) async {
   } catch (_) {}
 }
 
-String routeUrl(Venue v) => 'https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lon}';
+/// Route to the venue in the phone's own maps app:
+/// iPhone/iPad -> Apple Maps, Android -> Google Maps (app if installed, else browser).
+String routeUrl(Venue v) {
+  final p = defaultTargetPlatform;
+  if (!kIsWeb && (p == TargetPlatform.iOS || p == TargetPlatform.macOS)) {
+    return 'https://maps.apple.com/?daddr=${v.lat},${v.lon}&dirflg=d';
+  }
+  return 'https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lon}';
+}
 
 void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
