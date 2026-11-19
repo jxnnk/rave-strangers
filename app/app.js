@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    alarm_set:'Ticket-Alarm',alarm_on:'Ticket-Alarm an',alarm_note:'Noch keine Tickets? Aktivier den Ticket-Alarm, wir sagen dir Bescheid, sobald sie da sind.',alarm_toast:'Ticket-Alarm an. Wir melden uns, sobald es Tickets gibt.',get_tix:'Tickets',inbox_t:'Benachrichtigungen',inbox_empty:'Noch nichts da. Merk dir Events oder folge Clubs. Dann melden wir uns hier, sobald Tickets rauskommen oder neue Termine dazukommen.',n_tickets:'Tickets sind da: {e}',n_new:'Neu bei {v}: {e}',n_rem:'Morgen: {e}',inbox_note:'Push-Nachrichten aufs Handy kommen mit der App. Bis dahin landet alles hier.',
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
     home_hi:'Was geht',inst_t:'Rave Strangers als App',inst_sub:'Leg die App auf deinen Startbildschirm. Dann öffnet sie sich wie eine normale App.',inst_btn:'Installieren',inst_ios:'Auf dem iPhone: unten auf Teilen tippen, dann „Zum Home-Bildschirm“.',inst_x:'Später',ride_t:'Mitfahren',ride_sub:'Fährst du mit dem Auto hin und hast Plätze frei? Oder suchst du eine Mitfahrt? Schreib den Fahrer direkt an und teilt euch die Spritkosten.',ride_from:'Abfahrt in',ride_when:'Abfahrtszeit',ride_seats:'Freie Plätze',ride_note:'Hinweis (optional)',ride_note_ph:'z.B. Rückfahrt ca. 6 Uhr, Spritkosten teilen',ride_offer:'Mitfahrt anbieten',ride_none:'Noch keine Mitfahrten. Fährst du hin? Biete Plätze an.',ride_login:'Logg dich ein, um Mitfahrten zu sehen und anzubieten.',ride_line:'{from} → {to}',ride_seats_n:'{n} Plätze frei',ride_seat_1:'1 Platz frei',ride_open:'+ Mitfahrt anbieten',ride_mine:'Deine Fahrt',del_t:'Konto löschen',del_sub:'Löscht dein Profil, deine Zusagen, Crew-Einträge, Nachrichten und Bewertungen endgültig. Das lässt sich nicht rückgängig machen.',del_btn:'Konto endgültig löschen',del_q:'Wirklich löschen? Tipp zur Bestätigung LÖSCHEN ein.',del_word:'LÖSCHEN',del_done:'Dein Konto wurde gelöscht.',crew_find:'Crew finden',crew_find_sub:'Allein unterwegs oder noch Platz in der Gruppe? Schreib kurz, wer du bist. Andere können dich direkt anschreiben.',crew_ph:'z.B. Wir sind zu zweit aus Neukölln und suchen noch Leute zum Vorglühen und Hingehen',crew_post:'Eintragen',crew_del:'Löschen',crew_none:'Noch sucht niemand Anschluss. Trag dich als Erste:r ein.',crew_login:'Logg dich ein, um zu sehen, wer für diesen Abend noch Leute sucht.',crew_mine:'Dein Eintrag',msg_btn:'Nachricht',chats:'Chats',chats_none:'Noch keine Chats. Schreib Leute bei einem Event unter „Crew finden“ an.',chat_ph:'Nachricht …',send:'Senden',chat_safety:'Triff dich zuerst an öffentlichen Orten und teil nur, was du teilen willst.',rate_limited:'Zu viele Nachrichten, warte kurz.',unread_n:'{n} neu',chat_with:'Chat mit {n}',you_:'Du',block_q:'{n} blockieren? Ihr seht euch dann nicht mehr und könnt euch nicht mehr schreiben.',crew_cnt:'{n} suchen Leute',pick_kicker:'Willkommen',pick_t:'Wo ravst du?',pick_sub:'Wähl deine Stadt, dann zeigen wir dir zuerst, was dort läuft. Du kannst sie jederzeit oben ändern.',pick_other:'Andere Stadt',pick_all:'Überall in DE',crew_t:'Wer kommt mit?',crew_sub:'Schick das Event in deine Gruppe. Wer zusagt, sieht, wer noch hingeht.',crew_wa:'In WhatsApp teilen',crew_more:'Teilen …',crew_copy:'Link kopieren',crew_msg:'Kommst du mit? 🖤',crew_going:'{n} gehen schon hin',adm_refs:'Herkunft (30 Tage)',adm_refs_sub:'Besuche über geteilte Links und neue Konten je Quelle.',ref_visits:'Besuche',ref_signups:'Konten',home_hi_name:'Was geht, {n}',home_sub:'Dein Wochenende, News aus der Szene und was neu ist.',home_city:'Stadt',home_all:'Überall',
     home_weekend:'Dein Wochenende',home_today:'Heute und morgen',home_weekend_none:'Für dieses Wochenende ist hier noch nichts eingetragen.',home_all_events:'Alle Events',
@@ -67,6 +68,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    alarm_set:'Ticket alert',alarm_on:'Ticket alert on',alarm_note:'No tickets yet? Turn on the ticket alert and we will tell you as soon as they are out.',alarm_toast:'Ticket alert on. We will let you know when tickets are out.',get_tix:'Tickets',inbox_t:'Notifications',inbox_empty:'Nothing here yet. Save events or follow clubs and we will tell you here when tickets drop or new dates are added.',n_tickets:'Tickets are out: {e}',n_new:'New at {v}: {e}',n_rem:'Tomorrow: {e}',inbox_note:'Push notifications to your phone arrive with the app. Until then everything lands here.',
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
     home_hi:'What’s up',inst_t:'Rave Strangers as an app',inst_sub:'Add it to your home screen and it opens like a normal app.',inst_btn:'Install',inst_ios:'On iPhone: tap Share at the bottom, then “Add to Home Screen”.',inst_x:'Later',ride_t:'Ride share',ride_sub:'Driving there with free seats, or looking for a ride? Message the driver directly and split the fuel costs.',ride_from:'Leaving from',ride_when:'Departure',ride_seats:'Free seats',ride_note:'Note (optional)',ride_note_ph:'e.g. Back around 6am, split fuel',ride_offer:'Offer a ride',ride_none:'No rides yet. Driving there? Offer seats.',ride_login:'Log in to see and offer rides.',ride_line:'{from} → {to}',ride_seats_n:'{n} seats free',ride_seat_1:'1 seat free',ride_open:'+ Offer a ride',ride_mine:'Your ride',del_t:'Delete account',del_sub:'Permanently deletes your profile, plans, crew posts, messages and reviews. This cannot be undone.',del_btn:'Delete account permanently',del_q:'Really delete? Type DELETE to confirm.',del_word:'DELETE',del_done:'Your account was deleted.',crew_find:'Find a crew',crew_find_sub:'Going alone or room in your group? Say who you are. Others can message you directly.',crew_ph:'e.g. Two of us from Neukölln, looking for people for pre-drinks and going together',crew_post:'Post',crew_del:'Delete',crew_none:'Nobody is looking yet. Be the first.',crew_login:'Log in to see who is still looking for people for this night.',crew_mine:'Your post',msg_btn:'Message',chats:'Chats',chats_none:'No chats yet. Message people at an event under “Find a crew”.',chat_ph:'Message …',send:'Send',chat_safety:'Meet in public places first and only share what you want to share.',rate_limited:'Too many messages, wait a moment.',unread_n:'{n} new',chat_with:'Chat with {n}',you_:'You',block_q:'Block {n}? You will no longer see or message each other.',crew_cnt:'{n} looking for people',pick_kicker:'Welcome',pick_t:'Where do you rave?',pick_sub:'Pick your city and we show you what is on there first. You can change it any time at the top.',pick_other:'Other city',pick_all:'All of Germany',crew_t:'Who is coming?',crew_sub:'Send the event to your group. Whoever says yes sees who else is going.',crew_wa:'Share on WhatsApp',crew_more:'Share …',crew_copy:'Copy link',crew_msg:'Coming along? 🖤',crew_going:'{n} already going',adm_refs:'Sources (30 days)',adm_refs_sub:'Visits via shared links and new accounts per source.',ref_visits:'Visits',ref_signups:'Accounts',home_hi_name:'What’s up, {n}',home_sub:'Your weekend, news from the scene and what is new.',home_city:'City',home_all:'Everywhere',
     home_weekend:'Your weekend',home_today:'Today and tomorrow',home_weekend_none:'Nothing listed here for this weekend yet.',home_all_events:'All events',
@@ -252,12 +254,12 @@ function loadCrewCounts(){
   return sb.rpc('crew_counts').then(function(r){ if(r&&r.error) throw r.error; CREWN={}; ((r&&r.data)||[]).forEach(function(x){ CREWN[x.event_id]={c:x.crew||0,r:x.rides||0}; }); if(S.ready) render(false); }).catch(function(){});
 }
 function loadMine(){
-  if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
+  if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.alarms=[]; S.notes=[]; updateBell(); S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
   var uid=S.user.id;
   return Promise.all([
     data(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
     data(sb.from('attendance').select('event_id,profile_id')),
-    data(sb.from('bookmarks').select('event_id').eq('profile_id',uid)),
+    data(sb.from('bookmarks').select('event_id,remind').eq('profile_id',uid)),
     data(sb.from('artist_verifications').select('id,status,created_at').eq('profile_id',uid).order('created_at',{ascending:false}).limit(1)),
     data(sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,role)').eq('follower',uid)),
     data(sb.from('venue_follows').select('venue_id').eq('profile_id',uid))
@@ -266,12 +268,49 @@ function loadMine(){
     S.counts={}; S.going=[];
     r[1].forEach(function(a){ S.counts[a.event_id]=(S.counts[a.event_id]||0)+1; if(a.profile_id===uid) S.going.push(a.event_id); });
     S.saved=r[2].map(function(b){ return b.event_id; });
+    S.alarms=r[2].filter(function(b){ return b.remind; }).map(function(b){ return b.event_id; });
+    loadInbox();
     S.verif=r[3][0]||null;
     S.follow=r[4].map(function(x){ return x.profiles; }).filter(Boolean);
     S.vfollow=r[5].map(function(x){ return x.venue_id; });
     S.attRows=r[1];
   }).catch(fail);
 }
+/* ---------- Ticket alert + notifications (DB 021) ---------- */
+S.alarms=[]; S.notes=[];
+function needsAlarm(e){ var st=e.tstatus||'unknown'; return !e.ticket||st==='sold_out'||st==='unknown'; }
+function alarmBtn(e,primary){ var on=has(S.alarms,e.id);
+  return '<button type="button" class="btn'+(on?' on':(primary?' primary':''))+'" data-act="alarm" data-id="'+e.id+'" aria-pressed="'+on+'">'+(on?'🔔 ✓ '+t('alarm_on'):'🔔 '+t('alarm_set'))+'</button>'; }
+function tixCta(e){ var st=e.tstatus||'unknown';
+  if(e.ticket&&st!=='sold_out') return '<a class="btn primary" href="'+esc(e.ticket)+'" target="_blank" rel="noopener">'+t('get_tix')+' ↗</a>';
+  if(st==='sold_out') return '<a class="btn primary" href="'+esc(swapUrl(e))+'" target="_blank" rel="noopener nofollow">TicketSwap ↗</a>';
+  return alarmBtn(e,true); }
+function unreadNotes(){ return S.notes.filter(function(n){ return !n.read_at; }).length; }
+function updateBell(){ var b=document.getElementById('bell'); if(!b) return; b.hidden=!S.user; var n=unreadNotes(), c=b.querySelector('b'); c.textContent=n>9?'9+':String(n); c.hidden=!n; b.setAttribute('aria-label',t('inbox_t')+(n?' ('+n+')':'')); }
+function loadInbox(){ if(!S.user) return;
+  data(sb.from('notifications').select('id,kind,event_id,venue_id,created_at,read_at').order('created_at',{ascending:false}).limit(50))
+    .then(function(r){ S.notes=r; updateBell(); if(route().tab==='me'&&location.hash==='#inbox') render(false); }).catch(function(){}); }
+setInterval(function(){ if(S.user&&!document.hidden) loadInbox(); },60000);
+function viewInbox(){
+  if(!S.user) return viewLogin();
+  var rows=S.notes.map(function(n){ var e=evt(n.event_id), v=venue(n.venue_id), ti=e?e.title:'…';
+    var txt=n.kind==='tickets'?t('n_tickets',{e:ti}):n.kind==='new_event'?t('n_new',{v:v?v.name:'',e:ti}):t('n_rem',{e:ti});
+    var ic=n.kind==='tickets'?'🎟':n.kind==='new_event'?'✦':'⏰';
+    return '<a class="note'+(n.read_at?'':' unread')+'" href="'+(e?'#event-'+e.id:'#inbox')+'"><span class="ic">'+ic+'</span><div class="grow"><strong>'+esc(txt)+'</strong><p>'+esc(ago(n.created_at))+'</p></div></a>'; }).join('');
+  if(unreadNotes()) setTimeout(markNotesRead,2000);
+  return '<a class="back" href="#me">← '+t('nav_me')+'</a><h1>'+t('inbox_t')+'</h1><div class="sec notes">'+(rows||emptyBox(t('inbox_empty')))+'</div><p class="sub" style="font-size:13px">'+t('inbox_note')+'</p>';
+}
+function markNotesRead(){ if(!S.user||!unreadNotes()) return; var now=new Date().toISOString();
+  S.notes.forEach(function(n){ if(!n.read_at) n.read_at=now; }); updateBell();
+  sb.from('notifications').update({read_at:now}).is('read_at',null).then(function(){},function(){}); }
+function toggleAlarm(id){
+  if(needLogin()) return;
+  var on=has(S.alarms,id);
+  if(on) S.alarms.splice(S.alarms.indexOf(id),1); else { S.alarms.push(id); if(!has(S.saved,id)) S.saved.push(id); }
+  buzz(); render(false); if(!on) toast(t('alarm_toast'));
+  data(sb.from('bookmarks').upsert({event_id:id,profile_id:S.user.id,remind:!on})).catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); });
+}
+
 function resetCaches(){ cache={att:{},profile:{},artists:null,connect:null,subs:null,admin:null,home:null,reviews:{},crew:{},rides:{},chats:null,chat:{}}; }
 
 /* ---------- Shared pieces ---------- */
@@ -367,7 +406,7 @@ function ticketsHTML(e){
   var links='<div class="row" style="margin-top:12px">'+(off?'<a class="btn'+(st!=='sold_out'?' primary':'')+'" href="'+esc(off)+'" target="_blank" rel="noopener">'+t('tix_official')+' ↗</a>':'')+
     (e.resale?'<a class="btn" href="'+esc(e.resale)+'" target="_blank" rel="noopener">'+t('tix_resale_off')+' ↗</a>':'')+
     '<a class="btn" href="'+esc(swapUrl(e))+'" target="_blank" rel="noopener nofollow">'+t('tix_swap',{v:(venue(e.v)||{}).name||''})+' ↗</a></div><p class="sub" style="font-size:13px">'+t('tix_swap_note')+'</p>';
-  return head+links+scamHTML();
+  return head+(needsAlarm(e)?'<p class="sub" style="margin-top:12px">'+t('alarm_note')+'</p><div class="row">'+alarmBtn(e,false)+'</div>':'')+links+scamHTML();
 }
 function awareHTML(v){ var a=v&&v.rules&&v.rules.aware; return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(a?'<br><b>'+esc(t('aware_team',{x:a}))+'</b>':'')+'</div></div>'; }
 function reportForm(kind,id){
@@ -425,7 +464,7 @@ function viewEvent(id){
     '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+(e.endDate&&e.endDate!==e.date?' – '+esc(fmtLong(dayOf(e.endOff))):'')+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
     '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div></dl>'+
     (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
-    '<div class="row" style="margin-top:20px"><button type="button" class="btn '+(go?'on':'primary')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
+    '<div class="row" style="margin-top:20px">'+tixCta(e)+'<button type="button" class="btn '+(go?'on':'')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
     '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button></div>'+
     '<div class="crewshare"><h2>'+t('crew_t')+'</h2><p class="sub">'+t('crew_sub')+'</p><div class="row">'+
       '<a class="btn primary" href="'+esc(waUrl(e))+'" target="_blank" rel="noopener" data-act="crewwa" data-id="'+e.id+'">'+t('crew_wa')+' ↗</a>'+
@@ -1080,6 +1119,7 @@ function route(){
     case 'chats': return {tab:'connect',html:viewChats()};
     case 'chat': return {tab:'connect',html:viewChat(+arg)};
     case 'me': return {tab:'me',html:viewMe()};
+    case 'inbox': return {tab:'me',html:viewInbox()};
     case 'login': return {tab:'me',html:viewLogin()};
     case 'newpw': return {tab:'me',html:viewNewPw()};
     case 'reset': return {tab:'me',html:viewReset()};
@@ -1100,6 +1140,7 @@ function render(scroll){
   document.getElementById('tabs').innerHTML=['home','events','map','connect','me'].map(function(k){
     return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
   view.innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
+  updateBell();
   if(r.map) mountMap();
   if(scroll) window.scrollTo(0,0);
 }
@@ -1118,6 +1159,7 @@ function adminAct(p){ p.then(function(){ cache.admin=null; render(false); }).cat
 document.addEventListener('click',function(ev){
   var el=ev.target.closest('[data-act]'); if(!el) return;
   var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
+  if(act==='alarm'){ toggleAlarm(+id); return; }
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
   else if(act==='type'){ S.type=id; render(false); }
@@ -1137,7 +1179,7 @@ document.addEventListener('click',function(ev){
     if(on2) S.vfollow.splice(S.vfollow.indexOf(vid2),1); else S.vfollow.push(vid2);
     render(false); vq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
   else if(act==='loginhere'){ try{ sessionStorage.setItem('rs-after',location.hash); }catch(e){} }
-  else if(act==='save'){ if(S.user) buzz(); toggleRow('bookmarks',+id,S.saved); }
+  else if(act==='save'){ if(S.user){ buzz(); if(has(S.saved,+id)&&has(S.alarms,+id)) S.alarms.splice(S.alarms.indexOf(+id),1); } toggleRow('bookmarks',+id,S.saved); }
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
   else if(act==='forgot'){ S.resetMail=((document.getElementById('a-mail')||{}).value||'').trim(); S.resetErr=''; location.hash='#reset'; }
   else if(act==='delacct'){
