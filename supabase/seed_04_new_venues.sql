@@ -62,3 +62,13 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
 insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('ROXY – Kultur in Ulm','Ulm','Schillerstraße, 89077 Ulm',48.3916798,9.9855877,false,null,'club'),
  ('Hallo Werner','Augsburg','Schrannenstraße 8, 86150 Augsburg',48.3654108,10.8909229,false,null,'club');
+
+-- 2026-11-19 nächtlicher Lauf (Sachsen-Anhalt/MV/Brandenburg, NRW, Festivals)
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Helgas Stadtpalast','Rostock','Am Vögenteich 19, 18057 Rostock',54.0852224,12.1252806,false,null,'club'),
+ ('Zwischenbau','Rostock','Erich-Schlesinger-Straße 19a, 18059 Rostock',54.0787788,12.1146801,false,null,'club'),
+ ('Burg Storkow','Storkow (Mark)','Schloßstraße, 15859 Storkow (Mark)',52.2528076,13.9332350,true,null,'event_site'),
+ ('FZW','Dortmund','Ritterstraße 20, 44137 Dortmund',51.5149728,7.4501291,false,null,'club'),
+ ('Drucklufthaus','Oberhausen','Am Förderturm 27, 46049 Oberhausen',51.4726361,6.8465168,false,null,'club'),
+ ('Auto Böhler Schrottplatz (Hasardeur)','Karlsruhe','Ottostraße 6, 76227 Karlsruhe',48.9973298,8.4477550,false,'https://hasardeur-festival.de/','event_site'),
+ ('Stoppelmarkt Vechta','Vechta','Stoppelmarkt, 49377 Vechta',52.7479851,8.2956479,true,'https://www.tantemiatanzt.de/','event_site');
