@@ -35,3 +35,19 @@ Folgen, Bewertungen schreiben, Freunde-Pläne, Events eintragen, Admin. Kommt Sc
   klären wir einen dauerhaften Kartenanbieter.
 - Für einen Release-Build braucht Android noch `<uses-permission android:name="android.permission.INTERNET"/>`
   in `android/app/src/main/AndroidManifest.xml` (im Debug-Modus ist sie automatisch da).
+
+## Karte: Apple Karten auf iPhone/iPad
+
+- iOS zeigt die native Apple-Karte (`lib/screens/apple_map_layer.dart`, Paket `apple_maps_flutter`), Android weiter OpenStreetMap.
+- Nahe Clubs werden zu Zahlen-Bubbles zusammengefasst, Tippen zoomt hinein, ab Zoom 14 steht jeder Club einzeln.
+- Kostenlos, kein API-Key. Bauen nur auf einem Mac oder per Cloud-Build (z. B. Codemagic), Apple-Entwicklerkonto nötig.
+- Nach `flutter create .` in `ios/Runner/Info.plist` ergänzen:
+
+```xml
+<!-- App und Karte immer im Dunkelmodus -->
+<key>UIUserInterfaceStyle</key>
+<string>Dark</string>
+<!-- Pflichttext, weil das Karten-Paket Standort-Funktionen enthält. Wir fragen den Standort nicht ab. -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Rave Strangers nutzt deinen Standort nicht. Die Karte zeigt nur Clubs.</string>
+```

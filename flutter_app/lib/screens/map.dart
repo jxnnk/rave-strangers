@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,6 +8,7 @@ import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import 'apple_map_layer.dart';
 import 'club.dart';
 
 // Light raster map turned into a steel-grey night map (inverted greyscale), so it is not pitch black.
@@ -28,11 +30,15 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final _ctrl = MapController();
+  final _apple = GlobalKey<AppleMapLayerState>();
+  // iPhone/iPad: native Apple Maps. Android (and everything else): OpenStreetMap.
+  bool get _useApple => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
   bool _onlyEvents = false;
   bool _names = false;
   int? _selected;
 
   void _zoom(double delta) {
+    if (_useApple) return _apple.currentState?.zoomBy(delta);
     final c = _ctrl.camera;
     _ctrl.move(c.center, (c.zoom + delta).clamp(4.5, 17.0).toDouble());
   }
@@ -71,6 +77,9 @@ class _MapScreenState extends State<MapScreen> {
           ..sort((a, b) => (count[a.id] ?? 0).compareTo(count[b.id] ?? 0));
 
         return Stack(children: [
+          if (_useApple)
+            AppleMapLayer(key: _apple, venues: vs, counts: count, onVenue: _preview)
+          else
           FlutterMap(
             mapController: _ctrl,
             options: MapOptions(
@@ -177,12 +186,14 @@ class _MapScreenState extends State<MapScreen> {
                     Container(width: 42, height: 1, color: C.line2),
                     _MapBtn(Icons.remove, () => _zoom(-1)),
                     Container(width: 42, height: 1, color: C.line2),
-                    _MapBtn(Icons.crop_free, () => _ctrl.move(const LatLng(51.15, 10.4), 5.7)),
+                    _MapBtn(Icons.crop_free, () => _useApple ? _apple.currentState?.reset() : _ctrl.move(const LatLng(51.15, 10.4), 5.7)),
                   ]),
                 ),
               ),
             ),
           ),
+          // Apple Maps shows its own legal notice, OSM needs ours
+          if (!_useApple)
           Positioned(
             right: 4,
             bottom: 4,

@@ -12,6 +12,7 @@ dependencies:
   supabase_flutter: ^2.8.0
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
+  apple_maps_flutter: ^1.4.0 # iPhone/iPad map (native MapKit), unused on Android
   google_fonts: ^6.2.1
   url_launcher: ^6.3.0
   share_plus: ^10.1.0
