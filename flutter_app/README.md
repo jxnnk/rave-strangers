@@ -51,3 +51,11 @@ Folgen, Bewertungen schreiben, Freunde-Pläne, Events eintragen, Admin. Kommt Sc
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>Rave Strangers nutzt deinen Standort nicht. Die Karte zeigt nur Clubs.</string>
 ```
+
+## Karte Android
+
+Esri „Dark Gray Canvas“ (Raster, ohne API-Key). CARTO verlangt inzwischen einen Key. Vor großem Wachstum prüfen: Esri-Nutzungsbedingungen / kostenloses ArcGIS-Developer-Konto, oder auf MapLibre + OpenFreeMap (wie die Web-App) umsteigen.
+
+## Benachrichtigungen
+
+Tabelle `notifications` (Migration 021) wird per Trigger gefüllt: Tickets da, neuer Termin bei gefolgtem Club, Erinnerung am Tag vorher (pg_cron 12 Uhr). Die App zeigt sie unter der Glocke auf Home. Echte Push-Nachrichten: siehe LAUNCH.md (Firebase).
