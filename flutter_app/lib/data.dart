@@ -1,5 +1,8 @@
 // Data layer: same Supabase project, tables and rules as the web app.
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'strings.dart';
@@ -32,6 +35,16 @@ DateTime berlin(DateTime t) {
   final end = _lastSunday(u.year, 10).add(const Duration(hours: 1));
   final dst = !u.isBefore(start) && u.isBefore(end);
   return u.add(Duration(hours: dst ? 2 : 1));
+}
+
+/// Inverse of [berlin]: wall-clock time in Berlin -> UTC instant.
+DateTime berlinToUtc(DateTime local) {
+  final wall = DateTime.utc(local.year, local.month, local.day, local.hour, local.minute);
+  for (final h in [1, 2]) {
+    final u = wall.subtract(Duration(hours: h));
+    if (berlin(u) == wall) return u;
+  }
+  return wall.subtract(const Duration(hours: 1));
 }
 
 DateTime dayKey(DateTime b) => DateTime.utc(b.year, b.month, b.day);
@@ -152,7 +165,13 @@ class Store extends ChangeNotifier {
   List<Post> posts = [];
   Set<int> going = {};
   Set<int> saved = {};
+  Set<int> alarms = {}; // bookmarks with remind = ticket alert
+  Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
   Map<int, int> counts = {};
+  Map<int, int> crewN = {}, ridesN = {};
+  List<Map<String, dynamic>> notes = [];
+  int unreadChats = 0;
+  int get unreadNotes => notes.where((n) => n['read_at'] == null).length;
   Map<String, dynamic>? profile;
   bool loading = true;
   String? error;
@@ -161,8 +180,23 @@ class Store extends ChangeNotifier {
   String get lang => appLang;
 
   void setLang(String l) {
+    if (l == appLang) return;
     appLang = l;
     notifyListeners();
+    SharedPreferences.getInstance().then((p) => p.setString('lang', l)).catchError((_) => false);
+  }
+
+  /// Saved choice first, otherwise the phone's language (German -> de, everything else -> en).
+  Future<void> initLang() async {
+    try {
+      final p = await SharedPreferences.getInstance();
+      final saved = p.getString('lang');
+      if (saved == 'de' || saved == 'en') {
+        appLang = saved!;
+        return;
+      }
+    } catch (_) {}
+    appLang = ui.PlatformDispatcher.instance.locale.languageCode == 'de' ? 'de' : 'en';
   }
 
   Future<void> init() async {
@@ -194,6 +228,11 @@ class Store extends ChangeNotifier {
             .limit(10),
         sb.from('venue_ratings').select('venue_id,avg,n'),
       ]);
+      try {
+        final cc = await sb.rpc('crew_counts') as List;
+        crewN = {for (final m in cc) (m['event_id'] as int): (m['crew'] as int?) ?? 0};
+        ridesN = {for (final m in cc) (m['event_id'] as int): (m['rides'] as int?) ?? 0};
+      } catch (_) {}
       venues = {for (final m in r[0]) (m['id'] as int): Venue.fromMap(m)};
       events = r[1].map(Ev.fromMap).where((e) => venues.containsKey(e.venueId)).toList();
       headlines = r[2].map(Headline.fromMap).toList();
@@ -215,7 +254,10 @@ class Store extends ChangeNotifier {
     if (u == null) {
       going = {};
       saved = {};
-      counts = {};
+      alarms = {};
+      vfollow = {};
+      notes = [];
+      unreadChats = 0;
       profile = null;
       notifyListeners();
       return;
@@ -223,7 +265,7 @@ class Store extends ChangeNotifier {
     try {
       final p = await sb.from('profiles').select().eq('id', u.id).maybeSingle();
       final att = await sb.from('attendance').select('event_id,profile_id');
-      final bm = await sb.from('bookmarks').select('event_id').eq('profile_id', u.id);
+      final bm = await sb.from('bookmarks').select('event_id,remind').eq('profile_id', u.id);
       profile = p;
       final c = <int, int>{};
       final g = <int>{};
@@ -235,10 +277,87 @@ class Store extends ChangeNotifier {
       counts = c;
       going = g;
       saved = bm.map((b) => b['event_id'] as int).toSet();
+      alarms = bm.where((b) => b['remind'] == true).map((b) => b['event_id'] as int).toSet();
+      final vf = await sb.from('venue_follows').select('venue_id').eq('profile_id', u.id);
+      vfollow = vf.map((x) => x['venue_id'] as int).toSet();
     } catch (e) {
       debugPrint('loadMine failed: $e');
     }
     notifyListeners();
+    await loadInbox();
+  }
+
+  /// Notifications and unread chats (badge numbers).
+  Future<void> loadInbox() async {
+    if (user == null) return;
+    try {
+      final r = await sb
+          .from('notifications')
+          .select('id,kind,event_id,venue_id,created_at,read_at')
+          .order('created_at', ascending: false)
+          .limit(50);
+      notes = List<Map<String, dynamic>>.from(r);
+    } catch (e) {
+      debugPrint('notifications failed: $e');
+    }
+    try {
+      final c = await sb.rpc('my_chats') as List;
+      unreadChats = c.fold<int>(0, (a, m) => a + ((m['unread'] as int?) ?? 0));
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> markNotesRead() async {
+    if (user == null || unreadNotes == 0) return;
+    final now = DateTime.now().toUtc().toIso8601String();
+    for (final n in notes) {
+      n['read_at'] ??= now;
+    }
+    notifyListeners();
+    try {
+      await sb.from('notifications').update({'read_at': now}).isFilter('read_at', null);
+    } catch (e) {
+      debugPrint('mark read failed: $e');
+    }
+  }
+
+  Future<void> toggleVenueFollow(int venueId) async {
+    final u = user;
+    if (u == null) return;
+    final on = vfollow.contains(venueId);
+    on ? vfollow.remove(venueId) : vfollow.add(venueId);
+    notifyListeners();
+    try {
+      if (on) {
+        await sb.from('venue_follows').delete().eq('venue_id', venueId).eq('profile_id', u.id);
+      } else {
+        await sb.from('venue_follows').insert({'venue_id': venueId, 'profile_id': u.id});
+      }
+    } catch (e) {
+      debugPrint('venue follow failed: $e');
+      await loadMine();
+    }
+  }
+
+  /// Ticket alert = bookmark with remind. Turning it on also saves the event.
+  Future<bool> toggleAlarm(int id) async {
+    final u = user;
+    if (u == null) return false;
+    final on = alarms.contains(id);
+    if (on) {
+      alarms.remove(id);
+    } else {
+      alarms.add(id);
+      saved.add(id);
+    }
+    notifyListeners();
+    try {
+      await sb.from('bookmarks').upsert({'event_id': id, 'profile_id': u.id, 'remind': !on});
+    } catch (e) {
+      debugPrint('alarm failed: $e');
+      await loadMine();
+    }
+    return true;
   }
 
   /// Events that should be visible: upcoming, and temporary venues only shortly before.
@@ -267,7 +386,10 @@ class Store extends ChangeNotifier {
   }
 
   Future<bool> toggleGoing(int id) => _toggle('attendance', id, going, countsToo: true);
-  Future<bool> toggleSaved(int id) => _toggle('bookmarks', id, saved);
+  Future<bool> toggleSaved(int id) {
+    if (saved.contains(id)) alarms.remove(id);
+    return _toggle('bookmarks', id, saved);
+  }
 
   Future<bool> _toggle(String table, int id, Set<int> set, {bool countsToo = false}) async {
     final u = user;

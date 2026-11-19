@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data.dart';
+import 'screens/community.dart';
 import 'screens/events.dart';
 import 'screens/home.dart';
 import 'screens/map.dart';
@@ -19,6 +22,7 @@ Future<void> main() async {
     systemNavigationBarColor: C.bg,
     systemNavigationBarIconBrightness: Brightness.light,
   ));
+  await store.initLang();
   await Supabase.initialize(url: sbUrl, anonKey: sbKey);
   store.init();
   runApp(const RaveStrangersApp());
@@ -28,63 +32,115 @@ class RaveStrangersApp extends StatelessWidget {
   const RaveStrangersApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rave Strangers',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      home: const Shell(),
+    // The key makes the whole app (incl. opened pages) switch language at once.
+    return ListenableBuilder(
+      listenable: store,
+      builder: (context, _) => MaterialApp(
+        key: ValueKey(appLang),
+        title: 'Rave Strangers',
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(),
+        home: const Shell(),
+      ),
     );
   }
 }
 
-class Shell extends StatelessWidget {
+class Shell extends StatefulWidget {
   const Shell({super.key});
+  @override
+  State<Shell> createState() => _ShellState();
+}
+
+class _ShellState extends State<Shell> with WidgetsBindingObserver {
+  Timer? _poll;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // badges (notifications, unread chats) stay fresh while the app is open
+    _poll = Timer.periodic(const Duration(seconds: 60), (_) => store.loadInbox());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) store.loadInbox();
+  }
+
+  @override
+  void dispose() {
+    _poll?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      // rebuild on language change too
       listenable: Listenable.merge([tabIndex, store]),
+      // not const on purpose: the tabs must rebuild when data or language change
       builder: (context, _) => Scaffold(
         body: IndexedStack(
           index: tabIndex.value,
-          children: const [HomeScreen(), EventsScreen(), MapScreen(), ProfileScreen()],
+          children: [HomeScreen(), EventsScreen(), MapScreen(), CommunityScreen(), ProfileScreen()],
         ),
-        bottomNavigationBar: const _NavBar(),
+        bottomNavigationBar: _NavBar(tabIndex.value, store.unreadChats),
       ),
     );
   }
 }
 
 class _NavBar extends StatelessWidget {
-  const _NavBar();
+  final int current, chatBadge;
+  const _NavBar(this.current, this.chatBadge);
+
   @override
   Widget build(BuildContext context) {
-    const icons = [Icons.home_outlined, Icons.calendar_today_outlined, Icons.place_outlined, Icons.person_outline];
-    final labels = [t('tab_home'), t('tab_events'), t('tab_map'), t('tab_me')];
+    const icons = [Icons.home_outlined, Icons.calendar_today_outlined, Icons.place_outlined, Icons.groups_outlined, Icons.person_outline];
+    const iconsOn = [Icons.home, Icons.calendar_today, Icons.place, Icons.groups, Icons.person];
+    final labels = [t('tab_home'), t('tab_events'), t('tab_map'), t('tab_crew'), t('tab_me')];
     return Container(
       decoration: const BoxDecoration(color: C.bg, border: Border(top: BorderSide(color: C.line))),
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 60,
+          height: 62,
           child: Row(children: [
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < icons.length; i++)
               Expanded(
-                child: InkWell(
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    tabIndex.value = i;
-                  },
-                  child: Stack(alignment: Alignment.center, children: [
-                    if (tabIndex.value == i)
-                      Positioned(top: 0, left: 24, right: 24, child: Container(height: 2, color: C.accent)),
-                    Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Icon(icons[i], size: 22, color: tabIndex.value == i ? C.text : C.muted),
-                      const SizedBox(height: 4),
-                      Text(labels[i].toUpperCase(),
-                          style: mono(9.5, color: tabIndex.value == i ? C.text : C.muted, spacing: 1)),
+                child: Semantics(
+                  selected: current == i,
+                  button: true,
+                  label: labels[i],
+                  child: InkWell(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      tabIndex.value = i;
+                    },
+                    child: Stack(alignment: Alignment.center, children: [
+                      // red bar slides to the active tab
+                      Positioned(
+                        top: 0,
+                        left: 18,
+                        right: 18,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          height: 2,
+                          color: current == i ? C.accent : Colors.transparent,
+                        ),
+                      ),
+                      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        Stack(clipBehavior: Clip.none, children: [
+                          Icon(current == i ? iconsOn[i] : icons[i], size: 22, color: current == i ? C.text : C.muted),
+                          if (i == 3 && chatBadge > 0) Positioned(right: -10, top: -6, child: Badge0(chatBadge)),
+                        ]),
+                        const SizedBox(height: 4),
+                        Text(labels[i].toUpperCase(),
+                            style: mono(9, color: current == i ? C.text : C.muted, spacing: 0.8)),
+                      ]),
                     ]),
-                  ]),
+                  ),
                 ),
               ),
           ]),

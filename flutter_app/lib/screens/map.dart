@@ -11,17 +11,6 @@ import '../widgets.dart';
 import 'apple_map_layer.dart';
 import 'club.dart';
 
-// Light raster map turned into a steel-grey night map (inverted greyscale), so it is not pitch black.
-const _grey = ColorFilter.matrix(<double>[
-  -0.19, -0.64, -0.07, 0, 265, //
-  -0.19, -0.64, -0.07, 0, 265, //
-  -0.19, -0.64, -0.07, 0, 272, //
-  0, 0, 0, 1, 0,
-]);
-
-Widget _greyTile(BuildContext context, Widget tileWidget, TileImage tile) =>
-    ColorFiltered(colorFilter: _grey, child: tileWidget);
-
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
   @override
@@ -87,7 +76,7 @@ class _MapScreenState extends State<MapScreen> {
               initialZoom: 5.7,
               minZoom: 4.5,
               maxZoom: 17,
-              backgroundColor: const Color(0xFF2A2A2F),
+              backgroundColor: const Color(0xFF262628),
               interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
               onPositionChanged: (camera, hasGesture) {
                 final show = camera.zoom >= 11;
@@ -99,10 +88,18 @@ class _MapScreenState extends State<MapScreen> {
               },
             ),
             children: [
+              // Esri "Dark Gray Canvas": free, no API key, dark base + separate label layer
               TileLayer(
-                urlTemplate: 'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+                urlTemplate:
+                    'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+                maxNativeZoom: 16,
                 userAgentPackageName: 'de.ravestrangers.rave_strangers',
-                tileBuilder: _greyTile,
+              ),
+              TileLayer(
+                urlTemplate:
+                    'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+                maxNativeZoom: 16,
+                userAgentPackageName: 'de.ravestrangers.rave_strangers',
               ),
               if (_names)
                 MarkerLayer(markers: [
@@ -198,11 +195,11 @@ class _MapScreenState extends State<MapScreen> {
             right: 4,
             bottom: 4,
             child: GestureDetector(
-              onTap: () => openUrl('https://www.openstreetmap.org/copyright'),
+              onTap: () => openUrl('https://www.esri.com/en-us/legal/terms/full-master-agreement'),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 color: const Color(0xCC111113),
-                child: Text('© OpenStreetMap · © CARTO', style: mono(9, spacing: 0.3)),
+                child: Text('Esri, HERE, Garmin, © OpenStreetMap', style: mono(9, spacing: 0.3)),
               ),
             ),
           ),

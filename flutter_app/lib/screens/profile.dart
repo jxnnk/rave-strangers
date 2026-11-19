@@ -15,35 +15,14 @@ class ProfileScreen extends StatelessWidget {
       listenable: store,
       builder: (context, _) => SafeArea(
         bottom: false,
-        child: store.user == null ? const _AuthForm() : const _Me(),
+        child: store.user == null ? _AuthForm() : _Me(),
       ),
     );
   }
 }
 
-class _LangSwitch extends StatelessWidget {
-  const _LangSwitch();
-  @override
-  Widget build(BuildContext context) {
-    Widget b(String code) => Material(
-          color: appLang == code ? C.text : Colors.transparent,
-          child: InkWell(
-            onTap: () => store.setLang(code),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(code.toUpperCase(), style: mono(11, color: appLang == code ? C.bg : C.muted)),
-            ),
-          ),
-        );
-    return Container(
-      decoration: BoxDecoration(border: Border.all(color: C.line2)),
-      child: Row(mainAxisSize: MainAxisSize.min, children: [b('de'), b('en')]),
-    );
-  }
-}
-
 class _Me extends StatelessWidget {
-  const _Me();
+  _Me();
   @override
   Widget build(BuildContext context) {
     final p = store.profile ?? const <String, dynamic>{};
@@ -55,7 +34,7 @@ class _Me extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 48),
       children: [
-        Row(children: [const Brand(), const Spacer(), const _LangSwitch()]),
+        Row(children: [const Brand(), const Spacer(), const LangSwitch()]),
         const SizedBox(height: 28),
         Row(children: [
           Container(
@@ -79,18 +58,67 @@ class _Me extends StatelessWidget {
         Section(2, t('my_saved')),
         if (saved.isEmpty) EmptyBox(t('none_yet')),
         for (final e in saved) EventRow(e),
-        const SizedBox(height: 30),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: RsButton(t('logout'), onTap: () => sb.auth.signOut()),
+        Section(3, t('settings')),
+        Row(children: [
+          Expanded(child: Text(t('language').toUpperCase(), style: mono(11.5, color: C.text))),
+          const LangSwitch(),
+        ]),
+        const SizedBox(height: 22),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          RsButton(t('logout'), onTap: () => sb.auth.signOut()),
+          RsButton(t('reset_open'),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => ResetScreen(initialEmail: store.user?.email ?? '')))),
+        ]),
+        const SizedBox(height: 40),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(border: Border.all(color: C.line2)),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(t('del_acct').toUpperCase(), style: mono(11.5, color: C.accent)),
+            const SizedBox(height: 10),
+            RsButton(t('del_acct'), small: true, onTap: () => _deleteAccount(context)),
+          ]),
         ),
       ],
     );
   }
 }
 
+Future<void> _deleteAccount(BuildContext context) async {
+  final ctrl = TextEditingController();
+  final yes = await showDialog<bool>(
+    context: context,
+    builder: (c) => AlertDialog(
+      backgroundColor: C.surface,
+      title: Text(t('del_acct').toUpperCase(), style: mono(13, color: C.accent)),
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(t('del_q'), style: body(15)),
+        const SizedBox(height: 12),
+        TextField(controller: ctrl, autofocus: true, style: body(15), cursorColor: C.accent),
+      ]),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c, false), child: Text(t('cancel'))),
+        TextButton(
+          onPressed: () => Navigator.pop(c, ctrl.text.trim().toUpperCase() == t('del_word')),
+          child: Text(t('del_acct'), style: const TextStyle(color: C.accent)),
+        ),
+      ],
+    ),
+  );
+  ctrl.dispose();
+  if (yes != true) return;
+  try {
+    await sb.rpc('delete_my_account');
+    await sb.auth.signOut();
+    if (context.mounted) toast(context, t('deleted'));
+  } catch (e) {
+    if (context.mounted) toast(context, t('err'));
+  }
+}
+
 class _AuthForm extends StatefulWidget {
-  const _AuthForm();
+  _AuthForm();
   @override
   State<_AuthForm> createState() => _AuthFormState();
 }
@@ -187,7 +215,7 @@ class _AuthFormState extends State<_AuthForm> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 48),
       children: [
-        Row(children: [const Brand(), const Spacer(), const _LangSwitch()]),
+        Row(children: [const Brand(), const Spacer(), const LangSwitch()]),
         const SizedBox(height: 28),
         Text((_login ? t('login') : t('signup')).toUpperCase(), style: display(36)),
         const SizedBox(height: 10),

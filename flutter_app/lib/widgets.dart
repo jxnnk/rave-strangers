@@ -235,3 +235,57 @@ class EventRow extends StatelessWidget {
     );
   }
 }
+
+
+/// "vor 5 Min" style relative time.
+String ago(String? iso) {
+  if (iso == null) return '';
+  final d = DateTime.now().toUtc().difference(DateTime.parse(iso).toUtc());
+  if (d.inMinutes < 1) return t('ago_now');
+  if (d.inHours < 1) return t('ago_m', {'n': d.inMinutes});
+  if (d.inDays < 1) return t('ago_h', {'n': d.inHours});
+  return t('ago_d', {'n': d.inDays});
+}
+
+/// DE | EN toggle. Used in the Home header and in the profile.
+class LangSwitch extends StatelessWidget {
+  const LangSwitch({super.key});
+  @override
+  Widget build(BuildContext context) {
+    Widget b(String code) => Material(
+          color: appLang == code ? C.text : Colors.transparent,
+          child: InkWell(
+            onTap: () => store.setLang(code),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              child: Text(code.toUpperCase(), style: mono(11, color: appLang == code ? C.bg : C.muted)),
+            ),
+          ),
+        );
+    return Semantics(
+      label: t('language'),
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: C.line2)),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [b('de'), b('en')]),
+      ),
+    );
+  }
+}
+
+/// Small red counter on icons and tabs.
+class Badge0 extends StatelessWidget {
+  final int n;
+  const Badge0(this.n, {super.key});
+  @override
+  Widget build(BuildContext context) {
+    if (n <= 0) return const SizedBox.shrink();
+    return Container(
+      constraints: const BoxConstraints(minWidth: 17),
+      height: 17,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: C.accent, borderRadius: BorderRadius.circular(9)),
+      child: Text(n > 9 ? '9+' : '$n', style: mono(9.5, color: C.ink, spacing: 0)),
+    );
+  }
+}

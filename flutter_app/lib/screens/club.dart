@@ -33,6 +33,13 @@ class ClubScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Wrap(spacing: 8, runSpacing: 8, children: [
                 RsButton(t('route'), primary: true, onTap: () => openUrl(routeUrl(v))),
+                RsButton(store.vfollow.contains(v.id) ? '✓ ${t('followed_club')}' : '+ ${t('follow_club')}',
+                    active: store.vfollow.contains(v.id), onTap: () {
+                  if (store.user == null) return askLogin(context);
+                  store.toggleVenueFollow(v.id);
+                  if (!store.vfollow.contains(v.id)) return;
+                  toast(context, t('follow_toast'));
+                }),
               ]),
               if (r != null && r.n > 0) ...[
                 const SizedBox(height: 18),

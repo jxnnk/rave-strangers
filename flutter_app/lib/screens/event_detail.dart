@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../data.dart';
+import '../social.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
@@ -16,6 +16,7 @@ class EventDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      bottomNavigationBar: ListenableBuilder(listenable: store, builder: (context, _) => _TicketBar(e)),
       body: ListenableBuilder(
         listenable: store,
         builder: (context, _) {
@@ -63,16 +64,10 @@ class EventDetail extends StatelessWidget {
                       HapticFeedback.selectionClick();
                       await store.toggleSaved(e.id);
                     }),
-                RsButton(t('share'), icon: Icons.ios_share, onTap: () {
-                  final link = e.sourceUrl ?? webUrl;
-                  Share.share('${e.title} · ${v?.name ?? ''} · ${fmtLong(d)} ${e.timeLabel}\n$link');
-                }),
+                RsButton(t('share'), icon: Icons.ios_share, onTap: () => shareEvent(e)),
                 if (v != null) RsButton(t('route'), onTap: () => openUrl(routeUrl(v))),
               ]),
-              if (n > 0) ...[
-                const SizedBox(height: 10),
-                Text(t('going_n', {'n': n}).toUpperCase(), style: mono(11)),
-              ],
+              _SocialProof(e, going: n),
               const SizedBox(height: 18),
               _Facts(rows: [
                 [t('date'), fmtLong(d)],
@@ -95,6 +90,10 @@ class EventDetail extends StatelessWidget {
                 ),
               Section(2, t('tickets')),
               _Tickets(e),
+              Section(3, t('crew_t')),
+              CrewSection(e),
+              Section(4, t('rides_t')),
+              RidesSection(e),
             ],
           );
         },
@@ -156,6 +155,12 @@ class _Tickets extends StatelessWidget {
         ]),
       ),
       const SizedBox(height: 12),
+      if (needsAlarm(e)) ...[
+        Text(t('alarm_note'), style: body(14.5)),
+        const SizedBox(height: 10),
+        AlarmButton(e),
+        const SizedBox(height: 12),
+      ],
       Wrap(spacing: 8, runSpacing: 8, children: [
         if (official != null)
           RsButton('${t('tix_official')} ↗', primary: st != 'sold_out', onTap: () => openUrl(official)),
@@ -186,5 +191,111 @@ class _Tickets extends StatelessWidget {
         ]),
       ),
     ]);
+  }
+}
+
+
+/// Tickets can't be bought right now -> offer the ticket alert instead.
+bool needsAlarm(Ev e) => e.ticketUrl == null || e.ticketStatus == 'sold_out' || e.ticketStatus == null || e.ticketStatus == 'unknown';
+
+class AlarmButton extends StatelessWidget {
+  final Ev e;
+  final bool small;
+  const AlarmButton(this.e, {super.key, this.small = false});
+  @override
+  Widget build(BuildContext context) {
+    final on = store.alarms.contains(e.id);
+    return RsButton(on ? '✓ ${t('alarm_on')}' : t('alarm_set'),
+        icon: on ? Icons.notifications_active : Icons.notifications_none,
+        active: on,
+        primary: !on && !small,
+        small: small, onTap: () async {
+      if (store.user == null) {
+        askLogin(context);
+        return;
+      }
+      HapticFeedback.mediumImpact();
+      await store.toggleAlarm(e.id);
+      if (context.mounted && !on) toast(context, t('alarm_toast'));
+    });
+  }
+}
+
+/// "12 gehen hin · 3 suchen eine Crew · 2 Fahrten" – real numbers only, nothing invented.
+class _SocialProof extends StatelessWidget {
+  final Ev e;
+  final int going;
+  const _SocialProof(this.e, {required this.going});
+  @override
+  Widget build(BuildContext context) {
+    final crew = store.crewN[e.id] ?? 0;
+    final rides = store.ridesN[e.id] ?? 0;
+    final parts = [
+      if (going > 0) t('going_n', {'n': going}),
+      if (crew > 0) t('crew_n', {'n': crew}),
+      if (rides > 0) t('rides_n', {'n': rides}),
+    ];
+    if (parts.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Row(children: [
+        const Icon(Icons.groups_outlined, size: 18, color: C.accent),
+        const SizedBox(width: 8),
+        Expanded(child: Text(parts.join(' · ').toUpperCase(), style: mono(11, color: C.text))),
+      ]),
+    );
+  }
+}
+
+/// Always visible at the bottom: status + the one action that matters right now.
+class _TicketBar extends StatelessWidget {
+  final Ev e;
+  const _TicketBar(this.e);
+  @override
+  Widget build(BuildContext context) {
+    final st = e.ticketStatus ?? 'unknown';
+    final dot = switch (st) {
+      'available' => C.green,
+      'few' => C.amber,
+      'sold_out' => C.accent,
+      _ => C.muted,
+    };
+    final venueName = store.venues[e.venueId]?.name ?? e.title;
+    final canBuy = e.ticketUrl != null && st != 'sold_out';
+    final label = canBuy && st == 'unknown' ? t('tickets') : t('tix_$st');
+    Widget action;
+    if (canBuy) {
+      action = RsButton('${t('get_tix')} ↗', primary: true, onTap: () {
+        HapticFeedback.lightImpact();
+        openUrl(e.ticketUrl!);
+      });
+    } else if (st == 'sold_out') {
+      action = RsButton('TicketSwap ↗', primary: true,
+          onTap: () => openUrl('https://www.ticketswap.com/search?query=${Uri.encodeComponent(venueName)}'));
+    } else {
+      action = AlarmButton(e);
+    }
+    return Container(
+      decoration: const BoxDecoration(color: C.bg, border: Border(top: BorderSide(color: C.line2))),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+          child: Row(children: [
+            Container(width: 9, height: 9, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(label.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: mono(11, color: C.text)),
+                if (e.priceText != null)
+                  Text(e.priceText!, maxLines: 1, overflow: TextOverflow.ellipsis, style: body(13.5, color: C.muted)),
+              ]),
+            ),
+            const SizedBox(width: 10),
+            action,
+          ]),
+        ),
+      ),
+    );
   }
 }

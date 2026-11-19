@@ -5,6 +5,7 @@ import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import 'inbox.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,7 +33,16 @@ class HomeScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.only(bottom: 40),
               children: [
-                const Padding(padding: EdgeInsets.fromLTRB(18, 14, 18, 14), child: Brand()),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 8, 10, 8),
+                  child: Row(children: [
+                    const Brand(),
+                    const Spacer(),
+                    const LangSwitch(),
+                    const SizedBox(width: 4),
+                    BellButton(key: ValueKey(store.unreadNotes)), // rebuild when the count changes
+                  ]),
+                ),
                 if (heads.isNotEmpty) Marquee(heads),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
