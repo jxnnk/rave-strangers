@@ -4,6 +4,7 @@ String appLang = 'de';
 const Map<String, Map<String, String>> _s = {
   'de': {
     'tab_crew': 'Crew', 'lang_name': 'Deutsch',
+    'signup_exists': 'Mit dieser E-Mail gibt es schon ein Konto. Melde dich an oder nutze „Passwort vergessen?“.',
     'follow_club': 'Club folgen', 'followed_club': 'Du folgst', 'follow_toast': 'Wir sagen dir Bescheid, wenn hier neue Termine dazukommen.',
     'inbox_t': 'Benachrichtigungen',
     'inbox_empty': 'Noch nichts da. Merk dir Events oder folge Clubs. Dann melden wir uns hier, sobald Tickets rauskommen oder neue Termine dazukommen.',
@@ -77,6 +78,7 @@ const Map<String, Map<String, String>> _s = {
   },
   'en': {
     'tab_crew': 'Crew', 'lang_name': 'English',
+    'signup_exists': 'This email already has an account. Log in or use “Forgot password?”.',
     'follow_club': 'Follow club', 'followed_club': 'Following', 'follow_toast': 'We will tell you when new dates are added here.',
     'inbox_t': 'Notifications',
     'inbox_empty': 'Nothing here yet. Save events or follow clubs and we will tell you here when tickets drop or new dates are added.',

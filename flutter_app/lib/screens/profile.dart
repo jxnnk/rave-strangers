@@ -163,11 +163,17 @@ class _AuthFormState extends State<_AuthForm> {
         await sb.auth.signInWithPassword(email: email, password: pw);
         _msg = null;
       } else {
-        await sb.auth.signUp(
+        final r = await sb.auth.signUp(
             email: email, password: pw, data: {'display_name': name}, emailRedirectTo: '$webUrl#me');
-        _msg = t('check_mail');
-        _msgOk = true;
-        _login = true;
+        // Supabase sends no mail for an address that already has an account (identities is empty)
+        if (r.user != null && (r.user!.identities?.isEmpty ?? false)) {
+          _msg = t('signup_exists');
+          _msgOk = false;
+        } else {
+          _msg = t('check_mail');
+          _msgOk = true;
+          _login = true;
+        }
       }
     } on AuthException catch (e) {
       _msg = e.message;
