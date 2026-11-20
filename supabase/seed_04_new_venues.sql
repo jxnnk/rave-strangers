@@ -72,3 +72,23 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Drucklufthaus','Oberhausen','Am Förderturm 27, 46049 Oberhausen',51.4726361,6.8465168,false,null,'club'),
  ('Auto Böhler Schrottplatz (Hasardeur)','Karlsruhe','Ottostraße 6, 76227 Karlsruhe',48.9973298,8.4477550,false,'https://hasardeur-festival.de/','event_site'),
  ('Stoppelmarkt Vechta','Vechta','Stoppelmarkt, 49377 Vechta',52.7479851,8.2956479,true,'https://www.tantemiatanzt.de/','event_site');
+
+-- Nachtlauf 2026-11-20
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Bukowski (BUKO)','Heilbronn','Hafenstraße 36, 74076 Heilbronn',49.1495419,9.2050668,false,'https://www.bukowski-live.de','club'),
+ ('Reithalle Strasse E','Dresden','Werner-Hartmann-Straße 2, 01099 Dresden',51.0855930,13.7644580,false,null,'club'),
+ ('Kuckucksei','Nürtingen','Neckarstraße, 72622 Nürtingen',48.6268394,9.3311079,false,null,'club'),
+ ('Vybe Club','Paderborn','Marienstraße 20, 33098 Paderborn',51.7180443,8.7496520,false,null,'club'),
+ ('Kulturwerft Gollan','Lübeck','Einsiedelstraße (Innovationszentrum), 23554 Lübeck',53.8771899,10.6846129,false,null,'club'),
+ ('Holstenhallen','Neumünster','Holstenhallen, Neumünster',54.0922185,9.9740844,true,null,'event_site'),
+ ('Studio dB','Berlin','Uferstraße 8-11, 13357 Berlin',52.5522701,13.3735644,false,null,'club'),
+ ('809 Club','Essen','Kopstadtplatz 25, 45127 Essen',51.4579196,7.0112043,false,null,'club'),
+ ('Alte MFR Fabrikhalle','Leutershausen','Am Graben 12, 91578 Leutershausen',49.2995921,10.4050617,true,null,'event_site'),
+ ('Die Scheuer','Idstein','Wallbacher Straße 2, 65510 Idstein-Wörsdorf',50.2458451,8.2548198,false,null,'club'),
+ ('Jugendhaus Ost','Wolfsburg','Walter-Flex-Weg 2, 38446 Wolfsburg',52.4187785,10.7999869,false,null,'club'),
+ ('Schongauer Brauhaus','Schongau','Altenstadter Straße, 86956 Schongau',47.8166020,10.8918554,false,null,'club'),
+ ('H1 Club & Lounge','Hamburg','Kiebitzhof, 22089 Hamburg',53.5638484,10.0363951,false,null,'club'),
+ ('Studentenclub Block 17','Wismar','Philipp-Müller-Straße 20, 23966 Wismar',53.8900575,11.4434479,false,null,'club'),
+ ('Mauerpfeiffer','Saarbrücken','Lebacher Straße 7a, 66113 Saarbrücken',49.2429378,6.9808294,false,null,'club'),
+ ('Exerzierhalle Wittenberg','Lutherstadt Wittenberg','Lutherstraße 57, 06886 Lutherstadt Wittenberg',51.8701175,12.6442412,false,null,'event_site'),
+ ('The Soho Stage','Augsburg','Ludwigstraße 32, 86152 Augsburg',48.3708567,10.8933176,false,null,'club');
