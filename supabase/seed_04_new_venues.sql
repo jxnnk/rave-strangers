@@ -92,3 +92,12 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Mauerpfeiffer','Saarbrücken','Lebacher Straße 7a, 66113 Saarbrücken',49.2429378,6.9808294,false,null,'club'),
  ('Exerzierhalle Wittenberg','Lutherstadt Wittenberg','Lutherstraße 57, 06886 Lutherstadt Wittenberg',51.8701175,12.6442412,false,null,'event_site'),
  ('The Soho Stage','Augsburg','Ludwigstraße 32, 86152 Augsburg',48.3708567,10.8933176,false,null,'club');
+
+-- Nightly-Run 2026-11-22
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('TraumGmbH','Kiel','Grasweg 19-21, 24118 Kiel',54.3349796,10.1168045,false,null,'club'),
+ ('Absturz','Leipzig','Karl-Liebknecht-Straße 36, 04107 Leipzig',51.3265467,12.3726920,false,null,'club'),
+ ('Umbaubar','Oldenburg','Stau 25-27, 26122 Oldenburg',53.1408163,8.2199874,false,null,'club'),
+ ('De Schorre (Tomorrowland)','Boom (BE)','Provinciaal Domein De Schorre, De Hoek 1, 2850 Boom, Belgien',51.0897779,4.3842969,false,'https://www.tomorrowland.com','event_site'),
+ ('Clydeside Live (Terminal V)','Glasgow (GB)','225 South Street, Glasgow, United Kingdom',55.8752753,-4.3473164,true,null,'event_site'),
+ ('Alpe d''Huez (Tomorrowland Winter)','Huez (FR)','L''Alpe d''Huez, 38750 Huez, Frankreich',45.0924010,6.0699443,true,'https://www.tomorrowland.com','event_site');
