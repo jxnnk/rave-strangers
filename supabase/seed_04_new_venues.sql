@@ -101,3 +101,12 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('De Schorre (Tomorrowland)','Boom (BE)','Provinciaal Domein De Schorre, De Hoek 1, 2850 Boom, Belgien',51.0897779,4.3842969,false,'https://www.tomorrowland.com','event_site'),
  ('Clydeside Live (Terminal V)','Glasgow (GB)','225 South Street, Glasgow, United Kingdom',55.8752753,-4.3473164,true,null,'event_site'),
  ('Alpe d''Huez (Tomorrowland Winter)','Huez (FR)','L''Alpe d''Huez, 38750 Huez, Frankreich',45.0924010,6.0699443,true,'https://www.tomorrowland.com','event_site');
+
+-- 2026-11-23: neue Venues aus dem Nachtlauf (Hamburg, Freiburg, EXIT Novi Sad)
+insert into venues (name, city, address, lat, lon, approx, website, kind) values
+ ('Turtur','Hamburg','Am Veringhof 13, Hamburg-Wilhelmsburg',53.5141241,9.9839237,false,null,'club'),
+ ('Haus 73','Hamburg','Schulterblatt 73, 20357 Hamburg',53.5623976,9.9612198,false,null,'club'),
+ ('Georg Elser Halle','Hamburg','Feldstraße 66, 20359 Hamburg',53.5565061,9.9701015,false,null,'event_site'),
+ ('Locke','Hamburg','St. Pauli Fischmarkt 27, 20359 Hamburg',53.5461865,9.9578027,false,null,'club'),
+ ('Jazzhaus Freiburg','Freiburg','Schnewlinstraße 1, 79098 Freiburg im Breisgau',47.9947590,7.8405633,false,null,'club'),
+ ('Petrovaradin Fortress (EXIT)','Novi Sad (RS)','Petrovaradinska tvrđava, 21131 Petrovaradin, Serbien',45.2521551,19.8638279,false,'https://www.exitfest.org','event_site');
