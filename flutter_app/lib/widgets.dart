@@ -282,3 +282,65 @@ class Badge0 extends StatelessWidget {
     );
   }
 }
+
+
+/// Highlight event as a red poster card (design Mix A+C).
+class FlyerCard extends StatelessWidget {
+  final Ev e;
+  const FlyerCard(this.e, {super.key});
+  static const _mon = ['JAN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN', 'JUL', 'AUG', 'SEP', 'OKT', 'NOV', 'DEZ'];
+  @override
+  Widget build(BuildContext context) {
+    final v = store.venues[e.venueId];
+    final crew = store.crewN[e.id] ?? 0;
+    return Material(
+      color: C.accent,
+      child: InkWell(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => EventDetail(e))),
+        child: IntrinsicHeight(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Container(
+              width: 84,
+              decoration: const BoxDecoration(border: Border(right: BorderSide(color: C.ink, width: 3))),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text('${e.start.day}', style: display(44, color: C.ink)),
+                Text('${fmtDow(e.start).toUpperCase()} · ${_mon[e.start.month - 1]}', style: mono(10.5, color: C.ink, weight: FontWeight.w700)),
+              ]),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(t('highlight').toUpperCase(), style: mono(10, color: C.ink, weight: FontWeight.w700)),
+                  const SizedBox(height: 4),
+                  Text(e.title.toUpperCase(), maxLines: 3, overflow: TextOverflow.ellipsis, style: display(28, color: C.ink)),
+                  const SizedBox(height: 12),
+                  Row(children: [
+                    Expanded(
+                      child: Text('${v?.name ?? ''} · ${e.timeLabel}',
+                          maxLines: 1, overflow: TextOverflow.ellipsis, style: body(13.5, color: C.ink, weight: FontWeight.w700)),
+                    ),
+                    if (e.priceText != null) Text(e.priceText!, style: body(13.5, color: C.ink, weight: FontWeight.w700)),
+                  ]),
+                  if (crew > 0) ...[
+                    const SizedBox(height: 4),
+                    Text(t('crew_n', {'n': crew}), style: body(13, color: C.ink)),
+                  ],
+                ]),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+/// Most popular upcoming event (going count), first one on a tie.
+Ev pickHighlight(List<Ev> l) {
+  var best = l.first;
+  for (final e in l) {
+    if ((store.counts[e.id] ?? 0) > (store.counts[best.id] ?? 0)) best = e;
+  }
+  return best;
+}

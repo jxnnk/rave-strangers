@@ -383,3 +383,14 @@ nav.tabs a[aria-current="page"]{color:var(--accent)}
 .brand{font-weight:400;font-size:21px;gap:0}
 .brand b{color:var(--accent);font-weight:400}
 .brand i{display:none}
+/* highlight flyer card (Mix A+C) */
+.flyer{display:flex;margin-top:20px;background:var(--accent);color:var(--accent-ink);min-height:140px}
+.flyer .fd{width:86px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--accent-ink)}
+.flyer .fd b{font-family:var(--display);font-weight:400;font-size:50px;line-height:1}
+.flyer .fd span{font-weight:700;font-size:12px}
+.flyer .fb{flex:1;min-width:0;padding:14px;display:flex;flex-direction:column;gap:4px}
+.flyer small{font-weight:700;font-size:12px;text-transform:uppercase}
+.flyer strong{font-family:var(--display);font-weight:400;font-size:32px;line-height:.95;text-transform:uppercase;overflow-wrap:anywhere}
+.flyer .fm{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px;font-weight:700;font-size:13.5px}
+.flyer em{font-style:normal;font-size:13px}
+.flyer:hover{filter:brightness(1.06)}

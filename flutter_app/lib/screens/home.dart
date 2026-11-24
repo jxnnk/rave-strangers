@@ -58,6 +58,8 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(height: 10),
                       RsButton(t('retry'), onTap: store.load),
                     ],
+                    if (tonight.isNotEmpty || next.isNotEmpty)
+                      Padding(padding: const EdgeInsets.only(top: 20), child: FlyerCard(pickHighlight([...tonight, ...next]))),
                     Section(1, t('tonight')),
                     if (tonight.isEmpty && !store.loading) EmptyBox(t('nothing_tonight')),
                     for (final e in tonight) EventRow(e),
