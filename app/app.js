@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    crew_group:'Crew-Gruppe',crew_group_join:'Crew-Gruppe beitreten',leave_group:'Gruppe verlassen',send_to_chat:'In Chat senden',sent_ok:'Gesendet.',event_msg:'hat ein Event geteilt',event_gone:'Event nicht mehr verfügbar',members_n:'{n} Mitglieder',open:'Öffnen',invite_t:'Freunde einladen',invite_sub:'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',invite_msg:'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤',invite_n:'{n} über deinen Link dabei',qr_t:'Dein QR-Code',qr_sub:'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.',copy_link:'Link kopieren',
     highlight:'Highlight',
     settings:'Einstellungen',set_account:'Konto',set_privacy:'Privatsphäre',set_session:'Sitzung',set_email:'E-Mail ändern',set_email_hint:'Wir schicken dir einen Bestätigungslink an die neue Adresse. Erst nach dem Klick wird sie geändert.',set_email_sent:'Check dein Postfach und bestätige die neue Adresse.',reset_rate:'Gerade wurden zu viele Mails verschickt. Versuch es in einer Stunde nochmal.',set_notify_tickets:'Ticket-Alarm',set_notify_tickets_sub:'Wenn Tickets für gemerkte Events rauskommen',set_notify_new:'Neue Termine',set_notify_new_sub:'Wenn Clubs, denen du folgst, neue Events haben',set_notify_reminder:'Erinnerung',set_notify_reminder_sub:'Am Tag vor deinen Events',set_dm_open:'Nachrichten von allen',set_dm_open_sub:'Aus: Nur Leute, mit denen du schon schreibst, erreichen dich',set_going_visible:'„Ich gehe hin“ öffentlich',set_going_visible_sub:'Andere sehen, dass du hingehst (gilt für neue Zusagen)',set_blocked:'Blockierte Personen',set_blocked_none:'Du hast niemanden blockiert.',unblock:'Freigeben',
     signup_exists:'Mit dieser E-Mail gibt es schon ein Konto. Melde dich an oder nutze „Passwort vergessen?“.',
@@ -71,6 +72,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    crew_group:'Crew group',crew_group_join:'Join crew group',leave_group:'Leave group',send_to_chat:'Send to chat',sent_ok:'Sent.',event_msg:'shared an event',event_gone:'Event no longer available',members_n:'{n} members',open:'Open',invite_t:'Invite friends',invite_sub:'Anyone who joins through your link lands straight in a chat with you.',invite_msg:'Join me on Rave Strangers and let’s go raving together 🖤',invite_n:'{n} joined via your link',qr_t:'Your QR code',qr_sub:'Show it at the club: scan, join, and you are in a chat.',copy_link:'Copy link',
     highlight:'Highlight',
     settings:'Settings',set_account:'Account',set_privacy:'Privacy',set_session:'Session',set_email:'Change email',set_email_hint:'We send a confirmation link to the new address. It only changes after you click it.',set_email_sent:'Check your inbox and confirm the new address.',reset_rate:'Too many emails were sent just now. Please try again in an hour.',set_notify_tickets:'Ticket alert',set_notify_tickets_sub:'When tickets for saved events come out',set_notify_new:'New dates',set_notify_new_sub:'When clubs you follow add events',set_notify_reminder:'Reminder',set_notify_reminder_sub:'The day before your events',set_dm_open:'Messages from everyone',set_dm_open_sub:'Off: only people you already chat with can reach you',set_going_visible:'“I’m going” public',set_going_visible_sub:'Others see that you go (applies to new ones)',set_blocked:'Blocked people',set_blocked_none:'You have not blocked anyone.',unblock:'Unblock',
     signup_exists:'This email already has an account. Log in or use “Forgot password?”.',
@@ -693,7 +695,8 @@ function loadCrew(id){
     .catch(function(err){ cache.crew[id]=[]; fail(err); });
 }
 function crewHTML(e){
-  var head='<div class="sec crew"><h2>'+t('crew_find')+'</h2><p class="sub">'+t('crew_find_sub')+'</p>';
+  var head='<div class="sec crew"><h2>'+t('crew_find')+'</h2><p class="sub">'+t('crew_find_sub')+'</p>'+
+    '<div class="row" style="margin-bottom:12px"><button type="button" class="btn primary" data-act="joingrp" data-id="'+e.id+'">'+t('crew_group_join')+'</button><a class="btn" href="#sendev-'+e.id+'">'+t('send_to_chat')+'</a></div>';
   if(!S.user){ var cn=(CREWN[e.id]&&CREWN[e.id].c)||0; return head+'<div class="empty">'+(cn?'<b>'+t('crew_cnt',{n:cn})+'.</b> ':'')+'<a class="link" href="#login" data-act="loginhere">'+t('crew_login')+'</a></div></div>'; }
   var list=cache.crew[e.id];
   if(list===undefined){ loadCrew(e.id); list='loading'; }
@@ -743,7 +746,7 @@ function ridesHTML(e){
 }
 function loadChats(){
   cache.chats='loading';
-  sb.rpc('my_chats').then(function(r){ if(r.error) throw r.error; cache.chats=r.data||[]; S.unread=(cache.chats||[]).reduce(function(a,c){ return a+(c.unread||0); },0); render(false); })
+  sb.rpc('my_chats2').then(function(r){ if(r.error) throw r.error; cache.chats=r.data||[]; S.unread=(cache.chats||[]).reduce(function(a,c){ return a+(c.unread||0); },0); render(false); })
     .catch(function(err){ cache.chats=[]; fail(err); });
 }
 function chatsHTML(){
@@ -752,15 +755,21 @@ function chatsHTML(){
   if(c==='loading') return loadingBox();
   if(!c.length) return emptyBox(t('chats_none'));
   return '<div class="people">'+c.map(function(x){
-    var last=x.last_body?((x.last_sender===S.user.id?t('you_')+': ':'')+x.last_body):'';
-    return '<a class="person" href="#chat-'+x.conversation_id+'">'+av(x.other_name)+'<div class="grow"><strong>'+esc(x.other_name)+(x.other_verified?VB:'')+'</strong><p>'+esc(last.slice(0,80))+'</p></div>'+
+    var nm=chatName(x), lb=x.last_body&&/^\[\[event:\d+\]\]$/.test(x.last_body)?t('event_msg'):x.last_body;
+    var last=lb?((x.last_sender===S.user.id?t('you_')+': ':(x.is_group&&x.last_sender_name?x.last_sender_name+': ':''))+lb):(x.is_group?t('members_n',{n:x.members||1}):'');
+    return '<a class="person" href="#chat-'+x.conversation_id+'">'+av(nm)+'<div class="grow"><strong>'+esc(nm)+(x.other_verified?VB:'')+(x.is_group?' <span class="tag">'+t('crew_group')+'</span>':'')+'</strong><p>'+esc(last.slice(0,80))+'</p></div>'+
       (x.unread?'<span class="tag hot">'+t('unread_n',{n:x.unread})+'</span>':(x.last_at?'<span class="meta">'+esc(ago(x.last_at))+'</span>':''))+'</a>';
   }).join('')+'</div>';
 }
+function chatName(x){ return x.is_group?(x.title||t('crew_group')):(x.other_name||('@'+(x.other_handle||''))); }
+function msgHTML(body){ var m=/^\[\[event:(\d+)\]\]$/.exec((body||'').trim()); if(!m) return '<p>'+esc(body)+'</p>';
+  var e=evt(+m[1]); if(!e) return '<p>'+t('event_gone')+'</p>'; var v=venue(e.v);
+  return '<a class="evmsg" href="#event-'+e.id+'"><small>'+esc(fmtShort(new Date(e.date+'T12:00:00')))+(e.time?' · '+esc(e.time):'')+'</small><strong>'+esc(e.title)+'</strong><span>'+esc(v.name)+'</span></a>'+
+    (e.ticket?'<a class="btn small" href="'+esc(e.ticket)+'" target="_blank" rel="noopener">'+t('get_tix')+' ↗</a>':''); }
 var CHATPOLL=null;
 function loadChat(cid,quiet){
   if(!quiet) cache.chat[cid]=cache.chat[cid]||'loading';
-  return data(sb.from('messages').select('id,sender,body,created_at').eq('conversation_id',cid).order('created_at',{ascending:true}).limit(300)).then(function(msgs){
+  return data(sb.from('messages').select('id,sender,body,created_at,profiles(display_name,handle)').eq('conversation_id',cid).order('created_at',{ascending:true}).limit(300)).then(function(msgs){
     var prev=cache.chat[cid], changed=!prev||prev==='loading'||prev.msgs.length!==msgs.length;
     var other=(cache.chats||[]).filter&&(cache.chats||[]).filter(function(x){ return x.conversation_id===cid; })[0];
     cache.chat[cid]={msgs:msgs,other:other||(prev&&prev.other)||null};
@@ -776,18 +785,41 @@ function viewChat(cid){
   clearInterval(CHATPOLL); CHATPOLL=setInterval(function(){ if(location.hash!=='#chat-'+cid){ clearInterval(CHATPOLL); return; } loadChat(cid,true).catch(function(){}); },5000);
   if(c==='loading') return '<a class="back" href="#chats">← '+t('chats')+'</a>'+loadingBox();
   var o=c.other||((cache.chats||[]).filter?(cache.chats||[]).filter(function(x){ return x.conversation_id===cid; })[0]:null);
-  var name=o?o.other_name:'Chat';
-  var msgs=c.msgs.map(function(m){ var me=m.sender===S.user.id;
-    return '<div class="msg'+(me?' me':'')+'"><p>'+esc(m.body)+'</p><span>'+esc(ago(m.created_at))+'</span></div>'; }).join('');
+  var name=o?chatName(o):'Chat', grp=!!(o&&o.is_group);
+  var msgs=c.msgs.map(function(m){ var me=m.sender===S.user.id, who=grp&&!me&&m.profiles?'<b class="who">'+esc(m.profiles.display_name||('@'+m.profiles.handle))+'</b>':'';
+    return '<div class="msg'+(me?' me':'')+'">'+who+msgHTML(m.body)+'<span>'+esc(ago(m.created_at))+'</span></div>'; }).join('');
   return '<a class="back" href="#chats">← '+t('chats')+'</a><h1 class="chath">'+(o&&o.other_handle?'<a href="#u-'+esc(o.other_handle)+'">'+esc(name)+'</a>':esc(name))+(o&&o.other_verified?VB:'')+'</h1>'+
     '<p class="sub">'+t('chat_safety')+'</p><div class="msgs" id="msgs">'+(msgs||emptyBox('👋'))+'</div>'+
     '<form class="sendbar" data-form="msg" data-id="'+cid+'"><label class="sr" for="msg-b">'+t('chat_ph')+'</label><input id="msg-b" name="body" maxlength="2000" autocomplete="off" placeholder="'+esc(t('chat_ph'))+'" required><button class="btn primary" type="submit">'+t('send')+'</button></form>'+
-    (o?'<div class="sec"><div class="row"><button type="button" class="btn small" data-act="blockq" data-id="'+esc(o.other_id)+'" data-name="'+esc(name)+'">'+t('block')+'</button></div>'+reportForm('profile',o.other_id)+'</div>':'');
+    (grp?'<div class="sec"><div class="row">'+(o.event_id?'<a class="btn small" href="#event-'+o.event_id+'">'+t('open')+'</a>':'')+'<button type="button" class="btn small" data-act="leavegrp" data-id="'+cid+'">'+t('leave_group')+'</button></div></div>':'')+
+    (o&&!grp?'<div class="sec"><div class="row"><button type="button" class="btn small" data-act="blockq" data-id="'+esc(o.other_id)+'" data-name="'+esc(name)+'">'+t('block')+'</button></div>'+reportForm('profile',o.other_id)+'</div>':'');
 }
 function viewChats(){
   if(!S.user){ setTimeout(function(){ needLogin(); },0); return loadingBox(); }
   return '<a class="back" href="#connect">← '+t('connect_title')+'</a><h1>'+t('chats')+'</h1><div class="sec">'+chatsHTML()+'</div>';
 }
+
+function viewSendEv(id){
+  if(!S.user){ setTimeout(function(){ needLogin(); },0); return loadingBox(); }
+  var e=evt(id); if(!e) return emptyBox(t('event_gone'));
+  var c=cache.chats; if(c===null){ loadChats(); c='loading'; }
+  var list=c==='loading'?loadingBox():(c.length?'<div class="people">'+c.map(function(x){ var nm=chatName(x);
+    return '<button type="button" class="person" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line)" data-act="sendto" data-id="'+x.conversation_id+'" data-ev="'+id+'">'+av(nm)+'<div class="grow"><strong>'+esc(nm)+'</strong></div></button>'; }).join('')+'</div>':emptyBox(t('chats_none')));
+  return '<a class="back" href="#event-'+id+'">← '+esc(e.title)+'</a><h1>'+t('send_to_chat')+'</h1><div class="sec">'+list+'</div>';
+}
+/* ---------- Invite friends + QR ---------- */
+function inviteLink(){ return appBase()+'?ref=i-'+encodeURIComponent((S.me&&S.me.handle)||''); }
+var INVITES=null;
+function inviteHTML(){
+  if(INVITES===null){ INVITES=0; data(sb.rpc('my_invites')).then(function(n){ INVITES=+n||0; if(location.hash==='#me') render(false); }).catch(function(){}); }
+  return '<div class="sec invite"><h2>'+t('invite_t')+'</h2><p class="sub">'+t('invite_sub')+'</p>'+(INVITES?'<p class="kicker">'+t('invite_n',{n:INVITES})+'</p>':'')+
+    '<div class="row"><button type="button" class="btn primary" data-act="invshare">'+t('invite_t')+'</button><button type="button" class="btn" data-act="invqr">QR</button><button type="button" class="btn" data-act="invcopy">'+t('copy_link')+'</button></div><div id="qrbox" class="qrbox" hidden></div></div>';
+}
+function showQr(){ var box=document.getElementById('qrbox'); if(!box) return;
+  if(!box.hidden){ box.hidden=true; return; }
+  function draw(){ var q=window.qrcode(0,'M'); q.addData(inviteLink()); q.make(); box.innerHTML=q.createSvgTag({cellSize:6,margin:3,scalable:true,alt:t('qr_t')})+'<p class="sub">'+t('qr_sub')+'</p>'; box.hidden=false; }
+  if(window.qrcode) return draw();
+  var sc=document.createElement('script'); sc.src='vendor/qrcode.js'; sc.onload=draw; document.head.appendChild(sc); }
 
 /* ---------- Views: auth ---------- */
 function viewLogin(){
@@ -830,6 +862,7 @@ function viewMe(){
   return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#settings">⚙ '+t('settings')+'</a></div></div>'+
     '<div class="hero" style="margin-top:16px">'+av(m.display_name,72)+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
+    inviteHTML()+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="sec"><h2>'+t('my_saved')+'</h2>'+(saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="sec"><h2>'+t('me_title')+'</h2><form class="form" data-form="me" style="margin-top:0">'+
@@ -1154,6 +1187,7 @@ function route(){
     case 'connect': return {tab:'connect',html:viewConnect()};
     case 'chats': return {tab:'connect',html:viewChats()};
     case 'chat': return {tab:'connect',html:viewChat(+arg)};
+    case 'sendev': return {tab:'connect',html:viewSendEv(+arg)};
     case 'me': return {tab:'me',html:viewMe()};
     case 'inbox': return {tab:'me',html:viewInbox()};
     case 'settings': return {tab:'me',html:viewSettings()};
@@ -1197,6 +1231,12 @@ document.addEventListener('click',function(ev){
   var el=ev.target.closest('[data-act]'); if(!el) return;
   var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
   if(act==='alarm'){ toggleAlarm(+id); return; }
+  if(act==='joingrp'){ if(needLogin()) return; data(sb.rpc('join_event_chat',{p_event:+id})).then(function(cid){ cache.chats=null; location.hash='#chat-'+cid; }).catch(fail); return; }
+  if(act==='leavegrp'){ data(sb.rpc('leave_chat',{p_conv:+id})).then(function(){ cache.chats=null; location.hash='#chats'; }).catch(fail); return; }
+  if(act==='sendto'){ var evid=+el.getAttribute('data-ev'); data(sb.from('messages').insert({conversation_id:+id,sender:S.user.id,body:'[[event:'+evid+']]'})).then(function(){ toast(t('sent_ok')); cache.chat[+id]=undefined; location.hash='#chat-'+id; }).catch(fail); return; }
+  if(act==='invshare'){ var il=inviteLink(); if(navigator.share) navigator.share({text:t('invite_msg'),url:il}).catch(function(){}); else copyText(il); return; }
+  if(act==='invcopy'){ copyText(inviteLink()); return; }
+  if(act==='invqr'){ showQr(); return; }
   if(act==='setting'){ saveSetting(id, !!el.checked); return; }
   if(act==='unblock'){ data(sb.from('blocks').delete().eq('blocker',S.user.id).eq('blocked',id)).then(function(){ BLOCKS=null; render(false); }).catch(fail); return; }
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }

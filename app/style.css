@@ -394,3 +394,12 @@ nav.tabs a[aria-current="page"]{color:var(--accent)}
 .flyer .fm{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px;font-weight:700;font-size:13.5px}
 .flyer em{font-style:normal;font-size:13px}
 .flyer:hover{filter:brightness(1.06)}
+/* chat: groups, event cards, invite */
+.msg .who{display:block;font-size:12.5px;color:var(--accent);margin-bottom:2px}
+.msg .evmsg{display:block;color:var(--text);margin-bottom:6px}
+.msg .evmsg small{display:block;font-weight:700;font-size:12.5px}
+.msg .evmsg strong{display:block;font-family:var(--display);font-weight:400;font-size:20px;text-transform:uppercase;line-height:1}
+.msg .evmsg span{font-size:13.5px}
+.invite{border:2px solid var(--accent);padding:16px}
+.qrbox{margin-top:14px;max-width:260px}
+.qrbox svg{width:100%;height:auto;background:#efece6;display:block}
