@@ -44,15 +44,10 @@ class Brand extends StatelessWidget {
   const Brand({super.key});
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      Text('RAVE', style: display(15)),
-      Transform(
-        transform: Matrix4.skewX(-0.38),
-        alignment: Alignment.center,
-        child: Container(width: 3, height: 20, color: C.accent, margin: const EdgeInsets.symmetric(horizontal: 7)),
-      ),
-      Text('STRANGERS', style: display(15)),
-    ]);
+    return Text.rich(TextSpan(children: [
+      TextSpan(text: 'RAVE ', style: display(18)),
+      TextSpan(text: 'STRANGERS', style: display(18, color: C.accent)),
+    ]));
   }
 }
 
@@ -76,9 +71,7 @@ class Section extends StatelessWidget {
       padding: const EdgeInsets.only(top: 12),
       decoration: const BoxDecoration(border: Border(top: BorderSide(color: C.line))),
       child: Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-        Text(no.toString().padLeft(2, '0'), style: mono(11, color: C.accent)),
-        const SizedBox(width: 10),
-        Expanded(child: Text(title.toUpperCase(), style: display(18))),
+        Expanded(child: Text(title.toUpperCase(), style: display(22))),
       ]),
     );
   }
@@ -90,7 +83,7 @@ class Tag extends StatelessWidget {
   const Tag(this.text, {super.key, this.hot = false});
   @override
   Widget build(BuildContext context) =>
-      Text('[ ${text.toUpperCase()} ]', style: mono(10.5, color: hot ? C.accent : C.muted));
+      Text(text, style: mono(10.5, color: hot ? C.accent : C.muted));
 }
 
 class RsButton extends StatelessWidget {

@@ -17,18 +17,18 @@ class C {
   static const amber = Color(0xFFFFB020);
 }
 
-/// Wide, heavy headline face (always uppercase in use).
-TextStyle display(double size, {Color color = C.text}) => GoogleFonts.unbounded(
-    fontSize: size, fontWeight: FontWeight.w800, color: color, height: 1.0, letterSpacing: -0.4);
+/// Poster headline face (Anton, always uppercase in use). Mix A+C design.
+TextStyle display(double size, {Color color = C.text}) => GoogleFonts.anton(
+    fontSize: size * 1.12, fontWeight: FontWeight.w400, color: color, height: 0.95, letterSpacing: 0.3);
 
-/// Monospace for all data: dates, times, labels, buttons.
+/// Small labels, dates, buttons (grotesk, slightly larger than the old monospace).
 TextStyle mono(double size,
         {Color color = C.muted, FontWeight weight = FontWeight.w600, double spacing = 1.1}) =>
-    GoogleFonts.jetBrainsMono(fontSize: size, fontWeight: weight, color: color, letterSpacing: spacing);
+    GoogleFonts.spaceGrotesk(fontSize: size + 1.5, fontWeight: weight, color: color, letterSpacing: spacing * 0.3);
 
 /// Calm grotesk for body text.
 TextStyle body(double size, {Color color = C.text, FontWeight weight = FontWeight.w400}) =>
-    GoogleFonts.interTight(fontSize: size, color: color, fontWeight: weight, height: 1.35);
+    GoogleFonts.spaceGrotesk(fontSize: size, color: color, fontWeight: weight, height: 1.35);
 
 ThemeData buildTheme() {
   final base = ThemeData(brightness: Brightness.dark, useMaterial3: true);
@@ -39,7 +39,7 @@ ThemeData buildTheme() {
     canvasColor: C.bg,
     colorScheme: const ColorScheme.dark(
         primary: C.accent, onPrimary: C.ink, secondary: C.text, surface: C.surface, onSurface: C.text),
-    textTheme: GoogleFonts.interTightTextTheme(base.textTheme)
+    textTheme: GoogleFonts.spaceGroteskTextTheme(base.textTheme)
         .apply(bodyColor: C.text, displayColor: C.text),
     appBarTheme: AppBarTheme(
         backgroundColor: C.bg,
