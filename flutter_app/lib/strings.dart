@@ -3,6 +3,8 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'follow': 'Folgen', 'following_btn': 'Du folgst', 'followers': 'Follower', 'following': 'Folgt', 'goes_to': 'Geht hin',
+    'edit_profile': 'Profil bearbeiten', 'friends_going': 'Von deinen Leuten: {n}',
     'crew_group': 'Crew-Gruppe', 'crew_group_join': 'Crew-Gruppe', 'leave_group': 'Gruppe verlassen',
     'send_to_chat': 'In Chat senden', 'sent_ok': 'Gesendet.', 'event_msg': 'hat ein Event geteilt', 'event_gone': 'Event nicht mehr verfügbar',
     'members_n': '{n} Mitglieder', 'open': 'Öffnen',
@@ -95,6 +97,8 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'follow': 'Follow', 'following_btn': 'Following', 'followers': 'Followers', 'following': 'Following', 'goes_to': 'Going to',
+    'edit_profile': 'Edit profile', 'friends_going': 'From your people: {n}',
     'crew_group': 'Crew group', 'crew_group_join': 'Crew group', 'leave_group': 'Leave group',
     'send_to_chat': 'Send to chat', 'sent_ok': 'Sent.', 'event_msg': 'shared an event', 'event_gone': 'Event no longer available',
     'members_n': '{n} members', 'open': 'Open',

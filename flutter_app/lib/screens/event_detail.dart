@@ -235,6 +235,10 @@ class _SocialProof extends StatelessWidget {
       if (crew > 0) t('crew_n', {'n': crew}),
       if (rides > 0) t('rides_n', {'n': rides}),
     ];
+    final friends = store.friendsAt(e.id);
+    if (friends.isNotEmpty) {
+      parts.insert(0, t('friends_going', {'n': friends.take(3).map((f) => f['display_name'] ?? f['handle']).join(', ')}));
+    }
     if (parts.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 12),

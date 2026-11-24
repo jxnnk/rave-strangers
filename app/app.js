@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    edit_profile:'Profil bearbeiten',
     crew_group:'Crew-Gruppe',crew_group_join:'Crew-Gruppe beitreten',leave_group:'Gruppe verlassen',send_to_chat:'In Chat senden',sent_ok:'Gesendet.',event_msg:'hat ein Event geteilt',event_gone:'Event nicht mehr verfügbar',members_n:'{n} Mitglieder',open:'Öffnen',invite_t:'Freunde einladen',invite_sub:'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',invite_msg:'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤',invite_n:'{n} über deinen Link dabei',qr_t:'Dein QR-Code',qr_sub:'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.',copy_link:'Link kopieren',
     highlight:'Highlight',
     settings:'Einstellungen',set_account:'Konto',set_privacy:'Privatsphäre',set_session:'Sitzung',set_email:'E-Mail ändern',set_email_hint:'Wir schicken dir einen Bestätigungslink an die neue Adresse. Erst nach dem Klick wird sie geändert.',set_email_sent:'Check dein Postfach und bestätige die neue Adresse.',reset_rate:'Gerade wurden zu viele Mails verschickt. Versuch es in einer Stunde nochmal.',set_notify_tickets:'Ticket-Alarm',set_notify_tickets_sub:'Wenn Tickets für gemerkte Events rauskommen',set_notify_new:'Neue Termine',set_notify_new_sub:'Wenn Clubs, denen du folgst, neue Events haben',set_notify_reminder:'Erinnerung',set_notify_reminder_sub:'Am Tag vor deinen Events',set_dm_open:'Nachrichten von allen',set_dm_open_sub:'Aus: Nur Leute, mit denen du schon schreibst, erreichen dich',set_going_visible:'„Ich gehe hin“ öffentlich',set_going_visible_sub:'Andere sehen, dass du hingehst (gilt für neue Zusagen)',set_blocked:'Blockierte Personen',set_blocked_none:'Du hast niemanden blockiert.',unblock:'Freigeben',
@@ -72,6 +73,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    edit_profile:'Edit profile',
     crew_group:'Crew group',crew_group_join:'Join crew group',leave_group:'Leave group',send_to_chat:'Send to chat',sent_ok:'Sent.',event_msg:'shared an event',event_gone:'Event no longer available',members_n:'{n} members',open:'Open',invite_t:'Invite friends',invite_sub:'Anyone who joins through your link lands straight in a chat with you.',invite_msg:'Join me on Rave Strangers and let’s go raving together 🖤',invite_n:'{n} joined via your link',qr_t:'Your QR code',qr_sub:'Show it at the club: scan, join, and you are in a chat.',copy_link:'Copy link',
     highlight:'Highlight',
     settings:'Settings',set_account:'Account',set_privacy:'Privacy',set_session:'Session',set_email:'Change email',set_email_hint:'We send a confirmation link to the new address. It only changes after you click it.',set_email_sent:'Check your inbox and confirm the new address.',reset_rate:'Too many emails were sent just now. Please try again in an hour.',set_notify_tickets:'Ticket alert',set_notify_tickets_sub:'When tickets for saved events come out',set_notify_new:'New dates',set_notify_new_sub:'When clubs you follow add events',set_notify_reminder:'Reminder',set_notify_reminder_sub:'The day before your events',set_dm_open:'Messages from everyone',set_dm_open_sub:'Off: only people you already chat with can reach you',set_going_visible:'“I’m going” public',set_going_visible_sub:'Others see that you go (applies to new ones)',set_blocked:'Blocked people',set_blocked_none:'You have not blocked anyone.',unblock:'Unblock',
@@ -865,13 +867,7 @@ function viewMe(){
     inviteHTML()+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="sec"><h2>'+t('my_saved')+'</h2>'+(saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
-    '<div class="sec"><h2>'+t('me_title')+'</h2><form class="form" data-form="me" style="margin-top:0">'+
-      '<div class="form2"><div class="field"><label for="me-name">'+t('display_name')+'</label><input id="me-name" name="name" type="text" maxlength="60" value="'+esc(m.display_name)+'" required></div>'+
-      '<div class="field"><label for="me-handle">'+t('handle')+'</label><input id="me-handle" name="handle" type="text" maxlength="30" value="'+esc(m.handle)+'" autocapitalize="none" spellcheck="false"></div></div>'+
-      '<div class="field"><label for="me-city">'+t('city')+'</label><select id="me-city" name="city">'+cityOpts+'</select></div>'+
-      '<div class="field"><label for="me-bio">'+t('bio')+'</label><textarea id="me-bio" name="bio" maxlength="500" placeholder="'+esc(t('bio_ph'))+'">'+esc(m.bio||'')+'</textarea></div>'+
-      '<div><b>'+t('soc_hint')+'</b></div><div class="form2">'+soc+'</div>'+
-      '<div id="me-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('save')+'</button></div></form></div>'+
+    '<div class="row" style="margin-top:22px"><a class="btn" href="#settings">✎ '+t('edit_profile')+'</a></div>'+
     '<div class="sec"><h2>'+t('verif_t')+'</h2><div class="card">'+verif+'</div></div>'+
     '<div class="sec"><h2>'+t('my_subs')+'</h2>'+subs+'</div>'+
     '<div class="row" style="margin-top:28px"><a class="btn" href="#settings">⚙ '+t('settings')+'</a></div>';
@@ -884,11 +880,24 @@ function loadSettings(){ if(!S.user) return;
   data(sb.from('user_settings').select('*').eq('profile_id',S.user.id)).then(function(r){ S.settings=r[0]||{}; if(location.hash==='#settings') render(false); }).catch(function(){}); }
 function swRow(k){ var on=setOn(k);
   return '<label class="swrow"><div class="grow"><strong>'+t('set_'+k)+'</strong><p>'+t('set_'+k+'_sub')+'</p></div><input type="checkbox" role="switch" data-act="setting" data-id="'+k+'"'+(on?' checked':'')+'></label>'; }
+function meFormHTML(m){
+  var soc=SOC.map(function(s){ return '<div class="field"><label for="soc-'+s[0]+'">'+esc(s[1])+'</label><input id="soc-'+s[0]+'" name="soc-'+s[0]+'" type="text" maxlength="200" value="'+esc((m.socials||{})[s[0]]||'')+'" placeholder="@handle"></div>'; }).join('');
+  var cityOpts='<option value=""></option>'+CITIES.map(function(c){ return '<option'+(m.city===c.name?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('');
+  return ''+
+    '<form class="form" data-form="me" style="margin-top:0">'+
+      '<div class="form2"><div class="field"><label for="me-name">'+t('display_name')+'</label><input id="me-name" name="name" type="text" maxlength="60" value="'+esc(m.display_name)+'" required></div>'+
+      '<div class="field"><label for="me-handle">'+t('handle')+'</label><input id="me-handle" name="handle" type="text" maxlength="30" value="'+esc(m.handle)+'" autocapitalize="none" spellcheck="false"></div></div>'+
+      '<div class="field"><label for="me-city">'+t('city')+'</label><select id="me-city" name="city">'+cityOpts+'</select></div>'+
+      '<div class="field"><label for="me-bio">'+t('bio')+'</label><textarea id="me-bio" name="bio" maxlength="500" placeholder="'+esc(t('bio_ph'))+'">'+esc(m.bio||'')+'</textarea></div>'+
+      '<div><b>'+t('soc_hint')+'</b></div><div class="form2">'+soc+'</div>'+
+      '<div id="me-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('save')+'</button></div></form>';
+}
 function viewSettings(){
   if(!S.user) return viewLogin();
   if(BLOCKS===null){ BLOCKS=[]; data(sb.rpc('my_blocks')).then(function(r){ BLOCKS=r||[]; if(location.hash==='#settings') render(false); }).catch(function(){}); }
   var bl=BLOCKS.length?BLOCKS.map(function(b){ return '<div class="swrow"><div class="grow"><strong>'+esc(b.display_name||('@'+b.handle))+'</strong></div><button type="button" class="btn small" data-act="unblock" data-id="'+esc(b.blocked)+'">'+t('unblock')+'</button></div>'; }).join(''):'<p class="sub">'+t('set_blocked_none')+'</p>';
   return '<a class="back" href="#me">← '+t('nav_me')+'</a><h1>'+t('settings')+'</h1>'+
+    (S.me?'<div class="sec"><h2>'+t('edit_profile')+'</h2>'+meFormHTML(S.me)+'</div>':'')+
     '<div class="sec"><h2>'+t('set_account')+'</h2>'+
       '<form class="card form2" data-form="email"><div class="field"><label for="s-mail">'+t('set_email')+'</label><input id="s-mail" name="email" type="email" required autocomplete="email" value="'+esc(S.user.email||'')+'"></div><p class="sub" style="margin:0">'+t('set_email_hint')+'</p><div id="s-mail-msg" class="sub" role="status" style="margin:0"></div><div><button class="btn" type="submit">'+t('save')+'</button></div></form>'+
       '<div class="row" style="margin-top:12px"><a class="btn small" href="#newpw">'+t('change_pw')+'</a></div></div>'+

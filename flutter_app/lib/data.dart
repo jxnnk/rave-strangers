@@ -167,6 +167,9 @@ class Store extends ChangeNotifier {
   Set<int> saved = {};
   Set<int> alarms = {}; // bookmarks with remind = ticket alert
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
+  List<Map<String, dynamic>> attRows = []; // visible "going" rows (event_id, profile_id)
+  /// People I follow: id -> profile (handle, display_name, verified, city).
+  Map<String, Map<String, dynamic>> following = {};
   /// user_settings row (DB 022). Missing keys = default true.
   Map<String, dynamic> settings = {};
   bool setting(String k) => settings[k] != false;
@@ -259,6 +262,8 @@ class Store extends ChangeNotifier {
       saved = {};
       alarms = {};
       vfollow = {};
+      following = {};
+      attRows = [];
       settings = {};
       notes = [];
       unreadChats = 0;
@@ -280,8 +285,17 @@ class Store extends ChangeNotifier {
       }
       counts = c;
       going = g;
+      attRows = List<Map<String, dynamic>>.from(att);
       saved = bm.map((b) => b['event_id'] as int).toSet();
       alarms = bm.where((b) => b['remind'] == true).map((b) => b['event_id'] as int).toSet();
+      final fl = await sb
+          .from('follows')
+          .select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,city)')
+          .eq('follower', u.id);
+      following = {
+        for (final f in fl)
+          if (f['profiles'] != null) f['artist'] as String: Map<String, dynamic>.from(f['profiles'] as Map)
+      };
       final vf = await sb.from('venue_follows').select('venue_id').eq('profile_id', u.id);
       vfollow = vf.map((x) => x['venue_id'] as int).toSet();
       final st = await sb.from('user_settings').select().eq('profile_id', u.id).maybeSingle();
@@ -324,6 +338,34 @@ class Store extends ChangeNotifier {
       await sb.from('notifications').update({'read_at': now}).isFilter('read_at', null);
     } catch (e) {
       debugPrint('mark read failed: $e');
+    }
+  }
+
+  /// People I follow who go to this event.
+  List<Map<String, dynamic>> friendsAt(int eventId) => [
+        for (final a in attRows)
+          if (a['event_id'] == eventId && following.containsKey(a['profile_id'])) following[a['profile_id']]!
+      ];
+
+  Future<void> toggleFollow(String id, Map<String, dynamic> prof) async {
+    final u = user;
+    if (u == null || id == u.id) return;
+    final on = following.containsKey(id);
+    if (on) {
+      following.remove(id);
+    } else {
+      following[id] = prof;
+    }
+    notifyListeners();
+    try {
+      if (on) {
+        await sb.from('follows').delete().eq('follower', u.id).eq('artist', id);
+      } else {
+        await sb.from('follows').insert({'follower': u.id, 'artist': id});
+      }
+    } catch (e) {
+      debugPrint('follow failed: $e');
+      await loadMine();
     }
   }
 

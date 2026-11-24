@@ -8,6 +8,7 @@ import '../widgets.dart';
 import 'reset.dart';
 import 'settings.dart';
 import 'invite.dart';
+import 'person.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -62,6 +63,11 @@ class _Me extends StatelessWidget {
             ]),
           ),
         ]),
+        const SizedBox(height: 18),
+        if (store.user != null) FollowStats(store.user!.id),
+        const SizedBox(height: 12),
+        RsButton(t('edit_profile'), icon: Icons.edit_outlined,
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingsScreen()))),
         const SizedBox(height: 22),
         const InviteBox(),
         Section(1, t('my_going')),

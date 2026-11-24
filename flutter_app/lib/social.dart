@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 import 'data.dart';
 import 'screens/event_detail.dart';
+import 'screens/person.dart';
 import 'strings.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -191,11 +192,14 @@ class _CrewTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Avatar(name, size: 38),
+        InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38)),
         const SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('$name${prof?['verified'] == true ? ' ✓' : ''}', style: body(15, weight: FontWeight.w700)),
+            InkWell(
+              onTap: () => openPerson(context, p['author'] as String),
+              child: Text('$name${prof?['verified'] == true ? ' ✓' : ''}', style: body(15, weight: FontWeight.w700)),
+            ),
             Text('${city != null && city.isNotEmpty ? '$city · ' : ''}${ago(p['created_at'] as String?)}'.toUpperCase(),
                 style: mono(10)),
             const SizedBox(height: 6),
@@ -557,7 +561,9 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
-          onTap: widget.eventId == null ? null : () => _openEvent(widget.eventId!),
+          onTap: widget.eventId != null
+              ? () => _openEvent(widget.eventId!)
+              : (widget.otherId != null ? () => openPerson(context, widget.otherId!) : null),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(widget.otherName.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: display(17)),
             if (widget.isGroup) Text(t('crew_group'), style: mono(10.5)),

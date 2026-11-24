@@ -7,6 +7,7 @@ import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import 'event_detail.dart';
+import 'person.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -162,7 +163,7 @@ class _FeedTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Avatar(name, size: 38),
+          InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
