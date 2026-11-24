@@ -110,3 +110,9 @@ insert into venues (name, city, address, lat, lon, approx, website, kind) values
  ('Locke','Hamburg','St. Pauli Fischmarkt 27, 20359 Hamburg',53.5461865,9.9578027,false,null,'club'),
  ('Jazzhaus Freiburg','Freiburg','Schnewlinstraße 1, 79098 Freiburg im Breisgau',47.9947590,7.8405633,false,null,'club'),
  ('Petrovaradin Fortress (EXIT)','Novi Sad (RS)','Petrovaradinska tvrđava, 21131 Petrovaradin, Serbien',45.2521551,19.8638279,false,'https://www.exitfest.org','event_site');
+
+-- 2026-11-24
+insert into venues(name,city,address,lat,lon,approx,website,kind) values
+ ('Grün & Gold','Heidelberg','Am Karlstor 1, 69117 Heidelberg',49.4146932,8.7191414,false,null,'club'),
+ ('Circle Club','Offenburg','Marlener Straße 5, 77656 Offenburg',48.4692988,7.9302756,false,null,'club'),
+ ('Grampian Plains (Pitch Music & Arts)','Moyston (AU)','Moyston, Victoria, Australia',-37.3017640,142.7663831,true,null,'event_site');
