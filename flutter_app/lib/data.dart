@@ -167,6 +167,9 @@ class Store extends ChangeNotifier {
   Set<int> saved = {};
   Set<int> alarms = {}; // bookmarks with remind = ticket alert
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
+  /// user_settings row (DB 022). Missing keys = default true.
+  Map<String, dynamic> settings = {};
+  bool setting(String k) => settings[k] != false;
   Map<int, int> counts = {};
   Map<int, int> crewN = {}, ridesN = {};
   List<Map<String, dynamic>> notes = [];
@@ -256,6 +259,7 @@ class Store extends ChangeNotifier {
       saved = {};
       alarms = {};
       vfollow = {};
+      settings = {};
       notes = [];
       unreadChats = 0;
       profile = null;
@@ -280,6 +284,8 @@ class Store extends ChangeNotifier {
       alarms = bm.where((b) => b['remind'] == true).map((b) => b['event_id'] as int).toSet();
       final vf = await sb.from('venue_follows').select('venue_id').eq('profile_id', u.id);
       vfollow = vf.map((x) => x['venue_id'] as int).toSet();
+      final st = await sb.from('user_settings').select().eq('profile_id', u.id).maybeSingle();
+      settings = st ?? {};
     } catch (e) {
       debugPrint('loadMine failed: $e');
     }
@@ -318,6 +324,19 @@ class Store extends ChangeNotifier {
       await sb.from('notifications').update({'read_at': now}).isFilter('read_at', null);
     } catch (e) {
       debugPrint('mark read failed: $e');
+    }
+  }
+
+  Future<void> saveSetting(String key, bool value) async {
+    final u = user;
+    if (u == null) return;
+    settings[key] = value;
+    notifyListeners();
+    try {
+      await sb.from('user_settings').upsert({'profile_id': u.id, key: value, 'updated_at': DateTime.now().toUtc().toIso8601String()});
+    } catch (e) {
+      debugPrint('setting failed: $e');
+      await loadMine();
     }
   }
 
@@ -410,7 +429,11 @@ class Store extends ChangeNotifier {
       if (on) {
         await sb.from(table).delete().eq('event_id', id).eq('profile_id', u.id);
       } else {
-        await sb.from(table).insert({'event_id': id, 'profile_id': u.id});
+        await sb.from(table).insert({
+          'event_id': id,
+          'profile_id': u.id,
+          if (table == 'attendance') 'visible': setting('going_visible'),
+        });
       }
     } catch (e) {
       debugPrint('toggle $table failed: $e');

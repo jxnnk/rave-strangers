@@ -46,7 +46,12 @@ Future<void> openChat(BuildContext context, String otherId, String name) async {
         builder: (_) => ChatScreen(conversationId: (cid as num).toInt(), otherId: otherId, otherName: name)));
   } catch (e) {
     debugPrint('start_chat failed: $e');
-    if (context.mounted) showErr(context);
+    if (!context.mounted) return;
+    if ('$e'.contains('dm_closed')) {
+      toast(context, t('dm_closed'));
+    } else {
+      showErr(context);
+    }
   }
 }
 

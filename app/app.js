@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    settings:'Einstellungen',set_account:'Konto',set_privacy:'Privatsphäre',set_session:'Sitzung',set_email:'E-Mail ändern',set_email_hint:'Wir schicken dir einen Bestätigungslink an die neue Adresse. Erst nach dem Klick wird sie geändert.',set_email_sent:'Check dein Postfach und bestätige die neue Adresse.',reset_rate:'Gerade wurden zu viele Mails verschickt. Versuch es in einer Stunde nochmal.',set_notify_tickets:'Ticket-Alarm',set_notify_tickets_sub:'Wenn Tickets für gemerkte Events rauskommen',set_notify_new:'Neue Termine',set_notify_new_sub:'Wenn Clubs, denen du folgst, neue Events haben',set_notify_reminder:'Erinnerung',set_notify_reminder_sub:'Am Tag vor deinen Events',set_dm_open:'Nachrichten von allen',set_dm_open_sub:'Aus: Nur Leute, mit denen du schon schreibst, erreichen dich',set_going_visible:'„Ich gehe hin“ öffentlich',set_going_visible_sub:'Andere sehen, dass du hingehst (gilt für neue Zusagen)',set_blocked:'Blockierte Personen',set_blocked_none:'Du hast niemanden blockiert.',unblock:'Freigeben',
     signup_exists:'Mit dieser E-Mail gibt es schon ein Konto. Melde dich an oder nutze „Passwort vergessen?“.',
     alarm_set:'Ticket-Alarm',alarm_on:'Ticket-Alarm an',alarm_note:'Noch keine Tickets? Aktivier den Ticket-Alarm, wir sagen dir Bescheid, sobald sie da sind.',alarm_toast:'Ticket-Alarm an. Wir melden uns, sobald es Tickets gibt.',get_tix:'Tickets',inbox_t:'Benachrichtigungen',inbox_empty:'Noch nichts da. Merk dir Events oder folge Clubs. Dann melden wir uns hier, sobald Tickets rauskommen oder neue Termine dazukommen.',n_tickets:'Tickets sind da: {e}',n_new:'Neu bei {v}: {e}',n_rem:'Morgen: {e}',inbox_note:'Push-Nachrichten aufs Handy kommen mit der App. Bis dahin landet alles hier.',
     nav_home:'Home',nav_events:'Events',nav_map:'Karte',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profil',
@@ -69,6 +70,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    settings:'Settings',set_account:'Account',set_privacy:'Privacy',set_session:'Session',set_email:'Change email',set_email_hint:'We send a confirmation link to the new address. It only changes after you click it.',set_email_sent:'Check your inbox and confirm the new address.',reset_rate:'Too many emails were sent just now. Please try again in an hour.',set_notify_tickets:'Ticket alert',set_notify_tickets_sub:'When tickets for saved events come out',set_notify_new:'New dates',set_notify_new_sub:'When clubs you follow add events',set_notify_reminder:'Reminder',set_notify_reminder_sub:'The day before your events',set_dm_open:'Messages from everyone',set_dm_open_sub:'Off: only people you already chat with can reach you',set_going_visible:'“I’m going” public',set_going_visible_sub:'Others see that you go (applies to new ones)',set_blocked:'Blocked people',set_blocked_none:'You have not blocked anyone.',unblock:'Unblock',
     signup_exists:'This email already has an account. Log in or use “Forgot password?”.',
     alarm_set:'Ticket alert',alarm_on:'Ticket alert on',alarm_note:'No tickets yet? Turn on the ticket alert and we will tell you as soon as they are out.',alarm_toast:'Ticket alert on. We will let you know when tickets are out.',get_tix:'Tickets',inbox_t:'Notifications',inbox_empty:'Nothing here yet. Save events or follow clubs and we will tell you here when tickets drop or new dates are added.',n_tickets:'Tickets are out: {e}',n_new:'New at {v}: {e}',n_rem:'Tomorrow: {e}',inbox_note:'Push notifications to your phone arrive with the app. Until then everything lands here.',
     nav_home:'Home',nav_events:'Events',nav_map:'Map',nav_artists:'Artists',nav_connect:'Connect',nav_me:'Profile',
@@ -271,7 +273,7 @@ function loadMine(){
     r[1].forEach(function(a){ S.counts[a.event_id]=(S.counts[a.event_id]||0)+1; if(a.profile_id===uid) S.going.push(a.event_id); });
     S.saved=r[2].map(function(b){ return b.event_id; });
     S.alarms=r[2].filter(function(b){ return b.remind; }).map(function(b){ return b.event_id; });
-    loadInbox();
+    loadInbox(); loadSettings(); BLOCKS=null;
     S.verif=r[3][0]||null;
     S.follow=r[4].map(function(x){ return x.profiles; }).filter(Boolean);
     S.vfollow=r[5].map(function(x){ return x.venue_id; });
@@ -817,7 +819,7 @@ function viewMe(){
   }
   var subs=cache.subs==='loading'?loadingBox():(cache.subs.length?'<div class="people">'+cache.subs.map(function(s){ var p=berlinParts(new Date(s.starts_at));
     return '<div class="person"><div class="grow"><strong>'+esc(s.title)+'</strong><p>'+esc(p.date)+'</p></div><span class="tag'+(s.status==='pending'?' hot':'')+'">'+(s.status==='pending'?t('pending'):esc(s.status))+'</span></div>'; }).join('')+'</div>':emptyBox(t('none_yet')));
-  return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#newpw">'+t('change_pw')+'</a><button type="button" class="btn small" data-act="logout">'+t('logout')+'</button></div></div>'+
+  return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#settings">⚙ '+t('settings')+'</a></div></div>'+
     '<div class="hero" style="margin-top:16px">'+av(m.display_name,72)+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
@@ -831,8 +833,32 @@ function viewMe(){
       '<div id="me-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('save')+'</button></div></form></div>'+
     '<div class="sec"><h2>'+t('verif_t')+'</h2><div class="card">'+verif+'</div></div>'+
     '<div class="sec"><h2>'+t('my_subs')+'</h2>'+subs+'</div>'+
+    '<div class="row" style="margin-top:28px"><a class="btn" href="#settings">⚙ '+t('settings')+'</a></div>';
+}
+
+/* ---------- Settings (DB 022) ---------- */
+S.settings={}; var BLOCKS=null;
+function setOn(k){ return S.settings[k]!==false; }
+function loadSettings(){ if(!S.user) return;
+  data(sb.from('user_settings').select('*').eq('profile_id',S.user.id)).then(function(r){ S.settings=r[0]||{}; if(location.hash==='#settings') render(false); }).catch(function(){}); }
+function swRow(k){ var on=setOn(k);
+  return '<label class="swrow"><div class="grow"><strong>'+t('set_'+k)+'</strong><p>'+t('set_'+k+'_sub')+'</p></div><input type="checkbox" role="switch" data-act="setting" data-id="'+k+'"'+(on?' checked':'')+'></label>'; }
+function viewSettings(){
+  if(!S.user) return viewLogin();
+  if(BLOCKS===null){ BLOCKS=[]; data(sb.rpc('my_blocks')).then(function(r){ BLOCKS=r||[]; if(location.hash==='#settings') render(false); }).catch(function(){}); }
+  var bl=BLOCKS.length?BLOCKS.map(function(b){ return '<div class="swrow"><div class="grow"><strong>'+esc(b.display_name||('@'+b.handle))+'</strong></div><button type="button" class="btn small" data-act="unblock" data-id="'+esc(b.blocked)+'">'+t('unblock')+'</button></div>'; }).join(''):'<p class="sub">'+t('set_blocked_none')+'</p>';
+  return '<a class="back" href="#me">← '+t('nav_me')+'</a><h1>'+t('settings')+'</h1>'+
+    '<div class="sec"><h2>'+t('set_account')+'</h2>'+
+      '<form class="card form2" data-form="email"><div class="field"><label for="s-mail">'+t('set_email')+'</label><input id="s-mail" name="email" type="email" required autocomplete="email" value="'+esc(S.user.email||'')+'"></div><p class="sub" style="margin:0">'+t('set_email_hint')+'</p><div id="s-mail-msg" class="sub" role="status" style="margin:0"></div><div><button class="btn" type="submit">'+t('save')+'</button></div></form>'+
+      '<div class="row" style="margin-top:12px"><a class="btn small" href="#newpw">'+t('change_pw')+'</a></div></div>'+
+    '<div class="sec"><h2>'+t('inbox_t')+'</h2>'+swRow('notify_tickets')+swRow('notify_new')+swRow('notify_reminder')+'</div>'+
+    '<div class="sec"><h2>'+t('set_privacy')+'</h2>'+swRow('dm_open')+swRow('going_visible')+'<h3 style="margin:18px 0 6px;font-size:14px">'+t('set_blocked')+'</h3>'+bl+'</div>'+
+    '<div class="sec"><h2>'+t('set_session')+'</h2><div class="row"><button type="button" class="btn" data-act="logout">'+t('logout')+'</button></div></div>'+
     '<div class="sec danger"><h2>'+t('del_t')+'</h2><p class="sub">'+t('del_sub')+'</p><button type="button" class="btn small" data-act="delacct">'+t('del_btn')+'</button></div>';
 }
+function saveSetting(k,v){ if(!S.user) return; S.settings[k]=v;
+  var row={profile_id:S.user.id,updated_at:new Date().toISOString()}; row[k]=v;
+  data(sb.from('user_settings').upsert(row)).catch(function(err){ loadSettings(); fail(err); }); }
 
 /* ---------- Views: new event ---------- */
 function viewNew(){
@@ -1122,6 +1148,7 @@ function route(){
     case 'chat': return {tab:'connect',html:viewChat(+arg)};
     case 'me': return {tab:'me',html:viewMe()};
     case 'inbox': return {tab:'me',html:viewInbox()};
+    case 'settings': return {tab:'me',html:viewSettings()};
     case 'login': return {tab:'me',html:viewLogin()};
     case 'newpw': return {tab:'me',html:viewNewPw()};
     case 'reset': return {tab:'me',html:viewReset()};
@@ -1162,6 +1189,8 @@ document.addEventListener('click',function(ev){
   var el=ev.target.closest('[data-act]'); if(!el) return;
   var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
   if(act==='alarm'){ toggleAlarm(+id); return; }
+  if(act==='setting'){ saveSetting(id, !!el.checked); return; }
+  if(act==='unblock'){ data(sb.from('blocks').delete().eq('blocker',S.user.id).eq('blocked',id)).then(function(){ BLOCKS=null; render(false); }).catch(fail); return; }
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
   else if(act==='type'){ S.type=id; render(false); }
@@ -1171,7 +1200,7 @@ document.addEventListener('click',function(ev){
   else if(act==='copylink'){ copyText(shareMsg(evt(+id),'link').url); }
   else if(act==='homecity'){ setCity(id); render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
-  else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
+  else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going,{visible:setOn('going_visible')}); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
   else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h');
     var pq=fp?data(sb.from('follows').delete().eq('follower',S.user.id).eq('artist',id)):data(sb.from('follows').insert({follower:S.user.id,artist:id}));
     if(fp) S.follow=S.follow.filter(function(x){ return x.id!==id; }); else { var cp=cache.profile[String(hk).toLowerCase()]; S.follow.push({id:id,handle:hk,display_name:cp&&cp.display_name||hk,verified:cp&&cp.verified,role:cp&&cp.role}); }
@@ -1257,6 +1286,12 @@ document.addEventListener('submit',function(ev){
       busy(true);
       sb.auth.signInWithPassword({email:email,password:pw}).then(function(r){ busy(false); if(r.error){ errEl.textContent=t('err_login'); } });
     }
+  } else if(kind==='email'){
+    var nm=String(fd.get('email')||'').trim(), msgEl=document.getElementById('s-mail-msg');
+    if(!nm||nm===S.user.email) return;
+    sb.auth.updateUser({email:nm},{emailRedirectTo:location.origin+location.pathname+'#me'}).then(function(r){
+      if(r.error){ msgEl.textContent=/rate/i.test(r.error.message||'')?t('reset_rate'):(r.error.message||t('err_generic')); return; }
+      msgEl.textContent=t('set_email_sent'); });
   } else if(kind==='reset'){
     var rm=String(fd.get('email')||'').trim(); S.resetMail=rm;
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(rm)){ S.resetErr=t('email')+'?'; render(false); return; }
