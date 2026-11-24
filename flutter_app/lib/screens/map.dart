@@ -22,7 +22,7 @@ class _MapScreenState extends State<MapScreen> {
   final _apple = GlobalKey<AppleMapLayerState>();
   // iPhone/iPad: native Apple Maps. Android (and everything else): OpenStreetMap.
   bool get _useApple => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
-  bool _onlyEvents = false;
+  bool _onlyEvents = true; // ~1200 clubs: start with the ones that have events
   bool _names = false;
   int? _selected;
 

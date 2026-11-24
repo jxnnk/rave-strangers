@@ -116,3 +116,5 @@ insert into venues(name,city,address,lat,lon,approx,website,kind) values
  ('Grün & Gold','Heidelberg','Am Karlstor 1, 69117 Heidelberg',49.4146932,8.7191414,false,null,'club'),
  ('Circle Club','Offenburg','Marlener Straße 5, 77656 Offenburg',48.4692988,7.9302756,false,null,'club'),
  ('Grampian Plains (Pitch Music & Arts)','Moyston (AU)','Moyston, Victoria, Australia',-37.3017640,142.7663831,true,null,'event_site');
+
+-- 2026-11-24: ~1000 Clubs aus OpenStreetMap (amenity=nightclub, mit Name + Ort, ohne Erotik-Betriebe, Duplikate im Umkreis ~200 m übersprungen) direkt in venues importiert. Daten © OpenStreetMap-Mitwirkende (ODbL).
