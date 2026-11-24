@@ -3,6 +3,12 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'crew_group': 'Crew-Gruppe', 'crew_group_join': 'Crew-Gruppe', 'leave_group': 'Gruppe verlassen',
+    'send_to_chat': 'In Chat senden', 'sent_ok': 'Gesendet.', 'event_msg': 'hat ein Event geteilt', 'event_gone': 'Event nicht mehr verfügbar',
+    'members_n': '{n} Mitglieder', 'open': 'Öffnen',
+    'invite_t': 'Freunde einladen', 'invite_sub': 'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',
+    'invite_msg': 'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤', 'invite_n': '{n} über deinen Link dabei',
+    'qr_t': 'Dein QR-Code', 'qr_sub': 'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.', 'copy_link': 'Link kopieren', 'copied': 'Kopiert.',
     'set_profile': 'Profil', 'set_account': 'Konto', 'set_privacy': 'Privatsphäre', 'set_app': 'App', 'set_session': 'Sitzung',
     'set_name': 'Anzeigename', 'set_city': 'Stadt', 'set_bio': 'Über dich', 'saved_ok': 'Gespeichert.',
     'set_email': 'E-Mail ändern', 'set_email_hint': 'Wir schicken dir einen Bestätigungslink an die neue Adresse. Erst nach dem Klick wird sie geändert.',
@@ -89,6 +95,12 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'crew_group': 'Crew group', 'crew_group_join': 'Crew group', 'leave_group': 'Leave group',
+    'send_to_chat': 'Send to chat', 'sent_ok': 'Sent.', 'event_msg': 'shared an event', 'event_gone': 'Event no longer available',
+    'members_n': '{n} members', 'open': 'Open',
+    'invite_t': 'Invite friends', 'invite_sub': 'Anyone who joins through your link lands straight in a chat with you.',
+    'invite_msg': 'Join me on Rave Strangers and let’s go raving together 🖤', 'invite_n': '{n} joined via your link',
+    'qr_t': 'Your QR code', 'qr_sub': 'Show it at the club: scan, join, and you are in a chat.', 'copy_link': 'Copy link', 'copied': 'Copied.',
     'set_profile': 'Profile', 'set_account': 'Account', 'set_privacy': 'Privacy', 'set_app': 'App', 'set_session': 'Session',
     'set_name': 'Display name', 'set_city': 'City', 'set_bio': 'About you', 'saved_ok': 'Saved.',
     'set_email': 'Change email', 'set_email_hint': 'We send a confirmation link to the new address. It only changes after you click it.',

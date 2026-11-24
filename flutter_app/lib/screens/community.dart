@@ -24,7 +24,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     if (store.user == null) return;
     try {
       final r = await Future.wait([
-        sb.rpc('my_chats').then((v) => List<Map<String, dynamic>>.from(v as List)),
+        sb.rpc('my_chats2').then((v) => List<Map<String, dynamic>>.from(v as List)),
         sb
             .from('crew_posts')
             .select('id,author,body,created_at,event_id,profiles(handle,display_name,city,verified)')
@@ -98,7 +98,8 @@ class _ChatTile extends StatelessWidget {
   const _ChatTile(this.c, {required this.onBack});
   @override
   Widget build(BuildContext context) {
-    final name = ((c['other_name'] as String?)?.isNotEmpty ?? false) ? c['other_name'] as String : '@${c['other_handle']}';
+    final group = c['is_group'] == true;
+    final name = chatTitle(c);
     final unread = (c['unread'] as int?) ?? 0;
     final last = c['last_body'] as String?;
     final mineLast = c['last_sender'] == myId;
@@ -107,8 +108,10 @@ class _ChatTile extends StatelessWidget {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => ChatScreen(
                 conversationId: (c['conversation_id'] as num).toInt(),
-                otherId: c['other_id'] as String,
-                otherName: name)));
+                otherId: c['other_id'] as String?,
+                otherName: name,
+                isGroup: group,
+                eventId: (c['event_id'] as num?)?.toInt())));
         onBack();
       },
       child: Container(
@@ -122,7 +125,10 @@ class _ChatTile extends StatelessWidget {
               Text('$name${c['other_verified'] == true ? ' ✓' : ''}',
                   style: body(15.5, weight: unread > 0 ? FontWeight.w800 : FontWeight.w600)),
               const SizedBox(height: 3),
-              Text(last == null ? '…' : '${mineLast ? '${t('you')}: ' : ''}$last',
+              Text(
+                  last == null
+                      ? (group ? t('members_n', {'n': c['members'] ?? 1}) : '…')
+                      : '${mineLast ? '${t('you')}: ' : (group ? '${c['last_sender_name'] ?? ''}: ' : '')}${last.startsWith('[[event:') ? t('event_msg') : last}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: body(14, color: unread > 0 ? C.text : C.muted)),

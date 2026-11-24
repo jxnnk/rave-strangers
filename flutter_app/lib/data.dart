@@ -307,7 +307,7 @@ class Store extends ChangeNotifier {
       debugPrint('notifications failed: $e');
     }
     try {
-      final c = await sb.rpc('my_chats') as List;
+      final c = await sb.rpc('my_chats2') as List;
       unreadChats = c.fold<int>(0, (a, m) => a + ((m['unread'] as int?) ?? 0));
     } catch (_) {}
     notifyListeners();

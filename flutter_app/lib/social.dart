@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'data.dart';
+import 'screens/event_detail.dart';
 import 'strings.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -136,7 +137,11 @@ class _CrewSectionState extends State<CrewSection> {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(t('crew_sub'), style: body(14.5, color: C.muted)),
       const SizedBox(height: 12),
-      RsButton(t('share_wa'), icon: Icons.ios_share, onTap: () => shareEvent(e)),
+      Wrap(spacing: 8, runSpacing: 8, children: [
+        RsButton(t('crew_group_join'), primary: true, icon: Icons.groups_outlined, onTap: () => openEventGroup(context, e)),
+        RsButton(t('share_wa'), icon: Icons.ios_share, onTap: () => shareEvent(e)),
+        RsButton(t('send_to_chat'), icon: Icons.send_outlined, onTap: () => sendEventToChat(context, e)),
+      ]),
       const SizedBox(height: 16),
       if (store.user == null) ...[
         if (n > 0) Text(t('crew_n', {'n': n}).toUpperCase(), style: mono(11.5, color: C.accent)),
@@ -424,8 +429,17 @@ class _RideFormState extends State<_RideForm> {
 
 class ChatScreen extends StatefulWidget {
   final int conversationId;
-  final String otherId, otherName;
-  const ChatScreen({super.key, required this.conversationId, required this.otherId, required this.otherName});
+  final String? otherId; // null in a group
+  final String otherName; // person or group title
+  final bool isGroup;
+  final int? eventId;
+  const ChatScreen(
+      {super.key,
+      required this.conversationId,
+      required this.otherId,
+      required this.otherName,
+      this.isGroup = false,
+      this.eventId});
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -457,7 +471,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       final r = await sb
           .from('messages')
-          .select('id,sender,body,created_at')
+          .select('id,sender,body,created_at,profiles(display_name,handle)')
           .eq('conversation_id', widget.conversationId)
           .order('created_at', ascending: true)
           .limit(300);
@@ -500,7 +514,22 @@ class _ChatScreenState extends State<ChatScreen> {
     if (mounted) setState(() => _sending = false);
   }
 
+  void _openEvent(int id) {
+    final e = store.events.where((x) => x.id == id).firstOrNull;
+    if (e != null) Navigator.of(context).push(MaterialPageRoute(builder: (_) => EventDetail(e)));
+  }
+
+  Future<void> _leave() async {
+    try {
+      await sb.rpc('leave_chat', params: {'p_conv': widget.conversationId});
+      if (mounted) Navigator.of(context).pop();
+    } catch (_) {
+      if (mounted) showErr(context);
+    }
+  }
+
   Future<void> _block() async {
+    if (widget.otherId == null) return;
     final yes = await showDialog<bool>(
       context: context,
       builder: (c) => AlertDialog(
@@ -527,12 +556,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.otherName.toUpperCase(), style: mono(13, color: C.text)),
+        title: InkWell(
+          onTap: widget.eventId == null ? null : () => _openEvent(widget.eventId!),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(widget.otherName.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: display(17)),
+            if (widget.isGroup) Text(t('crew_group'), style: mono(10.5)),
+          ]),
+        ),
         actions: [
           PopupMenuButton<String>(
             color: C.surface,
-            onSelected: (_) => _block(),
-            itemBuilder: (_) => [PopupMenuItem(value: 'block', child: Text(t('block')))],
+            onSelected: (v) => v == 'leave' ? _leave() : _block(),
+            itemBuilder: (_) => widget.isGroup
+                ? [PopupMenuItem(value: 'leave', child: Text(t('leave_group')))]
+                : [PopupMenuItem(value: 'block', child: Text(t('block')))],
           ),
         ],
       ),
@@ -556,7 +593,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     border: me ? null : Border.all(color: C.line),
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    Text(m['body'] as String? ?? '', style: body(15, color: me ? C.ink : C.text)),
+                    if (widget.isGroup && !me)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(personName(m['profiles'] as Map<String, dynamic>?),
+                            style: body(12.5, color: C.accent, weight: FontWeight.w700)),
+                      ),
+                    _MsgBody(m['body'] as String? ?? '', me: me, onEvent: _openEvent),
                     const SizedBox(height: 3),
                     Text(fmtTime(berlin(DateTime.parse(m['created_at'] as String))),
                         style: mono(9, color: me ? C.ink : C.muted, spacing: 0.3)),
@@ -596,3 +639,114 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+
+/// Message text; "[[event:123]]" becomes an event card with a ticket button.
+class _MsgBody extends StatelessWidget {
+  final String text;
+  final bool me;
+  final void Function(int) onEvent;
+  const _MsgBody(this.text, {required this.me, required this.onEvent});
+  static final _re = RegExp(r'^\[\[event:(\d+)\]\]$');
+  @override
+  Widget build(BuildContext context) {
+    final m = _re.firstMatch(text.trim());
+    final e = m == null ? null : store.events.where((x) => x.id == int.parse(m.group(1)!)).firstOrNull;
+    if (e == null) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Text(m != null ? t('event_gone') : text, style: body(15, color: me ? C.ink : C.text)),
+      );
+    }
+    final v = store.venues[e.venueId];
+    final fg = me ? C.ink : C.text;
+    return InkWell(
+      onTap: () => onEvent(e.id),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('${fmtDow(e.start)} ${e.start.day}.${e.start.month}. · ${e.timeLabel}', style: body(12.5, color: fg, weight: FontWeight.w700)),
+        const SizedBox(height: 2),
+        Text(e.title.toUpperCase(), style: display(19, color: fg)),
+        if (v != null) Text(v.name, style: body(13.5, color: fg)),
+        const SizedBox(height: 8),
+        Row(mainAxisSize: MainAxisSize.min, children: [
+          if (e.ticketUrl != null)
+            RsButton('${t('get_tix')} ↗', small: true, onTap: () => openUrl(e.ticketUrl!)),
+          if (e.ticketUrl != null) const SizedBox(width: 6),
+          RsButton(t('open'), small: true, onTap: () => onEvent(e.id)),
+        ]),
+      ]),
+    );
+  }
+}
+
+/// Bottom sheet: send an event into one of your chats.
+Future<void> sendEventToChat(BuildContext context, Ev e) async {
+  if (store.user == null) {
+    askLogin(context);
+    return;
+  }
+  List<Map<String, dynamic>> chats = [];
+  try {
+    chats = List<Map<String, dynamic>>.from(await sb.rpc('my_chats2') as List);
+  } catch (_) {}
+  if (!context.mounted) return;
+  if (chats.isEmpty) {
+    toast(context, t('no_chats'));
+    return;
+  }
+  final pick = await showModalBottomSheet<Map<String, dynamic>>(
+    context: context,
+    backgroundColor: C.surface,
+    shape: const RoundedRectangleBorder(),
+    builder: (c) => SafeArea(
+      child: ListView(shrinkWrap: true, padding: const EdgeInsets.all(18), children: [
+        Text(t('send_to_chat').toUpperCase(), style: display(20)),
+        const SizedBox(height: 10),
+        for (final ch in chats)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(ch['is_group'] == true ? Icons.groups_outlined : Icons.person_outline, color: C.muted),
+            title: Text(chatTitle(ch), style: body(15.5)),
+            onTap: () => Navigator.pop(c, ch),
+          ),
+      ]),
+    ),
+  );
+  if (pick == null) return;
+  try {
+    await sb.from('messages').insert({
+      'conversation_id': (pick['conversation_id'] as num).toInt(),
+      'sender': myId,
+      'body': '[[event:${e.id}]]',
+    });
+    if (context.mounted) toast(context, t('sent_ok'));
+  } catch (_) {
+    if (context.mounted) showErr(context);
+  }
+}
+
+String chatTitle(Map<String, dynamic> c) {
+  if (c['is_group'] == true) return (c['title'] as String?) ?? t('crew_group');
+  final n = c['other_name'] as String?;
+  return (n != null && n.isNotEmpty) ? n : '@${c['other_handle']}';
+}
+
+/// Join the crew group chat of an event and open it.
+Future<void> openEventGroup(BuildContext context, Ev e) async {
+  if (store.user == null) {
+    askLogin(context);
+    return;
+  }
+  try {
+    final cid = await sb.rpc('join_event_chat', params: {'p_event': e.id});
+    if (!context.mounted) return;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => ChatScreen(
+            conversationId: (cid as num).toInt(), otherId: null, otherName: e.title, isGroup: true, eventId: e.id)));
+  } catch (_) {
+    if (context.mounted) showErr(context);
+  }
+}
+
+/// Personal invite link: whoever signs up through it lands in a chat with you.
+String inviteLink() => '$webUrl?ref=i-${store.profile?['handle'] ?? ''}';
