@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    followers_l:'Follower',following_l:'Folgt',write_dm:'Schreiben',
     edit_profile:'Profil bearbeiten',
     crew_group:'Crew-Gruppe',crew_group_join:'Crew-Gruppe beitreten',leave_group:'Gruppe verlassen',send_to_chat:'In Chat senden',sent_ok:'Gesendet.',event_msg:'hat ein Event geteilt',event_gone:'Event nicht mehr verfügbar',members_n:'{n} Mitglieder',open:'Öffnen',invite_t:'Freunde einladen',invite_sub:'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',invite_msg:'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤',invite_n:'{n} über deinen Link dabei',qr_t:'Dein QR-Code',qr_sub:'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.',copy_link:'Link kopieren',
     highlight:'Highlight',
@@ -73,6 +74,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    followers_l:'Followers',following_l:'Following',write_dm:'Message',
     edit_profile:'Edit profile',
     crew_group:'Crew group',crew_group_join:'Join crew group',leave_group:'Leave group',send_to_chat:'Send to chat',sent_ok:'Sent.',event_msg:'shared an event',event_gone:'Event no longer available',members_n:'{n} members',open:'Open',invite_t:'Invite friends',invite_sub:'Anyone who joins through your link lands straight in a chat with you.',invite_msg:'Join me on Rave Strangers and let’s go raving together 🖤',invite_n:'{n} joined via your link',qr_t:'Your QR code',qr_sub:'Show it at the club: scan, join, and you are in a chat.',copy_link:'Copy link',
     highlight:'Highlight',
@@ -650,11 +652,32 @@ function viewProfile(handle){
   var evs=(p.goes||[]).map(evt).filter(Boolean).sort(function(a,b){ return a.off-b.off; });
   return back+'<div class="hero">'+av(p.display_name,84)+'<div><h1>'+esc(p.display_name)+(p.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1>'+
     '<p class="sub" style="margin-top:6px">@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+(p.verified?' · '+t('verified'):'')+'</p></div></div>'+
-    (mine?'':'<div class="row" style="margin-top:16px"><button type="button" class="btn '+(fo?'on':'primary')+'" data-act="follow" data-id="'+esc(p.id)+'" data-h="'+esc(p.handle)+'" aria-pressed="'+fo+'">'+(fo?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>')+
+    fstatsHTML(p.id)+
+    (mine?'':'<div class="row" style="margin-top:16px"><button type="button" class="btn" data-act="dm" data-id="'+esc(p.id)+'">'+t('write_dm')+'</button>'+'</div><div class="row" style="margin-top:8px"><button type="button" class="btn '+(fo?'on':'primary')+'" data-act="follow" data-id="'+esc(p.id)+'" data-h="'+esc(p.handle)+'" aria-pressed="'+fo+'">'+(fo?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>')+
     (p.bio?'<p class="sub" style="margin-top:16px">'+esc(p.bio)+'</p>':'')+socialsHTML(p.socials)+
     (evs.length?'<div class="sec"><h2>'+t('upcoming_going')+'</h2><div class="list" style="margin-top:0">'+evs.map(eventCard).join('')+'</div></div>':'')+
     (S.user&&!mine?'<div class="sec"><div class="row"><button type="button" class="btn small" data-act="block" data-id="'+esc(p.id)+'">'+t('block')+'</button></div>'+reportForm('profile',p.id)+'<p class="sub">'+t('safety_note')+'</p></div>':'')+
     (mine?'<div class="row" style="margin-top:20px"><a class="btn" href="#me">'+t('me_title')+'</a></div>':'');
+}
+
+/* ---------- Followers / following ---------- */
+var FSTATS={};
+function fstatsHTML(id){
+  var st=FSTATS[id];
+  if(st===undefined){ FSTATS[id]=null;
+    Promise.all([sb.from('follows').select('artist',{count:'exact',head:true}).eq('artist',id),sb.from('follows').select('follower',{count:'exact',head:true}).eq('follower',id)])
+      .then(function(r){ FSTATS[id]={a:r[0].count||0,b:r[1].count||0}; render(false); }).catch(function(){}); }
+  st=FSTATS[id]||{a:'–',b:'–'};
+  return '<div class="fstats"><a href="#followers-'+esc(id)+'"><b>'+st.a+'</b><span>'+t('followers_l')+'</span></a><a href="#following-'+esc(id)+'"><b>'+st.b+'</b><span>'+t('following_l')+'</span></a></div>';
+}
+var FLIST={};
+function viewFollowList(id,followers){
+  var key=(followers?'a':'b')+id, rows=FLIST[key];
+  if(rows===undefined){ FLIST[key]='loading';
+    var q=followers?sb.from('follows').select('follower,profiles!follows_follower_fkey(id,handle,display_name,verified)').eq('artist',id):sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified)').eq('follower',id);
+    data(q.limit(500)).then(function(r){ FLIST[key]=r.map(function(x){ return x.profiles; }).filter(Boolean); render(false); }).catch(function(err){ FLIST[key]=[]; fail(err); }); rows='loading'; }
+  var list=rows==='loading'?loadingBox():(rows.length?'<div class="people">'+rows.map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p.display_name)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+'</p></div></a>'; }).join('')+'</div>':emptyBox(t('none_yet')));
+  return '<a class="back" href="javascript:history.back()">← '+t('back')+'</a><h1>'+(followers?t('followers_l'):t('following_l'))+'</h1><div class="sec">'+list+'</div>';
 }
 
 /* ---------- Views: connect ---------- */
@@ -863,6 +886,7 @@ function viewMe(){
     return '<div class="person"><div class="grow"><strong>'+esc(s.title)+'</strong><p>'+esc(p.date)+'</p></div><span class="tag'+(s.status==='pending'?' hot':'')+'">'+(s.status==='pending'?t('pending'):esc(s.status))+'</span></div>'; }).join('')+'</div>':emptyBox(t('none_yet')));
   return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#settings">⚙ '+t('settings')+'</a></div></div>'+
     '<div class="hero" style="margin-top:16px">'+av(m.display_name,72)+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
+    fstatsHTML(m.id)+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
     inviteHTML()+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
@@ -1193,6 +1217,8 @@ function route(){
     case 'club': return {tab:'map',html:viewClub(+arg)};
     case 'artists': return {tab:'home',html:viewArtists()};
     case 'u': return {tab:'home',html:viewProfile(arg)};
+    case 'followers': return {tab:'me',html:viewFollowList(arg,true)};
+    case 'following': return {tab:'me',html:viewFollowList(arg,false)};
     case 'connect': return {tab:'connect',html:viewConnect()};
     case 'chats': return {tab:'connect',html:viewChats()};
     case 'chat': return {tab:'connect',html:viewChat(+arg)};
@@ -1258,7 +1284,7 @@ document.addEventListener('click',function(ev){
   else if(act==='homecity'){ setCity(id); render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
   else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going,{visible:setOn('going_visible')}); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
-  else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h');
+  else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h'); delete FSTATS[id]; FLIST={};
     var pq=fp?data(sb.from('follows').delete().eq('follower',S.user.id).eq('artist',id)):data(sb.from('follows').insert({follower:S.user.id,artist:id}));
     if(fp) S.follow=S.follow.filter(function(x){ return x.id!==id; }); else { var cp=cache.profile[String(hk).toLowerCase()]; S.follow.push({id:id,handle:hk,display_name:cp&&cp.display_name||hk,verified:cp&&cp.verified,role:cp&&cp.role}); }
     render(false); pq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
