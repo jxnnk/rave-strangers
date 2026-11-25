@@ -33,6 +33,11 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 7. Standort nur im Vordergrund, nie speichern.
 8. Texte immer DE + EN (`strings.dart` bzw. Strings in `app.js`), keine doppelten Keys.
 
+## Hooks (`.claude/`, gelten automatisch für alle, brauchen Node)
+- `migration-guard.js`: blockiert `DROP TABLE/COLUMN/...` und `TRUNCATE` in Migrationen, fragt bei `DELETE FROM` nach (Regel 5).
+- `sw-cache-guard.js`: blockiert `git commit`/`git push`, wenn `app/` geändert, aber `rs-shell-vNN` nicht hochgezählt ist.
+- `strings-check.js`: meldet nach jeder Bearbeitung fehlende DE/EN-Keys und Dubletten (Regel 8). Von Hand: `node .claude/hooks/strings-check.js`.
+
 ## Zusammenarbeit
 - **`dev`** ist der gemeinsame Arbeits-Branch. Alle arbeiten und pushen dort.
 - **`main`** ist die Live-Version (GitHub Pages). Nur wenn `dev` getestet ist, wird `dev` in `main` gemergt.
