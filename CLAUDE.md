@@ -1,0 +1,51 @@
+# CLAUDE.md – Briefing für jede Claude-Sitzung
+
+Lies diese Datei zuerst. Danach `LAUNCH.md` (Plan) und `LATER.md` (offene Punkte).
+
+## Projekt
+**Rave Strangers** (Logo: RAVE STRNGRS) – Techno-Community-App für Deutschland.
+USP: „Nie mehr allein raven. Finde deine Crew, nicht nur die Party.“
+Startstadt: **Karlsruhe**, danach Berlin. Launch-Ziel: so bald wie möglich.
+
+## Aufbau
+| Ordner | Inhalt |
+|---|---|
+| `app/` | Web-App (Vanilla JS, `app.js` mit Hash-Router), live über GitHub Pages |
+| `flutter_app/` | Native App (Flutter). `android/` und `ios/` werden lokal erzeugt, nicht im Repo |
+| `supabase/` | Migrationen (`0xx_*.sql`) und Seeds |
+| `DESIGN.md` | Design-Regeln |
+
+Backend: Supabase-Projekt `wnmxloykrnbrpvzxhnsb`, RLS überall an.
+Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`).
+
+## Design
+- Farben: `#111113` (Hintergrund), `#19191C` (Flächen), `#EFECE6` (Text), `#FF2B1C` (Akzent)
+- Schrift: **Anton** für Überschriften, **Space Grotesk** für alles andere
+- Kein generischer „KI-Look“: keine Abschnittsnummern, keine [Klammer-Tags]
+
+## Feste Regeln
+1. **Nie** den Supabase `service_role`-Key teilen, committen oder in den Client packen. Nur der publishable Key gehört in die Apps.
+2. **Keine** Events, Adressen, Bewertungen oder Testimonials erfinden. Nur echte, öffentliche Quellen.
+3. **Kein** Scraping hinter Logins, kein Instagram/Facebook/TikTok-Scraping.
+4. **Keine** privaten, geheimen oder illegalen Rave-Locations.
+5. Migrationen ohne `DROP`/`DELETE`; Venues ausblenden über `rules.hidden=true`.
+6. Secrets (SMTP, OAuth, API-Keys) trägt nur Jannik selbst ein – nie im Chat.
+7. Standort nur im Vordergrund, nie speichern.
+8. Texte immer DE + EN (`strings.dart` bzw. Strings in `app.js`), keine doppelten Keys.
+
+## Zusammenarbeit
+- Jede Person arbeitet auf einem **eigenen Branch** (`name/feature`), dann Pull Request auf `main`.
+- Vor dem Start: `git pull`. Kleine, klare Commits.
+- Wer eine Aufgabe übernimmt, trägt sich unten ein, damit niemand doppelt arbeitet.
+
+## Offene Aufgaben (zum Aufteilen)
+| Aufgabe | Wer |
+|---|---|
+| Flutter: neuen Stand kompilieren und Fehler fixen | Jannik |
+| PostHog-Tracking mit Einwilligungs-Dialog (Web + Flutter) | – |
+| Apple- und Google-Login | – |
+| Push-Nachrichten (Firebase) | – |
+| Profilbilder (Supabase Storage) | – |
+| App-Icon | – |
+| Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
+| Impressum, Datenschutz, AGB | – |
