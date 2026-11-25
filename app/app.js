@@ -259,7 +259,7 @@ function loadBase(){
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
     loadRatings().then(function(){ if(S.ready) render(false); });
-    loadCrewCounts();
+    loadCrewCounts(); autoLocate();
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
 }
 
@@ -368,6 +368,21 @@ function copyText(x){
 }
 function setCity(c){ S.homeCity=c; S.city=c; lsSet('rs-city',c); }
 /* "Meine Stadt" via GPS: asked once on tap, used only here on the device, never saved or sent. */
+/* On every visit: if location is allowed, follow the city you are in (unless you picked one by hand).
+   First visit: ask once. Position stays in the browser, nothing is stored or sent. */
+function autoLocate(){
+  if(!navigator.geolocation||lsGet('rs-city-manual')==='1') return;
+  function go(){ navigator.geolocation.getCurrentPosition(function(pos){
+      var c=nearestCity(pos.coords.latitude,pos.coords.longitude); if(c&&c!==S.city){ setCity(c); render(false); } },function(){},{enableHighAccuracy:false,timeout:12000,maximumAge:900000}); }
+  var ask=function(){ if(lsGet('rs-loc-asked')==='1') return; lsSet('rs-loc-asked','1'); go(); };
+  if(navigator.permissions&&navigator.permissions.query){
+    navigator.permissions.query({name:'geolocation'}).then(function(st){ if(st.state==='granted') go(); else if(st.state==='prompt') ask(); }).catch(ask);
+  } else ask();
+}
+function nearestCity(la,lo){ var best=null, bd=1e9;
+  VENUES.forEach(function(v){ if(!EVENTS.some(function(e){ return e.v===v.id&&upcoming(e); })) return;
+    var dx=(v.lon-lo)*Math.cos(la*Math.PI/180), dy=v.lat-la, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=v; } });
+  return best?best.city:null; }
 function locateCity(){
   if(!navigator.geolocation){ toast(t('loc_none')); return; }
   toast(t('loc_wait'));
@@ -376,7 +391,7 @@ function locateCity(){
     VENUES.forEach(function(v){ if(!EVENTS.some(function(e){ return e.v===v.id&&upcoming(e); })) return;
       var dx=(v.lon-lo)*Math.cos(la*Math.PI/180), dy=v.lat-la, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=v; } });
     if(!best){ toast(t('loc_fail')); return; }
-    var km=Math.sqrt(bd)*111; setCity(best.city); render(false);
+    var km=Math.sqrt(bd)*111; setCity(best.city); lsSet('rs-city-manual',''); render(false);
     toast(km>60?t('loc_far',{c:best.city}):t('loc_ok',{c:best.city}));
   },function(err){ toast(err&&err.code===1?t('loc_denied'):t('loc_fail')); },{enableHighAccuracy:false,timeout:12000,maximumAge:600000});
 }
@@ -1298,7 +1313,7 @@ document.addEventListener('click',function(ev){
     if(navigator.share) navigator.share({title:sm.title,text:sm.text,url:sm.url}).catch(function(){});
     else copyText(sm.url); }
   else if(act==='copylink'){ copyText(shareMsg(evt(+id),'link').url); }
-  else if(act==='homecity'){ setCity(id); render(false); }
+  else if(act==='homecity'){ setCity(id); lsSet('rs-city-manual','1'); render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
   else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going,{visible:setOn('going_visible')}); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
   else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h'); delete FSTATS[id]; FLIST={};

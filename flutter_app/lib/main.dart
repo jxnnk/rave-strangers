@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data.dart';
+import 'locate.dart';
 import 'screens/community.dart';
 import 'screens/events.dart';
 import 'screens/home.dart';
@@ -61,11 +62,16 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     // badges (notifications, unread chats) stay fresh while the app is open
     _poll = Timer.periodic(const Duration(seconds: 60), (_) => store.loadInbox());
+    // current city via GPS (asks once, then updates silently while the app is open)
+    WidgetsBinding.instance.addPostFrameCallback((_) => autoLocate(context));
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) store.loadInbox();
+    if (state == AppLifecycleState.resumed) {
+      store.loadInbox();
+      autoLocate(context);
+    }
   }
 
   @override

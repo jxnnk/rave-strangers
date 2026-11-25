@@ -3,6 +3,7 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'loc_q_t': 'Events in deiner Nähe', 'loc_q': 'Darf Rave Strangers deinen Standort nutzen? Dann zeigen wir dir automatisch die Events in der Stadt, in der du gerade bist. Dein Standort bleibt auf dem Handy und wird nicht gespeichert.', 'later': 'Später', 'allow': 'Erlauben', 'in_city': 'in {c}',
     'loc_btn': 'Meine Stadt finden', 'loc_wait': 'Suche deine Stadt …', 'loc_ok': 'Stadt: {c}', 'loc_far': 'Nächste Stadt mit Events: {c}',
     'loc_fail': 'Standort nicht gefunden. Wähl deine Stadt einfach aus.', 'loc_denied': 'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',
     'follow': 'Folgen', 'following_btn': 'Du folgst', 'followers': 'Follower', 'following': 'Folgt', 'goes_to': 'Geht hin',
@@ -99,6 +100,7 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'loc_q_t': 'Events near you', 'loc_q': 'May Rave Strangers use your location? Then we automatically show the events in the city you are in. Your location stays on your phone and is not saved.', 'later': 'Later', 'allow': 'Allow', 'in_city': 'in {c}',
     'loc_btn': 'Find my city', 'loc_wait': 'Finding your city …', 'loc_ok': 'City: {c}', 'loc_far': 'Nearest city with events: {c}',
     'loc_fail': 'Could not get your location. Just pick your city.', 'loc_denied': 'Location not allowed. You can pick the city instead.',
     'follow': 'Follow', 'following_btn': 'Following', 'followers': 'Followers', 'following': 'Following', 'goes_to': 'Going to',

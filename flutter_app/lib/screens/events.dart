@@ -14,7 +14,13 @@ class EventsScreen extends StatefulWidget {
 
 class _EventsScreenState extends State<EventsScreen> {
   String _q = '';
-  String? _city;
+  String? _picked; // null = not chosen yet -> current city
+  bool _didPick = false;
+  String? get _city => _didPick ? _picked : store.hereCity;
+  set _city(String? v) {
+    _picked = v;
+    _didPick = true;
+  }
   String? _genre;
 
   bool _match(Ev e) {

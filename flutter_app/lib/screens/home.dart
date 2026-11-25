@@ -16,7 +16,9 @@ class HomeScreen extends StatelessWidget {
       listenable: store,
       builder: (context, _) {
         final today = berlinToday();
-        final all = store.visibleEvents;
+        final here = store.hereCity;
+        final inHere = here == null ? const <Ev>[] : store.visibleEvents.where((e) => store.venues[e.venueId]?.city == here).toList();
+        final all = inHere.isNotEmpty ? inHere : store.visibleEvents;
         final tonight = all.where((e) => e.day == today).take(8).toList();
         final next = all
             .where((e) => e.day.isAfter(today) && e.day.difference(today).inDays <= 7)

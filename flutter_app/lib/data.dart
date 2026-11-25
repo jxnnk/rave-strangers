@@ -167,6 +167,13 @@ class Store extends ChangeNotifier {
   Set<int> saved = {};
   Set<int> alarms = {}; // bookmarks with remind = ticket alert
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
+  /// City you are in right now (from GPS while the app is open). Kept in memory only.
+  String? hereCity;
+  void setHere(String? c) {
+    if (c == hereCity) return;
+    hereCity = c;
+    notifyListeners();
+  }
   List<Map<String, dynamic>> attRows = []; // visible "going" rows (event_id, profile_id)
   /// People I follow: id -> profile (handle, display_name, verified, city).
   Map<String, Map<String, dynamic>> following = {};
