@@ -3,6 +3,8 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'tagline': 'Nie mehr allein raven.', 'new_here': 'Neu hier? Konto erstellen', 'have_account': 'Schon dabei? Einloggen', 'skip': 'Erst mal umschauen',
+    'legal_hint': 'Mit der Anmeldung akzeptierst du Nutzungsbedingungen und Datenschutz.', 'wrong_login': 'E-Mail oder Passwort stimmt nicht.',
     'loc_q_t': 'Events in deiner Nähe', 'loc_q': 'Darf Rave Strangers deinen Standort nutzen? Dann zeigen wir dir automatisch die Events in der Stadt, in der du gerade bist. Dein Standort bleibt auf dem Handy und wird nicht gespeichert.', 'later': 'Später', 'allow': 'Erlauben', 'in_city': 'in {c}',
     'loc_btn': 'Meine Stadt finden', 'loc_wait': 'Suche deine Stadt …', 'loc_ok': 'Stadt: {c}', 'loc_far': 'Nächste Stadt mit Events: {c}',
     'loc_fail': 'Standort nicht gefunden. Wähl deine Stadt einfach aus.', 'loc_denied': 'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',
@@ -100,6 +102,8 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'tagline': 'Never rave alone again.', 'new_here': 'New here? Create account', 'have_account': 'Already in? Log in', 'skip': 'Look around first',
+    'legal_hint': 'By signing up you accept the terms and privacy policy.', 'wrong_login': 'Email or password is wrong.',
     'loc_q_t': 'Events near you', 'loc_q': 'May Rave Strangers use your location? Then we automatically show the events in the city you are in. Your location stays on your phone and is not saved.', 'later': 'Later', 'allow': 'Allow', 'in_city': 'in {c}',
     'loc_btn': 'Find my city', 'loc_wait': 'Finding your city …', 'loc_ok': 'City: {c}', 'loc_far': 'Nearest city with events: {c}',
     'loc_fail': 'Could not get your location. Just pick your city.', 'loc_denied': 'Location not allowed. You can pick the city instead.',

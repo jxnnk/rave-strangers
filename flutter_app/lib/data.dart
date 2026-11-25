@@ -169,6 +169,13 @@ class Store extends ChangeNotifier {
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
   /// City you are in right now (from GPS while the app is open). Kept in memory only.
   String? hereCity;
+  /// Start screen was dismissed with "look around without account" (saved on the device).
+  bool welcomeDone = false;
+  void skipWelcome() {
+    welcomeDone = true;
+    notifyListeners();
+    SharedPreferences.getInstance().then((p) => p.setBool('welcome_done', true)).catchError((_) => false);
+  }
   void setHere(String? c) {
     if (c == hereCity) return;
     hereCity = c;
@@ -203,6 +210,7 @@ class Store extends ChangeNotifier {
   Future<void> initLang() async {
     try {
       final p = await SharedPreferences.getInstance();
+      welcomeDone = p.getBool('welcome_done') ?? false;
       final saved = p.getString('lang');
       if (saved == 'de' || saved == 'en') {
         appLang = saved!;

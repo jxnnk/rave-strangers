@@ -11,6 +11,7 @@ import 'screens/events.dart';
 import 'screens/home.dart';
 import 'screens/map.dart';
 import 'screens/profile.dart';
+import 'screens/welcome.dart';
 import 'strings.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -86,7 +87,9 @@ class _ShellState extends State<Shell> with WidgetsBindingObserver {
     return ListenableBuilder(
       listenable: Listenable.merge([tabIndex, store]),
       // not const on purpose: the tabs must rebuild when data or language change
-      builder: (context, _) => Scaffold(
+      builder: (context, _) => store.user == null && !store.welcomeDone
+          ? const WelcomeScreen()
+          : Scaffold(
         body: IndexedStack(
           index: tabIndex.value,
           children: [HomeScreen(), EventsScreen(), MapScreen(), CommunityScreen(), ProfileScreen()],

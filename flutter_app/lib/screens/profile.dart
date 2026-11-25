@@ -7,6 +7,7 @@ import '../theme.dart';
 import '../widgets.dart';
 import 'reset.dart';
 import 'settings.dart';
+import 'welcome.dart';
 import 'invite.dart';
 import 'person.dart';
 
@@ -18,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
       listenable: store,
       builder: (context, _) => SafeArea(
         bottom: false,
-        child: store.user == null ? _AuthForm() : _Me(),
+        child: store.user == null ? const WelcomeScreen(embedded: true) : _Me(),
       ),
     );
   }
