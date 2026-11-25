@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    org_label:'Label',org_collective:'Kollektiv',org_series:'Eventreihe',org_promoter:'Veranstalter',org_festival:'Festival',by_org:'Veranstaltet von',org_dates:'Nächste Termine',org_none:'Gerade keine Termine bei uns. Folge, dann sagen wir Bescheid.',org_next_n:'{n} Termine',org_follow_toast:'Du bekommst Bescheid, wenn neue Termine kommen.',orgs_t:'Kollektive & Labels',orgs_search:'z. B. UNREAL, 44 Label, Teletech',note_new_org:'Neu von {o}: {e}',follow:'Folgen',following_btn:'Du folgst',
     tagline:'Nie mehr allein raven.',new_here:'Neu hier? Konto erstellen',have_account:'Schon dabei? Einloggen',skip:'Erst mal umschauen',legal_hint:'Mit der Anmeldung akzeptierst du Nutzungsbedingungen und Datenschutz.',
     loc_btn:'Meine Stadt finden',loc_wait:'Suche deine Stadt …',loc_ok:'Stadt: {c}',loc_far:'Nächste Stadt mit Events: {c}',loc_fail:'Standort nicht gefunden. Wähl deine Stadt einfach aus.',loc_denied:'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',loc_none:'Dein Gerät kann keinen Standort liefern.',
     followers_l:'Follower',following_l:'Folgt',write_dm:'Schreiben',
@@ -76,6 +77,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    org_label:'Label',org_collective:'Collective',org_series:'Event series',org_promoter:'Promoter',org_festival:'Festival',by_org:'Hosted by',org_dates:'Next dates',org_none:'No dates with us right now. Follow and we will let you know.',org_next_n:'{n} dates',org_follow_toast:'We will let you know when new dates come up.',orgs_t:'Collectives & labels',orgs_search:'e.g. UNREAL, 44 Label, Teletech',note_new_org:'New from {o}: {e}',follow:'Follow',following_btn:'Following',
     tagline:'Never rave alone again.',new_here:'New here? Create account',have_account:'Already in? Log in',skip:'Look around first',legal_hint:'By signing up you accept the terms and privacy policy.',
     loc_btn:'Find my city',loc_wait:'Finding your city …',loc_ok:'City: {c}',loc_far:'Nearest city with events: {c}',loc_fail:'Could not get your location. Just pick your city.',loc_denied:'Location not allowed. You can pick the city instead.',loc_none:'Your device cannot provide a location.',
     followers_l:'Followers',following_l:'Following',write_dm:'Message',
@@ -261,11 +263,40 @@ function loadBase(){
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
     loadRatings().then(function(){ if(S.ready) render(false); });
-    loadCrewCounts(); autoLocate();
+    loadCrewCounts(); loadOrgs(); autoLocate();
   }).catch(function(err){ if(window.console) console.error(err); S.loadErr=true; });
 }
 
 var CREWN={};
+/* ---------- Organizers: labels, collectives, event series (DB 024) ---------- */
+var ORGS=[], EVORG={}; S.orgFollow=[];
+function loadOrgs(){
+  return Promise.all([sb.rpc('organizer_list'),sb.from('event_organizers').select('event_id,organizer_id')]).then(function(r){
+    ORGS=(r[0]&&r[0].data)||[]; EVORG={}; ((r[1]&&r[1].data)||[]).forEach(function(x){ (EVORG[x.event_id]=EVORG[x.event_id]||[]).push(x.organizer_id); });
+    if(S.ready) render(false); }).catch(function(){});
+}
+function orgById(id){ for(var i=0;i<ORGS.length;i++) if(ORGS[i].id===id) return ORGS[i]; return null; }
+function orgBySlug(sl){ for(var i=0;i<ORGS.length;i++) if(ORGS[i].slug===sl) return ORGS[i]; return null; }
+function orgsOf(eid){ return (EVORG[eid]||[]).map(orgById).filter(Boolean); }
+function orgChips(e){ var os=orgsOf(e.id); if(!os.length) return '';
+  return '<div class="chips orgchips" style="margin-top:10px"><span class="sub" style="margin:0 6px 0 0">'+t('by_org')+'</span>'+os.map(function(o){ return '<a class="chip" href="#org-'+esc(o.slug)+'">'+esc(o.name)+'</a>'; }).join('')+'</div>'; }
+function viewOrg(sl){
+  var o=orgBySlug(sl); if(!o) return ORGS.length?'<a class="back" href="#orgs">← '+t('orgs_t')+'</a>'+emptyBox(t('org_none')):loadingBox();
+  var evs=sortedEvents().filter(function(e){ return upcoming(e)&&(EVORG[e.id]||[]).indexOf(o.id)>=0; });
+  var cities={}; evs.forEach(function(e){ cities[venue(e.v).city]=1; });
+  var on=has(S.orgFollow,o.id);
+  return '<a class="back" href="#orgs">← '+t('orgs_t')+'</a><p class="kicker">'+t('org_'+o.kind)+'</p><h1>'+esc(o.name)+'</h1>'+
+    '<p class="sub">'+(evs.length?t('org_next_n',{n:evs.length})+(Object.keys(cities).length?' · '+esc(Object.keys(cities).slice(0,4).join(', ')):''):t('org_none'))+'</p>'+
+    '<div class="row" style="margin-top:14px"><button type="button" class="btn '+(on?'on':'primary')+'" data-act="orgfollow" data-id="'+o.id+'" aria-pressed="'+on+'">'+(on?'✓ '+t('following_btn'):'+ '+t('follow'))+'</button></div>'+
+    '<div class="sec"><h2>'+t('org_dates')+'</h2>'+(evs.length?'<div class="list">'+evs.map(eventCard).join('')+'</div>':emptyBox(t('org_none')))+'</div>';
+}
+function viewOrgs(){
+  var q=(S.orgQ||'').trim().toLowerCase();
+  var list=ORGS.filter(function(o){ return !q||o.name.toLowerCase().indexOf(q)>=0; });
+  return '<a class="back" href="#events">← '+t('nav_events')+'</a><h1>'+t('orgs_t')+'</h1>'+
+    '<div class="field" style="margin-top:12px"><label class="sr" for="org-q">'+t('orgs_search')+'</label><input id="org-q" type="text" value="'+esc(S.orgQ||'')+'" placeholder="'+esc(t('orgs_search'))+'"></div>'+
+    '<div class="people orglist">'+(list.length?list.map(function(o){ return '<a class="person" href="#org-'+esc(o.slug)+'"><div class="grow"><strong>'+esc(o.name)+'</strong><p>'+t('org_'+o.kind)+'</p></div>'+(o.upcoming?'<span class="tag hot">'+t('org_next_n',{n:o.upcoming})+'</span>':'')+(has(S.orgFollow,o.id)?' ✓':'')+'</a>'; }).join(''):emptyBox(t('none_found')))+'</div>';
+}
 function loadCrewCounts(){
   return sb.rpc('crew_counts').then(function(r){ if(r&&r.error) throw r.error; CREWN={}; ((r&&r.data)||[]).forEach(function(x){ CREWN[x.event_id]={c:x.crew||0,r:x.rides||0}; }); if(S.ready) render(false); }).catch(function(){});
 }
@@ -285,6 +316,7 @@ function loadMine(){
     r[1].forEach(function(a){ S.counts[a.event_id]=(S.counts[a.event_id]||0)+1; if(a.profile_id===uid) S.going.push(a.event_id); });
     S.saved=r[2].map(function(b){ return b.event_id; });
     S.alarms=r[2].filter(function(b){ return b.remind; }).map(function(b){ return b.event_id; });
+    data(sb.from('organizer_follows').select('organizer_id').eq('profile_id',uid)).then(function(x){ S.orgFollow=x.map(function(y){ return y.organizer_id; }); }).catch(function(){});
     loadInbox(); loadSettings(); BLOCKS=null;
     S.verif=r[3][0]||null;
     S.follow=r[4].map(function(x){ return x.profiles; }).filter(Boolean);
@@ -304,13 +336,13 @@ function tixCta(e){ var st=e.tstatus||'unknown';
 function unreadNotes(){ return S.notes.filter(function(n){ return !n.read_at; }).length; }
 function updateBell(){ var b=document.getElementById('bell'); if(!b) return; b.hidden=!S.user; var n=unreadNotes(), c=b.querySelector('b'); c.textContent=n>9?'9+':String(n); c.hidden=!n; b.setAttribute('aria-label',t('inbox_t')+(n?' ('+n+')':'')); }
 function loadInbox(){ if(!S.user) return;
-  data(sb.from('notifications').select('id,kind,event_id,venue_id,created_at,read_at').order('created_at',{ascending:false}).limit(50))
+  data(sb.from('notifications').select('id,kind,event_id,venue_id,organizer_id,created_at,read_at').order('created_at',{ascending:false}).limit(50))
     .then(function(r){ S.notes=r; updateBell(); if(route().tab==='me'&&location.hash==='#inbox') render(false); }).catch(function(){}); }
 setInterval(function(){ if(S.user&&!document.hidden) loadInbox(); },60000);
 function viewInbox(){
   if(!S.user) return viewLogin();
   var rows=S.notes.map(function(n){ var e=evt(n.event_id), v=venue(n.venue_id), ti=e?e.title:'…';
-    var txt=n.kind==='tickets'?t('note_tickets',{e:ti}):n.kind==='new_event'?t('note_new',{v:v?v.name:'',e:ti}):t('note_rem',{e:ti});
+    var og=n.organizer_id?orgById(n.organizer_id):null; var txt=n.kind==='tickets'?t('note_tickets',{e:ti}):n.kind==='new_event'?(og?t('note_new_org',{o:og.name,e:ti}):t('note_new',{v:v?v.name:'',e:ti})):t('note_rem',{e:ti});
     var ic=n.kind==='tickets'?'🎟':n.kind==='new_event'?'✦':'⏰';
     return '<a class="note'+(n.read_at?'':' unread')+'" href="'+(e?'#event-'+e.id:'#inbox')+'"><span class="ic">'+ic+'</span><div class="grow"><strong>'+esc(txt)+'</strong><p>'+esc(ago(n.created_at))+'</p></div></a>'; }).join('');
   if(unreadNotes()) setTimeout(markNotesRead,2000);
@@ -416,7 +448,7 @@ var MON=['JAN','FEB','MÄR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ
 function flyerHTML(e){ var v=venue(e.v), d=new Date(e.date+'T12:00:00'), c=CREWN[e.id];
   return '<a class="flyer" href="#event-'+e.id+'"><div class="fd"><b>'+d.getDate()+'</b><span>'+esc(fmtDow(d).toUpperCase())+' · '+MON[d.getMonth()]+'</span></div>'+
     '<div class="fb"><small>'+t('highlight')+'</small><strong>'+esc(e.title)+'</strong><div class="fm"><span>'+esc(v.name)+(e.time?' · '+esc(e.time):'')+'</span>'+(e.price?'<span>'+esc(e.price)+'</span>':'')+'</div>'+
-    (c&&c.crew?'<em>'+t('crew_cnt',{n:c.crew})+'</em>':'')+'</div></a>'; }
+    (c&&c.c?'<em>'+t('crew_cnt',{n:c.c})+'</em>':'')+'</div></a>'; }
 function eventCard(e){
   var d=dayOf(e.off), v=venue(e.v), n=S.counts[e.id]||0, fr=friendsAt(e.id);
   var tag=tixTag(e)+(e.status==='pending'?' <span class="tag hot">'+t('pending')+'</span>':'')+(e.type==='festival'?' <span class="tag">'+t('fest_tag')+'</span>':'')+(has(S.saved,e.id)?' <span class="stars" title="'+t('saved_ev')+'">★</span>':'');
@@ -476,14 +508,16 @@ function filteredEvents(){
     if(S.genre&&e.genres.indexOf(S.genre)<0) return false;
     if(S.type==='festival'&&e.type!=='festival') return false;
     if(S.type==='club'&&e.type==='festival') return false;
-    if(q&&(e.title+' '+v.name+' '+v.city+' '+(e.lineup||[]).join(' ')).toLowerCase().indexOf(q)<0) return false;
+    if(q&&(e.title+' '+v.name+' '+v.city+' '+(e.lineup||[]).join(' ')+' '+orgsOf(e.id).map(function(o){ return o.name; }).join(' ')).toLowerCase().indexOf(q)<0) return false;
     return true;
   });
 }
 function eventsListHTML(){
   var list=filteredEvents();
-  if(!list.length) return '<div class="empty">'+t('none_found')+'</div>';
-  return '<p class="count">'+t('n_events',{n:list.length})+'</p><div class="list">'+list.map(eventCard).join('')+'</div>';
+  if(!list.length) return '<div class="chips" style="margin:6px 0 10px"><a class="chip" href="#orgs">'+t('orgs_t')+'</a></div><div class="empty">'+t('none_found')+'</div>';
+  var q=S.q.trim().toLowerCase(), om=q.length>=2?ORGS.filter(function(o){ return o.name.toLowerCase().indexOf(q)>=0; }).slice(0,4):[];
+  var orgRow='<div class="chips" style="margin:6px 0 10px">'+om.map(function(o){ return '<a class="chip" aria-pressed="true" href="#org-'+esc(o.slug)+'">'+esc(o.name)+' →</a>'; }).join('')+'<a class="chip" href="#orgs">'+t('orgs_t')+'</a></div>';
+  return orgRow+'<p class="count">'+t('n_events',{n:list.length})+'</p><div class="list">'+list.map(eventCard).join('')+'</div>';
 }
 function viewEvents(){
   var cities={}; VENUES.forEach(function(v){ cities[v.city]=1; });
@@ -509,7 +543,7 @@ function viewEvent(id){
   var fr=friendsAt(e.id), cdx=cdHTML(e);
   var hero=e.img?'<figure class="evbanner"><img src="'+esc(e.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest(\'.evbanner\').remove()"><figcaption>'+t('banner_by')+': '+esc(e.imgCredit||host(e.src||e.img))+'</figcaption></figure>':'';
   return '<a class="back" href="#events">← '+t('back')+'</a>'+hero+(cdx?'<p class="kicker">'+cdx+'</p>':'')+'<h1>'+esc(e.title)+'</h1>'+
-    '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+
+    '<div class="chips" style="margin-top:12px">'+genreTags(e.genres)+(e.type==='festival'?' <span class="tag hot">'+t('fest_tag')+'</span>':'')+'</div>'+orgChips(e)+
     '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+(e.endDate&&e.endDate!==e.date?' – '+esc(fmtLong(dayOf(e.endOff))):'')+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
     '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div></dl>'+
     (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
@@ -1262,6 +1296,8 @@ function route(){
     case 'club': return {tab:'map',html:viewClub(+arg)};
     case 'artists': return {tab:'home',html:viewArtists()};
     case 'u': return {tab:'home',html:viewProfile(arg)};
+    case 'orgs': return {tab:'events',html:viewOrgs()};
+    case 'org': return {tab:'events',html:viewOrg(arg)};
     case 'followers': return {tab:'me',html:viewFollowList(arg,true)};
     case 'following': return {tab:'me',html:viewFollowList(arg,false)};
     case 'connect': return {tab:'connect',html:viewConnect()};
@@ -1313,6 +1349,9 @@ document.addEventListener('click',function(ev){
   var el=ev.target.closest('[data-act]'); if(!el) return;
   var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
   if(act==='alarm'){ toggleAlarm(+id); return; }
+  if(act==='orgfollow'){ if(needLogin()) return; var oid=+id, on2=has(S.orgFollow,oid); buzz();
+    if(on2) S.orgFollow.splice(S.orgFollow.indexOf(oid),1); else { S.orgFollow.push(oid); toast(t('org_follow_toast')); } render(false);
+    data(on2?sb.from('organizer_follows').delete().eq('profile_id',S.user.id).eq('organizer_id',oid):sb.from('organizer_follows').insert({profile_id:S.user.id,organizer_id:oid})).catch(fail); return; }
   if(act==='locate'){ locateCity(); return; }
   if(act==='joingrp'){ if(needLogin()) return; data(sb.rpc('join_event_chat',{p_event:+id})).then(function(cid){ cache.chats=null; location.hash='#chat-'+cid; }).catch(fail); return; }
   if(act==='leavegrp'){ data(sb.rpc('leave_chat',{p_conv:+id})).then(function(){ cache.chats=null; location.hash='#chats'; }).catch(fail); return; }
@@ -1391,6 +1430,7 @@ document.addEventListener('change',function(ev){
 });
 document.addEventListener('input',function(ev){
   if(ev.target.id==='f-q'){ S.q=ev.target.value; var l=document.getElementById('evlist'); if(l) l.innerHTML=eventsListHTML(); }
+  if(ev.target.id==='org-q'){ S.orgQ=ev.target.value; var tmp=document.createElement('div'); tmp.innerHTML=viewOrgs(); var nl=tmp.querySelector('.orglist'), ol=document.querySelector('.orglist'); if(nl&&ol) ol.innerHTML=nl.innerHTML; }
 });
 document.addEventListener('submit',function(ev){
   var f=ev.target.closest('form[data-form]'); if(!f) return;
