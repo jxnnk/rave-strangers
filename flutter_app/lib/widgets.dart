@@ -44,10 +44,16 @@ class Brand extends StatelessWidget {
   const Brand({super.key});
   @override
   Widget build(BuildContext context) {
-    return Text.rich(TextSpan(children: [
-      TextSpan(text: 'RAVE ', style: display(18)),
-      TextSpan(text: 'STRANGERS', style: display(18, color: C.accent)),
-    ]));
+    // Logo: RAVE STRNGRS (spoken and searchable as "Rave Strangers")
+    return Semantics(
+      label: 'Rave Strangers',
+      child: ExcludeSemantics(
+        child: Text.rich(TextSpan(children: [
+          TextSpan(text: 'RAVE ', style: display(18)),
+          TextSpan(text: 'STRNGRS', style: display(18, color: C.accent)),
+        ])),
+      ),
+    );
   }
 }
 
