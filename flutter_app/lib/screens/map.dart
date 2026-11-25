@@ -44,7 +44,7 @@ class _MapScreenState extends State<MapScreen> {
   bool _names = false;
   int? _selected;
 
-  void _zoom(double delta) {
+  void _zoomBy(double delta) {
     if (_useApple) return _apple.currentState?.zoomBy(delta);
     final c = _ctrl.camera;
     _ctrl.move(c.center, (c.zoom + delta).clamp(4.5, 17.0).toDouble());
@@ -213,9 +213,9 @@ class _MapScreenState extends State<MapScreen> {
                 child: Container(
                   decoration: BoxDecoration(border: Border.all(color: C.line2)),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    _MapBtn(Icons.add, () => _zoom(1)),
+                    _MapBtn(Icons.add, () => _zoomBy(1)),
                     Container(width: 42, height: 1, color: C.line2),
-                    _MapBtn(Icons.remove, () => _zoom(-1)),
+                    _MapBtn(Icons.remove, () => _zoomBy(-1)),
                     Container(width: 42, height: 1, color: C.line2),
                     _MapBtn(Icons.crop_free, () => _useApple ? _apple.currentState?.reset() : _ctrl.move(const LatLng(51.15, 10.4), 5.7)),
                   ]),

@@ -25,7 +25,7 @@ Future<void> main() async {
     systemNavigationBarIconBrightness: Brightness.light,
   ));
   await store.initLang();
-  await Supabase.initialize(url: sbUrl, anonKey: sbKey);
+  await Supabase.initialize(url: sbUrl, publishableKey: sbKey);
   store.init();
   runApp(const RaveStrangersApp());
 }
