@@ -57,3 +57,4 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | App-Icon | – |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
 | Impressum, Datenschutz, AGB | – |
+| iOS Public Beta über TestFlight + Codemagic (siehe `IOS_BETA.md`) | Claude: `codemagic.yaml` steht; Melden-Funktion + Datenschutz-Seite offen |
