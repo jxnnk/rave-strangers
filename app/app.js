@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    loc_btn:'Meine Stadt finden',loc_wait:'Suche deine Stadt …',loc_ok:'Stadt: {c}',loc_far:'Nächste Stadt mit Events: {c}',loc_fail:'Standort nicht gefunden. Wähl deine Stadt einfach aus.',loc_denied:'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',loc_none:'Dein Gerät kann keinen Standort liefern.',
     followers_l:'Follower',following_l:'Folgt',write_dm:'Schreiben',
     edit_profile:'Profil bearbeiten',
     crew_group:'Crew-Gruppe',crew_group_join:'Crew-Gruppe beitreten',leave_group:'Gruppe verlassen',send_to_chat:'In Chat senden',sent_ok:'Gesendet.',event_msg:'hat ein Event geteilt',event_gone:'Event nicht mehr verfügbar',members_n:'{n} Mitglieder',open:'Öffnen',invite_t:'Freunde einladen',invite_sub:'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',invite_msg:'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤',invite_n:'{n} über deinen Link dabei',qr_t:'Dein QR-Code',qr_sub:'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.',copy_link:'Link kopieren',
@@ -74,6 +75,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    loc_btn:'Find my city',loc_wait:'Finding your city …',loc_ok:'City: {c}',loc_far:'Nearest city with events: {c}',loc_fail:'Could not get your location. Just pick your city.',loc_denied:'Location not allowed. You can pick the city instead.',loc_none:'Your device cannot provide a location.',
     followers_l:'Followers',following_l:'Following',write_dm:'Message',
     edit_profile:'Edit profile',
     crew_group:'Crew group',crew_group_join:'Join crew group',leave_group:'Leave group',send_to_chat:'Send to chat',sent_ok:'Sent.',event_msg:'shared an event',event_gone:'Event no longer available',members_n:'{n} members',open:'Open',invite_t:'Invite friends',invite_sub:'Anyone who joins through your link lands straight in a chat with you.',invite_msg:'Join me on Rave Strangers and let’s go raving together 🖤',invite_n:'{n} joined via your link',qr_t:'Your QR code',qr_sub:'Show it at the club: scan, join, and you are in a chat.',copy_link:'Copy link',
@@ -365,6 +367,19 @@ function copyText(x){
   else toast(x);
 }
 function setCity(c){ S.homeCity=c; S.city=c; lsSet('rs-city',c); }
+/* "Meine Stadt" via GPS: asked once on tap, used only here on the device, never saved or sent. */
+function locateCity(){
+  if(!navigator.geolocation){ toast(t('loc_none')); return; }
+  toast(t('loc_wait'));
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var la=pos.coords.latitude, lo=pos.coords.longitude, best=null, bd=1e9;
+    VENUES.forEach(function(v){ if(!EVENTS.some(function(e){ return e.v===v.id&&upcoming(e); })) return;
+      var dx=(v.lon-lo)*Math.cos(la*Math.PI/180), dy=v.lat-la, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=v; } });
+    if(!best){ toast(t('loc_fail')); return; }
+    var km=Math.sqrt(bd)*111; setCity(best.city); render(false);
+    toast(km>60?t('loc_far',{c:best.city}):t('loc_ok',{c:best.city}));
+  },function(err){ toast(err&&err.code===1?t('loc_denied'):t('loc_fail')); },{enableHighAccuracy:false,timeout:12000,maximumAge:600000});
+}
 var REF=(function(){
   var r=null;
   try{ r=new URLSearchParams(location.search).get('ref'); }catch(e){}
@@ -545,8 +560,9 @@ function viewHome(){
   var picker=needPick?'<div class="citypick"><p class="kicker">'+t('pick_kicker')+'</p><h2>'+t('pick_t')+'</h2><p class="sub">'+t('pick_sub')+'</p><div class="cpgrid">'+
     top.slice(0,8).map(function(c){ return '<button type="button" class="btn" data-act="homecity" data-id="'+esc(c)+'">'+esc(c)+'<em>'+cities[c]+'</em></button>'; }).join('')+
     '<button type="button" class="btn" data-act="homecity" data-id="">'+t('pick_all')+'</button></div>'+
+    '<div class="row" style="margin-top:12px"><button type="button" class="btn primary" data-act="locate">📍 '+t('loc_btn')+'</button></div>'+
     '<label class="sr" for="cp-other">'+t('pick_other')+'</label><select id="cp-other"><option value="">'+t('pick_other')+' …</option>'+allCities.map(function(c){ return '<option>'+esc(c)+'</option>'; }).join('')+'</select></div>':'';
-  var chips='<button type="button" class="chip" data-act="homecity" data-id="" aria-pressed="'+(city==='')+'">'+t('home_all')+'</button>'+top.map(function(c){ return '<button type="button" class="chip" data-act="homecity" data-id="'+esc(c)+'" aria-pressed="'+(city===c)+'">'+esc(c)+'</button>'; }).join('');
+  var chips='<button type="button" class="chip" data-act="locate" aria-label="'+esc(t('loc_btn'))+'">📍</button><button type="button" class="chip" data-act="homecity" data-id="" aria-pressed="'+(city==='')+'">'+t('home_all')+'</button>'+top.map(function(c){ return '<button type="button" class="chip" data-act="homecity" data-id="'+esc(c)+'" aria-pressed="'+(city===c)+'">'+esc(c)+'</button>'; }).join('');
   function inCity(e){ return !city||venue(e.v).city===city; }
   var rg=weekendRange();
   var wk=sortedEvents().filter(function(e){ return upcoming(e)&&inCity(e)&&e.off>=rg[0]&&e.off<=rg[1]; })
@@ -1266,6 +1282,7 @@ document.addEventListener('click',function(ev){
   var el=ev.target.closest('[data-act]'); if(!el) return;
   var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
   if(act==='alarm'){ toggleAlarm(+id); return; }
+  if(act==='locate'){ locateCity(); return; }
   if(act==='joingrp'){ if(needLogin()) return; data(sb.rpc('join_event_chat',{p_event:+id})).then(function(cid){ cache.chats=null; location.hash='#chat-'+cid; }).catch(fail); return; }
   if(act==='leavegrp'){ data(sb.rpc('leave_chat',{p_conv:+id})).then(function(){ cache.chats=null; location.hash='#chats'; }).catch(fail); return; }
   if(act==='sendto'){ var evid=+el.getAttribute('data-ev'); data(sb.from('messages').insert({conversation_id:+id,sender:S.user.id,body:'[[event:'+evid+']]'})).then(function(){ toast(t('sent_ok')); cache.chat[+id]=undefined; location.hash='#chat-'+id; }).catch(fail); return; }
