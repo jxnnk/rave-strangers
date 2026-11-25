@@ -1,7 +1,9 @@
 // Data layer: same Supabase project, tables and rules as the web app.
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +15,12 @@ const sbKey = 'sb_publishable_4vHWXBP7d04RUXs7lOQ9nA_yys9gxdN';
 const webUrl = 'https://jxnnk.github.io/rave-strangers/';
 
 SupabaseClient get sb => Supabase.instance.client;
+
+/// Sends product analytics without delaying the user action that produced it.
+/// Identity is already persisted by [_syncPostHogIdentity].
+void captureEvent(String eventName, {Map<String, dynamic>? properties}) {
+  unawaited(Posthog().capture(eventName: eventName, properties: properties).catchError((_) {}));
+}
 
 const genres = ['Techno', 'Hard Techno', 'Acid', 'Trance', 'House', 'Minimal', 'Drum & Bass', 'Electronic'];
 
@@ -234,8 +242,42 @@ class Store extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    sb.auth.onAuthStateChange.listen((_) => loadMine());
+    sb.auth.onAuthStateChange.listen((authState) async {
+      await _syncPostHogIdentity(authState.event, authState.session?.user);
+      await loadMine();
+    });
     await load();
+  }
+
+  /// Binds PostHog's persisted client identity to Supabase's auth lifecycle.
+  /// The Supabase UUID is stable; email and display name remain person data.
+  Future<void> _syncPostHogIdentity(AuthChangeEvent event, User? user) async {
+    try {
+      if (event == AuthChangeEvent.signedOut) {
+        await Posthog().reset();
+        return;
+      }
+      if (event != AuthChangeEvent.initialSession &&
+          event != AuthChangeEvent.signedIn) {
+        return;
+      }
+      if (user == null) return;
+
+      final userProperties = <String, dynamic>{};
+      if (user.email?.isNotEmpty ?? false) {
+        userProperties['email'] = user.email;
+      }
+      final displayName = user.userMetadata['display_name'];
+      if (displayName is String && displayName.isNotEmpty) {
+        userProperties['display_name'] = displayName;
+      }
+      await Posthog().identify(
+        userId: user.id,
+        userProperties: userProperties,
+      );
+    } catch (_) {
+      // Analytics must not interrupt authentication or application loading.
+    }
   }
 
   Future<void> load() async {
@@ -411,6 +453,10 @@ class Store extends ChangeNotifier {
       } else {
         await sb.from('follows').insert({'follower': u.id, 'artist': id});
       }
+      captureEvent(
+        'person_follow_updated',
+        properties: {'action': on ? 'unfollowed' : 'followed'},
+      );
     } catch (e) {
       debugPrint('follow failed: $e');
       await loadMine();
@@ -433,6 +479,10 @@ class Store extends ChangeNotifier {
       } else {
         await sb.from('organizer_follows').insert({'profile_id': u.id, 'organizer_id': id});
       }
+      captureEvent(
+        'organizer_follow_updated',
+        properties: {'action': on ? 'unfollowed' : 'followed'},
+      );
     } catch (e) {
       debugPrint('org follow failed: $e');
       await loadMine();
@@ -464,6 +514,10 @@ class Store extends ChangeNotifier {
       } else {
         await sb.from('venue_follows').insert({'venue_id': venueId, 'profile_id': u.id});
       }
+      captureEvent(
+        'venue_follow_updated',
+        properties: {'action': on ? 'unfollowed' : 'followed'},
+      );
     } catch (e) {
       debugPrint('venue follow failed: $e');
       await loadMine();
@@ -484,6 +538,10 @@ class Store extends ChangeNotifier {
     notifyListeners();
     try {
       await sb.from('bookmarks').upsert({'event_id': id, 'profile_id': u.id, 'remind': !on});
+      captureEvent(
+        'ticket_alert_updated',
+        properties: {'action': on ? 'disabled' : 'enabled'},
+      );
     } catch (e) {
       debugPrint('alarm failed: $e');
       await loadMine();
@@ -547,6 +605,10 @@ class Store extends ChangeNotifier {
           if (table == 'attendance') 'visible': setting('going_visible'),
         });
       }
+      captureEvent(
+        table == 'attendance' ? 'event_rsvp_updated' : 'event_saved_updated',
+        properties: {'action': on ? 'removed' : 'added'},
+      );
     } catch (e) {
       debugPrint('toggle $table failed: $e');
       await loadMine();

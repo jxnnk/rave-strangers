@@ -71,6 +71,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     try {
       if (_login) {
         await sb.auth.signInWithPassword(email: email, password: pw);
+        captureEvent('account_authenticated', properties: {'method': 'password'});
+        capturePostHogLog('password authentication succeeded', attributes: {
+          'auth_method': 'password',
+        });
         HapticFeedback.mediumImpact();
         _msg = null;
       } else {
