@@ -19,6 +19,24 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final _ctrl = MapController();
+  double _zoom = 5.5;
+
+  /// City name + centre of its venues. At low zoom only cities with several clubs, to keep it calm.
+  List<(String, LatLng)> _cityLabels() {
+    final acc = <String, List<double>>{};
+    for (final v in store.venues.values) {
+      if (v.city.isEmpty || v.city.contains('(')) continue;
+      final a = acc.putIfAbsent(v.city, () => [0, 0, 0]);
+      a[0] += v.lat;
+      a[1] += v.lon;
+      a[2] += 1;
+    }
+    final minN = _zoom < 6.5 ? 8 : (_zoom < 8 ? 4 : (_zoom < 10 ? 2 : 1));
+    return [
+      for (final e in acc.entries)
+        if (e.value[2] >= minN) (e.key, LatLng(e.value[0] / e.value[2], e.value[1] / e.value[2]))
+    ];
+  }
   final _apple = GlobalKey<AppleMapLayerState>();
   // iPhone/iPad: native Apple Maps. Android (and everything else): OpenStreetMap.
   bool get _useApple => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
@@ -80,9 +98,15 @@ class _MapScreenState extends State<MapScreen> {
               interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
               onPositionChanged: (camera, hasGesture) {
                 final show = camera.zoom >= 11;
-                if (show != _names) {
+                final zb = (camera.zoom * 2).round() / 2; // only rebuild every half zoom step
+                if (show != _names || zb != _zoom) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) setState(() => _names = show);
+                    if (mounted) {
+                      setState(() {
+                        _names = show;
+                        _zoom = zb;
+                      });
+                    }
                   });
                 }
               },
@@ -95,12 +119,22 @@ class _MapScreenState extends State<MapScreen> {
                 maxNativeZoom: 16,
                 userAgentPackageName: 'de.ravestrangers.rave_strangers',
               ),
-              TileLayer(
-                urlTemplate:
-                    'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
-                maxNativeZoom: 16,
-                userAgentPackageName: 'de.ravestrangers.rave_strangers',
-              ),
+              // Esri's label layer is English only ("Germany", "Lower Saxony"), so we draw our own
+              // city names in the local spelling from our venues instead.
+              if (_zoom >= 5.5 && _zoom < 12.5)
+                MarkerLayer(markers: [
+                  for (final c in _cityLabels())
+                    Marker(
+                      point: c.$2,
+                      width: 160,
+                      height: 22,
+                      child: IgnorePointer(
+                        child: Text(c.$1,
+                            textAlign: TextAlign.center,
+                            style: body(_zoom < 8 ? 12 : 13.5, color: const Color(0xFF9A968F), weight: FontWeight.w600)),
+                      ),
+                    ),
+                ]),
               if (_names)
                 MarkerLayer(markers: [
                   for (final v in vs)
@@ -199,7 +233,7 @@ class _MapScreenState extends State<MapScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 color: const Color(0xCC111113),
-                child: Text('Esri, HERE, Garmin, © OpenStreetMap', style: mono(9, spacing: 0.3)),
+                child: Text('Esri, HERE, Garmin, © OpenStreetMap · Orte: OSM', style: mono(9, spacing: 0.3)),
               ),
             ),
           ),

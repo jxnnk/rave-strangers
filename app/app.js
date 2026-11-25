@@ -1199,7 +1199,11 @@ function greyStyle(st){
     if(l.type==='background') p['background-color']=C.bg;
     else if(l.type==='fill'){ p['fill-color']=/water|ocean|lake|river/.test(id)?C.water:/build/.test(id)?C.build:/park|wood|forest|grass|landcover|landuse/.test(id)?C.green:C.bg; delete p['fill-pattern']; p['fill-outline-color']=p['fill-color']; }
     else if(l.type==='line'){ p['line-color']=/water|river|stream|canal/.test(id)?C.water:/boundary|admin/.test(id)?C.border:/rail|transit/.test(id)?C.rail:/motorway|trunk|primary/.test(id)?C.major:C.road; }
-    else if(l.type==='symbol'&&l.layout&&l.layout['text-field']){ p['text-color']=/water/.test(id)?'#6d7480':C.text; p['text-halo-color']=C.halo; p['text-halo-width']=1.2; }
+    else if(l.type==='symbol'&&l.layout&&l.layout['text-field']){ p['text-color']=/water/.test(id)?'#6d7480':C.text; p['text-halo-color']=C.halo; p['text-halo-width']=1.2;
+      /* place names in the app language (Deutschland, Niedersachsen …), fallback: local name */
+      if(JSON.stringify(l.layout['text-field']).indexOf('name')>=0) l.layout['text-field']=S.lang==='de'
+        ?['coalesce',['get','name:de'],['get','name_de'],['get','name']]
+        :['coalesce',['get','name:en'],['get','name_en'],['get','name']]; }
     else if(l.type==='fill-extrusion'){ p['fill-extrusion-color']=C.build; }
   });
   return st;
