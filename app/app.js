@@ -259,7 +259,7 @@ function loadBase(){
     data(sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules')),
     data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,created_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,price_text,ticket_status,resale_url,image_url,image_credit,event_lineup(position,name,artist_id)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
   ]).then(function(res){
-    VENUES=res[0].map(mapVenue);
+    VENUES=res[0].map(mapVenue).filter(function(v){ return !(v.rules&&v.rules.hidden); }); /* hidden = checked: not a club */
     EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
     S.ready=true; S.loadErr=false;
     loadRatings().then(function(){ if(S.ready) render(false); });

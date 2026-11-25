@@ -245,7 +245,7 @@ class Store extends ChangeNotifier {
     try {
       final since = DateTime.now().toUtc().subtract(const Duration(days: 1)).toIso8601String();
       final r = await Future.wait<List<Map<String, dynamic>>>([
-        sb.from('venues').select('id,name,city,address,lat,lon,approx,kind'),
+        sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules'),
         sb
             .from('events')
             .select('id,venue_id,title,starts_at,ends_at,time_known,kind,genres,ticket_url,source_url,'
@@ -279,7 +279,10 @@ class Store extends ChangeNotifier {
         crewN = {for (final m in cc) (m['event_id'] as int): (m['crew'] as int?) ?? 0};
         ridesN = {for (final m in cc) (m['event_id'] as int): (m['rides'] as int?) ?? 0};
       } catch (_) {}
-      venues = {for (final m in r[0]) (m['id'] as int): Venue.fromMap(m)};
+      venues = {
+        for (final m in r[0])
+          if ((m['rules'] as Map?)?['hidden'] != true) (m['id'] as int): Venue.fromMap(m)
+      }; // hidden = checked, not a club
       events = r[1].map(Ev.fromMap).where((e) => venues.containsKey(e.venueId)).toList();
       headlines = r[2].map(Headline.fromMap).toList();
       posts = r[3].map(Post.fromMap).toList();
