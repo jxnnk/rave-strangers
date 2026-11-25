@@ -38,6 +38,7 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 - **`main`** ist die Live-Version (GitHub Pages). Nur wenn `dev` getestet ist, wird `dev` in `main` gemergt.
 - Vor jedem Arbeiten: `git pull`. Vor jedem Push nochmal `git pull`, dann `git push`.
 - Kleine, klare Commits, damit Konflikte selten und klein bleiben.
+- **Für Claude:** Arbeite immer auf `dev`. Vor jeder Aufgabe `git checkout dev && git pull`, danach selbst committen und pushen. Konflikte selbst lösen und kurz erklären. Nach `main` mergen nur, wenn der Nutzer es ausdrücklich sagt.
 - Wer eine Aufgabe übernimmt, trägt sich unten ein, damit niemand doppelt arbeitet.
 
 ## Offene Aufgaben (zum Aufteilen)
