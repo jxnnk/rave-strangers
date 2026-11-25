@@ -31,6 +31,7 @@ void shareEvent(Ev e) {
     if (n > 1) t('share_going', {'n': n}),
     link,
   ];
+  captureEvent('event_shared');
   Share.share(lines.join('\n'));
 }
 
@@ -112,6 +113,7 @@ class _CrewSectionState extends State<CrewSection> {
         onConflict: 'event_id,author',
       );
       HapticFeedback.lightImpact();
+      captureEvent('crew_post_published');
       store.crewN[widget.e.id] = (_posts?.where((p) => p['author'] != myId).length ?? 0) + 1;
       await _load();
     } catch (e) {
@@ -381,6 +383,7 @@ class _RideFormState extends State<_RideForm> {
         'seats': _seats,
         'note': _note.text.trim().isEmpty ? null : _note.text.trim(),
       });
+      captureEvent('ride_offer_published', properties: {'seats': _seats});
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       debugPrint('ride insert failed: $e');
@@ -510,6 +513,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       _ctrl.clear();
       HapticFeedback.selectionClick();
+      captureEvent('message_sent', properties: {'chat_type': widget.isGroup ? 'group' : 'direct'});
       await _load();
     } catch (e) {
       debugPrint('send failed: $e');
@@ -725,6 +729,7 @@ Future<void> sendEventToChat(BuildContext context, Ev e) async {
       'sender': myId,
       'body': '[[event:${e.id}]]',
     });
+    captureEvent('event_sent_to_chat', properties: {'chat_type': pick['is_group'] == true ? 'group' : 'direct'});
     if (context.mounted) toast(context, t('sent_ok'));
   } catch (_) {
     if (context.mounted) showErr(context);
@@ -745,6 +750,7 @@ Future<void> openEventGroup(BuildContext context, Ev e) async {
   }
   try {
     final cid = await sb.rpc('join_event_chat', params: {'p_event': e.id});
+    captureEvent('event_group_joined');
     if (!context.mounted) return;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => ChatScreen(

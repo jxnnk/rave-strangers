@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data.dart';
 import 'locate.dart';
+import 'posthog.dart';
 import 'screens/community.dart';
 import 'screens/events.dart';
 import 'screens/home.dart';
@@ -26,6 +27,10 @@ Future<void> main() async {
   ));
   await store.initLang();
   await Supabase.initialize(url: sbUrl, anonKey: sbKey);
+  await setupPostHog();
+  capturePostHogLog('application startup completed', attributes: {
+    'startup_stage': 'posthog_initialized',
+  });
   store.init();
   runApp(const RaveStrangersApp());
 }
