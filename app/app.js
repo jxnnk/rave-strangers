@@ -11,6 +11,7 @@ var sb=window.supabase.createClient(SB_URL,SB_KEY);
 /* ---------- Texts ---------- */
 var T={
   de:{
+    tagline:'Nie mehr allein raven.',new_here:'Neu hier? Konto erstellen',have_account:'Schon dabei? Einloggen',skip:'Erst mal umschauen',legal_hint:'Mit der Anmeldung akzeptierst du Nutzungsbedingungen und Datenschutz.',
     loc_btn:'Meine Stadt finden',loc_wait:'Suche deine Stadt …',loc_ok:'Stadt: {c}',loc_far:'Nächste Stadt mit Events: {c}',loc_fail:'Standort nicht gefunden. Wähl deine Stadt einfach aus.',loc_denied:'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',loc_none:'Dein Gerät kann keinen Standort liefern.',
     followers_l:'Follower',following_l:'Folgt',write_dm:'Schreiben',
     edit_profile:'Profil bearbeiten',
@@ -75,6 +76,7 @@ var T={
     footer:'Rave Strangers · Beta · Event-Daten aus öffentlichen Quellen, ohne Gewähr. Club-Adressen und Positionen: © OpenStreetMap-Mitwirkende.'
   },
   en:{
+    tagline:'Never rave alone again.',new_here:'New here? Create account',have_account:'Already in? Log in',skip:'Look around first',legal_hint:'By signing up you accept the terms and privacy policy.',
     loc_btn:'Find my city',loc_wait:'Finding your city …',loc_ok:'City: {c}',loc_far:'Nearest city with events: {c}',loc_fail:'Could not get your location. Just pick your city.',loc_denied:'Location not allowed. You can pick the city instead.',loc_none:'Your device cannot provide a location.',
     followers_l:'Followers',following_l:'Following',write_dm:'Message',
     edit_profile:'Edit profile',
@@ -878,19 +880,31 @@ function showQr(){ var box=document.getElementById('qrbox'); if(!box) return;
   var sc=document.createElement('script'); sc.src='vendor/qrcode.js'; sc.onload=draw; document.head.appendChild(sc); }
 
 /* ---------- Views: auth ---------- */
-function viewLogin(){
+/* Login / welcome: big logo first, then it glides up and the options slide in one by one (CSS). */
+function hasSession(){ try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(/^sb-.*-auth-token$/.test(k)) return true; } }catch(e){} return false; }
+function showWelcomeGate(){ return !S.user&&!hasSession()&&lsGet('rs-welcome')!=='1'&&(location.hash===''||location.hash==='#home'); }
+function viewLogin(gate){
   if(S.user){ setTimeout(function(){ location.hash='#me'; },0); return loadingBox(); }
-  var login=S.authTab==='login';
-  return '<h1>'+(login?t('login_t'):t('signup_t'))+'</h1>'+
-    '<div class="seg" role="group" style="margin-top:16px"><button type="button" data-act="authtab" data-id="login" aria-pressed="'+login+'">'+t('login_t')+'</button><button type="button" data-act="authtab" data-id="signup" aria-pressed="'+(!login)+'">'+t('signup_t')+'</button></div>'+
-    (S.authMsg?'<div class="nophone"><div>'+esc(S.authMsg)+'</div></div>':'')+
-    (after()?'<p class="sub">'+t('login_why')+'</p>':'')+'<form class="form" data-form="'+(login?'login':'signup')+'" novalidate>'+
-    (login?'':'<div class="field"><label for="a-name">'+t('display_name')+'</label><input id="a-name" name="name" type="text" maxlength="60" autocomplete="nickname" required></div>')+
-    '<div class="field"><label for="a-mail">'+t('email')+'</label><input id="a-mail" name="email" type="email" autocomplete="email" required></div>'+
-    '<div class="field"><label for="a-pw">'+t('password')+'</label><input id="a-pw" name="password" type="password" minlength="8" autocomplete="'+(login?'current-password':'new-password')+'" required>'+(login?'':'<p class="sub" style="margin:4px 0 0;font-size:13px">'+t('pw_hint')+'</p>')+'</div>'+
-    (login?'':'<label class="row" style="gap:10px"><input type="checkbox" name="age" required style="width:20px;height:20px;accent-color:var(--accent)"> '+t('age_ok')+'</label>')+
+  var login=S.authTab==='login', n=0;
+  function wi(html){ n++; return '<div class="wi" style="--i:'+n+'">'+html+'</div>'; }
+  return '<div class="welcome'+(gate?' gate':'')+'">'+
+    '<div class="wlogo" aria-label="Rave Strangers"><span>Rave</span><b>Strngrs</b></div>'+
+    '<p class="wtag">'+t('tagline')+'</p>'+
+    (S.authMsg?wi('<div class="nophone"><div>'+esc(S.authMsg)+'</div></div>'):'')+
+    (after()?wi('<p class="sub">'+t('login_why')+'</p>'):'')+
+    '<form class="form wform" data-form="'+(login?'login':'signup')+'" novalidate>'+
+    (login?'':wi('<label class="sr" for="a-name">'+t('display_name')+'</label><input id="a-name" name="name" type="text" maxlength="60" autocomplete="nickname" required placeholder="'+esc(t('display_name'))+'">'))+
+    wi('<label class="sr" for="a-mail">'+t('email')+'</label><input id="a-mail" name="email" type="email" autocomplete="email" required placeholder="'+esc(t('email'))+'">')+
+    wi('<label class="sr" for="a-pw">'+t('password')+'</label><input id="a-pw" name="password" type="password" minlength="8" autocomplete="'+(login?'current-password':'new-password')+'" required placeholder="'+esc(t('password'))+'">'+(login?'':'<p class="sub" style="margin:6px 0 0;font-size:13px">'+t('pw_hint')+'</p>'))+
+    (login?'':wi('<label class="row" style="gap:10px"><input type="checkbox" name="age" required style="width:20px;height:20px;accent-color:var(--accent)"> '+t('age_ok')+'</label>'))+
     '<div id="auth-err" class="sub" style="color:var(--accent);margin:0" role="alert">'+esc(S.authErr)+'</div>'+
-    '<div class="row"><button class="btn primary" type="submit">'+(login?t('login_btn'):t('signup_btn'))+'</button>'+(login?'<button type="button" class="btn" data-act="forgot">'+t('reset_open')+'</button>':'')+'</div></form>';
+    wi('<button class="btn primary wbig" type="submit">'+(login?t('login_btn'):t('signup_btn'))+'</button>')+
+    '</form>'+
+    wi('<button type="button" class="btn wbig2" data-act="authtab" data-id="'+(login?'signup':'login')+'">'+(login?t('new_here'):t('have_account'))+'</button>')+
+    wi('<div class="wrow">'+(login?'<button type="button" class="linkbtn" data-act="forgot">'+t('reset_open')+'</button>':'<span></span>')+
+      (gate?'<button type="button" class="linkbtn strong" data-act="skipwelcome">'+t('skip')+' →</button>':'')+'</div>')+
+    wi('<p class="wlegal">'+t('legal_hint')+'</p>')+
+  '</div>';
 }
 
 /* ---------- Views: my profile ---------- */
@@ -1274,6 +1288,8 @@ function render(scroll){
   if(S.loadErr){ view.innerHTML='<div class="empty">'+t('load_err')+'<div class="row" style="justify-content:center;margin-top:12px"><button type="button" class="btn primary" data-act="reload">'+t('retry')+'</button></div></div>'; return; }
   if(!S.ready){ view.innerHTML=loadingBox(); return; }
   var r=route();
+  if(r.tab==='home'&&showWelcomeGate()) r={tab:'home',html:viewLogin(true)};
+  document.body.classList.toggle('gated',r.html.indexOf('welcome gate')>=0);
   document.getElementById('tabs').innerHTML=['home','events','map','connect','me'].map(function(k){
     return '<a href="#'+k+'"'+(r.tab===k?' aria-current="page"':'')+'>'+ICONS[k]+'<span>'+t('nav_'+k)+'</span></a>'; }).join('');
   view.innerHTML=r.html+'<footer>'+t('footer')+'</footer>';
@@ -1326,6 +1342,7 @@ document.addEventListener('click',function(ev){
     render(false); vq.catch(function(err){ loadMine().then(function(){ render(false); }); fail(err); }); }
   else if(act==='loginhere'){ try{ sessionStorage.setItem('rs-after',location.hash); }catch(e){} }
   else if(act==='save'){ if(S.user){ buzz(); if(has(S.saved,+id)&&has(S.alarms,+id)) S.alarms.splice(S.alarms.indexOf(+id),1); } toggleRow('bookmarks',+id,S.saved); }
+  else if(act==='skipwelcome'){ lsSet('rs-welcome','1'); render(true); }
   else if(act==='authtab'){ S.authTab=id; S.authErr=''; S.authMsg=''; render(false); }
   else if(act==='forgot'){ S.resetMail=((document.getElementById('a-mail')||{}).value||'').trim(); S.resetErr=''; location.hash='#reset'; }
   else if(act==='delacct'){

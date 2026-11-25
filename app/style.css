@@ -407,3 +407,29 @@ nav.tabs a[aria-current="page"]{color:var(--accent)}
 .fstats a{flex:1;padding:12px 0;display:flex;flex-direction:column}
 .fstats b{font-family:var(--display);font-weight:400;font-size:28px;line-height:1}
 .fstats span{font-size:13px;color:var(--muted)}
+/* welcome / login (animated) */
+.welcome{max-width:420px;margin:0 auto;padding:28px 0 12px;display:flex;flex-direction:column;align-items:stretch;text-align:center}
+.wlogo{font-family:var(--display);text-transform:uppercase;font-size:64px;line-height:.92;display:flex;flex-direction:column;animation:wlogo 1.1s cubic-bezier(.2,.8,.2,1) both}
+.wlogo b{font-weight:400;color:var(--accent)}
+.wtag{color:var(--muted);font-size:16px;margin:14px 0 28px;animation:wfade .6s .5s both}
+.welcome .wi{animation:wup .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.55s + var(--i) * .07s);margin-bottom:12px;text-align:left}
+.wform{margin:0;display:block}
+.wform input[type=email],.wform input[type=password],.wform input[type=text]{width:100%;box-sizing:border-box;height:54px;padding:0 16px;font-size:16px;background:var(--surface);border:1px solid var(--line-2);color:var(--text)}
+.wform input:focus{outline:none;border-color:var(--text)}
+.wbig{width:100%;height:54px;justify-content:center;font-family:var(--display);font-weight:400;font-size:19px;text-transform:uppercase;letter-spacing:.03em}
+.wbig2{width:100%;height:50px;justify-content:center;border:1.5px solid var(--text);font-weight:700}
+.wrow{display:flex;justify-content:space-between;align-items:center}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;padding:12px 0;cursor:pointer}
+.linkbtn.strong{color:var(--text);font-weight:700}
+.wlegal{font-size:11.5px;color:var(--muted);text-align:center;margin:6px 0 0}
+.welcome.gate{min-height:calc(100vh - 140px);justify-content:center}
+.welcome.gate .wlogo{animation:wlogogate 1.6s cubic-bezier(.2,.8,.2,1) both}
+.welcome.gate .wtag{animation-delay:1s}
+.welcome.gate .wi{animation-delay:calc(1.15s + var(--i) * .08s)}
+body.gated nav.tabs,body.gated footer{display:none}
+@keyframes wlogo{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes wlogogate{0%{opacity:0;transform:translateY(22vh) scale(1.2)}35%{opacity:1;transform:translateY(22vh) scale(1.2)}100%{opacity:1;transform:none}}
+@keyframes wfade{from{opacity:0}to{opacity:1}}
+@keyframes wup{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.wlogo,.wtag,.welcome .wi{animation:none!important}}
+body.gated .brand,body.gated #banner{visibility:hidden}
