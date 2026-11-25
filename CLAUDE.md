@@ -53,7 +53,7 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | PostHog-Tracking mit Einwilligungs-Dialog (Web + Flutter) | – |
 | Apple- und Google-Login | – |
 | Push-Nachrichten (Firebase) | – |
-| Profilbilder (Supabase Storage) | – |
+| Profilbilder (Supabase Storage) | erledigt (Web + Flutter, Migration 025) |
 | App-Icon | – |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
 | Impressum, Datenschutz, AGB | – |

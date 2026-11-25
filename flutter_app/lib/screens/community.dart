@@ -28,7 +28,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         sb.rpc('my_chats2').then((v) => List<Map<String, dynamic>>.from(v as List)),
         sb
             .from('crew_posts')
-            .select('id,author,body,created_at,event_id,profiles(handle,display_name,city,verified)')
+            .select('id,author,body,created_at,event_id,profiles(handle,display_name,avatar_url,city,verified)')
             .order('created_at', ascending: false)
             .limit(80)
             .then((v) => List<Map<String, dynamic>>.from(v)),
@@ -37,6 +37,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
       final upcoming = {for (final e in store.visibleEvents) e.id};
       setState(() {
         _chats = r[0];
+        store.loadAvatars(r[0].map((c) => c['other_id'] as String?));
         _feed = r[1].where((p) => upcoming.contains(p['event_id'])).take(40).toList();
       });
     } catch (e) {
@@ -119,7 +120,7 @@ class _ChatTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
         child: Row(children: [
-          Avatar(name, size: 42),
+          Avatar(name, size: 42, url: group ? null : store.avatars[c['other_id']]),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -163,7 +164,7 @@ class _FeedTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38)),
+          InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38, url: prof?['avatar_url'] as String?)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -433,3 +433,11 @@ body.gated nav.tabs,body.gated footer{display:none}
 @keyframes wup{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.wlogo,.wtag,.welcome .wi{animation:none!important}}
 body.gated .brand,body.gated #banner{visibility:hidden}
+/* Profilbilder */
+.av{position:relative;overflow:hidden}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.avedit{display:flex;gap:16px;align-items:center;margin:0 0 18px;padding:14px;background:var(--surface,#19191C);border:1px solid var(--line)}
+.avedit .av{border-color:var(--accent)}
+.avedit label.btn{cursor:pointer}
+.avlink{position:relative;display:inline-block;line-height:0}
+.avplus{position:absolute;right:-6px;bottom:-6px;width:24px;height:24px;display:grid;place-items:center;background:var(--accent);color:#111113;font:700 16px/1 var(--body);border:2px solid var(--bg,#111113)}

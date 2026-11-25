@@ -167,17 +167,30 @@ class RatingLine extends StatelessWidget {
 class Avatar extends StatelessWidget {
   final String name;
   final double size;
-  const Avatar(this.name, {super.key, this.size = 40});
+  final String? url; // profiles.avatar_url (Supabase Storage), falls vorhanden
+  const Avatar(this.name, {super.key, this.size = 40, this.url});
   @override
   Widget build(BuildContext context) {
     final parts = name.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
     final ini = parts.isEmpty ? '?' : parts.take(2).map((p) => p[0].toUpperCase()).join();
+    final letters = Text(ini, style: mono(size * 0.34, color: C.text));
+    final u = url;
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(color: C.surface2, border: Border.all(color: C.line2)),
-      child: Text(ini, style: mono(size * 0.34, color: C.text)),
+      child: (u == null || u.isEmpty)
+          ? letters
+          : Image.network(
+              u,
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              cacheWidth: (size * 3).round(),
+              errorBuilder: (_, __, ___) => letters,
+            ),
     );
   }
 }

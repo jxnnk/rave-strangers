@@ -66,3 +66,10 @@ Paket `geolocator`, nur grobe Position, einmalig auf Knopfdruck, nichts wird ges
 - Android: in `android/app/src/main/AndroidManifest.xml` vor `<application` einfügen:
   `<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>`
 - iOS: `NSLocationWhenInUseUsageDescription` in `ios/Runner/Info.plist` (Text: „Nur um die Stadt mit Events in deiner Nähe zu finden. Dein Standort wird nicht gespeichert.“)
+
+## Profilbild
+
+Paket `image_picker`. Bild aus der Galerie, auf max. 768 px verkleinert, Upload nach Supabase Storage `avatars/<user-id>/avatar.jpg` (Migration 025, jeder darf nur in seinen eigenen Ordner schreiben).
+- Android: keine extra Berechtigung nötig (System-Fotoauswahl).
+- iOS: in `ios/Runner/Info.plist` ergänzen, sonst stürzt die App beim Öffnen der Galerie ab:
+  `<key>NSPhotoLibraryUsageDescription</key><string>Damit du ein Profilbild auswählen kannst.</string>`

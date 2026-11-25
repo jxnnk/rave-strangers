@@ -88,7 +88,7 @@ class _CrewSectionState extends State<CrewSection> {
     try {
       final r = await sb
           .from('crew_posts')
-          .select('id,author,body,created_at,profiles(handle,display_name,city,verified)')
+          .select('id,author,body,created_at,profiles(handle,display_name,avatar_url,city,verified)')
           .eq('event_id', widget.e.id)
           .order('created_at', ascending: false)
           .limit(60);
@@ -192,7 +192,7 @@ class _CrewTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38)),
+        InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38, url: prof?['avatar_url'] as String?)),
         const SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -239,7 +239,7 @@ class _RidesSectionState extends State<RidesSection> {
     try {
       final r = await sb
           .from('rides')
-          .select('id,driver,from_city,departs_at,seats,note,profiles(handle,display_name,verified)')
+          .select('id,driver,from_city,departs_at,seats,note,profiles(handle,display_name,avatar_url,verified)')
           .eq('event_id', widget.e.id)
           .order('departs_at', ascending: true)
           .limit(50);
@@ -475,7 +475,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       final r = await sb
           .from('messages')
-          .select('id,sender,body,created_at,profiles(display_name,handle)')
+          .select('id,sender,body,created_at,profiles(display_name,avatar_url,handle)')
           .eq('conversation_id', widget.conversationId)
           .order('created_at', ascending: true)
           .limit(300);

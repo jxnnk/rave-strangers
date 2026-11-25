@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../avatar_upload.dart';
 import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
@@ -25,6 +26,7 @@ class SettingsScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(18, 8, 18, 48),
             children: [
               _Head(t('set_profile')),
+              const AvatarEditor(),
               _ProfileForm(),
               _Head(t('set_account')),
               _Row(

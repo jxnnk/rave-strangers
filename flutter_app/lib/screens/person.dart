@@ -102,7 +102,7 @@ class _PersonScreenState extends State<PersonScreen> {
     try {
       final p = await sb
           .from('profiles')
-          .select('id,handle,display_name,city,bio,verified,role')
+          .select('id,handle,display_name,avatar_url,city,bio,verified,role')
           .eq('id', widget.id)
           .maybeSingle();
       final a = store.user == null
@@ -137,7 +137,7 @@ class _PersonScreenState extends State<PersonScreen> {
                     final events = store.visibleEvents.where((e) => _goes.contains(e.id)).toList();
                     return ListView(padding: const EdgeInsets.fromLTRB(18, 4, 18, 48), children: [
                       Row(children: [
-                        Avatar(name, size: 64),
+                        Avatar(name, size: 64, url: p['avatar_url'] as String?),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -200,12 +200,12 @@ class _FollowListScreenState extends State<FollowListScreen> {
       final r = widget.followers
           ? await sb
               .from('follows')
-              .select('follower,profiles!follows_follower_fkey(id,handle,display_name,verified,city)')
+              .select('follower,profiles!follows_follower_fkey(id,handle,display_name,avatar_url,verified,city)')
               .eq('artist', widget.id)
               .limit(500)
           : await sb
               .from('follows')
-              .select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,city)')
+              .select('artist,profiles!follows_artist_fkey(id,handle,display_name,avatar_url,verified,city)')
               .eq('follower', widget.id)
               .limit(500);
       if (mounted) {
@@ -236,7 +236,7 @@ class _FollowListScreenState extends State<FollowListScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
                     child: Row(children: [
-                      Avatar(personName(p), size: 40),
+                      Avatar(personName(p), size: 40, url: p['avatar_url'] as String?),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -206,6 +206,30 @@ class Store extends ChangeNotifier {
   int unreadChats = 0;
   int get unreadNotes => notes.where((n) => n['read_at'] == null).length;
   Map<String, dynamic>? profile;
+  /// Profilbilder anderer Leute (id -> avatar_url), z. B. für die Chatliste.
+  final Map<String, String?> avatars = {};
+  Future<void> loadAvatars(Iterable<String?> ids) async {
+    final todo = ids.whereType<String>().where((id) => !avatars.containsKey(id)).toSet().toList();
+    if (todo.isEmpty) return;
+    for (final id in todo) {
+      avatars[id] = null;
+    }
+    try {
+      final r = await sb.from('profiles').select('id,avatar_url').inFilter('id', todo);
+      var any = false;
+      for (final p in List<Map<String, dynamic>>.from(r)) {
+        final u = p['avatar_url'] as String?;
+        if (u != null && u.isNotEmpty) {
+          avatars[p['id'] as String] = u;
+          any = true;
+        }
+      }
+      if (any) notifyListeners();
+    } catch (e) {
+      debugPrint('avatars failed: $e');
+    }
+  }
+
   bool loading = true;
   String? error;
 
@@ -256,7 +280,7 @@ class Store extends ChangeNotifier {
         sb.from('headlines').select('url,source,title,lang').order('published_at', ascending: false).limit(40),
         sb
             .from('posts')
-            .select('title,kind,body,link,created_at,profiles!posts_author_fkey(display_name,verified)')
+            .select('title,kind,body,link,created_at,profiles!posts_author_fkey(display_name,avatar_url,verified)')
             .eq('published', true)
             .order('created_at', ascending: false)
             .limit(10),
@@ -334,7 +358,7 @@ class Store extends ChangeNotifier {
       alarms = bm.where((b) => b['remind'] == true).map((b) => b['event_id'] as int).toSet();
       final fl = await sb
           .from('follows')
-          .select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,city)')
+          .select('artist,profiles!follows_artist_fkey(id,handle,display_name,avatar_url,verified,city)')
           .eq('follower', u.id);
       following = {
         for (final f in fl)

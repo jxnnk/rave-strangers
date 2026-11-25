@@ -16,6 +16,7 @@ var T={
     loc_btn:'Meine Stadt finden',loc_wait:'Suche deine Stadt …',loc_ok:'Stadt: {c}',loc_far:'Nächste Stadt mit Events: {c}',loc_fail:'Standort nicht gefunden. Wähl deine Stadt einfach aus.',loc_denied:'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',loc_none:'Dein Gerät kann keinen Standort liefern.',
     followers_l:'Follower',following_l:'Folgt',write_dm:'Schreiben',
     edit_profile:'Profil bearbeiten',
+    av_t:'Profilbild', av_pick:'Bild wählen', av_change:'Bild ändern', av_del:'Entfernen', av_hint:'JPG oder PNG. Wird quadratisch zugeschnitten.', av_busy:'Lädt hoch …', av_ok:'Profilbild gespeichert', av_gone:'Profilbild entfernt', av_err:'Bild konnte nicht hochgeladen werden', av_add:'Profilbild hinzufügen',
     crew_group:'Crew-Gruppe',crew_group_join:'Crew-Gruppe beitreten',leave_group:'Gruppe verlassen',send_to_chat:'In Chat senden',sent_ok:'Gesendet.',event_msg:'hat ein Event geteilt',event_gone:'Event nicht mehr verfügbar',members_n:'{n} Mitglieder',open:'Öffnen',invite_t:'Freunde einladen',invite_sub:'Wer über deinen Link mitmacht, landet direkt in einem Chat mit dir.',invite_msg:'Komm zu Rave Strangers, dann gehen wir zusammen raven 🖤',invite_n:'{n} über deinen Link dabei',qr_t:'Dein QR-Code',qr_sub:'Im Club zeigen: scannen, mitmachen, schon seid ihr im Chat.',copy_link:'Link kopieren',
     highlight:'Highlight',
     settings:'Einstellungen',set_account:'Konto',set_privacy:'Privatsphäre',set_session:'Sitzung',set_email:'E-Mail ändern',set_email_hint:'Wir schicken dir einen Bestätigungslink an die neue Adresse. Erst nach dem Klick wird sie geändert.',set_email_sent:'Check dein Postfach und bestätige die neue Adresse.',reset_rate:'Gerade wurden zu viele Mails verschickt. Versuch es in einer Stunde nochmal.',set_notify_tickets:'Ticket-Alarm',set_notify_tickets_sub:'Wenn Tickets für gemerkte Events rauskommen',set_notify_new:'Neue Termine',set_notify_new_sub:'Wenn Clubs, denen du folgst, neue Events haben',set_notify_reminder:'Erinnerung',set_notify_reminder_sub:'Am Tag vor deinen Events',set_dm_open:'Nachrichten von allen',set_dm_open_sub:'Aus: Nur Leute, mit denen du schon schreibst, erreichen dich',set_going_visible:'„Ich gehe hin“ öffentlich',set_going_visible_sub:'Andere sehen, dass du hingehst (gilt für neue Zusagen)',set_blocked:'Blockierte Personen',set_blocked_none:'Du hast niemanden blockiert.',unblock:'Freigeben',
@@ -82,6 +83,7 @@ var T={
     loc_btn:'Find my city',loc_wait:'Finding your city …',loc_ok:'City: {c}',loc_far:'Nearest city with events: {c}',loc_fail:'Could not get your location. Just pick your city.',loc_denied:'Location not allowed. You can pick the city instead.',loc_none:'Your device cannot provide a location.',
     followers_l:'Followers',following_l:'Following',write_dm:'Message',
     edit_profile:'Edit profile',
+    av_t:'Profile picture', av_pick:'Choose photo', av_change:'Change photo', av_del:'Remove', av_hint:'JPG or PNG. Cropped to a square.', av_busy:'Uploading …', av_ok:'Profile picture saved', av_gone:'Profile picture removed', av_err:'Could not upload the photo', av_add:'Add profile picture',
     crew_group:'Crew group',crew_group_join:'Join crew group',leave_group:'Leave group',send_to_chat:'Send to chat',sent_ok:'Sent.',event_msg:'shared an event',event_gone:'Event no longer available',members_n:'{n} members',open:'Open',invite_t:'Invite friends',invite_sub:'Anyone who joins through your link lands straight in a chat with you.',invite_msg:'Join me on Rave Strangers and let’s go raving together 🖤',invite_n:'{n} joined via your link',qr_t:'Your QR code',qr_sub:'Show it at the club: scan, join, and you are in a chat.',copy_link:'Copy link',
     highlight:'Highlight',
     settings:'Settings',set_account:'Account',set_privacy:'Privacy',set_session:'Session',set_email:'Change email',set_email_hint:'We send a confirmation link to the new address. It only changes after you click it.',set_email_sent:'Check your inbox and confirm the new address.',reset_rate:'Too many emails were sent just now. Please try again in an hour.',set_notify_tickets:'Ticket alert',set_notify_tickets_sub:'When tickets for saved events come out',set_notify_new:'New dates',set_notify_new_sub:'When clubs you follow add events',set_notify_reminder:'Reminder',set_notify_reminder_sub:'The day before your events',set_dm_open:'Messages from everyone',set_dm_open_sub:'Off: only people you already chat with can reach you',set_going_visible:'“I’m going” public',set_going_visible_sub:'Others see that you go (applies to new ones)',set_blocked:'Blocked people',set_blocked_none:'You have not blocked anyone.',unblock:'Unblock',
@@ -200,7 +202,8 @@ function fmtLong(d){ return d.toLocaleDateString(locale(),{weekday:'long',day:'n
 function fmtShort(d){ return d.toLocaleDateString(locale(),{weekday:'short',day:'numeric',month:'short'}); }
 function hue(n){ var h=0; for(var i=0;i<n.length;i++){ h=(h*31+n.charCodeAt(i))%360; } return h; }
 function initials(n){ var p=String(n||'?').trim().split(/\s+/); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
-function av(name,size){ return '<span class="av" style="--h:'+hue(name||'?')+';--s:'+(size||40)+'px" aria-hidden="true">'+esc(initials(name))+'</span>'; }
+function av(p,size){ var name=p&&typeof p==='object'?p.display_name:p, url=p&&typeof p==='object'?p.avatar_url:null;
+  return '<span class="av" style="--h:'+hue(name||'?')+';--s:'+(size||40)+'px" aria-hidden="true">'+(url?'<img src="'+esc(url)+'" alt="" loading="lazy" onerror="this.remove()">':'')+esc(initials(name))+'</span>'; }
 var VB='<svg class="vb" viewBox="0 0 24 24" role="img" aria-label="verified"><circle cx="12" cy="12" r="11" fill="#e4262e"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function host(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
 function safeUrl(u){ return /^https?:\/\//i.test(u||'')?u:null; }
@@ -308,7 +311,7 @@ function loadMine(){
     data(sb.from('attendance').select('event_id,profile_id')),
     data(sb.from('bookmarks').select('event_id,remind').eq('profile_id',uid)),
     data(sb.from('artist_verifications').select('id,status,created_at').eq('profile_id',uid).order('created_at',{ascending:false}).limit(1)),
-    data(sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified,role)').eq('follower',uid)),
+    data(sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,avatar_url,verified,role)').eq('follower',uid)),
     data(sb.from('venue_follows').select('venue_id').eq('profile_id',uid))
   ]).then(function(r){
     S.me=r[0];
@@ -539,7 +542,7 @@ function viewEvent(id){
   var who;
   if(!S.user) who=emptyBox('<a class="link" href="#login" data-act="loginhere">'+t('login_to_see')+'</a>');
   else if(cache.att[e.id]===undefined){ who=loadingBox(); loadAttendees(e.id); }
-  else who=cache.att[e.id].length?cache.att[e.id].map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p.display_name)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+'</p></div></a>'; }).join(''):emptyBox(t('nobody'));
+  else who=cache.att[e.id].length?cache.att[e.id].map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+'</p></div></a>'; }).join(''):emptyBox(t('nobody'));
   var fr=friendsAt(e.id), cdx=cdHTML(e);
   var hero=e.img?'<figure class="evbanner"><img src="'+esc(e.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest(\'.evbanner\').remove()"><figcaption>'+t('banner_by')+': '+esc(e.imgCredit||host(e.src||e.img))+'</figcaption></figure>':'';
   return '<a class="back" href="#events">← '+t('back')+'</a>'+hero+(cdx?'<p class="kicker">'+cdx+'</p>':'')+'<h1>'+esc(e.title)+'</h1>'+
@@ -557,7 +560,7 @@ function viewEvent(id){
     '<div class="row" style="margin-top:10px"><a class="btn" href="'+esc(gcalUrl(e))+'" target="_blank" rel="noopener">'+t('gcal')+' ↗</a>'+
     '<a class="btn" href="#map-'+v.id+'">'+t('show_map')+'</a></div>'+
     (n?'<p class="sub">'+t('going_n',{n:n})+'</p>':'')+
-    (fr.length?'<div class="frline"><span class="fr">'+t('fr_going')+'</span>'+fr.slice(0,6).map(function(p){ return '<a href="#u-'+esc(p.handle)+'" title="'+esc(p.display_name)+'">'+av(p.display_name,30)+'</a>'; }).join('')+'<span class="sub" style="margin:0">'+esc(fr.slice(0,3).map(function(p){ return p.display_name; }).join(', '))+(fr.length>3?' +'+(fr.length-3):'')+'</span></div>':'')+
+    (fr.length?'<div class="frline"><span class="fr">'+t('fr_going')+'</span>'+fr.slice(0,6).map(function(p){ return '<a href="#u-'+esc(p.handle)+'" title="'+esc(p.display_name)+'">'+av(p,30)+'</a>'; }).join('')+'<span class="sub" style="margin:0">'+esc(fr.slice(0,3).map(function(p){ return p.display_name; }).join(', '))+(fr.length>3?' +'+(fr.length-3):'')+'</span></div>':'')+
     '<div class="sec"><h2>'+t('tix_t')+'</h2>'+ticketsHTML(e)+'</div>'+
     '<div class="sec"><h2>'+t('lineup')+'</h2><div class="people">'+lineup+'</div></div>'+
     '<div class="sec"><h2>'+t('who_goes')+'</h2><div class="people">'+who+'</div></div>'+
@@ -566,7 +569,7 @@ function viewEvent(id){
     (S.user?reportForm('event',e.id):'');
 }
 function loadAttendees(id){
-  data(sb.from('attendance').select('profile_id,profiles(handle,display_name,city,verified)').eq('event_id',id)).then(function(rows){
+  data(sb.from('attendance').select('profile_id,profiles(handle,display_name,avatar_url,city,verified)').eq('event_id',id)).then(function(rows){
     cache.att[id]=rows.filter(function(r){ return r.profiles; }).map(function(r){ return r.profiles; });
     if(location.hash==='#event-'+id) render(false);
   }).catch(function(err){ cache.att[id]=[]; fail(err); });
@@ -583,7 +586,7 @@ function weekendRange(){ var wd=dayOf(0).getDay(); var start=(wd===5||wd===6||wd
 function loadHome(){
   cache.home='loading';
   Promise.all([
-    data(sb.from('posts').select('id,kind,title,body,link,created_at,author,profiles!posts_author_fkey(handle,display_name,verified)').eq('published',true).order('created_at',{ascending:false}).limit(10)),
+    data(sb.from('posts').select('id,kind,title,body,link,created_at,author,profiles!posts_author_fkey(handle,display_name,avatar_url,verified)').eq('published',true).order('created_at',{ascending:false}).limit(10)),
     data(sb.from('headlines').select('url,source,title,published_at,lang').order('published_at',{ascending:false}).limit(40))
   ]).then(function(r){ cache.home={posts:r[0],headlines:r[1]}; if(route().tab==='home') render(false); })
     .catch(function(err){ cache.home={posts:[],headlines:[]}; fail(err); });
@@ -654,7 +657,7 @@ function revStars(name,val,label,req){
 }
 function loadReviews(id){
   cache.reviews[id]='loading';
-  data(sb.from('reviews').select('id,author,stars,sound,crowd,door,safety,body,created_at,profiles(handle,display_name,verified)').eq('venue_id',id).is('event_id',null).order('created_at',{ascending:false}).limit(30))
+  data(sb.from('reviews').select('id,author,stars,sound,crowd,door,safety,body,created_at,profiles(handle,display_name,avatar_url,verified)').eq('venue_id',id).is('event_id',null).order('created_at',{ascending:false}).limit(30))
     .then(function(r){ cache.reviews[id]=r; if(location.hash==='#club-'+id) render(false); }).catch(function(err){ cache.reviews[id]=[]; fail(err); });
 }
 function bar(label,x){ return x?'<div class="rbar"><span>'+label+'</span><i><b style="width:'+(x/5*100)+'%"></b></i><em>'+String(x).replace('.',S.lang==='de'?',':'.')+'</em></div>':''; }
@@ -694,17 +697,17 @@ function viewClub(id){
 function viewArtists(){
   if(cache.artists===null){
     cache.artists='loading';
-    data(sb.from('profiles').select('handle,display_name,city,verified').eq('role','artist').eq('verified',true).order('display_name',{ascending:true}))
+    data(sb.from('profiles').select('handle,display_name,avatar_url,city,verified').eq('role','artist').eq('verified',true).order('display_name',{ascending:true}))
       .then(function(r){ cache.artists=r; if(location.hash==='#artists') render(false); }).catch(function(err){ cache.artists=[]; fail(err); });
   }
-  var body=cache.artists==='loading'?loadingBox():(cache.artists.length?'<div class="grid">'+cache.artists.map(function(a){ return '<a class="acard" href="#u-'+esc(a.handle)+'">'+av(a.display_name,52)+'<div><strong>'+esc(a.display_name)+VB+'</strong><p>'+esc(a.city||'')+'</p></div></a>'; }).join('')+'</div>':'<div class="empty">'+t('no_artists')+'</div>');
+  var body=cache.artists==='loading'?loadingBox():(cache.artists.length?'<div class="grid">'+cache.artists.map(function(a){ return '<a class="acard" href="#u-'+esc(a.handle)+'">'+av(a,52)+'<div><strong>'+esc(a.display_name)+VB+'</strong><p>'+esc(a.city||'')+'</p></div></a>'; }).join('')+'</div>':'<div class="empty">'+t('no_artists')+'</div>');
   return '<h1>'+t('artists_title')+'</h1><p class="sub">'+t('artists_sub')+'</p>'+body;
 }
 function viewProfile(handle){
   var key=handle.toLowerCase();
   if(cache.profile[key]===undefined){
     cache.profile[key]='loading';
-    data(sb.from('profiles').select('id,handle,display_name,city,bio,socials,verified,role').eq('handle',key).maybeSingle()).then(function(p){
+    data(sb.from('profiles').select('id,handle,display_name,avatar_url,city,bio,socials,verified,role').eq('handle',key).maybeSingle()).then(function(p){
       if(!p){ cache.profile[key]=null; return; }
       if(!S.user){ p.goes=[]; return p; }
       return data(sb.from('attendance').select('event_id').eq('profile_id',p.id)).then(function(a){ p.goes=a.map(function(x){ return x.event_id; }); return p; });
@@ -717,7 +720,7 @@ function viewProfile(handle){
   if(!p) return back+'<div class="empty">'+t('profile_nf')+'</div>';
   var mine=S.user&&S.user.id===p.id, fo=!!followsP(p.id);
   var evs=(p.goes||[]).map(evt).filter(Boolean).sort(function(a,b){ return a.off-b.off; });
-  return back+'<div class="hero">'+av(p.display_name,84)+'<div><h1>'+esc(p.display_name)+(p.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1>'+
+  return back+'<div class="hero">'+av(p,84)+'<div><h1>'+esc(p.display_name)+(p.verified?VB.replace('class="vb"','class="vb" style="width:26px;height:26px"'):'')+'</h1>'+
     '<p class="sub" style="margin-top:6px">@'+esc(p.handle)+(p.city?' · '+esc(p.city):'')+(p.verified?' · '+t('verified'):'')+'</p></div></div>'+
     fstatsHTML(p.id)+
     (mine?'':'<div class="row" style="margin-top:16px"><button type="button" class="btn" data-act="dm" data-id="'+esc(p.id)+'">'+t('write_dm')+'</button>'+'</div><div class="row" style="margin-top:8px"><button type="button" class="btn '+(fo?'on':'primary')+'" data-act="follow" data-id="'+esc(p.id)+'" data-h="'+esc(p.handle)+'" aria-pressed="'+fo+'">'+(fo?'✓ '+t('following'):'+ '+t('follow'))+'</button></div>')+
@@ -741,9 +744,9 @@ var FLIST={};
 function viewFollowList(id,followers){
   var key=(followers?'a':'b')+id, rows=FLIST[key];
   if(rows===undefined){ FLIST[key]='loading';
-    var q=followers?sb.from('follows').select('follower,profiles!follows_follower_fkey(id,handle,display_name,verified)').eq('artist',id):sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,verified)').eq('follower',id);
+    var q=followers?sb.from('follows').select('follower,profiles!follows_follower_fkey(id,handle,display_name,avatar_url,verified)').eq('artist',id):sb.from('follows').select('artist,profiles!follows_artist_fkey(id,handle,display_name,avatar_url,verified)').eq('follower',id);
     data(q.limit(500)).then(function(r){ FLIST[key]=r.map(function(x){ return x.profiles; }).filter(Boolean); render(false); }).catch(function(err){ FLIST[key]=[]; fail(err); }); rows='loading'; }
-  var list=rows==='loading'?loadingBox():(rows.length?'<div class="people">'+rows.map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p.display_name)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+'</p></div></a>'; }).join('')+'</div>':emptyBox(t('none_yet')));
+  var list=rows==='loading'?loadingBox():(rows.length?'<div class="people">'+rows.map(function(p){ return '<a class="person" href="#u-'+esc(p.handle)+'">'+av(p)+'<div class="grow"><strong>'+esc(p.display_name)+(p.verified?VB:'')+'</strong><p>@'+esc(p.handle)+'</p></div></a>'; }).join('')+'</div>':emptyBox(t('none_yet')));
   return '<a class="back" href="javascript:history.back()">← '+t('back')+'</a><h1>'+(followers?t('followers_l'):t('following_l'))+'</h1><div class="sec">'+list+'</div>';
 }
 
@@ -755,7 +758,7 @@ function viewConnect(){
   if(cache.connect===null){
     cache.connect='loading';
     var mine=S.going.slice();
-    var p=mine.length?data(sb.from('attendance').select('event_id,profile_id,profiles(handle,display_name,city,verified)').in('event_id',mine)):Promise.resolve([]);
+    var p=mine.length?data(sb.from('attendance').select('event_id,profile_id,profiles(handle,display_name,avatar_url,city,verified)').in('event_id',mine)):Promise.resolve([]);
     p.then(function(rows){
       var by={};
       rows.forEach(function(r){ if(!r.profiles||r.profile_id===S.user.id) return; var k=r.profile_id; (by[k]=by[k]||{p:r.profiles,ev:[]}).ev.push(r.event_id); });
@@ -766,7 +769,7 @@ function viewConnect(){
   var c=cache.connect;
   var body=c==='loading'?loadingBox():(c.length?'<div class="people">'+c.map(function(x){
     var names=x.ev.map(evt).filter(Boolean).map(function(e){ return e.title; }).join(', ');
-    return '<a class="person" href="#u-'+esc(x.p.handle)+'">'+av(x.p.display_name)+'<div class="grow"><strong>'+esc(x.p.display_name)+(x.p.verified?VB:'')+'</strong><p>'+(x.p.city?esc(x.p.city)+' · ':'')+t('goes_to')+' '+esc(names)+'</p></div></a>'; }).join('')+'</div>':'<div class="empty">'+t('connect_none')+'</div>');
+    return '<a class="person" href="#u-'+esc(x.p.handle)+'">'+av(x.p)+'<div class="grow"><strong>'+esc(x.p.display_name)+(x.p.verified?VB:'')+'</strong><p>'+(x.p.city?esc(x.p.city)+' · ':'')+t('goes_to')+' '+esc(names)+'</p></div></a>'; }).join('')+'</div>':'<div class="empty">'+t('connect_none')+'</div>');
   var chatsBox='<div class="sec"><h2>'+t('chats')+'</h2>'+chatsHTML()+'</div>';
   return head+chatsBox+'<div class="sec"><h2>'+t('connect_title')+'</h2>'+body+'</div>'+soon;
 }
@@ -782,7 +785,7 @@ function ago(iso){
 }
 function loadCrew(id){
   cache.crew[id]='loading';
-  data(sb.from('crew_posts').select('id,author,body,created_at,profiles(handle,display_name,city,verified)').eq('event_id',id).order('created_at',{ascending:false}).limit(60))
+  data(sb.from('crew_posts').select('id,author,body,created_at,profiles(handle,display_name,avatar_url,city,verified)').eq('event_id',id).order('created_at',{ascending:false}).limit(60))
     .then(function(r){ cache.crew[id]=r||[]; if(location.hash==='#event-'+id) render(false); })
     .catch(function(err){ cache.crew[id]=[]; fail(err); });
 }
@@ -797,7 +800,7 @@ function crewHTML(e){
   var form=mine?'':'<form class="form" data-form="crew" data-id="'+e.id+'" style="margin:10px 0 14px"><label class="sr" for="crew-b">'+t('crew_find')+'</label><textarea id="crew-b" name="body" maxlength="280" minlength="2" required placeholder="'+esc(t('crew_ph'))+'"></textarea><div><button class="btn primary" type="submit">'+t('crew_post')+'</button></div></form>';
   var items=list.length?'<div class="people">'+list.map(function(x){
     var p=x.profiles||{display_name:'Raver',handle:''}, own=x.author===S.user.id;
-    return '<div class="person crewpost">'+av(p.display_name)+'<div class="grow"><strong>'+(p.handle?'<a href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>':esc(p.display_name))+(p.verified?VB:'')+'</strong>'+
+    return '<div class="person crewpost">'+av(p)+'<div class="grow"><strong>'+(p.handle?'<a href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>':esc(p.display_name))+(p.verified?VB:'')+'</strong>'+
       '<p class="meta">'+(own?t('crew_mine')+' · ':'')+(p.city?esc(p.city)+' · ':'')+esc(ago(x.created_at))+'</p><p class="body">'+esc(x.body)+'</p></div>'+
       (own?'<button type="button" class="btn small" data-act="crewdel" data-id="'+x.id+'" data-ev="'+e.id+'">'+t('crew_del')+'</button>'
           :'<button type="button" class="btn small primary" data-act="dm" data-id="'+esc(x.author)+'">'+t('msg_btn')+'</button>')+'</div>';
@@ -807,7 +810,7 @@ function crewHTML(e){
 
 function loadRides(id){
   cache.rides[id]='loading';
-  data(sb.from('rides').select('id,driver,from_city,departs_at,seats,note,profiles(handle,display_name,verified)').eq('event_id',id).order('departs_at',{ascending:true}).limit(50))
+  data(sb.from('rides').select('id,driver,from_city,departs_at,seats,note,profiles(handle,display_name,avatar_url,verified)').eq('event_id',id).order('departs_at',{ascending:true}).limit(50))
     .then(function(r){ cache.rides[id]=r||[]; if(location.hash==='#event-'+id) render(false); })
     .catch(function(err){ cache.rides[id]=[]; fail(err); });
 }
@@ -828,7 +831,7 @@ function ridesHTML(e){
     '<div><button class="btn primary" type="submit">'+t('ride_offer')+'</button></div></form></details>';
   var items=list.length?'<div class="people">'+list.map(function(x){
     var p=x.profiles||{display_name:'Raver',handle:''}, own=x.driver===S.user.id;
-    return '<div class="person crewpost">'+av(p.display_name)+'<div class="grow"><strong>'+esc(t('ride_line',{from:x.from_city,to:v?v.city:''}))+'</strong>'+
+    return '<div class="person crewpost">'+av(p)+'<div class="grow"><strong>'+esc(t('ride_line',{from:x.from_city,to:v?v.city:''}))+'</strong>'+
       '<p class="meta">'+(own?t('ride_mine')+' · ':'')+esc(new Date(x.departs_at).toLocaleString(locale(),{timeZone:'Europe/Berlin',weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+(x.seats===1?t('ride_seat_1'):t('ride_seats_n',{n:x.seats}))+' · '+(p.handle?'<a href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>':esc(p.display_name))+(p.verified?VB:'')+'</p>'+
       (x.note?'<p class="body">'+esc(x.note)+'</p>':'')+'</div>'+
       (own?'<button type="button" class="btn small" data-act="ridedel" data-id="'+x.id+'" data-ev="'+e.id+'">'+t('crew_del')+'</button>'
@@ -838,9 +841,14 @@ function ridesHTML(e){
 }
 function loadChats(){
   cache.chats='loading';
-  sb.rpc('my_chats2').then(function(r){ if(r.error) throw r.error; cache.chats=r.data||[]; S.unread=(cache.chats||[]).reduce(function(a,c){ return a+(c.unread||0); },0); render(false); })
+  sb.rpc('my_chats2').then(function(r){ if(r.error) throw r.error; cache.chats=r.data||[]; S.unread=(cache.chats||[]).reduce(function(a,c){ return a+(c.unread||0); },0); render(false); loadAvatars(cache.chats.map(function(c){ return c.other_id; })); })
     .catch(function(err){ cache.chats=[]; fail(err); });
 }
+var AVA={};
+function loadAvatars(ids){ ids=(ids||[]).filter(function(id){ return id&&!(id in AVA); }); if(!ids.length) return;
+  ids.forEach(function(id){ AVA[id]=null; });
+  data(sb.from('profiles').select('id,avatar_url').in('id',ids)).then(function(r){ var any=false; r.forEach(function(p){ if(p.avatar_url){ AVA[p.id]=p.avatar_url; any=true; } }); if(any) render(false); }).catch(function(){}); }
+function chatAv(x,nm){ return av({display_name:nm,avatar_url:x.is_group?null:AVA[x.other_id]}); }
 function chatsHTML(){
   var c=cache.chats;
   if(c===null){ loadChats(); c='loading'; }
@@ -849,7 +857,7 @@ function chatsHTML(){
   return '<div class="people">'+c.map(function(x){
     var nm=chatName(x), lb=x.last_body&&/^\[\[event:\d+\]\]$/.test(x.last_body)?t('event_msg'):x.last_body;
     var last=lb?((x.last_sender===S.user.id?t('you_')+': ':(x.is_group&&x.last_sender_name?x.last_sender_name+': ':''))+lb):(x.is_group?t('members_n',{n:x.members||1}):'');
-    return '<a class="person" href="#chat-'+x.conversation_id+'">'+av(nm)+'<div class="grow"><strong>'+esc(nm)+(x.other_verified?VB:'')+(x.is_group?' <span class="tag">'+t('crew_group')+'</span>':'')+'</strong><p>'+esc(last.slice(0,80))+'</p></div>'+
+    return '<a class="person" href="#chat-'+x.conversation_id+'">'+chatAv(x,nm)+'<div class="grow"><strong>'+esc(nm)+(x.other_verified?VB:'')+(x.is_group?' <span class="tag">'+t('crew_group')+'</span>':'')+'</strong><p>'+esc(last.slice(0,80))+'</p></div>'+
       (x.unread?'<span class="tag hot">'+t('unread_n',{n:x.unread})+'</span>':(x.last_at?'<span class="meta">'+esc(ago(x.last_at))+'</span>':''))+'</a>';
   }).join('')+'</div>';
 }
@@ -861,7 +869,7 @@ function msgHTML(body){ var m=/^\[\[event:(\d+)\]\]$/.exec((body||'').trim()); i
 var CHATPOLL=null;
 function loadChat(cid,quiet){
   if(!quiet) cache.chat[cid]=cache.chat[cid]||'loading';
-  return data(sb.from('messages').select('id,sender,body,created_at,profiles(display_name,handle)').eq('conversation_id',cid).order('created_at',{ascending:true}).limit(300)).then(function(msgs){
+  return data(sb.from('messages').select('id,sender,body,created_at,profiles(display_name,avatar_url,handle)').eq('conversation_id',cid).order('created_at',{ascending:true}).limit(300)).then(function(msgs){
     var prev=cache.chat[cid], changed=!prev||prev==='loading'||prev.msgs.length!==msgs.length;
     var other=(cache.chats||[]).filter&&(cache.chats||[]).filter(function(x){ return x.conversation_id===cid; })[0];
     cache.chat[cid]={msgs:msgs,other:other||(prev&&prev.other)||null};
@@ -896,7 +904,7 @@ function viewSendEv(id){
   var e=evt(id); if(!e) return emptyBox(t('event_gone'));
   var c=cache.chats; if(c===null){ loadChats(); c='loading'; }
   var list=c==='loading'?loadingBox():(c.length?'<div class="people">'+c.map(function(x){ var nm=chatName(x);
-    return '<button type="button" class="person" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line)" data-act="sendto" data-id="'+x.conversation_id+'" data-ev="'+id+'">'+av(nm)+'<div class="grow"><strong>'+esc(nm)+'</strong></div></button>'; }).join('')+'</div>':emptyBox(t('chats_none')));
+    return '<button type="button" class="person" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line)" data-act="sendto" data-id="'+x.conversation_id+'" data-ev="'+id+'">'+chatAv(x,nm)+'<div class="grow"><strong>'+esc(nm)+'</strong></div></button>'; }).join('')+'</div>':emptyBox(t('chats_none')));
   return '<a class="back" href="#event-'+id+'">← '+esc(e.title)+'</a><h1>'+t('send_to_chat')+'</h1><div class="sec">'+list+'</div>';
 }
 /* ---------- Invite friends + QR ---------- */
@@ -964,7 +972,7 @@ function viewMe(){
   var subs=cache.subs==='loading'?loadingBox():(cache.subs.length?'<div class="people">'+cache.subs.map(function(s){ var p=berlinParts(new Date(s.starts_at));
     return '<div class="person"><div class="grow"><strong>'+esc(s.title)+'</strong><p>'+esc(p.date)+'</p></div><span class="tag'+(s.status==='pending'?' hot':'')+'">'+(s.status==='pending'?t('pending'):esc(s.status))+'</span></div>'; }).join('')+'</div>':emptyBox(t('none_yet')));
   return '<div class="row" style="justify-content:space-between"><h1>'+t('me_title')+'</h1><div class="row"><a class="btn small" href="#settings">⚙ '+t('settings')+'</a></div></div>'+
-    '<div class="hero" style="margin-top:16px">'+av(m.display_name,72)+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
+    '<div class="hero" style="margin-top:16px"><a href="#settings" class="avlink" aria-label="'+esc(t(m.avatar_url?'av_change':'av_add'))+'">'+av(m,72)+(m.avatar_url?'':'<b class="avplus">+</b>')+'</a>'+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
     fstatsHTML(m.id)+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
     inviteHTML()+
@@ -983,10 +991,29 @@ function loadSettings(){ if(!S.user) return;
   data(sb.from('user_settings').select('*').eq('profile_id',S.user.id)).then(function(r){ S.settings=r[0]||{}; if(location.hash==='#settings') render(false); }).catch(function(){}); }
 function swRow(k){ var on=setOn(k);
   return '<label class="swrow"><div class="grow"><strong>'+t('set_'+k)+'</strong><p>'+t('set_'+k+'_sub')+'</p></div><input type="checkbox" role="switch" data-act="setting" data-id="'+k+'"'+(on?' checked':'')+'></label>'; }
+function avEditHTML(m){
+  return '<div class="avedit">'+av(m,84)+'<div class="grow"><strong>'+t('av_t')+'</strong><p class="sub" style="margin:2px 0 8px">'+t('av_hint')+'</p><div class="row">'+
+    '<label class="btn small primary" for="av-file">'+t(m.avatar_url?'av_change':'av_pick')+'</label><input id="av-file" type="file" accept="image/*" class="sr">'+
+    (m.avatar_url?'<button type="button" class="btn small" data-act="avdel">'+t('av_del')+'</button>':'')+'</div></div></div>'; }
+function squareJpeg(file,size){ return new Promise(function(res,rej){
+  var url=URL.createObjectURL(file), img=new Image();
+  img.onload=function(){ var s=Math.min(img.naturalWidth,img.naturalHeight), c=document.createElement('canvas'); c.width=c.height=size;
+    c.getContext('2d').drawImage(img,(img.naturalWidth-s)/2,(img.naturalHeight-s)/2,s,s,0,0,size,size); URL.revokeObjectURL(url);
+    c.toBlob(function(b){ b?res(b):rej(new Error('blob')); },'image/jpeg',0.85); };
+  img.onerror=function(){ URL.revokeObjectURL(url); rej(new Error('img')); }; img.src=url; }); }
+function setAvatar(url){ return sb.from('profiles').update({avatar_url:url}).eq('id',S.user.id).select().single().then(function(r){ if(r.error) throw r.error; S.me=r.data; cache.profile={}; if(S.user) AVA[S.user.id]=url; render(false); }); }
+function uploadAvatar(file){
+  if(!file||!S.user) return; if(!/^image\//.test(file.type||'image/')){ toast(t('av_err')); return; }
+  var path=S.user.id+'/avatar.jpg'; toast(t('av_busy'));
+  squareJpeg(file,512).then(function(blob){ return sb.storage.from('avatars').upload(path,blob,{upsert:true,contentType:'image/jpeg',cacheControl:'3600'}); })
+    .then(function(r){ if(r.error) throw r.error; return setAvatar(sb.storage.from('avatars').getPublicUrl(path).data.publicUrl+'?v='+Date.now()); })
+    .then(function(){ toast(t('av_ok')); }).catch(function(){ toast(t('av_err')); }); }
+function removeAvatar(){ if(!S.user) return;
+  sb.storage.from('avatars').remove([S.user.id+'/avatar.jpg']).then(function(){ return setAvatar(null); }).then(function(){ toast(t('av_gone')); }).catch(function(){ toast(t('err_generic')); }); }
 function meFormHTML(m){
   var soc=SOC.map(function(s){ return '<div class="field"><label for="soc-'+s[0]+'">'+esc(s[1])+'</label><input id="soc-'+s[0]+'" name="soc-'+s[0]+'" type="text" maxlength="200" value="'+esc((m.socials||{})[s[0]]||'')+'" placeholder="@handle"></div>'; }).join('');
   var cityOpts='<option value=""></option>'+CITIES.map(function(c){ return '<option'+(m.city===c.name?' selected':'')+'>'+esc(c.name)+'</option>'; }).join('');
-  return ''+
+  return avEditHTML(m)+
     '<form class="form" data-form="me" style="margin-top:0">'+
       '<div class="form2"><div class="field"><label for="me-name">'+t('display_name')+'</label><input id="me-name" name="name" type="text" maxlength="60" value="'+esc(m.display_name)+'" required></div>'+
       '<div class="field"><label for="me-handle">'+t('handle')+'</label><input id="me-handle" name="handle" type="text" maxlength="30" value="'+esc(m.handle)+'" autocapitalize="none" spellcheck="false"></div></div>'+
@@ -1066,7 +1093,7 @@ function viewAdmin(){
   if(cache.admin===null){
     cache.admin='loading';
     Promise.all([
-      data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name)').eq('status','pending').order('created_at',{ascending:true})),
+      data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name,avatar_url)').eq('status','pending').order('created_at',{ascending:true})),
       data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by,status,review_state,review_note').or('status.eq.pending,review_state.eq.unclear').neq('status','cancelled').order('starts_at',{ascending:true})),
       data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true})),
       sb.rpc('admin_ref_stats',{p_days:30}).then(function(x){ return (x&&x.data)||[]; },function(){ return []; })
@@ -1364,6 +1391,7 @@ document.addEventListener('click',function(ev){
   if(act==='invcopy'){ copyText(inviteLink()); return; }
   if(act==='invqr'){ showQr(); return; }
   if(act==='setting'){ saveSetting(id, !!el.checked); return; }
+  if(act==='avdel'){ removeAvatar(); return; }
   if(act==='unblock'){ data(sb.from('blocks').delete().eq('blocker',S.user.id).eq('blocked',id)).then(function(){ BLOCKS=null; render(false); }).catch(fail); return; }
   if(act==='lang'){ S.lang=id; try{ localStorage.setItem('rs-lang',id); }catch(e){} render(false); }
   else if(act==='genre'){ S.genre=id; render(false); }
@@ -1431,6 +1459,7 @@ document.addEventListener('change',function(ev){
   var sel=ev.target.getAttribute&&ev.target.getAttribute('data-sel');
   if(sel){ S[sel]=ev.target.value; render(false); }
   if(ev.target.id==='cp-other'&&ev.target.value){ setCity(ev.target.value); render(false); }
+  if(ev.target.id==='av-file'&&ev.target.files&&ev.target.files[0]){ uploadAvatar(ev.target.files[0]); ev.target.value=''; }
 });
 document.addEventListener('input',function(ev){
   if(ev.target.id==='f-q'){ S.q=ev.target.value; var l=document.getElementById('evlist'); if(l) l.innerHTML=eventsListHTML(); }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../avatar_upload.dart';
 import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
@@ -49,10 +50,7 @@ class _Me extends StatelessWidget {
         ]),
         const SizedBox(height: 28),
         Row(children: [
-          Container(
-            decoration: BoxDecoration(border: Border.all(color: C.accent)),
-            child: Avatar(name, size: 64),
-          ),
+          const MyAvatar(size: 64),
           const SizedBox(width: 16),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
