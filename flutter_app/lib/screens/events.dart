@@ -5,6 +5,7 @@ import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import '../locate.dart';
+import 'organizer.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -31,7 +32,8 @@ class _EventsScreenState extends State<EventsScreen> {
     final q = _q.toLowerCase();
     return e.title.toLowerCase().contains(q) ||
         (v?.name.toLowerCase().contains(q) ?? false) ||
-        e.lineup.any((n) => n.toLowerCase().contains(q));
+        e.lineup.any((n) => n.toLowerCase().contains(q)) ||
+        store.orgsOf(e.id).any((o) => o.name.toLowerCase().contains(q));
   }
 
   @override
@@ -103,6 +105,13 @@ class _EventsScreenState extends State<EventsScreen> {
                         for (final g in genres) _Chip(g, _genre == g, () => setState(() => _genre = _genre == g ? null : g)),
                       ]),
                     ),
+                    const SizedBox(height: 10),
+                    Wrap(spacing: 8, runSpacing: 8, children: [
+                      for (final o in store.orgs.where((o) => _q.length >= 2 && o.name.toLowerCase().contains(_q.toLowerCase())).take(4))
+                        RsButton('${o.name} →', small: true, active: true, onTap: () => openOrg(context, o)),
+                      RsButton(t('orgs_t'), small: true, icon: Icons.groups_2_outlined,
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OrganizerList()))),
+                    ]),
                     const SizedBox(height: 16),
                     Text(t('n_events', {'n': list.length}).toUpperCase(), style: mono(11)),
                     const SizedBox(height: 8),

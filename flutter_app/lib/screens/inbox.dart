@@ -48,6 +48,8 @@ class _InboxScreenState extends State<InboxScreen> {
     final title = e?.title ?? '…';
     return switch (n['kind']) {
       'tickets' => t('n_tickets', {'e': title}),
+      'new_event' when n['organizer_id'] != null =>
+        t('n_new_org', {'o': store.orgById(n['organizer_id'] as int)?.name ?? '', 'e': title}),
       'new_event' => t('n_new', {'v': v?.name ?? '', 'e': title}),
       _ => t('n_rem', {'e': title}),
     };

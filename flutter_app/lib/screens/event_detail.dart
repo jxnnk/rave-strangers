@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../data.dart';
 import '../social.dart';
+import 'organizer.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
@@ -68,6 +69,7 @@ class EventDetail extends StatelessWidget {
                 if (v != null) RsButton(t('route'), onTap: () => openUrl(routeUrl(v))),
               ]),
               _SocialProof(e, going: n),
+              OrgChips(e),
               const SizedBox(height: 18),
               _Facts(rows: [
                 [t('date'), fmtLong(d)],

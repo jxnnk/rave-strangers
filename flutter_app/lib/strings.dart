@@ -3,6 +3,10 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'org_label': 'Label', 'org_collective': 'Kollektiv', 'org_series': 'Eventreihe', 'org_promoter': 'Veranstalter', 'org_festival': 'Festival',
+    'by_org': 'Veranstaltet von', 'org_dates': 'Nächste Termine', 'org_none': 'Gerade keine Termine bei uns. Folge, dann sagen wir Bescheid.',
+    'org_next_n': '{n} Termine', 'org_follow_toast': 'Du bekommst Bescheid, wenn neue Termine kommen.', 'orgs_t': 'Kollektive & Labels', 'orgs_search': 'z. B. UNREAL, 44 Label, Teletech',
+    'n_new_org': 'Neu von {o}: {e}',
     'tagline': 'Nie mehr allein raven.', 'new_here': 'Neu hier? Konto erstellen', 'have_account': 'Schon dabei? Einloggen', 'skip': 'Erst mal umschauen',
     'legal_hint': 'Mit der Anmeldung akzeptierst du Nutzungsbedingungen und Datenschutz.', 'wrong_login': 'E-Mail oder Passwort stimmt nicht.',
     'loc_q_t': 'Events in deiner Nähe', 'loc_q': 'Darf Rave Strangers deinen Standort nutzen? Dann zeigen wir dir automatisch die Events in der Stadt, in der du gerade bist. Dein Standort bleibt auf dem Handy und wird nicht gespeichert.', 'later': 'Später', 'allow': 'Erlauben', 'in_city': 'in {c}',
@@ -102,6 +106,10 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'org_label': 'Label', 'org_collective': 'Collective', 'org_series': 'Event series', 'org_promoter': 'Promoter', 'org_festival': 'Festival',
+    'by_org': 'Hosted by', 'org_dates': 'Next dates', 'org_none': 'No dates with us right now. Follow and we will let you know.',
+    'org_next_n': '{n} dates', 'org_follow_toast': 'We will let you know when new dates come up.', 'orgs_t': 'Collectives & labels', 'orgs_search': 'e.g. UNREAL, 44 Label, Teletech',
+    'n_new_org': 'New from {o}: {e}',
     'tagline': 'Never rave alone again.', 'new_here': 'New here? Create account', 'have_account': 'Already in? Log in', 'skip': 'Look around first',
     'legal_hint': 'By signing up you accept the terms and privacy policy.', 'wrong_login': 'Email or password is wrong.',
     'loc_q_t': 'Events near you', 'loc_q': 'May Rave Strangers use your location? Then we automatically show the events in the city you are in. Your location stays on your phone and is not saved.', 'later': 'Later', 'allow': 'Allow', 'in_city': 'in {c}',

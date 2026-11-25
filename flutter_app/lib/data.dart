@@ -67,6 +67,13 @@ String fmtLong(DateTime b) => appLang == 'de'
     : '${_wdLongEn[b.weekday - 1]}, ${b.day} ${_moLongEn[b.month - 1]}';
 
 // ---------- Models ----------
+/// Label, collective or event series (44 Label, UNREAL, Teletech ...).
+class Org {
+  final int id, upcoming;
+  final String name, slug, kind;
+  Org(this.id, this.name, this.slug, this.kind, this.upcoming);
+}
+
 class Venue {
   final int id;
   final String name, city, address, kind;
@@ -169,6 +176,12 @@ class Store extends ChangeNotifier {
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
   /// City you are in right now (from GPS while the app is open). Kept in memory only.
   String? hereCity;
+  List<Org> orgs = [];
+  Map<int, List<int>> eventOrgs = {}; // event id -> organizer ids
+  Set<int> orgFollow = {};
+  Org? orgById(int id) => orgs.where((o) => o.id == id).firstOrNull;
+  List<Org> orgsOf(int eventId) => (eventOrgs[eventId] ?? const <int>[]).map(orgById).whereType<Org>().toList();
+  List<Ev> eventsOfOrg(int orgId) => visibleEvents.where((e) => eventOrgs[e.id]?.contains(orgId) ?? false).toList();
   /// Start screen was dismissed with "look around without account" (saved on the device).
   bool welcomeDone = false;
   void skipWelcome() {
@@ -250,6 +263,18 @@ class Store extends ChangeNotifier {
         sb.from('venue_ratings').select('venue_id,avg,n'),
       ]);
       try {
+        final ol = await sb.rpc('organizer_list') as List;
+        orgs = [for (final o in ol) Org(o['id'] as int, o['name'] as String, o['slug'] as String, o['kind'] as String, (o['upcoming'] as int?) ?? 0)];
+        final eo = await sb.from('event_organizers').select('event_id,organizer_id');
+        final m = <int, List<int>>{};
+        for (final x in eo) {
+          (m[x['event_id'] as int] ??= []).add(x['organizer_id'] as int);
+        }
+        eventOrgs = m;
+      } catch (e) {
+        debugPrint('organizers failed: $e');
+      }
+      try {
         final cc = await sb.rpc('crew_counts') as List;
         crewN = {for (final m in cc) (m['event_id'] as int): (m['crew'] as int?) ?? 0};
         ridesN = {for (final m in cc) (m['event_id'] as int): (m['rides'] as int?) ?? 0};
@@ -277,6 +302,7 @@ class Store extends ChangeNotifier {
       saved = {};
       alarms = {};
       vfollow = {};
+      orgFollow = {};
       following = {};
       attRows = [];
       settings = {};
@@ -311,6 +337,10 @@ class Store extends ChangeNotifier {
         for (final f in fl)
           if (f['profiles'] != null) f['artist'] as String: Map<String, dynamic>.from(f['profiles'] as Map)
       };
+      try {
+        final of = await sb.from('organizer_follows').select('organizer_id').eq('profile_id', u.id);
+        orgFollow = of.map((x) => x['organizer_id'] as int).toSet();
+      } catch (_) {}
       final vf = await sb.from('venue_follows').select('venue_id').eq('profile_id', u.id);
       vfollow = vf.map((x) => x['venue_id'] as int).toSet();
       final st = await sb.from('user_settings').select().eq('profile_id', u.id).maybeSingle();
@@ -328,7 +358,7 @@ class Store extends ChangeNotifier {
     try {
       final r = await sb
           .from('notifications')
-          .select('id,kind,event_id,venue_id,created_at,read_at')
+          .select('id,kind,event_id,venue_id,organizer_id,created_at,read_at')
           .order('created_at', ascending: false)
           .limit(50);
       notes = List<Map<String, dynamic>>.from(r);
@@ -380,6 +410,28 @@ class Store extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('follow failed: $e');
+      await loadMine();
+    }
+  }
+
+  Future<void> toggleOrgFollow(int id) async {
+    final u = user;
+    if (u == null) return;
+    final on = orgFollow.contains(id);
+    if (on) {
+      orgFollow.remove(id);
+    } else {
+      orgFollow.add(id);
+    }
+    notifyListeners();
+    try {
+      if (on) {
+        await sb.from('organizer_follows').delete().eq('profile_id', u.id).eq('organizer_id', id);
+      } else {
+        await sb.from('organizer_follows').insert({'profile_id': u.id, 'organizer_id': id});
+      }
+    } catch (e) {
+      debugPrint('org follow failed: $e');
       await loadMine();
     }
   }
