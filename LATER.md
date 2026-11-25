@@ -12,3 +12,10 @@ Bewusst zurückgestellt (Stand 14.11.2026). Vor dem öffentlichen Launch angehen
 - Banner/Flyer: Rechte klären, Upload durch Veranstalter
 - Supabase Pro (Backups) vor echten Nutzern
 - Eigener Mail-Dienst (Brevo/Resend) gegen Mail-Limit
+
+## Heute Abend (25.11.): Nutzungsanalyse mit PostHog
+- Jannik: Konto auf eu.posthog.com (EU!), Projekt „Rave Strangers“, Project API Key (`phc_…`) schicken.
+- Claude: Einwilligungs-Dialog beim ersten Start (Ja/Nein gleich groß), PostHog erst nach „Ja“, in Flutter + Web.
+- Messen: Funnel Event → Ticket-Klick, Crew-Posts/Gruppen/Nachrichten, Wiederkehr, Herkunft (Städte, Einladungslinks).
+- Sitzungsaufnahmen nur mit Maskierung (Chats/Eingaben immer geschwärzt).
+- Datenschutzerklärung: Abschnitt PostHog (Frankfurt, keine US-Übertragung) – Text vorbereiten.
