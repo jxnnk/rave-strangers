@@ -19,3 +19,4 @@ Bewusst zurückgestellt (Stand 14.11.2026). Vor dem öffentlichen Launch angehen
 - Messen: Funnel Event → Ticket-Klick, Crew-Posts/Gruppen/Nachrichten, Wiederkehr, Herkunft (Städte, Einladungslinks).
 - Sitzungsaufnahmen nur mit Maskierung (Chats/Eingaben immer geschwärzt).
 - Datenschutzerklärung: Abschnitt PostHog (Frankfurt, keine US-Übertragung) – Text vorbereiten.
+- Vorlage: Branch `posthog/wizard-01a214927984` (vom PostHog-Assistenten, Commit `ce157b5`). **Nicht direkt mergen:** trackt ohne Einwilligung und wirft im Debug-Modus einen Fehler, wenn der Key fehlt. Brauchbare Teile (`posthog.dart`, Event-Aufrufe in `data.dart`/`social.dart`/`welcome.dart`) beim Bauen nach `dev` übernehmen.
