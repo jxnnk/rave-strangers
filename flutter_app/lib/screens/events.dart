@@ -4,6 +4,7 @@ import '../data.dart';
 import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
+import '../locate.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -54,7 +55,8 @@ class _EventsScreenState extends State<EventsScreen> {
                       onChanged: (v) => setState(() => _q = v.trim()),
                     ),
                     const SizedBox(height: 10),
-                    Container(
+                    Row(children: [
+                    Expanded(child: Container(
                       height: 48,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(color: C.surface, border: Border.all(color: C.line2)),
@@ -72,7 +74,21 @@ class _EventsScreenState extends State<EventsScreen> {
                           onChanged: (v) => setState(() => _city = v),
                         ),
                       ),
+                    )),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(padding: EdgeInsets.zero, side: const BorderSide(color: C.line2), shape: const RoundedRectangleBorder()),
+                        onPressed: () async {
+                          final c = await locateCity(context);
+                          if (c != null && mounted) setState(() => _city = c);
+                        },
+                        child: Icon(Icons.my_location, color: C.text, size: 20, semanticLabel: t('loc_btn')),
+                      ),
                     ),
+                    ]),
                     const SizedBox(height: 12),
                     SizedBox(
                       height: 36,

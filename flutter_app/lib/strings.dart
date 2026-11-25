@@ -3,6 +3,8 @@ String appLang = 'de';
 
 const Map<String, Map<String, String>> _s = {
   'de': {
+    'loc_btn': 'Meine Stadt finden', 'loc_wait': 'Suche deine Stadt …', 'loc_ok': 'Stadt: {c}', 'loc_far': 'Nächste Stadt mit Events: {c}',
+    'loc_fail': 'Standort nicht gefunden. Wähl deine Stadt einfach aus.', 'loc_denied': 'Standort nicht erlaubt. Du kannst die Stadt auch auswählen.',
     'follow': 'Folgen', 'following_btn': 'Du folgst', 'followers': 'Follower', 'following': 'Folgt', 'goes_to': 'Geht hin',
     'edit_profile': 'Profil bearbeiten', 'friends_going': 'Von deinen Leuten: {n}',
     'crew_group': 'Crew-Gruppe', 'crew_group_join': 'Crew-Gruppe', 'leave_group': 'Gruppe verlassen',
@@ -97,6 +99,8 @@ const Map<String, Map<String, String>> _s = {
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
   },
   'en': {
+    'loc_btn': 'Find my city', 'loc_wait': 'Finding your city …', 'loc_ok': 'City: {c}', 'loc_far': 'Nearest city with events: {c}',
+    'loc_fail': 'Could not get your location. Just pick your city.', 'loc_denied': 'Location not allowed. You can pick the city instead.',
     'follow': 'Follow', 'following_btn': 'Following', 'followers': 'Followers', 'following': 'Following', 'goes_to': 'Going to',
     'edit_profile': 'Edit profile', 'friends_going': 'From your people: {n}',
     'crew_group': 'Crew group', 'crew_group_join': 'Crew group', 'leave_group': 'Leave group',

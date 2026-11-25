@@ -59,3 +59,10 @@ Esri „Dark Gray Canvas“ (Raster, ohne API-Key). CARTO verlangt inzwischen ei
 ## Benachrichtigungen
 
 Tabelle `notifications` (Migration 021) wird per Trigger gefüllt: Tickets da, neuer Termin bei gefolgtem Club, Erinnerung am Tag vorher (pg_cron 12 Uhr). Die App zeigt sie unter der Glocke auf Home. Echte Push-Nachrichten: siehe LAUNCH.md (Firebase).
+
+## Standort („Meine Stadt finden“)
+
+Paket `geolocator`, nur grobe Position, einmalig auf Knopfdruck, nichts wird gespeichert oder verschickt.
+- Android: in `android/app/src/main/AndroidManifest.xml` vor `<application` einfügen:
+  `<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>`
+- iOS: `NSLocationWhenInUseUsageDescription` in `ios/Runner/Info.plist` (Text: „Nur um die Stadt mit Events in deiner Nähe zu finden. Dein Standort wird nicht gespeichert.“)
