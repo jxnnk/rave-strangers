@@ -34,8 +34,10 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 8. Texte immer DE + EN (`strings.dart` bzw. Strings in `app.js`), keine doppelten Keys.
 
 ## Zusammenarbeit
-- Jede Person arbeitet auf einem **eigenen Branch** (`name/feature`), dann Pull Request auf `main`.
-- Vor dem Start: `git pull`. Kleine, klare Commits.
+- **`dev`** ist der gemeinsame Arbeits-Branch. Alle arbeiten und pushen dort.
+- **`main`** ist die Live-Version (GitHub Pages). Nur wenn `dev` getestet ist, wird `dev` in `main` gemergt.
+- Vor jedem Arbeiten: `git pull`. Vor jedem Push nochmal `git pull`, dann `git push`.
+- Kleine, klare Commits, damit Konflikte selten und klein bleiben.
 - Wer eine Aufgabe übernimmt, trägt sich unten ein, damit niemand doppelt arbeitet.
 
 ## Offene Aufgaben (zum Aufteilen)
