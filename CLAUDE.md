@@ -54,6 +54,7 @@ Vor größeren Änderungen daran kurz im Chat Bescheid geben.
 3. **Wer zuerst fertig ist, pusht zuerst.** Der andere holt sich das mit `git pull --rebase` vor seinem eigenen Push. Konflikte löst der, der als Zweiter pusht.
 4. **Nach dem Push** kurz im Chat sagen: „gepusht: <was>“.
 5. **Live (`main`)** nur, wenn Jannik „bring live“ sagt. `dev` landet automatisch in der Vorschau unter `/dev/`.
+6. **Nie** `git push --force`, nie fremde Änderungen verwerfen (`git reset --hard`, `checkout --` auf fremde Dateien). Bei Konflikten beide Änderungen behalten und erklären.
 
 ## Zusammenarbeit
 - **`dev`** ist der gemeinsame Arbeits-Branch. Alle arbeiten und pushen dort.

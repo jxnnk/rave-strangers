@@ -94,6 +94,8 @@ Mit Claude Code: „Löse die Git-Konflikte, behalte beide Änderungen wo mögli
 
 Notbremse: `git rebase --abort`. Dann ist alles wie vor dem Pull.
 
+Nie `git push --force`: Das ist der einzige Befehl, der die Arbeit des anderen auf GitHub überschreiben kann.
+
 ## Live gehen
 
 Jeder Push auf `dev` landet nach etwa einer Minute in der Vorschau `/dev/`. Live (`main`) nur, wenn Jannik zu Claude „bring live“ sagt.
