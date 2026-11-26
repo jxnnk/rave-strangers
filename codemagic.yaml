@@ -23,32 +23,25 @@ workflows:
       branch_patterns:
         - pattern: main
     scripts:
-      - name: iOS-Ordner erzeugen (nicht im Repo)
-        script: |
-          flutter create . --org de.ravestrangers --project-name rave_strangers --platforms ios
-      - name: Info.plist ergänzen
-        script: |
-          P=ios/Runner/Info.plist
-          pb() { /usr/libexec/PlistBuddy -c "Delete :$1" "$P" 2>/dev/null || true; /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$P"; }
-          pb CFBundleDisplayName string "Rave Strangers"
-          pb UIUserInterfaceStyle string Dark
-          pb ITSAppUsesNonExemptEncryption bool false
-          pb NSLocationWhenInUseUsageDescription string "Nur um die Stadt mit Events in deiner Nähe zu finden. Dein Standort wird nicht gespeichert."
-          pb NSPhotoLibraryUsageDescription string "Damit du ein Profilbild aus deiner Galerie auswählen kannst."
-          pb NSCameraUsageDescription string "Damit du ein Profilbild aufnehmen kannst."
-          pb NSMicrophoneUsageDescription string "Rave Strangers nimmt keinen Ton auf. Dieser Text ist für das Foto-Modul vorgeschrieben."
-          plutil -lint "$P"
-      - name: Pakete
+      - name: iOS-Projekt vorbereiten (Icon, Info.plist, Privacy Manifest, iPhone/Hochformat)
         script: |
           flutter pub get
-          cd ios && pod install --repo-update
+          bash tool/prepare_ios.sh
+      - name: Pods (falls das Projekt CocoaPods nutzt)
+        script: |
+          if [ -f ios/Podfile ]; then cd ios && pod install --repo-update; fi
+      - name: Analyse + Tests
+        script: |
+          flutter analyze --no-fatal-infos
+          flutter test
       - name: Signing-Profile setzen
         script: xcode-project use-profiles
       - name: IPA bauen
         script: |
           LAST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" || echo 0)
+          VERSION=$(grep '^version:' pubspec.yaml | sed -E 's/version: *([^+]+).*/\1/')
           flutter build ipa --release \
-            --build-name=0.1.0 \
+            --build-name=$VERSION \
             --build-number=$((LAST + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
