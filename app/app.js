@@ -63,7 +63,7 @@ var T={
     err_generic:'Das hat nicht geklappt. Bitte versuch es noch einmal.',err_login:'E-Mail oder Passwort stimmt nicht, oder die E-Mail ist noch nicht bestätigt.',
     err_handle:'Dieser Nutzername ist schon vergeben.',err_handle_fmt:'Nutzername: 3 bis 30 Zeichen, nur a–z, 0–9, Punkt und Unterstrich.',err_pw:'Das Passwort braucht mindestens 8 Zeichen.',
     me_title:'Mein Profil',handle:'Nutzername',bio:'Über mich',bio_ph:'Was hörst du, wo tanzt du?',save:'Speichern',saved:'Gespeichert',soc_hint:'Socials verlinken',
-    my_going:'Ich gehe hin',my_saved:'Merkliste',my_subs:'Meine Einträge',none_yet:'Noch nichts.',
+    er_t:'Wie war das Event?',er_none:'Noch keine Bewertungen für dieses Event.',er_write:'Event bewerten',er_login:'Melde dich an, um das Event zu bewerten.',er_only_go:'Bewerten kann, wer dabei war. Tipp auf „Ich war dort“.',er_closed:'Bewertungen sind bis 3 Wochen nach dem Event möglich.',er_lineup:'Line-up & Musik',er_safety:'Sicherheit',er_aware:'Awareness & Wohlfühlen',er_was_there:'War vor Ort',er_verified_n:'{n} vor Ort eingecheckt',er_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen. Clubs und Veranstalter sehen dein Feedback.',er_torate:'Wie war es? Jetzt bewerten',er_torate_sub:'Deine letzten Events. Dein Feedback hilft Clubs und Veranstaltern, besser zu werden.',was_there:'Ich war dort',was_there_on:'Du warst dort',ci_t:'Bist du gerade hier?',ci_sub:'Tipp auf „Ich bin da“. Dein Handy prüft einmal, ob du in der Nähe des Clubs bist. Dein Standort verlässt dein Gerät nicht.',ci_btn:'Ich bin da',ci_done:'Eingecheckt',ci_done_sub:'Deine Bewertung bekommt später das Häkchen „War vor Ort“.',ci_busy:'Prüfe Standort …',ci_ok:'Eingecheckt! Viel Spaß.',ci_far:'Du scheinst nicht am Club zu sein (mehr als 400 m entfernt).',ci_notnow:'Einchecken geht nur während des Events.',ci_denied:'Ohne Standort-Freigabe geht Einchecken nicht.',ci_err:'Einchecken hat nicht geklappt.',note_review:'Wie war „{e}“? Bewerte das Event.',org_rating:'Bewertung aus {n} Events-Feedbacks',my_going:'Ich gehe hin',my_saved:'Merkliste',my_subs:'Meine Einträge',none_yet:'Noch nichts.',
     verif_t:'Artist-Verifizierung',verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung. Dann bekommst du das rote Häkchen und deine Events erscheinen sofort.',
     verif_name:'Artist-Name',verif_links:'Belege (Links, eins pro Zeile)',verif_links_ph:'z. B. Resident-Advisor-Seite, offizielles Instagram, Booking-Agentur',
     verif_btn:'Verifizierung beantragen',verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',verif_rejected:'Dein letzter Antrag wurde abgelehnt. Du kannst einen neuen stellen.',verif_ok:'Dein Profil ist verifiziert.',
@@ -130,7 +130,7 @@ var T={
     err_generic:'That did not work. Please try again.',err_login:'Email or password is wrong, or the email is not confirmed yet.',
     err_handle:'This username is taken.',err_handle_fmt:'Username: 3 to 30 characters, only a–z, 0–9, dot and underscore.',err_pw:'The password needs at least 8 characters.',
     me_title:'My profile',handle:'Username',bio:'About me',bio_ph:'What do you listen to, where do you dance?',save:'Save',saved:'Saved',soc_hint:'Link your socials',
-    my_going:"I'm going",my_saved:'Saved',my_subs:'My submissions',none_yet:'Nothing yet.',
+    er_t:'How was the event?',er_none:'No ratings for this event yet.',er_write:'Rate this event',er_login:'Log in to rate this event.',er_only_go:'Only people who were there can rate. Tap “I was there”.',er_closed:'Ratings are possible up to 3 weeks after the event.',er_lineup:'Line-up & music',er_safety:'Safety',er_aware:'Awareness & comfort',er_was_there:'Was there',er_verified_n:'{n} checked in on site',er_rules:'Rate fairly and from your own experience. No names of door staff or guests. Clubs and promoters see your feedback.',er_torate:'How was it? Rate now',er_torate_sub:'Your recent events. Your feedback helps clubs and promoters get better.',was_there:'I was there',was_there_on:'You were there',ci_t:'Are you here right now?',ci_sub:'Tap “I’m here”. Your phone checks once whether you are near the club. Your location never leaves your device.',ci_btn:'I’m here',ci_done:'Checked in',ci_done_sub:'Your rating will get the “Was there” tick later.',ci_busy:'Checking location …',ci_ok:'Checked in! Have fun.',ci_far:'You don’t seem to be at the club (more than 400 m away).',ci_notnow:'Check-in only works during the event.',ci_denied:'Check-in needs location access.',ci_err:'Check-in didn’t work.',note_review:'How was “{e}”? Rate the event.',org_rating:'Rating from {n} event reviews',my_going:"I'm going",my_saved:'Saved',my_subs:'My submissions',none_yet:'Nothing yet.',
     verif_t:'Artist verification',verif_none:'Are you a DJ or live act? Request verification to get the red tick; your events then go live right away.',
     verif_name:'Artist name',verif_links:'Proof (links, one per line)',verif_links_ph:'e.g. Resident Advisor page, official Instagram, booking agency',
     verif_btn:'Request verification',verif_pending:"Request received. We'll check your profile and get back to you.",verif_rejected:'Your last request was declined. You can send a new one.',verif_ok:'Your profile is verified.',
@@ -164,7 +164,7 @@ var LEAD_DAYS=60;
 var RULE_LABEL={phone:'r_phone',door:'r_door',age:'r_age',access:'r_access',aware:'r_aware'};
 
 /* ---------- State ---------- */
-var VENUES=[], EVENTS=[];
+var VENUES=[], EVENTS=[], PAST=[]; /* PAST: vorbei, letzte 14 Tage (für Bewertungen) */
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function lsSet(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
 var SAVED_CITY=lsGet('rs-city');
@@ -208,7 +208,7 @@ var VB='<svg class="vb" viewBox="0 0 24 24" role="img" aria-label="verified"><ci
 function host(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
 function safeUrl(u){ return /^https?:\/\//i.test(u||'')?u:null; }
 function venue(id){ for(var i=0;i<VENUES.length;i++){ if(VENUES[i].id===id) return VENUES[i]; } return null; }
-function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return EVENTS[i]; } return null; }
+function evt(id){ for(var i=0;i<EVENTS.length;i++){ if(EVENTS[i].id===id) return EVENTS[i]; } for(var j=0;j<PAST.length;j++){ if(PAST[j].id===id) return PAST[j]; } return null; }
 function genreTags(g){ return g.map(function(x){ return '<span class="tag">'+esc(x)+'</span>'; }).join(' '); }
 function isTemporary(e){ var v=venue(e.v); return e.type==='festival'||(v&&v.kind!=='club'); }
 function upcoming(e){ if(e.endOff<0) return false; if(isTemporary(e)&&e.off>LEAD_DAYS) return false; return true; }
@@ -263,7 +263,8 @@ function loadBase(){
     data(sb.from('events').select('id,venue_id,title,starts_at,ends_at,created_at,time_known,kind,genres,no_phone,ticket_url,source_url,lineup_more,status,created_by,price_text,ticket_status,resale_url,image_url,image_credit,event_lineup(position,name,artist_id)').eq('status','published').gte('starts_at',since).order('starts_at',{ascending:true}))
   ]).then(function(res){
     VENUES=res[0].map(mapVenue).filter(function(v){ return !(v.rules&&v.rules.hidden); }); /* hidden = checked: not a club */
-    EVENTS=res[1].map(mapEvent).filter(function(e){ return venue(e.v)&&e.endOff>=0; });
+    var allEv=res[1].map(mapEvent).filter(function(e){ return venue(e.v); });
+    EVENTS=allEv.filter(function(e){ return e.endOff>=0; }); PAST=allEv.filter(function(e){ return e.endOff<0; });
     S.ready=true; S.loadErr=false;
     loadRatings().then(function(){ if(S.ready) render(false); });
     loadCrewCounts(); loadOrgs(); autoLocate();
@@ -291,6 +292,7 @@ function viewOrg(sl){
   return '<a class="back" href="#orgs">← '+t('orgs_t')+'</a><p class="kicker">'+t('org_'+o.kind)+'</p><h1>'+esc(o.name)+'</h1>'+
     '<p class="sub">'+(evs.length?t('org_next_n',{n:evs.length})+(Object.keys(cities).length?' · '+esc(Object.keys(cities).slice(0,4).join(', ')):''):t('org_none'))+'</p>'+
     '<div class="row" style="margin-top:14px"><button type="button" class="btn '+(on?'on':'primary')+'" data-act="orgfollow" data-id="'+o.id+'" aria-pressed="'+on+'">'+(on?'✓ '+t('following_btn'):'+ '+t('follow'))+'</button></div>'+
+    orgRatingHTML(o)+
     '<div class="sec"><h2>'+t('org_dates')+'</h2>'+(evs.length?'<div class="list">'+evs.map(eventCard).join('')+'</div>':emptyBox(t('org_none')))+'</div>';
 }
 function viewOrgs(){
@@ -304,7 +306,7 @@ function loadCrewCounts(){
   return sb.rpc('crew_counts').then(function(r){ if(r&&r.error) throw r.error; CREWN={}; ((r&&r.data)||[]).forEach(function(x){ CREWN[x.event_id]={c:x.crew||0,r:x.rides||0}; }); if(S.ready) render(false); }).catch(function(){});
 }
 function loadMine(){
-  if(!S.user){ S.me=null; S.going=[]; S.saved=[]; S.alarms=[]; S.notes=[]; updateBell(); S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
+  if(!S.user){ S.checkins=[]; S.myEvRev=[]; S.me=null; S.going=[]; S.saved=[]; S.alarms=[]; S.notes=[]; updateBell(); S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
   var uid=S.user.id;
   return Promise.all([
     data(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
@@ -321,6 +323,8 @@ function loadMine(){
     S.alarms=r[2].filter(function(b){ return b.remind; }).map(function(b){ return b.event_id; });
     data(sb.from('organizer_follows').select('organizer_id').eq('profile_id',uid)).then(function(x){ S.orgFollow=x.map(function(y){ return y.organizer_id; }); }).catch(function(){});
     loadInbox(); loadSettings(); BLOCKS=null;
+    data(sb.from('checkins').select('event_id').eq('profile_id',uid)).then(function(x){ S.checkins=x.map(function(y){ return y.event_id; }); }).catch(function(){});
+    data(sb.from('reviews').select('event_id').eq('author',uid)).then(function(x){ S.myEvRev=x.map(function(y){ return y.event_id; }).filter(Boolean); }).catch(function(){});
     S.verif=r[3][0]||null;
     S.follow=r[4].map(function(x){ return x.profiles; }).filter(Boolean);
     S.vfollow=r[5].map(function(x){ return x.venue_id; });
@@ -351,9 +355,9 @@ setInterval(function(){ if(S.user&&!document.hidden) loadInbox(); },60000);
 function viewInbox(){
   if(!S.user) return viewLogin();
   var rows=S.notes.map(function(n){ var e=evt(n.event_id), v=venue(n.venue_id), ti=e?e.title:'…';
-    var og=n.organizer_id?orgById(n.organizer_id):null; var txt=n.kind==='tickets'?t('note_tickets',{e:ti}):n.kind==='new_event'?(og?t('note_new_org',{o:og.name,e:ti}):t('note_new',{v:v?v.name:'',e:ti})):t('note_rem',{e:ti});
-    var ic=n.kind==='tickets'?'🎟':n.kind==='new_event'?'✦':'⏰';
-    return '<a class="note'+(n.read_at?'':' unread')+'" href="'+(e?'#event-'+e.id:'#inbox')+'"><span class="ic">'+ic+'</span><div class="grow"><strong>'+esc(txt)+'</strong><p>'+esc(ago(n.created_at))+'</p></div></a>'; }).join('');
+    var og=n.organizer_id?orgById(n.organizer_id):null; var txt=n.kind==='tickets'?t('note_tickets',{e:ti}):n.kind==='new_event'?(og?t('note_new_org',{o:og.name,e:ti}):t('note_new',{v:v?v.name:'',e:ti})):n.kind==='review'?t('note_review',{e:ti}):t('note_rem',{e:ti});
+    var ic=n.kind==='tickets'?'🎟':n.kind==='new_event'?'✦':n.kind==='review'?'★':'⏰';
+    return '<a class="note'+(n.read_at?'':' unread')+'" href="'+(e?'#event-'+e.id+(n.kind==='review'?'-rate':''):'#inbox')+'"><span class="ic">'+ic+'</span><div class="grow"><strong>'+esc(txt)+'</strong><p>'+esc(ago(n.created_at))+'</p></div></a>'; }).join('');
   if(unreadNotes()) setTimeout(markNotesRead,2000);
   return '<a class="back" href="#me">← '+t('nav_me')+'</a><h1>'+t('inbox_t')+'</h1><div class="sec notes">'+(rows||emptyBox(t('inbox_empty')))+'</div><p class="sub" style="font-size:13px">'+t('inbox_note')+'</p>';
 }
@@ -557,8 +561,9 @@ function viewEvent(id){
     '<dl class="facts"><div><dt>'+t('date')+'</dt><dd>'+esc(fmtLong(d))+(e.endDate&&e.endDate!==e.date?' – '+esc(fmtLong(dayOf(e.endOff))):'')+'</dd></div><div><dt>'+t('time')+'</dt><dd>'+(e.time?esc(e.time):t('tba'))+'</dd></div>'+
     '<div><dt>'+t('venue')+'</dt><dd><a href="#club-'+v.id+'">'+esc(v.name)+'</a>, '+esc(v.city)+'</dd></div></dl>'+
     (e.nophone?'<div class="nophone"><div><b>'+t('nophone_t')+'</b><br>'+t('nophone_d')+'</div></div>':'')+
-    '<div class="row" style="margin-top:20px">'+tixCta(e)+'<button type="button" class="btn '+(go?'on':'')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(go?'✓ '+t('going'):t('go'))+'</button>'+
+    '<div class="row" style="margin-top:20px">'+(evPhase(e)==='past'?'':tixCta(e))+'<button type="button" class="btn '+(go?'on':'')+'" data-act="go" data-id="'+e.id+'" aria-pressed="'+go+'">'+(evPhase(e)==='past'?(go?'✓ '+t('was_there_on'):t('was_there')):(go?'✓ '+t('going'):t('go')))+'</button>'+
     '<button type="button" class="btn'+(sv?' on':'')+'" data-act="save" data-id="'+e.id+'" aria-pressed="'+sv+'">'+(sv?'★ '+t('saved_ev'):'☆ '+t('save_ev'))+'</button></div>'+
+    checkinHTML(e)+evReviewsHTML(e)+
     '<div class="crewshare"><h2>'+t('crew_t')+'</h2><p class="sub">'+t('crew_sub')+'</p><div class="row">'+
       '<a class="btn primary" href="'+esc(waUrl(e))+'" target="_blank" rel="noopener" data-act="crewwa" data-id="'+e.id+'">'+t('crew_wa')+' ↗</a>'+
       (navigator.share?'<button type="button" class="btn" data-act="share" data-id="'+e.id+'">'+t('crew_more')+'</button>':'')+
@@ -668,6 +673,55 @@ function loadReviews(id){
     .then(function(r){ cache.reviews[id]=r; if(location.hash==='#club-'+id) render(false); }).catch(function(err){ cache.reviews[id]=[]; fail(err); });
 }
 function bar(label,x){ return x?'<div class="rbar"><span>'+label+'</span><i><b style="width:'+(x/5*100)+'%"></b></i><em>'+String(x).replace('.',S.lang==='de'?',':'.')+'</em></div>':''; }
+/* ---------- Event-Bewertungen + Check-in (DB 027) ---------- */
+S.checkins=[]; S.myEvRev=[]; var EVR={}, ORGR={};
+function evPhase(e){ var now=Date.now(), s=new Date(e.startsAt).getTime(), end=e.endsAt?new Date(e.endsAt).getTime():s+14*3600e3;
+  return now<s-3600e3?'future':(now<=end+2*3600e3?'live':'past'); }
+function canRate(e){ return !!S.user&&has(S.going,e.id)&&evPhase(e)!=='future'&&Date.now()-new Date(e.startsAt).getTime()<21*864e5; }
+function loadEvReviews(id){ EVR[id]='loading';
+  Promise.all([data(sb.from('event_ratings').select('*').eq('event_id',id)),
+    data(sb.from('reviews').select('id,author,stars,sound,crowd,door,safety,lineup,awareness,body,verified,created_at,profiles(handle,display_name,avatar_url,verified)').eq('event_id',id).order('created_at',{ascending:false}).limit(50))])
+  .then(function(r){ EVR[id]={sum:r[0][0]||null,list:r[1]}; if(location.hash.indexOf('#event-'+id)===0){ render(false); jumpRate(); } })
+  .catch(function(err){ EVR[id]={sum:null,list:[]}; fail(err); }); }
+function checkinHTML(e){
+  if(!S.user||evPhase(e)!=='live') return '';
+  var on=has(S.checkins,e.id);
+  return '<div class="checkin'+(on?' on':'')+'"><div class="grow"><b>'+(on?'✓ ':'')+t(on?'ci_done':'ci_t')+'</b><p class="sub" style="margin:4px 0 0">'+t(on?'ci_done_sub':'ci_sub')+'</p></div>'+
+    (on?'':'<button type="button" class="btn primary" data-act="checkin" data-id="'+e.id+'">'+t('ci_btn')+'</button>')+'</div>'; }
+function rateBars(r){ return bar(t('er_lineup'),r.lineup)+bar(t('rev_sound'),r.sound)+bar(t('rev_crowd'),r.crowd)+bar(t('rev_door'),r.door)+bar(t('er_safety'),r.safety)+bar(t('er_aware'),r.awareness); }
+function evReviewsHTML(e){
+  if(evPhase(e)==='future') return '';
+  var c=EVR[e.id]; if(c===undefined){ loadEvReviews(e.id); c='loading'; }
+  if(c==='loading') return '<div class="sec" id="rate"><h2>'+t('er_t')+'</h2>'+loadingBox()+'</div>';
+  var r=c.sum, mine=S.user?c.list.filter(function(x){ return x.author===S.user.id; })[0]:null, sc=r?(r.score||r.avg):0;
+  var sum=r&&r.n?'<div class="rsum"><div class="rbig"><b>'+String(sc).replace('.',S.lang==='de'?',':'.')+'</b>'+starsHTML(sc)+'<em>'+(r.n===1?t('rev_one'):t('rev_n',{n:r.n}))+(r.n_verified?'<br>'+t('er_verified_n',{n:r.n_verified}):'')+'</em></div><div class="rbars">'+rateBars(r)+'</div></div>':emptyBox(t('er_none'));
+  var form;
+  if(!S.user) form='<p class="sub"><a class="link" href="#login" data-act="loginhere">'+t('er_login')+'</a></p>';
+  else if(mine||canRate(e)) form='<details class="more"'+(mine?'':' open')+'><summary>'+(mine?'✎ '+t('rev_edit'):'★ '+t('er_write'))+'</summary>'+
+    '<form class="form" data-form="review" data-v="'+e.v+'" data-ev="'+e.id+'" data-rid="'+(mine?mine.id:'')+'" style="margin-top:8px" novalidate>'+
+    '<p class="sub" style="margin:0;font-size:13px">'+t('er_rules')+'</p>'+revStars('r-stars',mine&&mine.stars,t('rev_overall'))+
+    '<div class="form2">'+revStars('r-lineup',mine&&mine.lineup,t('er_lineup'))+revStars('r-sound',mine&&mine.sound,t('rev_sound'))+'</div>'+
+    '<div class="form2">'+revStars('r-crowd',mine&&mine.crowd,t('rev_crowd'))+revStars('r-door',mine&&mine.door,t('rev_door'))+'</div>'+
+    '<div class="form2">'+revStars('r-safety',mine&&mine.safety,t('er_safety'))+revStars('r-aware',mine&&mine.awareness,t('er_aware'))+'</div>'+
+    '<div class="field"><label for="r-body">'+t('rev_body')+'</label><textarea id="r-body" name="body" maxlength="2000">'+esc(mine&&mine.body||'')+'</textarea></div>'+
+    '<div id="rev-err" class="sub" style="color:var(--accent);margin:0" role="alert"></div><div><button class="btn primary" type="submit">'+t('rev_send')+'</button></div></form></details>';
+  else form='<p class="sub">'+t(has(S.going,e.id)?'er_closed':'er_only_go')+'</p>';
+  var items=c.list.filter(function(x){ return x.body; }).slice(0,20).map(function(x){ var p=x.profiles||{};
+    return '<div class="review">'+starsHTML(x.stars)+(x.verified?'<span class="vtick">✓ '+t('er_was_there')+'</span>':'')+'<p>'+esc(x.body)+'</p><p class="addr">'+(p.handle?'<a class="link" href="#u-'+esc(p.handle)+'">'+esc(p.display_name)+'</a>'+(p.verified?VB:''):'')+' · '+esc(relTime(x.created_at))+'</p></div>'; }).join('');
+  return '<div class="sec" id="rate"><h2>'+t('er_t')+'</h2>'+sum+form+(items?'<div class="reviews">'+items+'</div>':'')+'</div>';
+}
+function distM(a,b,c,d){ var R=6371000,r=Math.PI/180,x=Math.sin((c-a)*r/2),y=Math.sin((d-b)*r/2); return 2*R*Math.asin(Math.sqrt(x*x+Math.cos(a*r)*Math.cos(c*r)*y*y)); }
+function jumpRate(){ if(!/^#event-\d+-rate$/.test(location.hash)) return; var el=document.getElementById('rate'); if(el&&el.scrollIntoView) setTimeout(function(){ el.scrollIntoView({block:'start'}); },50); }
+function toRateHTML(){
+  var list=EVENTS.concat(PAST).filter(function(e){ return has(S.going,e.id)&&!has(S.myEvRev,e.id)&&evPhase(e)==='past'&&canRate(e); }).sort(function(a,b){ return b.startsAt<a.startsAt?-1:1; }).slice(0,5);
+  if(!list.length) return '';
+  return '<div class="sec torate"><h2>'+t('er_torate')+'</h2><p class="sub">'+t('er_torate_sub')+'</p><div class="list" style="margin-top:0">'+list.map(function(e){
+    var v=venue(e.v)||{}; return '<a class="ev" href="#event-'+e.id+'"><div class="grow"><strong>'+esc(e.title)+'</strong><p>'+esc(fmtLong(dayOf(e.off)))+' · '+esc(v.name||'')+'</p></div><span class="btn small primary">★ '+t('er_write')+'</span></a>'; }).join('')+'</div></div>'; }
+function orgRatingHTML(o){
+  var r=ORGR[o.id];
+  if(r===undefined){ ORGR[o.id]=null; data(sb.from('organizer_ratings').select('*').eq('organizer_id',o.id)).then(function(x){ ORGR[o.id]=x[0]||false; if(location.hash==='#org-'+o.slug) render(false); }).catch(function(){ ORGR[o.id]=false; }); return ''; }
+  if(!r||!r.n) return '';
+  return '<div class="sec"><h2>'+t('rev_t')+'</h2><div class="rsum"><div class="rbig"><b>'+String(r.avg).replace('.',S.lang==='de'?',':'.')+'</b>'+starsHTML(r.avg)+'<em>'+t('org_rating',{n:r.n})+'</em></div><div class="rbars">'+rateBars(r)+'</div></div></div>'; }
 function reviewsHTML(v){
   var r=RATINGS[v.id], list=cache.reviews[v.id];
   if(list===undefined){ loadReviews(v.id); list='loading'; }
@@ -982,7 +1036,7 @@ function viewMe(){
     '<div class="hero" style="margin-top:16px"><a href="#settings" class="avlink" aria-label="'+esc(t(m.avatar_url?'av_change':'av_add'))+'">'+av(m,72)+(m.avatar_url?'':'<b class="avplus">+</b>')+'</a>'+'<div><h2 style="font-size:30px">'+esc(m.display_name)+(m.verified?VB:'')+'</h2><p class="sub" style="margin:2px 0 0"><a class="link" href="#u-'+esc(m.handle)+'">@'+esc(m.handle)+'</a>'+(m.city?' · '+esc(m.city):'')+'</p></div></div>'+
     fstatsHTML(m.id)+
     (m.role==='admin'?'<div class="row" style="margin-top:16px"><a class="btn primary" href="#admin">'+t('admin_open')+'</a></div>':'')+
-    inviteHTML()+
+    toRateHTML()+inviteHTML()+
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="sec"><h2>'+t('my_saved')+'</h2>'+(saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="row" style="margin-top:22px"><a class="btn" href="#settings">✎ '+t('edit_profile')+'</a></div>'+
@@ -1327,7 +1381,7 @@ function route(){
   if(h==='new-event') return {tab:'events',html:viewNew()};
   var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
   switch(name){
-    case 'event': return {tab:'events',html:viewEvent(+arg)};
+    case 'event': return {tab:'events',html:viewEvent(parseInt(arg,10))};
     case 'map':
       if(arg){ if(S.mapHash!==h){ S.mapHash=h; focusVenueFromHash(+arg); } } else S.mapHash=null;
       return {tab:'map',html:viewMap(),map:true};
@@ -1370,6 +1424,7 @@ function render(scroll){
   updateBell();
   if(r.map) mountMap();
   if(scroll) window.scrollTo(0,0);
+  jumpRate();
 }
 
 /* ---------- Actions ---------- */
@@ -1409,6 +1464,22 @@ document.addEventListener('click',function(ev){
   else if(act==='copylink'){ copyText(shareMsg(evt(+id),'link').url); }
   else if(act==='homecity'){ setCity(id); lsSet('rs-city-manual','1'); render(false); }
   else if(act==='onlyev'){ S.onlyEvents=!S.onlyEvents; render(false); }
+  else if(act==='checkin'){
+    if(needLogin()) return;
+    if(!navigator.geolocation){ toast(t('ci_denied')); return; }
+    toast(t('ci_busy'));
+    var cev=evt(+id), cv=cev?venue(cev.v):null;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      /* Abstand wird hier im Browser berechnet, der Standort geht nicht an den Server (Datenschutz) */
+      if(!cv||cv.lat==null){ toast(t('ci_err')); return; }
+      if(distM(pos.coords.latitude,pos.coords.longitude,cv.lat,cv.lon)>400){ toast(t('ci_far')); return; }
+      sb.rpc('check_in',{p_event:+id}).then(function(r){
+        if(r.error){ toast(t('ci_err')); return; }
+        if(r.data==='ok'){ if(!has(S.checkins,+id)) S.checkins.push(+id); if(!has(S.going,+id)) S.going.push(+id); buzz(); toast(t('ci_ok')); render(false); }
+        else toast(t(r.data==='too_far'?'ci_far':r.data==='not_now'?'ci_notnow':'ci_err'));
+      });
+    },function(){ toast(t('ci_denied')); },{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
+  }
   else if(act==='go'){ if(S.user) buzz(); toggleRow('attendance',+id,S.going,{visible:setOn('going_visible')}); if(S.user) S.attRows=S.attRows.filter(function(a){ return !(a.event_id===+id&&a.profile_id===S.user.id); }).concat(has(S.going,+id)?[{event_id:+id,profile_id:S.user.id}]:[]); }
   else if(act==='follow'){ if(needLogin()) return; buzz(); var fp=followsP(id), hk=el.getAttribute('data-h'); delete FSTATS[id]; FLIST={};
     var pq=fp?data(sb.from('follows').delete().eq('follower',S.user.id).eq('artist',id)):data(sb.from('follows').insert({follower:S.user.id,artist:id}));
@@ -1547,13 +1618,14 @@ document.addEventListener('submit',function(ev){
       .then(function(){ toast(t('post_done')); loadHome(); }).catch(function(err){ busy(false); fail(err); });
   } else if(kind==='review'){
     if(needLogin()) return;
-    var rv=+f.getAttribute('data-v'), rid=f.getAttribute('data-rid'), rerr=document.getElementById('rev-err');
+    var rv=+f.getAttribute('data-v'), rev=+f.getAttribute('data-ev')||null, rid=f.getAttribute('data-rid'), rerr=document.getElementById('rev-err');
     function num(n){ var x=fd.get(n); return x?+x:null; }
     var row={stars:num('r-stars'),sound:num('r-sound'),crowd:num('r-crowd'),door:num('r-door'),safety:num('r-safety'),body:String(fd.get('body')||'').trim()||null};
+    if(rev){ row.lineup=num('r-lineup'); row.awareness=num('r-aware'); }
     if(!row.stars){ rerr.textContent=t('rev_need_star'); return; }
     busy(true);
-    var q=rid?sb.from('reviews').update(Object.assign(row,{updated_at:new Date().toISOString()})).eq('id',+rid):sb.from('reviews').insert(Object.assign(row,{venue_id:rv,author:S.user.id}));
-    data(q).then(function(){ toast(t('rev_saved')); delete cache.reviews[rv]; return loadRatings(); }).then(function(){ render(false); })
+    var q=rid?sb.from('reviews').update(Object.assign(row,{updated_at:new Date().toISOString()})).eq('id',+rid):sb.from('reviews').insert(Object.assign(row,{venue_id:rv,author:S.user.id},rev?{event_id:rev}:{}));
+    data(q).then(function(){ toast(t('rev_saved')); if(rev){ delete EVR[rev]; if(!has(S.myEvRev,rev)) S.myEvRev.push(rev); buzz(); } else delete cache.reviews[rv]; return loadRatings(); }).then(function(){ busy(false); render(false); })
       .catch(function(err){ busy(false); fail(err); });
   } else if(kind==='crew'){
     if(needLogin()) return;
