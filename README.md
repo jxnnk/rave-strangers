@@ -1,4 +1,4 @@
-# Rave Strangers
+# Rave Strngrs
 
 Eine Community-App für die Techno-Szene in Deutschland: alle Raves an einem Ort, Artists mit verifizierten Profilen, und Leute, die zu denselben Events gehen, finden sich vorher und nachher. Auf dem Floor bleibt das Handy aus.
 

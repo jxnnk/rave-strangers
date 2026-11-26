@@ -16,8 +16,8 @@ P=ios/Runner/Info.plist
 pb() { /usr/libexec/PlistBuddy -c "Delete :$1" "$P" 2>/dev/null || true; /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$P"; }
 
 # 2) Info.plist: Name, Sprache, Darstellung, Export-Compliance, Zweckangaben
-pb CFBundleDisplayName string "Rave Strangers"
-pb CFBundleName string "Rave Strangers"
+pb CFBundleDisplayName string "Rave Strngrs"
+pb CFBundleName string "Rave Strngrs"
 pb CFBundleDevelopmentRegion string de
 /usr/libexec/PlistBuddy -c "Delete :CFBundleLocalizations" "$P" 2>/dev/null || true
 /usr/libexec/PlistBuddy -c "Add :CFBundleLocalizations array" -c "Add :CFBundleLocalizations:0 string de" -c "Add :CFBundleLocalizations:1 string en" "$P"
@@ -30,10 +30,10 @@ pb UIStatusBarStyle string UIStatusBarStyleLightContent
 /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations array" -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationPortrait" "$P"
 # Zweckangaben: ehrlich, sonst Ablehnung nach 5.1.1. Kamera/Mikrofon verlangt Apple, weil image_picker sie technisch enthält.
 pb NSLocationWhenInUseUsageDescription string "Damit wir dir automatisch die Events in der Stadt zeigen, in der du gerade bist, und du dich bei einem Event vor Ort einchecken kannst. Dein Standort bleibt auf dem Gerät und wird nicht gespeichert oder gesendet."
-pb NSLocationAlwaysAndWhenInUseUsageDescription string "Rave Strangers nutzt deinen Standort nie im Hintergrund, nur während die App geöffnet ist."
+pb NSLocationAlwaysAndWhenInUseUsageDescription string "Rave Strngrs nutzt deinen Standort nie im Hintergrund, nur während die App geöffnet ist."
 pb NSPhotoLibraryUsageDescription string "Damit du ein Profilbild aus deiner Galerie auswählen kannst. Nur das gewählte Bild wird hochgeladen."
-pb NSCameraUsageDescription string "Rave Strangers nutzt die Kamera derzeit nicht. Profilbilder wählst du aus deiner Galerie."
-pb NSMicrophoneUsageDescription string "Rave Strangers nimmt keinen Ton auf. Die Angabe ist nötig, weil das Foto-Modul technisch auch Videos aufnehmen könnte."
+pb NSCameraUsageDescription string "Rave Strngrs nutzt die Kamera derzeit nicht. Profilbilder wählst du aus deiner Galerie."
+pb NSMicrophoneUsageDescription string "Rave Strngrs nimmt keinen Ton auf. Die Angabe ist nötig, weil das Foto-Modul technisch auch Videos aufnehmen könnte."
 plutil -lint "$P"
 
 # 3) App-Icon (1024 px, ohne Transparenz; Xcode erzeugt alle Größen)

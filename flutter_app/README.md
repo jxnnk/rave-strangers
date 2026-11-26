@@ -1,4 +1,4 @@
-# Rave Strangers – Flutter-App
+# Rave Strngrs – Flutter-App
 
 Native App (Android, später iOS) auf derselben Supabase-Datenbank wie die Web-App in `../app`.
 Design: siehe `../DESIGN.md` (Tokens in `lib/theme.dart`).
@@ -49,7 +49,7 @@ Folgen, Bewertungen schreiben, Freunde-Pläne, Events eintragen, Admin. Kommt Sc
 <string>Dark</string>
 <!-- Pflichttext, weil das Karten-Paket Standort-Funktionen enthält. Wir fragen den Standort nicht ab. -->
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>Rave Strangers nutzt deinen Standort nicht. Die Karte zeigt nur Clubs.</string>
+<string>Rave Strngrs nutzt deinen Standort nicht. Die Karte zeigt nur Clubs.</string>
 ```
 
 ## Karte Android

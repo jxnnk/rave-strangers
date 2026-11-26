@@ -63,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                 const LangSwitch(),
               ]),
               const SizedBox(height: 14),
-              Text('Rave Strangers $appVersion', style: mono(10.5)),
+              Text('Rave Strngrs $appVersion', style: mono(10.5)),
               _Head(t('set_session')),
               Wrap(spacing: 10, runSpacing: 10, children: [
                 RsButton(t('logout'), onTap: () async {

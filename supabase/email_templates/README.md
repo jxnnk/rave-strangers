@@ -12,12 +12,12 @@ Für jede Vorlage: Betreff einfügen, dann in „Message body“ (Source/HTML) d
 
 | Vorlage in Supabase | Datei | Betreff |
 |---|---|---|
-| Confirm sign up | `confirm_signup.html` | Willkommen bei Rave Strangers – bestätige deine Mail |
-| Reset password | `reset_password.html` | Rave Strangers – neues Passwort festlegen |
-| Magic link | `magic_link.html` | Dein Login-Link für Rave Strangers |
-| Change email address | `change_email.html` | Rave Strangers – neue E-Mail-Adresse bestätigen |
-| Invite user | `invite.html` | Du wurdest zu Rave Strangers eingeladen |
-| Reauthentication | `reauthentication.html` | Dein Bestätigungscode für Rave Strangers |
+| Confirm sign up | `confirm_signup.html` | Willkommen bei Rave Strngrs – bestätige deine Mail |
+| Reset password | `reset_password.html` | Rave Strngrs – neues Passwort festlegen |
+| Magic link | `magic_link.html` | Dein Login-Link für Rave Strngrs |
+| Change email address | `change_email.html` | Rave Strngrs – neue E-Mail-Adresse bestätigen |
+| Invite user | `invite.html` | Du wurdest zu Rave Strngrs eingeladen |
+| Reauthentication | `reauthentication.html` | Dein Bestätigungscode für Rave Strngrs |
 
 Die Platzhalter `{{ .ConfirmationURL }}`, `{{ .Token }}`, `{{ .Email }}`, `{{ .NewEmail }}` ersetzt Supabase beim Versand. Nicht verändern.
 

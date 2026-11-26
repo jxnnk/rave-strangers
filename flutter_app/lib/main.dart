@@ -48,7 +48,7 @@ class RaveStrangersApp extends StatelessWidget {
       listenable: store,
       builder: (context, _) => MaterialApp(
         key: ValueKey(appLang),
-        title: 'Rave Strangers',
+        title: 'Rave Strngrs',
         debugShowCheckedModeBanner: false,
         theme: buildTheme(),
         home: const Shell(),

@@ -1,4 +1,4 @@
-# Launch-Plan Rave Strangers (Ziel: in 1–2 Wochen live)
+# Launch-Plan Rave Strngrs (Ziel: in 1–2 Wochen live)
 
 Prinzip: lieber wenige Funktionen, die perfekt laufen, als viele halbe.
 USP in einem Satz: **Nie mehr allein raven. Finde deine Crew, nicht nur die Party.**

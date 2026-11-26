@@ -3,7 +3,8 @@
 Lies diese Datei zuerst. Danach `LAUNCH.md` (Plan) und `LATER.md` (offene Punkte).
 
 ## Projekt
-**Rave Strangers** (Logo: RAVE STRNGRS) – Techno-Community-App für Deutschland.
+**Rave Strngrs** (offizieller Name und Logo, ohne Vokale; App-Store-Name „Rave Strngrs“) – Techno-Community-App für Deutschland.
+Technische Namen bleiben: Repo/URL `rave-strangers`, Mail `rave-strangers@mail.de`, Bundle-ID `de.ravestrangers…`.
 USP: „Nie mehr allein raven. Finde deine Crew, nicht nur die Party.“
 Startstadt: **Karlsruhe**, danach Berlin. Launch-Ziel: so bald wie möglich.
 

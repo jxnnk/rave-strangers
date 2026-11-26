@@ -10,7 +10,7 @@ Ziel: öffentlicher TestFlight-Link, den wir in Karlsruhe teilen können. Kein M
 | 2 | ✅ Entwurf liegt in `app/legal/` (Datenschutz, Nutzungsbedingungen, Impressum). **Rote Felder ausfüllen** (Name, Anschrift, Mail, Supabase-Region), dann `dev` → `main`, damit die URLs live sind | Kontoinhaber | 15 min |
 | 3 | ✅ Melden (Nachricht lange drücken, Crew-Post, Profil, Gruppe) + Blockieren im Profil. **Migration `supabase/migrations/026_reports.sql` im Supabase SQL-Editor ausführen**, sonst schlägt „Melden“ fehl. Offene Meldungen täglich prüfen: `select * from reports where status='open' order by created_at;` | Kontoinhaber | 5 min + täglich |
 | 4 | Developer-Portal: Identifiers → App ID `de.ravestrangers.raveStrangers` registrieren | Kontoinhaber | 5 min |
-| 5 | App Store Connect: neue App anlegen (Name „Rave Strangers“, Bundle ID aus 4, Sprache Deutsch). Apple ID der App in `codemagic.yaml` bei `APP_STORE_APPLE_ID` eintragen | Kontoinhaber | 10 min |
+| 5 | App Store Connect: neue App anlegen (Name „Rave Strngrs“, Bundle ID aus 4, Sprache Deutsch). Apple ID der App in `codemagic.yaml` bei `APP_STORE_APPLE_ID` eintragen | Kontoinhaber | 10 min |
 | 6 | App Store Connect → Benutzer und Zugriff → Integrationen → API-Key (Rolle App Manager) erstellen, `.p8` herunterladen | Kontoinhaber | 5 min |
 | 7 | codemagic.io mit GitHub anmelden, Repo hinzufügen, unter Team integrations → Developer Portal den Key aus 6 als „Rave Strangers ASC“ hinterlegen | Kontoinhaber (Secret, nie in den Chat) | 10 min |
 | 8 | TestFlight: interne Gruppe anlegen, dann externe Gruppe **„Public Beta“**. Testinformationen ausfüllen: Beschreibung, Feedback-Mail, Datenschutz-URL, **Demo-Login für Apple** (eigenes Testkonto in Supabase) | Kontoinhaber, Texte von Claude | 20 min |
@@ -55,11 +55,11 @@ Push-Nachrichten, App-Store-Screenshots, DSA-Händlerstatus (erst für den echte
 - Support/Marketing: `https://jxnnk.github.io/rave-strangers/legal/impressum.html`
 
 **TestFlight → Testinformationen**
-- Beta-Beschreibung: „Rave Strangers: Techno-Events in Karlsruhe finden und Leute, mit denen du hingehst. Crew-Finder, Chat, Mitfahren, Ticket-Alarm.“
+- Beta-Beschreibung: „Rave Strngrs: Techno-Events in Karlsruhe finden und Leute, mit denen du hingehst. Crew-Finder, Chat, Mitfahren, Ticket-Alarm.“
 - Was testen: „Events ansehen, ‚Ich gehe hin‘, Crew-Post schreiben, Chat, Mitfahren, Ticket-Alarm, Profilbild. Fehler bitte per Screenshot im TestFlight-Feedback.“
 - Anmeldung erforderlich: Ja → **Demo-Konto** (in Supabase anlegen, E-Mail bestätigt, mit Profil und einem Crew-Post).
 - Prüfnotizen (EN):
-  > Rave Strangers is a community app for techno events in Germany (18+). Browsing works without an account ("Erst mal umschauen"). Social features need the demo account above. User-generated content: users can report any message (long-press), crew post, profile or group, and block users (profile menu or chat menu). Reports are reviewed within 24 hours. Users accept terms with zero tolerance for objectionable content at sign-up. Account deletion: Profile → Settings → Delete account. Location is optional (while in use only): after a short explanation with a single "Continue" button the system dialog appears; the position is only used on-device to pick the nearest city with events and is never stored or sent.
+  > Rave Strngrs is a community app for techno events in Germany (18+). Browsing works without an account ("Erst mal umschauen"). Social features need the demo account above. User-generated content: users can report any message (long-press), crew post, profile or group, and block users (profile menu or chat menu). Reports are reviewed within 24 hours. Users accept terms with zero tolerance for objectionable content at sign-up. Account deletion: Profile → Settings → Delete account. Location is optional (while in use only): after a short explanation with a single "Continue" button the system dialog appears; the position is only used on-device to pick the nearest city with events and is never stored or sent.
 
 ## Bewusst offen (nicht nötig für TestFlight)
 - Englische Zweckangaben (InfoPlist.strings) – Texte sind deutsch, App-Sprache Deutsch.

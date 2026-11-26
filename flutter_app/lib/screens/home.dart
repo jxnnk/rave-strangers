@@ -100,7 +100,7 @@ class _PostTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('${p.author ?? 'Rave Strangers'}${p.verified ? ' ✓' : ''}'.toUpperCase(), style: mono(10.5, color: C.accent)),
+          Text('${p.author ?? 'Rave Strngrs'}${p.verified ? ' ✓' : ''}'.toUpperCase(), style: mono(10.5, color: C.accent)),
           const SizedBox(height: 6),
           Text(p.title, style: body(17, weight: FontWeight.w700)),
           if (p.body != null) ...[

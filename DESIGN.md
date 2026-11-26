@@ -1,4 +1,4 @@
-# Rave Strangers – Design-System "NACHTSCHICHT"
+# Rave Strngrs – Design-System "NACHTSCHICHT"
 
 The look is inspired by the scene's own visual language: label sites, flyers and timetables.
 It takes no logos, wordmarks or brand elements from anyone.

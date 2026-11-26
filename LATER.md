@@ -14,7 +14,7 @@ Bewusst zurückgestellt (Stand 14.11.2026). Vor dem öffentlichen Launch angehen
 - Eigener Mail-Dienst (Brevo/Resend) gegen Mail-Limit
 
 ## Heute Abend (25.11.): Nutzungsanalyse mit PostHog
-- Jannik: Konto auf eu.posthog.com (EU!), Projekt „Rave Strangers“, Project API Key (`phc_…`) schicken.
+- Jannik: Konto auf eu.posthog.com (EU!), Projekt „Rave Strngrs“, Project API Key (`phc_…`) schicken.
 - Claude: Einwilligungs-Dialog beim ersten Start (Ja/Nein gleich groß), PostHog erst nach „Ja“, in Flutter + Web.
 - Messen: Funnel Event → Ticket-Klick, Crew-Posts/Gruppen/Nachrichten, Wiederkehr, Herkunft (Städte, Einladungslinks).
 - Sitzungsaufnahmen nur mit Maskierung (Chats/Eingaben immer geschwärzt).

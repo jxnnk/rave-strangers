@@ -44,7 +44,7 @@ def page(preheader, kicker, title, de_html, en_html, action, note_de, note_en):
 <tr><td style="padding:22px 4px 0;font-family:{BODY};font-size:12px;line-height:1.6;color:{MUTED}">
 Nie mehr allein raven. Finde deine Crew, nicht nur die Party.<br>
 <a href="{SITE}" style="color:{MUTED}">ravestrangers</a> &middot; <a href="{SITE}legal/impressum.html" style="color:{MUTED}">Impressum</a> &middot; <a href="{SITE}legal/datenschutz.html" style="color:{MUTED}">Datenschutz</a><br>
-Du bekommst diese Mail, weil jemand mit deiner Adresse bei Rave Strangers etwas angefragt hat.
+Du bekommst diese Mail, weil jemand mit deiner Adresse bei Rave Strngrs etwas angefragt hat.
 </td></tr>
 </table></td></tr></table></body></html>
 '''
@@ -53,7 +53,7 @@ IGNORE_DE = 'Warst du das nicht? Dann ignorier diese Mail einfach, es passiert n
 IGNORE_EN = 'Not you? Just ignore this email, nothing will happen.'
 T = {
  'confirm_signup': dict(
-   subject='Willkommen bei Rave Strangers – bestätige deine Mail',
+   subject='Willkommen bei Rave Strngrs – bestätige deine Mail',
    pre='Ein Klick noch, dann findest du deine Crew.',
    kicker='Fast geschafft', title='Bestätige deine Mail',
    de='<p style="margin:0">Schön, dass du dabei bist! Tipp auf den Button, um deine E-Mail-Adresse zu bestätigen. Danach kannst du Events speichern, Crews finden und mit anderen Ravern schreiben.</p>',
@@ -61,7 +61,7 @@ T = {
    action=button('{{ .ConfirmationURL }}', 'Mail bestätigen'),
    nde=IGNORE_DE, nen=IGNORE_EN),
  'reset_password': dict(
-   subject='Rave Strangers – neues Passwort festlegen',
+   subject='Rave Strngrs – neues Passwort festlegen',
    pre='Hier kannst du ein neues Passwort festlegen.',
    kicker='Passwort vergessen?', title='Neues Passwort',
    de='<p style="margin:0">Kein Stress, passiert den Besten nach einer langen Nacht. Tipp auf den Button und leg ein neues Passwort fest. Der Link gilt nur kurz.</p>',
@@ -69,7 +69,7 @@ T = {
    action=button('{{ .ConfirmationURL }}', 'Passwort ändern'),
    nde='Du hast nichts angefragt? Dann ignorier diese Mail, dein Passwort bleibt gleich.', nen='Didn’t ask for this? Ignore this email, your password stays the same.'),
  'magic_link': dict(
-   subject='Dein Login-Link für Rave Strangers',
+   subject='Dein Login-Link für Rave Strngrs',
    pre='Ein Klick und du bist drin.',
    kicker='Login', title='Dein Login-Link',
    de='<p style="margin:0">Tipp auf den Button, um dich ohne Passwort anzumelden. Der Link gilt nur kurz und nur einmal.</p>',
@@ -77,7 +77,7 @@ T = {
    action=button('{{ .ConfirmationURL }}', 'Einloggen'),
    nde=IGNORE_DE, nen=IGNORE_EN),
  'change_email': dict(
-   subject='Rave Strangers – neue E-Mail-Adresse bestätigen',
+   subject='Rave Strngrs – neue E-Mail-Adresse bestätigen',
    pre='Bestätige deine neue E-Mail-Adresse.',
    kicker='Konto', title='Neue Mail bestätigen',
    de='<p style="margin:0">Du möchtest die E-Mail-Adresse deines Kontos von <b>{{ .Email }}</b> auf <b>{{ .NewEmail }}</b> ändern. Tipp auf den Button, um das zu bestätigen.</p>',
@@ -85,15 +85,15 @@ T = {
    action=button('{{ .ConfirmationURL }}', 'Änderung bestätigen'),
    nde='Das warst du nicht? Dann ignorier diese Mail und ändere zur Sicherheit dein Passwort.', nen='Not you? Ignore this email and change your password to be safe.'),
  'invite': dict(
-   subject='Du wurdest zu Rave Strangers eingeladen',
+   subject='Du wurdest zu Rave Strngrs eingeladen',
    pre='Nie mehr allein raven. Deine Einladung wartet.',
    kicker='Einladung', title='Komm in die Crew',
-   de='<p style="margin:0">Du wurdest zu Rave Strangers eingeladen, der App, mit der du nie mehr allein raven musst. Tipp auf den Button, um dein Konto anzulegen.</p>',
-   en='You’ve been invited to Rave Strangers. Tap the button to create your account.',
+   de='<p style="margin:0">Du wurdest zu Rave Strngrs eingeladen, der App, mit der du nie mehr allein raven musst. Tipp auf den Button, um dein Konto anzulegen.</p>',
+   en='You’ve been invited to Rave Strngrs. Tap the button to create your account.',
    action=button('{{ .ConfirmationURL }}', 'Einladung annehmen'),
    nde='Kein Interesse? Dann ignorier diese Mail einfach.', nen='Not interested? Just ignore this email.'),
  'reauthentication': dict(
-   subject='Dein Bestätigungscode für Rave Strangers',
+   subject='Dein Bestätigungscode für Rave Strngrs',
    pre='Dein Code zur Bestätigung.',
    kicker='Sicherheit', title='Dein Code',
    de='<p style="margin:0">Gib diesen Code in der App ein, um die Aktion zu bestätigen:</p>',

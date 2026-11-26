@@ -200,7 +200,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                           TextSpan(text: 'STRNGRS', style: display(54, color: C.accent)),
                         ]),
                         textAlign: TextAlign.center,
-                        semanticsLabel: 'Rave Strangers',
+                        semanticsLabel: 'Rave Strngrs',
                         style: const TextStyle(height: 0.92),
                       ),
                     ),
