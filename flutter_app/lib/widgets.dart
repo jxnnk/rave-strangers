@@ -363,3 +363,22 @@ Ev pickHighlight(List<Ev> l) {
   }
   return best;
 }
+
+/// Links zu Nutzungsbedingungen und Datenschutz (unter der Zustimmung bei der Registrierung).
+class LegalLinks extends StatelessWidget {
+  const LegalLinks({super.key});
+  @override
+  Widget build(BuildContext context) {
+    Widget link(String label, String url) => InkWell(
+          onTap: () => openUrl(url),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(label, style: body(13.5, color: C.muted).copyWith(decoration: TextDecoration.underline)),
+          ),
+        );
+    return Padding(
+      padding: const EdgeInsets.only(left: 48),
+      child: Wrap(spacing: 16, children: [link(t('terms_p'), termsUrl), link(t('privacy_p'), privacyUrl)]),
+    );
+  }
+}

@@ -221,6 +221,7 @@ class _AuthFormState extends State<_AuthForm> {
               ]),
             ),
           ),
+        if (!_login) const Padding(padding: EdgeInsets.only(bottom: 10), child: LegalLinks()),
         if (_msg != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 14),

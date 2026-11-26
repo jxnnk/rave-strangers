@@ -138,6 +138,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             Expanded(child: Text(t('age'), style: body(14))),
           ]),
         ),
+      if (!_login) const LegalLinks(),
       if (_msg != null) Text(_msg!, style: body(14.5, color: _msgOk ? C.green : C.accent)),
       SizedBox(
         height: 54,

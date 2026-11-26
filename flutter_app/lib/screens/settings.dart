@@ -53,6 +53,10 @@ class SettingsScreen extends StatelessWidget {
                 title: t('set_blocked'),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const _BlockedScreen())),
               ),
+              _Head(t('legal_t')),
+              _Row(icon: Icons.privacy_tip_outlined, title: t('privacy_p'), onTap: () => openUrl(privacyUrl)),
+              _Row(icon: Icons.gavel_outlined, title: t('terms_p'), onTap: () => openUrl(termsUrl)),
+              _Row(icon: Icons.mail_outline, title: t('imprint_p'), onTap: () => openUrl(imprintUrl)),
               _Head(t('set_app')),
               Row(children: [
                 Expanded(child: Text(t('language'), style: body(15.5))),

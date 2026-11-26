@@ -1,0 +1,10 @@
+:root{--bg:#111113;--s:#19191C;--t:#EFECE6;--m:#9a978f;--a:#FF2B1C}
+*{box-sizing:border-box}html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.6 "Space Grotesk",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
+h1,h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em;line-height:1.1}
+h1{font-size:40px;margin:8px 0 4px}h2{font-size:22px;margin:36px 0 8px}
+a{color:var(--a)}p,li{color:var(--t)}small,.m{color:var(--m)}
+.todo{background:var(--a);color:#111113;padding:0 4px;font-weight:700}
+nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:24px}
+.box{background:var(--s);padding:16px;margin:16px 0}

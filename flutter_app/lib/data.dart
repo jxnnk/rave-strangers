@@ -11,6 +11,10 @@ const sbUrl = 'https://wnmxloykrnbrpvzxhnsb.supabase.co';
 // Publishable key: meant to be public, the database is protected by row level security.
 const sbKey = 'sb_publishable_4vHWXBP7d04RUXs7lOQ9nA_yys9gxdN';
 const webUrl = 'https://jxnnk.github.io/rave-strangers/';
+// Rechtstexte (statisch in app/legal/, auch als URLs für App Store Connect).
+const privacyUrl = '${webUrl}legal/datenschutz.html';
+const termsUrl = '${webUrl}legal/nutzungsbedingungen.html';
+const imprintUrl = '${webUrl}legal/impressum.html';
 
 SupabaseClient get sb => Supabase.instance.client;
 
