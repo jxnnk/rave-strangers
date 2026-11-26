@@ -52,6 +52,16 @@ jobs:
           /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$APP/Info.plist"
           /usr/libexec/PlistBuddy -c "Print :NSPhotoLibraryUsageDescription" "$APP/Info.plist"
           du -sh "$APP"
+      - name: Unsignierte IPA zum Selbst-Installieren (z. B. Sideloadly mit eigener Apple-ID)
+        run: |
+          rm -rf ../ipa && mkdir -p ../ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app ../ipa/Payload/
+          (cd ../ipa && zip -qry "rave-strangers-$(grep '^version:' ../flutter_app/pubspec.yaml | sed -E 's/version: *//; s/\+/-/').ipa" Payload && rm -rf Payload && ls -la)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rave-strangers-ipa-unsigniert
+          path: ipa/*.ipa
+          retention-days: 14
       - name: Simulator-Build
         run: flutter build ios --simulator --debug
       - name: Simulator starten
