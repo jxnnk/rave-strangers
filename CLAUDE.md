@@ -1,6 +1,6 @@
 # CLAUDE.md – Briefing für jede Claude-Sitzung
 
-Lies diese Datei zuerst. Danach `LAUNCH.md` (Plan) und `LATER.md` (offene Punkte).
+Lies diese Datei zuerst. Danach `LAUNCH.md` (Plan), `LATER.md` (offene Punkte) und `GIT-ANLEITUNG.md` (wie wir zusammen pushen).
 
 ## Projekt
 **Rave Strngrs** (offizieller Name und Logo, ohne Vokale; App-Store-Name „Rave Strngrs“) – Techno-Community-App für Deutschland.
