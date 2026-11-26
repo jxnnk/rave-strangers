@@ -1,4 +1,4 @@
-// "Meine Stadt finden": one-time location on tap, used only on the device, never saved or sent.
+// Standort: nur im Vordergrund, grob, nur auf dem Gerät genutzt, nie gespeichert oder gesendet (CLAUDE.md Regel 7).
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -83,19 +83,19 @@ Future<void> autoLocate(BuildContext context) async {
       final prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('loc_asked') == true || !context.mounted) return;
       await prefs.setBool('loc_asked', true);
-      final ok = await showDialog<bool>(
+      // Erklärung vor der System-Abfrage. Apple (5.1.1): nur ein „Weiter“-Knopf, der immer zur System-Abfrage führt.
+      await showDialog<void>(
         context: context,
+        barrierDismissible: false,
         builder: (c) => AlertDialog(
           backgroundColor: C.surface,
           title: Text(t('loc_q_t').toUpperCase(), style: display(22)),
           content: Text(t('loc_q'), style: body(15)),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(c, false), child: Text(t('later'))),
-            TextButton(onPressed: () => Navigator.pop(c, true), child: Text(t('allow'), style: const TextStyle(color: C.accent))),
+            TextButton(onPressed: () => Navigator.pop(c), child: Text(t('continue'), style: const TextStyle(color: C.accent))),
           ],
         ),
       );
-      if (ok != true) return;
       perm = await Geolocator.requestPermission();
     }
     if (perm != LocationPermission.whileInUse && perm != LocationPermission.always) return;

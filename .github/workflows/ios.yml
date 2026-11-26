@@ -54,22 +54,33 @@ jobs:
           du -sh "$APP"
       - name: Simulator-Build
         run: flutter build ios --simulator --debug
-      - name: Im Simulator starten
+      - name: Simulator starten
         run: |
           DEV=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];print(next(x['udid'] for k,v in sorted(d.items(),reverse=True) if 'iOS' in k for x in v if x['name'].startswith('iPhone')))")
-          echo "Gerät: $DEV"
+          echo "DEV=$DEV" >> "$GITHUB_ENV"
           xcrun simctl boot "$DEV"
           xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl location "$DEV" set 49.0094,8.4044   # Karlsruhe
+      - name: App starten, Screenshot, Absturz-Check
+        run: |
           xcrun simctl install "$DEV" build/ios/iphonesimulator/Runner.app
           xcrun simctl launch "$DEV" de.ravestrangers.raveStrangers
           mkdir -p ../shots
           sleep 20; xcrun simctl io "$DEV" screenshot ../shots/start-20s.png
           sleep 20; xcrun simctl io "$DEV" screenshot ../shots/start-40s.png
           xcrun simctl spawn "$DEV" log show --last 2m --style compact --predicate 'process == "Runner"' > ../shots/runner.log || true
-          tail -50 ../shots/runner.log
           # Läuft die App nach 40 s noch (kein Absturz)?
           xcrun simctl spawn "$DEV" launchctl list | grep -i "raveStrangers"
           ls ~/Library/Logs/DiagnosticReports 2>/dev/null | grep -i runner && { echo "Absturzbericht gefunden"; exit 1; } || echo "kein Absturz"
+          # kleines Vorschaubild ins Log (base64), damit man es ohne Artefakt-Download ansehen kann
+          sips -s format jpeg -s formatOptions 40 -Z 360 ../shots/start-40s.png --out ../shots/thumb.jpg >/dev/null
+          echo "THUMB_BEGIN"; base64 -i ../shots/thumb.jpg | fold -w 3000; echo "THUMB_END"
+          xcrun simctl terminate "$DEV" de.ravestrangers.raveStrangers || true
+      - name: Integrationstest auf dem Simulator (echte Daten, ohne Konto)
+        run: |
+          xcrun simctl privacy "$DEV" grant location de.ravestrangers.raveStrangers || true
+          flutter test integration_test/app_test.dart -d "$DEV" --reporter expanded 2>&1 | tee ../shots/integration.log
+          grep -q "IT: alle Tabs ok" ../shots/integration.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
