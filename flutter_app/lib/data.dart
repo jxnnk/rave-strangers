@@ -242,6 +242,20 @@ class Store extends ChangeNotifier {
   int unreadChats = 0;
   int get unreadNotes => notes.where((n) => n['read_at'] == null).length;
   Map<String, dynamic>? profile;
+  /// Account tier (DB 029): tier = raver | promoter | admin, active_until, request_status, trusted.
+  Map<String, dynamic>? tier;
+  bool get canAddEvents => tier?['tier'] == 'promoter' || tier?['tier'] == 'admin';
+  Future<void> loadTier() async {
+    if (user == null) return;
+    try {
+      final r = await sb.rpc('my_tier') as List?;
+      tier = r == null || r.isEmpty ? {'tier': 'raver'} : Map<String, dynamic>.from(r.first as Map);
+    } catch (e) {
+      debugPrint('my_tier failed: $e');
+      tier = {'tier': 'raver'};
+    }
+    notifyListeners();
+  }
   /// Profilbilder anderer Leute (id -> avatar_url), z. B. für die Chatliste.
   final Map<String, String?> avatars = {};
   Future<void> loadAvatars(Iterable<String?> ids) async {
@@ -375,6 +389,7 @@ class Store extends ChangeNotifier {
       notes = [];
       unreadChats = 0;
       profile = null;
+      tier = null;
       notifyListeners();
       return;
     }
@@ -383,6 +398,7 @@ class Store extends ChangeNotifier {
       final att = await sb.from('attendance').select('event_id,profile_id');
       final bm = await sb.from('bookmarks').select('event_id,remind').eq('profile_id', u.id);
       profile = p;
+      loadTier();
       final c = <int, int>{};
       final g = <int>{};
       for (final a in att) {

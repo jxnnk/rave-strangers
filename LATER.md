@@ -20,3 +20,11 @@ Bewusst zurückgestellt (Stand 14.11.2026). Vor dem öffentlichen Launch angehen
 - Sitzungsaufnahmen nur mit Maskierung (Chats/Eingaben immer geschwärzt).
 - Datenschutzerklärung: Abschnitt PostHog (Frankfurt, keine US-Übertragung) – Text vorbereiten.
 - Vorlage: Branch `posthog/wizard-01a214927984` (vom PostHog-Assistenten, Commit `ce157b5`). **Nicht direkt mergen:** trackt ohne Einwilligung und wirft im Debug-Modus einen Fehler, wenn der Key fehlt. Brauchbare Teile (`posthog.dart`, Event-Aufrufe in `data.dart`/`social.dart`/`welcome.dart`) beim Bauen nach `dev` übernehmen.
+
+## Promoter-Abo (Kontostufen, DB 029)
+Stand 26.11.: Raver (kostenlos) und Promoter (Abo) sind gebaut (Web + Flutter). Nur Promoter und Admins tragen Events ein; das erste Event eines Promoters wird geprüft, danach geht es sofort online.
+- Jannik: `supabase/migrations/029_promoter_tier.sql` im SQL-Editor ausführen (vorher sieht jeder „Raver“, Eintragen läuft noch nach alter Regel).
+- Freischalten bis zur Online-Zahlung: Admin-Bereich → Promoter-Anfragen → „1 Monat“ / „12 Monate“, nach bezahlter Rechnung. Verlängern/Beenden unter „Aktive Promoter“.
+- Offen: Preis festlegen; Online-Zahlung (Stripe auf der Website, Freischaltung per Webhook in einer Edge Function). Vorher Gewerbe, AGB mit Abo-Bedingungen, Kündigungsbutton (§ 312k BGB) für Verbraucher.
+- iOS/Android: In der App keinen Preis und keinen Kauf-Link zeigen, solange nicht über Apple/Google abgerechnet wird (App Store 3.1.1 / 3.1.3, Google Play Payments). Die App zeigt deshalb nur „Anfrage stellen“.
+- Später: Erinnerung kurz vor Abo-Ende, Promoter-Badge an Events.

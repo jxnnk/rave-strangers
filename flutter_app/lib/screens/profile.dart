@@ -11,6 +11,7 @@ import 'settings.dart';
 import 'welcome.dart';
 import 'invite.dart';
 import 'person.dart';
+import 'promoter.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -76,6 +77,8 @@ class _Me extends StatelessWidget {
           const SizedBox(height: 18),
         ],
         const InviteBox(),
+        Section(0, t('tier_t')),
+        const TierBox(),
         Section(1, t('my_going')),
         if (going.isEmpty) EmptyBox(t('none_yet')),
         for (final e in going) EventRow(e),

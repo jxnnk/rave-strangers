@@ -6,6 +6,7 @@ import '../theme.dart';
 import '../widgets.dart';
 import '../locate.dart';
 import 'organizer.dart';
+import 'promoter.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -111,6 +112,7 @@ class _EventsScreenState extends State<EventsScreen> {
                         RsButton('${o.name} →', small: true, active: true, onTap: () => openOrg(context, o)),
                       RsButton(t('orgs_t'), small: true, icon: Icons.groups_2_outlined,
                           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OrganizerList()))),
+                      RsButton('+ ${t('add_event')}', small: true, onTap: () => openAddEvent(context)),
                     ]),
                     const SizedBox(height: 16),
                     Text(t('n_events', {'n': list.length}).toUpperCase(), style: mono(11)),

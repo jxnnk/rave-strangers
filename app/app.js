@@ -1,6 +1,6 @@
 /* Rave Strngrs – web app (real data via Supabase).
    Plain JavaScript, no build step. Hash routing: #events, #event-<id>, #map, #map-<venueId>, #club-<id>,
-   #artists, #u-<handle>, #connect, #me, #login, #new-event, #admin. */
+   #artists, #u-<handle>, #connect, #me, #login, #new-event, #promoter, #admin. */
 (function(){
 'use strict';
 
@@ -64,14 +64,14 @@ var T={
     err_handle:'Dieser Nutzername ist schon vergeben.',err_handle_fmt:'Nutzername: 3 bis 30 Zeichen, nur a–z, 0–9, Punkt und Unterstrich.',err_pw:'Das Passwort braucht mindestens 8 Zeichen.',
     me_title:'Mein Profil',handle:'Nutzername',bio:'Über mich',bio_ph:'Was hörst du, wo tanzt du?',save:'Speichern',saved:'Gespeichert',soc_hint:'Socials verlinken',
     er_t:'Wie war das Event?',er_none:'Noch keine Bewertungen für dieses Event.',er_write:'Event bewerten',er_login:'Melde dich an, um das Event zu bewerten.',er_only_go:'Bewerten kann, wer dabei war. Tipp auf „Ich war dort“.',er_closed:'Bewertungen sind bis 3 Wochen nach dem Event möglich.',er_lineup:'Line-up & Musik',er_safety:'Sicherheit',er_aware:'Awareness & Wohlfühlen',er_was_there:'War vor Ort',er_verified_n:'{n} vor Ort eingecheckt',er_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen. Clubs und Veranstalter sehen dein Feedback.',er_torate:'Wie war es? Jetzt bewerten',er_torate_sub:'Deine letzten Events. Dein Feedback hilft Clubs und Veranstaltern, besser zu werden.',was_there:'Ich war dort',was_there_on:'Du warst dort',ci_t:'Bist du gerade hier?',ci_sub:'Tipp auf „Ich bin da“. Dein Handy prüft einmal, ob du in der Nähe des Clubs bist. Dein Standort verlässt dein Gerät nicht.',ci_btn:'Ich bin da',ci_done:'Eingecheckt',ci_done_sub:'Deine Bewertung bekommt später das Häkchen „War vor Ort“.',ci_busy:'Prüfe Standort …',ci_ok:'Eingecheckt! Viel Spaß.',ci_far:'Du scheinst nicht am Club zu sein (mehr als 400 m entfernt).',ci_notnow:'Einchecken geht nur während des Events.',ci_denied:'Ohne Standort-Freigabe geht Einchecken nicht.',ci_err:'Einchecken hat nicht geklappt.',note_review:'Wie war „{e}“? Bewerte das Event.',org_rating:'Bewertung aus {n} Events-Feedbacks',my_going:'Ich gehe hin',my_saved:'Merkliste',my_subs:'Meine Einträge',none_yet:'Noch nichts.',
-    verif_t:'Artist-Verifizierung',verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung. Dann bekommst du das rote Häkchen und deine Events erscheinen sofort.',
+    verif_t:'Artist-Verifizierung',verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung. Dann bekommst du das rote Häkchen.',
     verif_name:'Artist-Name',verif_links:'Belege (Links, eins pro Zeile)',verif_links_ph:'z. B. Resident-Advisor-Seite, offizielles Instagram, Booking-Agentur',
     verif_btn:'Verifizierung beantragen',verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',verif_rejected:'Dein letzter Antrag wurde abgelehnt. Du kannst einen neuen stellen.',verif_ok:'Dein Profil ist verifiziert.',
     admin_t:'Admin',admin_open:'Admin-Bereich öffnen',adm_verif:'Verifizierungs-Anträge',adm_events:'Events in Prüfung',rev_unclear:'Prüf-Agent unsicher',rev_waiting:'Wartet auf Prüfung',rev_live:'online',rev_note:'Prüf-Agent',adm_reports:'Meldungen',approve:'Freigeben',reject:'Ablehnen',publish:'Veröffentlichen',done:'Erledigt',
     profile_nf:'Dieses Profil gibt es nicht.',report:'Melden',block:'Blockieren',blocked:'Blockiert. Ihr seht euch gegenseitig nicht mehr.',report_reason:'Grund',
     rr1:'Belästigung',rr2:'Spam oder Fake-Profil',rr3:'Gefährliches Verhalten',rr4:'Falsche Angaben',rr5:'Sonstiges',report_txt:'Was ist passiert? (optional)',report_send:'Meldung senden',report_sent:'Danke. Unser Team prüft die Meldung vertraulich.',
     safety_note:'Melden und Blockieren bleibt anonym.',upcoming_going:'Geht zu',
-    add_event:'Event eintragen',new_title:'Event eintragen',new_sub:'Verifizierte Artists und Clubs erscheinen sofort, alle anderen Einträge werden kurz geprüft.',
+    add_event:'Event eintragen',new_title:'Event eintragen',new_sub:'Dein erstes Event prüfen wir kurz, danach gehen deine Events sofort online.',new_sub_live:'Als Promoter gehen deine Events sofort online.',tier_t:'Dein Konto',tier_raver:'Raver · kostenlos',tier_promoter:'Promoter · aktiv bis {d}',tier_admin:'Admin',tier_ended:'Dein Promoter-Abo ist am {d} abgelaufen.',pro_t:'Promoter werden',pro_lead:'Events eintragen geht mit einem Promoter-Konto. Als Raver bleibt alles andere kostenlos: Events finden, Crew suchen, chatten.',pro_b1:'Deine Events erscheinen für alle Raver in Liste, Karte und Suche.',pro_b2:'Dein erstes Event prüfen wir kurz, danach gehen neue Events sofort online.',pro_b3:'Kostenpflichtiges Abo. Preis und Rechnung bekommst du nach deiner Anfrage per E-Mail.',pro_org:'Name von Kollektiv, Label oder Veranstaltung',pro_web:'Website oder Social-Link (optional)',pro_note:'Nachricht an uns (optional)',pro_send:'Promoter-Konto anfragen',pro_sent:'Anfrage gesendet. Wir melden uns per E-Mail.',pro_pending:'Deine Anfrage ist eingegangen. Wir melden uns per E-Mail mit Preis und Rechnung.',pro_rejected:'Deine letzte Anfrage wurde abgelehnt. Du kannst eine neue stellen.',pro_need:'Events eintragen geht nur mit einem Promoter-Konto.',adm_pro:'Promoter-Anfragen',adm_pro_act:'Aktive Promoter',adm_m1:'1 Monat',adm_m12:'12 Monate',adm_plus1:'+1 Monat',adm_end:'Beenden',adm_until:'bis {d}',
     f_title:'Name des Events',f_venue:'Club',f_venue_pick:'Club wählen',f_venue_missing:'Dein Club fehlt? Schreib es in den Namen, wir legen ihn an.',f_date:'Datum',f_time:'Beginn',f_genres:'Genres',
     f_lineup:'Line-up (Namen mit Komma trennen)',f_link:'Link zu Tickets oder Flyer',f_nophone:'Auf dem Event gilt ein Foto- und Videoverbot',f_kind:'Art',f_submit:'Event einreichen',
     f_err:'Bitte Name, Club und Datum ausfüllen.',sub_ok_pub:'Event ist online.',sub_ok_pend:'Danke! Dein Event wird geprüft und erscheint danach.',
@@ -131,14 +131,14 @@ var T={
     err_handle:'This username is taken.',err_handle_fmt:'Username: 3 to 30 characters, only a–z, 0–9, dot and underscore.',err_pw:'The password needs at least 8 characters.',
     me_title:'My profile',handle:'Username',bio:'About me',bio_ph:'What do you listen to, where do you dance?',save:'Save',saved:'Saved',soc_hint:'Link your socials',
     er_t:'How was the event?',er_none:'No ratings for this event yet.',er_write:'Rate this event',er_login:'Log in to rate this event.',er_only_go:'Only people who were there can rate. Tap “I was there”.',er_closed:'Ratings are possible up to 3 weeks after the event.',er_lineup:'Line-up & music',er_safety:'Safety',er_aware:'Awareness & comfort',er_was_there:'Was there',er_verified_n:'{n} checked in on site',er_rules:'Rate fairly and from your own experience. No names of door staff or guests. Clubs and promoters see your feedback.',er_torate:'How was it? Rate now',er_torate_sub:'Your recent events. Your feedback helps clubs and promoters get better.',was_there:'I was there',was_there_on:'You were there',ci_t:'Are you here right now?',ci_sub:'Tap “I’m here”. Your phone checks once whether you are near the club. Your location never leaves your device.',ci_btn:'I’m here',ci_done:'Checked in',ci_done_sub:'Your rating will get the “Was there” tick later.',ci_busy:'Checking location …',ci_ok:'Checked in! Have fun.',ci_far:'You don’t seem to be at the club (more than 400 m away).',ci_notnow:'Check-in only works during the event.',ci_denied:'Check-in needs location access.',ci_err:'Check-in didn’t work.',note_review:'How was “{e}”? Rate the event.',org_rating:'Rating from {n} event reviews',my_going:"I'm going",my_saved:'Saved',my_subs:'My submissions',none_yet:'Nothing yet.',
-    verif_t:'Artist verification',verif_none:'Are you a DJ or live act? Request verification to get the red tick; your events then go live right away.',
+    verif_t:'Artist verification',verif_none:'Are you a DJ or live act? Request verification to get the red tick.',
     verif_name:'Artist name',verif_links:'Proof (links, one per line)',verif_links_ph:'e.g. Resident Advisor page, official Instagram, booking agency',
     verif_btn:'Request verification',verif_pending:"Request received. We'll check your profile and get back to you.",verif_rejected:'Your last request was declined. You can send a new one.',verif_ok:'Your profile is verified.',
     admin_t:'Admin',admin_open:'Open admin area',adm_verif:'Verification requests',adm_events:'Events under review',rev_unclear:'Review agent unsure',rev_waiting:'Waiting for review',rev_live:'live',rev_note:'Review agent',adm_reports:'Reports',approve:'Approve',reject:'Reject',publish:'Publish',done:'Done',
     profile_nf:'This profile does not exist.',report:'Report',block:'Block',blocked:'Blocked. You no longer see each other.',report_reason:'Reason',
     rr1:'Harassment',rr2:'Spam or fake profile',rr3:'Dangerous behaviour',rr4:'Wrong details',rr5:'Other',report_txt:'What happened? (optional)',report_send:'Send report',report_sent:'Thanks. Our team reviews the report confidentially.',
     safety_note:'Reporting and blocking are anonymous.',upcoming_going:'Going to',
-    add_event:'Add event',new_title:'Add an event',new_sub:'Verified artists and clubs go live right away, all other entries get a quick check.',
+    add_event:'Add event',new_title:'Add an event',new_sub:'We quickly check your first event, after that your events go live right away.',new_sub_live:'As a promoter, your events go live right away.',tier_t:'Your account',tier_raver:'Raver · free',tier_promoter:'Promoter · active until {d}',tier_admin:'Admin',tier_ended:'Your promoter subscription ended on {d}.',pro_t:'Become a promoter',pro_lead:'Adding events needs a promoter account. Everything else stays free for ravers: finding events, finding a crew, chatting.',pro_b1:'Your events show up for all ravers in the list, on the map and in search.',pro_b2:'We quickly check your first event, after that new events go live right away.',pro_b3:'Paid subscription. You get the price and an invoice by email after your request.',pro_org:'Name of your collective, label or event',pro_web:'Website or social link (optional)',pro_note:'Message to us (optional)',pro_send:'Request promoter account',pro_sent:'Request sent. We will get back to you by email.',pro_pending:'We got your request. We will email you the price and an invoice.',pro_rejected:'Your last request was declined. You can send a new one.',pro_need:'Adding events needs a promoter account.',adm_pro:'Promoter requests',adm_pro_act:'Active promoters',adm_m1:'1 month',adm_m12:'12 months',adm_plus1:'+1 month',adm_end:'End',adm_until:'until {d}',
     f_title:'Event name',f_venue:'Club',f_venue_pick:'Pick a club',f_venue_missing:'Your club is missing? Put it in the name, we will add it.',f_date:'Date',f_time:'Start',f_genres:'Genres',
     f_lineup:'Line-up (separate names with commas)',f_link:'Link to tickets or flyer',f_nophone:'This event has a no-photo, no-video rule',f_kind:'Type',f_submit:'Submit event',
     f_err:'Please fill in name, club and date.',sub_ok_pub:'Event is live.',sub_ok_pend:'Thanks! Your event will be checked and then appear.',
@@ -306,7 +306,7 @@ function loadCrewCounts(){
   return sb.rpc('crew_counts').then(function(r){ if(r&&r.error) throw r.error; CREWN={}; ((r&&r.data)||[]).forEach(function(x){ CREWN[x.event_id]={c:x.crew||0,r:x.rides||0}; }); if(S.ready) render(false); }).catch(function(){});
 }
 function loadMine(){
-  if(!S.user){ S.checkins=[]; S.myEvRev=[]; S.me=null; S.going=[]; S.saved=[]; S.alarms=[]; S.notes=[]; updateBell(); S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
+  if(!S.user){ S.tier=null; S.checkins=[]; S.myEvRev=[]; S.me=null; S.going=[]; S.saved=[]; S.alarms=[]; S.notes=[]; updateBell(); S.counts={}; S.verif=null; S.follow=[]; S.vfollow=[]; S.attRows=[]; return Promise.resolve(); }
   var uid=S.user.id;
   return Promise.all([
     data(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
@@ -317,6 +317,7 @@ function loadMine(){
     data(sb.from('venue_follows').select('venue_id').eq('profile_id',uid))
   ]).then(function(r){
     S.me=r[0];
+    loadTier();
     S.counts={}; S.going=[];
     r[1].forEach(function(a){ S.counts[a.event_id]=(S.counts[a.event_id]||0)+1; if(a.profile_id===uid) S.going.push(a.event_id); });
     S.saved=r[2].map(function(b){ return b.event_id; });
@@ -1040,6 +1041,7 @@ function viewMe(){
     '<div class="sec"><h2>'+t('my_going')+'</h2>'+(going.length?'<div class="list" style="margin-top:0">'+going.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="sec"><h2>'+t('my_saved')+'</h2>'+(saved.length?'<div class="list" style="margin-top:0">'+saved.map(eventCard).join('')+'</div>':emptyBox(t('none_yet')))+'</div>'+
     '<div class="row" style="margin-top:22px"><a class="btn" href="#settings">✎ '+t('edit_profile')+'</a></div>'+
+    '<div class="sec"><h2>'+t('tier_t')+'</h2><div class="card"><p><b style="color:var(--text)">'+esc(tierLine())+'</b></p>'+(S.tier&&S.tier.tier==='raver'&&S.tier.request_status==='pending'?'<p>'+t('pro_pending')+'</p>':'')+'<div class="row">'+(canAddEvents()?'<a class="btn primary" href="#new-event">+ '+t('add_event')+'</a>':'<a class="btn" href="#promoter">'+t('pro_t')+'</a>')+'</div></div></div>'+
     '<div class="sec"><h2>'+t('verif_t')+'</h2><div class="card">'+verif+'</div></div>'+
     '<div class="sec"><h2>'+t('my_subs')+'</h2>'+subs+'</div>'+
     '<div class="row" style="margin-top:28px"><a class="btn" href="#settings">⚙ '+t('settings')+'</a></div>';
@@ -1101,12 +1103,39 @@ function saveSetting(k,v){ if(!S.user) return; S.settings[k]=v;
   var row={profile_id:S.user.id,updated_at:new Date().toISOString()}; row[k]=v;
   data(sb.from('user_settings').upsert(row)).catch(function(err){ loadSettings(); fail(err); }); }
 
+/* ---------- Account tiers (DB 029): raver = free, promoter = paid, may add events ---------- */
+function loadTier(){ if(!S.user) return Promise.resolve();
+  return sb.rpc('my_tier').then(function(r){ if(r.error) throw r.error; S.tier=(r.data&&r.data[0])||{tier:'raver'}; render(false); })
+    .catch(function(err){ S.tier={tier:'raver'}; if(window.console) console.error(err); }); }
+function canAddEvents(){ return !!S.tier&&(S.tier.tier==='promoter'||S.tier.tier==='admin'); }
+function fmtUntil(x){ return new Date(x).toLocaleDateString(locale(),{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Berlin'}); }
+function tierLine(){ var x=S.tier; if(!x) return '';
+  if(x.tier==='admin') return t('tier_admin');
+  if(x.tier==='promoter') return t('tier_promoter',{d:fmtUntil(x.active_until)});
+  return t('tier_raver'); }
+function viewPromoter(){
+  var back='<a class="back" href="#me">← '+t('back')+'</a><h1>'+t('pro_t')+'</h1>';
+  if(!S.user) return back+'<div class="empty">'+t('login_need')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login" data-act="loginhere">'+t('to_login')+'</a></div></div>';
+  if(!S.tier) return back+loadingBox();
+  if(canAddEvents()) return back+'<div class="card"><p>'+esc(tierLine())+'</p><div class="row"><a class="btn primary" href="#new-event">+ '+t('add_event')+'</a></div></div>';
+  var x=S.tier, ended=x.active_until?'<p>'+t('tier_ended',{d:fmtUntil(x.active_until)})+'</p>':'';
+  var info='<p class="sub">'+t('pro_lead')+'</p><ul class="sub" style="padding-left:20px;line-height:1.6"><li>'+t('pro_b1')+'</li><li>'+t('pro_b2')+'</li><li>'+t('pro_b3')+'</li></ul>';
+  if(x.request_status==='pending') return back+info+'<div class="card">'+ended+'<p>'+t('pro_pending')+'</p></div>';
+  return back+info+'<div class="card">'+ended+(x.request_status==='rejected'?'<p>'+t('pro_rejected')+'</p>':'')+
+    '<form class="form" data-form="promoter"><div class="field"><label for="p-org">'+t('pro_org')+'</label><input id="p-org" name="org" type="text" maxlength="80" required></div>'+
+    '<div class="field"><label for="p-web">'+t('pro_web')+'</label><input id="p-web" name="web" type="text" maxlength="300" placeholder="https://"></div>'+
+    '<div class="field"><label for="p-note">'+t('pro_note')+'</label><textarea id="p-note" name="note" maxlength="1000"></textarea></div>'+
+    '<div><button class="btn primary" type="submit">'+t('pro_send')+'</button></div></form></div>';
+}
+
 /* ---------- Views: new event ---------- */
 function viewNew(){
   if(!S.user) return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><div class="empty">'+t('login_need')+'<div class="row" style="justify-content:center;margin-top:12px"><a class="btn primary" href="#login" data-act="loginhere">'+t('to_login')+'</a></div></div>';
+  if(!S.tier) return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1>'+loadingBox();
+  if(!canAddEvents()) return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><div class="card"><p><b style="color:var(--text)">'+t('pro_need')+'</b></p><p>'+t('pro_b1')+'</p><div class="row"><a class="btn primary" href="#promoter">'+t('pro_t')+'</a></div></div>';
   var vopts='<option value="">'+t('f_venue_pick')+'</option>'+VENUES.slice().sort(function(a,b){ return a.city.localeCompare(b.city,'de')||a.name.localeCompare(b.name,'de'); }).map(function(v){ return '<option value="'+v.id+'">'+esc(v.city)+' · '+esc(v.name)+'</option>'; }).join('');
   var g=GENRES.map(function(x){ return '<label class="chipcheck"><input type="checkbox" name="genre" value="'+esc(x)+'"><span>'+esc(x)+'</span></label>'; }).join('');
-  return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><p class="sub">'+t('new_sub')+'</p>'+
+  return '<a class="back" href="#events">← '+t('back')+'</a><h1>'+t('new_title')+'</h1><p class="sub">'+t(S.tier.tier==='admin'||S.tier.trusted?'new_sub_live':'new_sub')+'</p>'+
     '<form class="form" data-form="event" novalidate>'+
     '<div class="field"><label for="n-title">'+t('f_title')+'</label><input id="n-title" name="title" type="text" maxlength="140"></div>'+
     '<div class="field"><label for="n-venue">'+t('f_venue')+'</label><select id="n-venue" name="venue">'+vopts+'</select><p class="sub" style="margin:4px 0 0;font-size:13px">'+t('f_venue_missing')+'</p></div>'+
@@ -1161,9 +1190,11 @@ function viewAdmin(){
       data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name,avatar_url)').eq('status','pending').order('created_at',{ascending:true})),
       data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by,status,review_state,review_note').or('status.eq.pending,review_state.eq.unclear').neq('status','cancelled').order('starts_at',{ascending:true})),
       data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true})),
-      sb.rpc('admin_ref_stats',{p_days:30}).then(function(x){ return (x&&x.data)||[]; },function(){ return []; })
-    ]).then(function(r){ cache.admin={verif:r[0],events:r[1],reports:r[2],refs:r[3]||[]}; if(location.hash==='#admin') render(false); })
-      .catch(function(err){ cache.admin={verif:[],events:[],reports:[],refs:[]}; fail(err); });
+      sb.rpc('admin_ref_stats',{p_days:30}).then(function(x){ return (x&&x.data)||[]; },function(){ return []; }),
+      data(sb.from('promoter_requests').select('id,org_name,website,note,created_at,profiles!promoter_requests_profile_id_fkey(handle,display_name)').eq('status','pending').order('created_at',{ascending:true})).catch(function(){ return []; }),
+      data(sb.from('promoters').select('profile_id,org_name,active_until,profiles(handle,display_name)').gt('active_until',new Date().toISOString()).order('active_until',{ascending:true})).catch(function(){ return []; })
+    ]).then(function(r){ cache.admin={verif:r[0],events:r[1],reports:r[2],refs:r[3]||[],proReq:r[4]||[],pros:r[5]||[]}; if(location.hash==='#admin') render(false); })
+      .catch(function(err){ cache.admin={verif:[],events:[],reports:[],refs:[],proReq:[],pros:[]}; fail(err); });
   }
   var a=cache.admin;
   if(a==='loading') return '<h1>'+t('admin_t')+'</h1>'+loadingBox();
@@ -1181,7 +1212,16 @@ function viewAdmin(){
     return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.reason)+'</b> · '+target+'</p>'+(x.details?'<p>'+esc(x.details)+'</p>':'')+
       '<div class="row"><button type="button" class="btn small" data-act="adm-report" data-id="'+x.id+'">'+t('done')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   var refs=(a.refs||[]).length?'<table class="reftab"><thead><tr><th></th><th>'+t('ref_visits')+'</th><th>'+t('ref_signups')+'</th></tr></thead><tbody>'+a.refs.map(function(x){ return '<tr><td>'+esc(x.ref)+'</td><td>'+(+x.visits)+'</td><td>'+(+x.signups)+'</td></tr>'; }).join('')+'</tbody></table>':emptyBox(t('none_yet'));
+  var who=function(p){ return p?'<a class="link" href="#u-'+esc(p.handle)+'">@'+esc(p.handle)+'</a>':''; };
+  var proReq=a.proReq.length?a.proReq.map(function(x){ var s=safeUrl(x.website||'');
+    return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.org_name)+'</b> · '+who(x.profiles)+'</p>'+
+      (x.website?'<p>'+(s?'<a class="link" href="'+esc(s)+'" target="_blank" rel="noopener nofollow">'+esc(host(s))+'</a>':esc(x.website))+'</p>':'')+(x.note?'<p>'+esc(x.note)+'</p>':'')+
+      '<div class="row"><button type="button" class="btn small primary" data-act="adm-pro-ok" data-id="'+x.id+'" data-m="1">'+t('adm_m1')+'</button><button type="button" class="btn small primary" data-act="adm-pro-ok" data-id="'+x.id+'" data-m="12">'+t('adm_m12')+'</button><button type="button" class="btn small" data-act="adm-pro-no" data-id="'+x.id+'">'+t('reject')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
+  var pros=a.pros.length?a.pros.map(function(x){
+    return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.org_name||'–')+'</b> · '+who(x.profiles)+' · '+t('adm_until',{d:fmtUntil(x.active_until)})+'</p>'+
+      '<div class="row"><button type="button" class="btn small" data-act="adm-pro-ext" data-id="'+esc(x.profile_id)+'" data-m="1">'+t('adm_plus1')+'</button><button type="button" class="btn small" data-act="adm-pro-ext" data-id="'+esc(x.profile_id)+'" data-m="0">'+t('adm_end')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   return '<a class="back" href="#me">← '+t('back')+'</a><h1>'+t('admin_t')+'</h1>'+
+    '<div class="sec"><h2>'+t('adm_pro')+'</h2>'+proReq+'</div><div class="sec"><h2>'+t('adm_pro_act')+'</h2>'+pros+'</div>'+
     '<div class="sec"><h2>'+t('adm_refs')+'</h2><p class="sub">'+t('adm_refs_sub')+'</p>'+refs+'</div><div class="sec"><h2>'+t('adm_verif')+'</h2>'+ver+'</div><div class="sec"><h2>'+t('adm_events')+'</h2>'+evs+'</div><div class="sec"><h2>'+t('adm_reports')+'</h2>'+reps+'</div>';
 }
 
@@ -1383,6 +1423,7 @@ function route(){
   var h=decodeURIComponent((location.hash||'#home').slice(1));
   if(/(^|[#&])error_code=|^error=/.test(h)) return {tab:'me',html:viewLinkBad()};
   if(h==='new-event') return {tab:'events',html:viewNew()};
+  if(h==='promoter') return {tab:'me',html:viewPromoter()};
   var i=h.indexOf('-'), name=i<0?h:h.slice(0,i), arg=i<0?'':h.slice(i+1);
   switch(name){
     case 'event': return {tab:'events',html:viewEvent(parseInt(arg,10))};
@@ -1535,6 +1576,9 @@ document.addEventListener('click',function(ev){
   else if(act==='adm-reject'){ adminAct(data(sb.from('artist_verifications').update({status:'rejected',reviewed_by:S.user.id,reviewed_at:new Date().toISOString()}).eq('id',+id))); }
   else if(act==='adm-publish'){ adminAct(data(sb.from('events').update({status:'published',review_state:'ok',reviewed_at:new Date().toISOString()}).eq('id',+id)).then(function(){ return loadBase(); })); }
   else if(act==='adm-cancel'){ adminAct(data(sb.from('events').update({status:'cancelled',review_state:'rejected',reviewed_at:new Date().toISOString()}).eq('id',+id)).then(function(){ return loadBase(); })); }
+  else if(act==='adm-pro-ok'){ adminAct(data(sb.rpc('approve_promoter',{req_id:+id,p_months:+el.getAttribute('data-m')}))); }
+  else if(act==='adm-pro-no'){ adminAct(data(sb.rpc('reject_promoter',{req_id:+id}))); }
+  else if(act==='adm-pro-ext'){ if(el.getAttribute('data-m')==='0'&&!confirm(t('adm_end')+'?')) return; adminAct(data(sb.rpc('set_promoter_until',{p_profile:id,p_months:+el.getAttribute('data-m')}))); }
   else if(act==='adm-report'){ adminAct(data(sb.from('reports').update({status:'approved'}).eq('id',+id))); }
 });
 document.addEventListener('change',function(ev){
@@ -1609,6 +1653,12 @@ document.addEventListener('submit',function(ev){
       if(r.error){ errMe.textContent=r.error.code==='23505'?t('err_handle'):t('err_generic'); return; }
       S.me=r.data; cache.profile={}; render(false); toast(t('saved'));
     });
+  } else if(kind==='promoter'){
+    if(needLogin()) return;
+    var org=String(fd.get('org')||'').trim(); if(!org) return;
+    busy(true);
+    data(sb.from('promoter_requests').insert({profile_id:S.user.id,org_name:org.slice(0,80),website:String(fd.get('web')||'').trim().slice(0,300)||null,note:String(fd.get('note')||'').trim().slice(0,1000)||null}))
+      .then(function(){ busy(false); toast(t('pro_sent')); return loadTier(); }).catch(function(err){ busy(false); fail(err); });
   } else if(kind==='verify'){
     var links=String(fd.get('links')||'').split(/\s+/).map(function(x){ return x.trim(); }).filter(Boolean).slice(0,5);
     busy(true);
@@ -1672,8 +1722,8 @@ document.addEventListener('submit',function(ev){
       }).then(function(row){
         cache.subs=null;
         toast(row.status==='published'?t('sub_ok_pub'):t('sub_ok_pend'));
-        return loadBase().then(function(){ location.hash=row.status==='published'?'#event-'+row.id:'#me'; });
-      }).catch(function(err){ busy(false); fail(err); });
+        return Promise.all([loadBase(),loadTier()]).then(function(){ location.hash=row.status==='published'?'#event-'+row.id:'#me'; });
+      }).catch(function(err){ busy(false); if(/promoter_required/.test(err&&err.message||'')){ toast(t('pro_need')); loadTier(); location.hash='#promoter'; } else fail(err); });
   }
 });
 
