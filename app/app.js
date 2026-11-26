@@ -1127,7 +1127,11 @@ function resetLeft(){ var u=0; try{ u=+sessionStorage.getItem('rs-reset-until')|
 var resetTick=null;
 function viewReset(){
   var left=resetLeft(), sent=S.resetSent;
-  if(left&&!resetTick) resetTick=setInterval(function(){ if(location.hash!=='#reset'||!resetLeft()){ clearInterval(resetTick); resetTick=null; } if(location.hash==='#reset') render(false); },1000);
+  /* Countdown: nur den Button-Text aktualisieren, nicht die ganze Seite neu zeichnen (sonst springt sie jede Sekunde) */
+  if(left&&!resetTick) resetTick=setInterval(function(){
+    var l=resetLeft(), b=document.querySelector('form[data-form=reset] button[type=submit]');
+    if(location.hash!=='#reset'||!l){ clearInterval(resetTick); resetTick=null; if(location.hash==='#reset'&&b){ b.disabled=false; b.textContent=t(S.resetSent?'reset_again':'reset_btn'); } return; }
+    if(b) b.textContent=t('reset_wait',{n:l}); },1000);
   var steps='<ol class="steps">'+[t('reset_s1'),t('reset_s2'),t('reset_s3')].map(function(x,i){ return '<li><span>'+(i+1)+'</span>'+esc(x)+'</li>'; }).join('')+'</ol>';
   var box=sent?'<div class="nophone"><div><b>'+t('reset_sent_t')+'</b><br>'+esc(t('reset_sent_d',{mail:sent}))+'</div></div>':'';
   return '<a class="back" href="#login">← '+t('reset_back')+'</a><h1>'+t('reset_t')+'</h1><p class="sub">'+t('reset_intro')+'</p>'+steps+box+
