@@ -1,3 +1,9 @@
+/* Schriften liegen selbst auf unserem Server (kein Google Fonts -> keine IP an Google) */
+@font-face{font-family:'Anton';src:url(fonts/Anton-Regular.ttf) format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url(fonts/SpaceGrotesk-Regular.ttf) format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url(fonts/SpaceGrotesk-Medium.ttf) format('truetype');font-weight:500;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url(fonts/SpaceGrotesk-SemiBold.ttf) format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url(fonts/SpaceGrotesk-Bold.ttf) format('truetype');font-weight:700;font-display:swap}
 /* RAVE//STRANGERS — design system "NACHTSCHICHT"
    Ink-black canvas, bone-white type, one signal red. Square edges and hairlines like a timetable,
    monospace for all data (dates, times, labels), a wide industrial display face for headlines,
