@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data.dart';
@@ -18,6 +20,13 @@ import 'widgets.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Schriften liegen in assets/fonts (keine Anfrage an Google-Server, DSGVO + offline).
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    for (final f in ['anton', 'spacegrotesk']) {
+      yield LicenseEntryWithLineBreaks(['google_fonts'], await rootBundle.loadString('assets/fonts/OFL-$f.txt'));
+    }
+  });
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
