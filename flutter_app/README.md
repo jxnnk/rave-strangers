@@ -41,7 +41,7 @@ Folgen, Bewertungen schreiben, Freunde-Pläne, Events eintragen, Admin. Kommt Sc
 - iOS zeigt die native Apple-Karte (`lib/screens/apple_map_layer.dart`, Paket `apple_maps_flutter`), Android weiter OpenStreetMap.
 - Nahe Clubs werden zu Zahlen-Bubbles zusammengefasst, Tippen zoomt hinein, ab Zoom 14 steht jeder Club einzeln.
 - Kostenlos, kein API-Key. Bauen nur auf einem Mac oder per Cloud-Build (z. B. Codemagic), Apple-Entwicklerkonto nötig.
-- Nach `flutter create .` in `ios/Runner/Info.plist` ergänzen:
+- **iOS-Einstellungen setzt `tool/prepare_ios.sh`** (auf dem Mac: `bash tool/prepare_ios.sh`, sonst automatisch in Codemagic / GitHub Actions). Die Einträge unten sind nur zur Info:
 
 ```xml
 <!-- App und Karte immer im Dunkelmodus -->

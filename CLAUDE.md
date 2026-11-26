@@ -11,7 +11,7 @@ Startstadt: **Karlsruhe**, danach Berlin. Launch-Ziel: so bald wie möglich.
 | Ordner | Inhalt |
 |---|---|
 | `app/` | Web-App (Vanilla JS, `app.js` mit Hash-Router), live über GitHub Pages |
-| `flutter_app/` | Native App (Flutter). `android/` und `ios/` werden lokal erzeugt, nicht im Repo |
+| `flutter_app/` | Native App (Flutter). `android/` und `ios/` werden lokal erzeugt, nicht im Repo. iOS-Einstellungen nur über `tool/prepare_ios.sh` + `ios_assets/` ändern |
 | `supabase/` | Migrationen (`0xx_*.sql`) und Seeds |
 | `DESIGN.md` | Design-Regeln |
 
@@ -56,5 +56,6 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | Profilbilder (Supabase Storage) | erledigt (Web + Flutter, Migration 025) |
 | App-Icon | – |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
-| Impressum, Datenschutz, AGB | – |
+| Impressum, Datenschutz, AGB: Entwurf in `app/legal/`, rote Felder ausfüllen | Jannik |
+| iOS-Beta: Migration 026 ausführen, Apple-Konto, Codemagic (siehe IOS_BETA.md) | Jannik |
 | iOS Public Beta über TestFlight + Codemagic (siehe `IOS_BETA.md`) | Claude: `codemagic.yaml` steht; Melden-Funktion + Datenschutz-Seite offen |
