@@ -65,7 +65,8 @@ class _ResetScreenState extends State<ResetScreen> {
       _startCooldown();
     } on AuthException catch (e) {
       final limit = e.statusCode == '429' || RegExp('rate limit|security purposes', caseSensitive: false).hasMatch(e.message);
-      _err = limit ? t('reset_limit') : e.message;
+      final send = (int.tryParse(e.statusCode ?? '') ?? 0) >= 500 || RegExp('sending|smtp', caseSensitive: false).hasMatch(e.message);
+      _err = limit ? t('reset_limit') : (send ? t('reset_send_err') : e.message);
     } catch (e) {
       _err = '$e';
     }

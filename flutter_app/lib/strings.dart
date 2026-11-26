@@ -129,6 +129,7 @@ const Map<String, Map<String, String>> _s = {
     'reset_wait': 'Nochmal senden in {n} s', 'reset_sent_t': 'Mail ist unterwegs',
     'reset_sent_d': 'Wenn es ein Konto mit {mail} gibt, kommt gleich eine Mail. Schau auch im Spam-Ordner. Öffne nur den neuesten Link, ältere werden ungültig.',
     'reset_limit': 'Gerade wurden zu viele Mails verschickt. Bitte versuch es in etwa einer Stunde nochmal.',
+    'reset_send_err': 'Die Mail konnte gerade nicht verschickt werden. Das liegt an uns, nicht an dir. Bitte versuch es später nochmal.',
   },
   'en': {
     'org_label': 'Label', 'org_collective': 'Collective', 'org_series': 'Event series', 'org_promoter': 'Promoter', 'org_festival': 'Festival',
@@ -257,6 +258,7 @@ const Map<String, Map<String, String>> _s = {
     'reset_wait': 'Send again in {n} s', 'reset_sent_t': 'Email is on its way',
     'reset_sent_d': 'If an account with {mail} exists, an email is coming. Check your spam folder too. Only open the newest link, older ones stop working.',
     'reset_limit': 'Too many emails were sent just now. Please try again in about an hour.',
+    'reset_send_err': 'We couldn’t send the email right now. That’s on us, not you. Please try again later.',
   },
 };
 
