@@ -39,6 +39,22 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 - `sw-cache-guard.js`: blockiert `git commit`/`git push`, wenn `app/` geändert, aber `rs-shell-vNN` nicht hochgezählt ist.
 - `strings-check.js`: meldet nach jeder Bearbeitung fehlende DE/EN-Keys und Dubletten (Regel 8). Von Hand: `node .claude/hooks/strings-check.js`.
 
+## Team
+| Wer | Rechner | Bereich |
+|---|---|---|
+| **Jannik** | Windows (Claude-App + Claude Code) | Web-App (`app/`), Android, Datenbank (`supabase/`), Events, Rechtstexte |
+| **Fero** | Mac (Claude Code, Xcode) | iOS / Swift (`flutter_app/ios/`, `ios_assets/`, `codemagic.yaml`, TestFlight) |
+
+Gemeinsame Dateien (beide fassen sie an, Konfliktgefahr): `flutter_app/lib/strings.dart`, `data.dart`, `pubspec.yaml`, `CLAUDE.md`.
+Vor größeren Änderungen daran kurz im Chat Bescheid geben.
+
+## Wann wer pusht
+1. **Vor dem Arbeiten:** `git checkout dev && git pull`.
+2. **Nach jeder fertigen Teilaufgabe** (nicht erst am Ende des Tages): `git add -A && git commit -m "…" && git pull --rebase origin dev && git push origin dev`.
+3. **Wer zuerst fertig ist, pusht zuerst.** Der andere holt sich das mit `git pull --rebase` vor seinem eigenen Push. Konflikte löst der, der als Zweiter pusht.
+4. **Nach dem Push** kurz im Chat sagen: „gepusht: <was>“.
+5. **Live (`main`)** nur, wenn Jannik „bring live“ sagt. `dev` landet automatisch in der Vorschau unter `/dev/`.
+
 ## Zusammenarbeit
 - **`dev`** ist der gemeinsame Arbeits-Branch. Alle arbeiten und pushen dort.
 - **`main`** ist die Live-Version (GitHub Pages). Nur wenn `dev` getestet ist, wird `dev` in `main` gemergt.
@@ -59,5 +75,5 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | App-Icon | erledigt (Master `flutter_app/branding/app-icon.svg`, `build_icons.sh`; Android: `tool/prepare_android.sh`) |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
 | Impressum, Datenschutz, AGB | erledigt (Kontakt: rave-strangers@mail.de) |
-| iOS-Beta: Migration 026 ausführen, Apple-Konto, Codemagic (siehe IOS_BETA.md) | Jannik |
+| iOS-Beta: Apple-Konto, Codemagic (siehe IOS_BETA.md); Migration 026 ist schon aktiv | Jannik (Konto) + Fero |
 | iOS Public Beta über TestFlight + Codemagic (siehe `IOS_BETA.md`) | Claude: `codemagic.yaml` steht; Melden-Funktion + Datenschutz-Seite offen |
