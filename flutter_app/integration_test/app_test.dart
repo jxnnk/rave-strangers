@@ -7,6 +7,7 @@ import 'package:rave_strangers/data.dart';
 import 'package:rave_strangers/main.dart' as app;
 import 'package:rave_strangers/strings.dart';
 import 'package:rave_strangers/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pumpUntil(WidgetTester tester, bool Function() ok, {int seconds = 30, String what = ''}) async {
   for (var i = 0; i < seconds * 4; i++) {
@@ -20,10 +21,14 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('Neuer Nutzer: Start, umschauen, Events laden, Event öffnen, alle Tabs', (tester) async {
+    // Standort-Erklärung beim ersten Start überspringen (die System-Abfrage kann der Test nicht bedienen).
+    (await SharedPreferences.getInstance()).setBool('loc_asked', true);
     app.main();
-    final skip = find.text('${t('skip')} →');
-    await pumpUntil(tester, () => skip.evaluate().isNotEmpty, what: 'Startbildschirm');
-    await tester.tap(skip);
+    // Finder erst nach dem Start bauen: die App-Sprache steht erst nach initLang fest.
+    Finder skip() => find.text('${t('skip')} →');
+    await pumpUntil(tester, () => skip().evaluate().isNotEmpty, what: 'Startbildschirm');
+    await tester.pump(const Duration(seconds: 3)); // Einblend-Animation
+    await tester.tap(skip());
 
     // Live-Daten aus Supabase
     await pumpUntil(tester, () => !store.loading && store.visibleEvents.isNotEmpty, seconds: 45, what: 'Events aus Supabase');
