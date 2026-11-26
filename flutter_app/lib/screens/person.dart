@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../data.dart';
+import '../report.dart';
 import '../social.dart';
 import '../strings.dart';
 import '../theme.dart';
@@ -105,9 +106,8 @@ class _PersonScreenState extends State<PersonScreen> {
           .select('id,handle,display_name,avatar_url,city,bio,verified,role')
           .eq('id', widget.id)
           .maybeSingle();
-      final a = store.user == null
-          ? <dynamic>[]
-          : await sb.from('attendance').select('event_id').eq('profile_id', widget.id);
+      final a =
+          store.user == null ? <dynamic>[] : await sb.from('attendance').select('event_id').eq('profile_id', widget.id);
       if (!mounted) return;
       setState(() {
         _p = p;
@@ -119,11 +119,55 @@ class _PersonScreenState extends State<PersonScreen> {
     }
   }
 
+  Future<void> _block(String id) async {
+    if (store.user == null) {
+      askLogin(context);
+      return;
+    }
+    final yes = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        backgroundColor: C.surface,
+        content: Text(t('block_q'), style: body(15)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(c, false), child: Text(t('cancel'))),
+          TextButton(
+              onPressed: () => Navigator.pop(c, true),
+              child: Text(t('block'), style: const TextStyle(color: C.accent))),
+        ],
+      ),
+    );
+    if (yes != true) return;
+    try {
+      await sb.from('blocks').insert({'blocker': myId, 'blocked': id});
+      if (!mounted) return;
+      toast(context, t('blocked'));
+      Navigator.of(context).pop();
+    } catch (_) {
+      if (mounted) toast(context, t('err'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = _p;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(actions: [
+        if (p != null && p['id'] != myId)
+          PopupMenuButton<String>(
+            color: C.surface,
+            onSelected: (v) => v == 'block'
+                ? _block(p['id'] as String)
+                : reportContent(context,
+                    kind: 'profile',
+                    targetUser: p['id'] as String,
+                    snippet: [p['display_name'], p['handle'], p['bio']].whereType<String>().join(' · ')),
+            itemBuilder: (_) => [
+              PopupMenuItem(value: 'report', child: Text(t('report_profile'))),
+              PopupMenuItem(value: 'block', child: Text(t('block'))),
+            ],
+          ),
+      ]),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
           : p == null
@@ -142,7 +186,8 @@ class _PersonScreenState extends State<PersonScreen> {
                         Expanded(
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('${name.toUpperCase()}${p['verified'] == true ? ' ✓' : ''}', style: display(26)),
-                            Text('@${p['handle']}${(p['city'] as String?)?.isNotEmpty ?? false ? ' · ${p['city']}' : ''}',
+                            Text(
+                                '@${p['handle']}${(p['city'] as String?)?.isNotEmpty ?? false ? ' · ${p['city']}' : ''}',
                                 style: body(14, color: C.muted)),
                           ]),
                         ),
@@ -164,8 +209,8 @@ class _PersonScreenState extends State<PersonScreen> {
                             }
                             store.toggleFollow(p['id'] as String, Map<String, dynamic>.from(p));
                           }),
-                          RsButton(t('write_dm'), icon: Icons.chat_bubble_outline,
-                              onTap: () => openChat(context, p['id'] as String, name)),
+                          RsButton(t('write_dm'),
+                              icon: Icons.chat_bubble_outline, onTap: () => openChat(context, p['id'] as String, name)),
                         ]),
                       ],
                       Section(1, t('goes_to')),
@@ -223,8 +268,8 @@ class _FollowListScreenState extends State<FollowListScreen> {
   Widget build(BuildContext context) {
     final rows = _rows;
     return Scaffold(
-      appBar: AppBar(
-          title: Text((widget.followers ? t('followers') : t('following')).toUpperCase(), style: display(18))),
+      appBar:
+          AppBar(title: Text((widget.followers ? t('followers') : t('following')).toUpperCase(), style: display(18))),
       body: rows == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(padding: const EdgeInsets.all(18), children: [
@@ -240,7 +285,8 @@ class _FollowListScreenState extends State<FollowListScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('${personName(p)}${p['verified'] == true ? ' ✓' : ''}', style: body(15.5, weight: FontWeight.w700)),
+                          Text('${personName(p)}${p['verified'] == true ? ' ✓' : ''}',
+                              style: body(15.5, weight: FontWeight.w700)),
                           Text('@${p['handle']}', style: body(13, color: C.muted)),
                         ]),
                       ),

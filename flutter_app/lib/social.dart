@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'data.dart';
+import 'report.dart';
 import 'screens/event_detail.dart';
 import 'screens/person.dart';
 import 'strings.dart';
@@ -14,8 +15,9 @@ import 'widgets.dart';
 
 String? get myId => store.user?.id;
 
-String personName(Map<String, dynamic>? p) =>
-    ((p?['display_name'] as String?)?.trim().isNotEmpty ?? false) ? p!['display_name'] as String : '@${p?['handle'] ?? '?'}';
+String personName(Map<String, dynamic>? p) => ((p?['display_name'] as String?)?.trim().isNotEmpty ?? false)
+    ? p!['display_name'] as String
+    : '@${p?['handle'] ?? '?'}';
 
 void showErr(BuildContext context) => toast(context, t('err'));
 
@@ -139,7 +141,8 @@ class _CrewSectionState extends State<CrewSection> {
       Text(t('crew_sub'), style: body(14.5, color: C.muted)),
       const SizedBox(height: 12),
       Wrap(spacing: 8, runSpacing: 8, children: [
-        RsButton(t('crew_group_join'), primary: true, icon: Icons.groups_outlined, onTap: () => openEventGroup(context, e)),
+        RsButton(t('crew_group_join'),
+            primary: true, icon: Icons.groups_outlined, onTap: () => openEventGroup(context, e)),
         RsButton(t('share_wa'), icon: Icons.ios_share, onTap: () => shareEvent(e)),
         RsButton(t('send_to_chat'), icon: Icons.send_outlined, onTap: () => sendEventToChat(context, e)),
       ]),
@@ -170,7 +173,8 @@ class _CrewSectionState extends State<CrewSection> {
           onTap: _busy ? null : _post,
         ),
         const SizedBox(height: 14),
-        if (_posts == null) const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+        if (_posts == null)
+          const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
         if (_posts != null && _posts!.isEmpty) EmptyBox(t('crew_empty')),
         for (final p in _posts ?? const <Map<String, dynamic>>[]) _CrewTile(p, onDelete: () => _delete(p['id'] as int)),
       ],
@@ -192,7 +196,9 @@ class _CrewTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: C.line))),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        InkWell(onTap: () => openPerson(context, p['author'] as String), child: Avatar(name, size: 38, url: prof?['avatar_url'] as String?)),
+        InkWell(
+            onTap: () => openPerson(context, p['author'] as String),
+            child: Avatar(name, size: 38, url: prof?['avatar_url'] as String?)),
         const SizedBox(width: 12),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -207,8 +213,20 @@ class _CrewTile extends StatelessWidget {
             const SizedBox(height: 8),
             mine
                 ? RsButton(t('delete'), small: true, onTap: onDelete)
-                : RsButton(t('write_dm'), small: true, icon: Icons.chat_bubble_outline,
-                    onTap: () => openChat(context, p['author'] as String, personName(prof))),
+                : Wrap(spacing: 8, runSpacing: 8, children: [
+                    RsButton(t('write_dm'),
+                        small: true,
+                        icon: Icons.chat_bubble_outline,
+                        onTap: () => openChat(context, p['author'] as String, personName(prof))),
+                    RsButton(t('report'),
+                        small: true,
+                        icon: Icons.flag_outlined,
+                        onTap: () => reportContent(context,
+                            kind: 'crew_post',
+                            targetUser: p['author'] as String?,
+                            refId: (p['id'] as num?)?.toInt(),
+                            snippet: p['body'] as String?)),
+                  ]),
           ]),
         ),
       ]),
@@ -304,9 +322,11 @@ class _RidesSectionState extends State<RidesSection> {
                 const SizedBox(height: 8),
                 r['driver'] == myId
                     ? RsButton(t('delete'), small: true, onTap: () => _delete(r['id'] as int))
-                    : RsButton(t('ride_ask'), small: true, icon: Icons.chat_bubble_outline,
-                        onTap: () => openChat(context, r['driver'] as String,
-                            personName(r['profiles'] as Map<String, dynamic>?))),
+                    : RsButton(t('ride_ask'),
+                        small: true,
+                        icon: Icons.chat_bubble_outline,
+                        onTap: () => openChat(
+                            context, r['driver'] as String, personName(r['profiles'] as Map<String, dynamic>?))),
               ]),
             ),
           ]),
@@ -359,8 +379,7 @@ class _RideFormState extends State<_RideForm> {
       lastDate: init.add(const Duration(days: 1)),
     );
     if (d == null || !mounted) return;
-    final tm = await showTimePicker(
-        context: context, initialTime: TimeOfDay(hour: (start.hour + 22) % 24, minute: 0));
+    final tm = await showTimePicker(context: context, initialTime: TimeOfDay(hour: (start.hour + 22) % 24, minute: 0));
     if (tm == null) return;
     setState(() => _when = DateTime(d.year, d.month, d.day, tm.hour, tm.minute));
   }
@@ -399,7 +418,8 @@ class _RideFormState extends State<_RideForm> {
         Text(t('ride_offer').toUpperCase(), style: display(22)),
         const SizedBox(height: 16),
         Text(t('ride_from').toUpperCase(), style: mono(10.5)),
-        TextField(controller: _from, maxLength: 60, style: body(15.5), decoration: const InputDecoration(counterText: '')),
+        TextField(
+            controller: _from, maxLength: 60, style: body(15.5), decoration: const InputDecoration(counterText: '')),
         const SizedBox(height: 12),
         Text(t('ride_when').toUpperCase(), style: mono(10.5)),
         const SizedBox(height: 6),
@@ -421,7 +441,8 @@ class _RideFormState extends State<_RideForm> {
         ]),
         const SizedBox(height: 12),
         Text(t('ride_note').toUpperCase(), style: mono(10.5)),
-        TextField(controller: _note, maxLength: 200, style: body(15.5), decoration: const InputDecoration(counterText: '')),
+        TextField(
+            controller: _note, maxLength: 200, style: body(15.5), decoration: const InputDecoration(counterText: '')),
         const SizedBox(height: 16),
         RsButton(_busy ? '…' : t('ride_offer'), primary: true, onTap: _busy ? null : _save),
       ]),
@@ -532,6 +553,27 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  Future<void> _reportMsg(Map<String, dynamic> m) async {
+    final go = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: C.surface,
+      shape: const RoundedRectangleBorder(),
+      builder: (c) => SafeArea(
+        child: ListTile(
+          leading: const Icon(Icons.flag_outlined, color: C.accent),
+          title: Text(t('report_msg'), style: body(15)),
+          onTap: () => Navigator.pop(c, true),
+        ),
+      ),
+    );
+    if (go != true || !mounted) return;
+    await reportContent(context,
+        kind: 'message',
+        targetUser: m['sender'] as String?,
+        refId: (m['id'] as num?)?.toInt(),
+        snippet: m['body'] as String?);
+  }
+
   Future<void> _block() async {
     if (widget.otherId == null) return;
     final yes = await showDialog<bool>(
@@ -541,7 +583,9 @@ class _ChatScreenState extends State<ChatScreen> {
         content: Text(t('block_q'), style: body(15)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(c, false), child: Text(t('cancel'))),
-          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(t('block'), style: const TextStyle(color: C.accent))),
+          TextButton(
+              onPressed: () => Navigator.pop(c, true),
+              child: Text(t('block'), style: const TextStyle(color: C.accent))),
         ],
       ),
     );
@@ -572,10 +616,28 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           PopupMenuButton<String>(
             color: C.surface,
-            onSelected: (v) => v == 'leave' ? _leave() : _block(),
+            onSelected: (v) {
+              if (v == 'leave') {
+                _leave();
+              } else if (v == 'block') {
+                _block();
+              } else {
+                reportContent(context,
+                    kind: widget.isGroup ? 'group' : 'profile',
+                    targetUser: widget.otherId,
+                    refId: widget.conversationId,
+                    snippet: widget.otherName);
+              }
+            },
             itemBuilder: (_) => widget.isGroup
-                ? [PopupMenuItem(value: 'leave', child: Text(t('leave_group')))]
-                : [PopupMenuItem(value: 'block', child: Text(t('block')))],
+                ? [
+                    PopupMenuItem(value: 'leave', child: Text(t('leave_group'))),
+                    PopupMenuItem(value: 'report', child: Text(t('report_group'))),
+                  ]
+                : [
+                    PopupMenuItem(value: 'block', child: Text(t('block'))),
+                    PopupMenuItem(value: 'report', child: Text(t('report'))),
+                  ],
           ),
         ],
       ),
@@ -590,26 +652,29 @@ class _ChatScreenState extends State<ChatScreen> {
               final me = m['sender'] == myId;
               return Align(
                 alignment: me ? Alignment.centerRight : Alignment.centerLeft,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                  decoration: BoxDecoration(
-                    color: me ? C.accent : C.surface2,
-                    border: me ? null : Border.all(color: C.line),
+                child: GestureDetector(
+                  onLongPress: me ? null : () => _reportMsg(m),
+                  child: Container(
+                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                    decoration: BoxDecoration(
+                      color: me ? C.accent : C.surface2,
+                      border: me ? null : Border.all(color: C.line),
+                    ),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                      if (widget.isGroup && !me)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(personName(m['profiles'] as Map<String, dynamic>?),
+                              style: body(12.5, color: C.accent, weight: FontWeight.w700)),
+                        ),
+                      _MsgBody(m['body'] as String? ?? '', me: me, onEvent: _openEvent),
+                      const SizedBox(height: 3),
+                      Text(fmtTime(berlin(DateTime.parse(m['created_at'] as String))),
+                          style: mono(9, color: me ? C.ink : C.muted, spacing: 0.3)),
+                    ]),
                   ),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    if (widget.isGroup && !me)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(personName(m['profiles'] as Map<String, dynamic>?),
-                            style: body(12.5, color: C.accent, weight: FontWeight.w700)),
-                      ),
-                    _MsgBody(m['body'] as String? ?? '', me: me, onEvent: _openEvent),
-                    const SizedBox(height: 3),
-                    Text(fmtTime(berlin(DateTime.parse(m['created_at'] as String))),
-                        style: mono(9, color: me ? C.ink : C.muted, spacing: 0.3)),
-                  ]),
                 ),
               );
             },
@@ -646,7 +711,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-
 /// Message text; "[[event:123]]" becomes an event card with a ticket button.
 class _MsgBody extends StatelessWidget {
   final String text;
@@ -669,14 +733,14 @@ class _MsgBody extends StatelessWidget {
     return InkWell(
       onTap: () => onEvent(e.id),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('${fmtDow(e.start)} ${e.start.day}.${e.start.month}. · ${e.timeLabel}', style: body(12.5, color: fg, weight: FontWeight.w700)),
+        Text('${fmtDow(e.start)} ${e.start.day}.${e.start.month}. · ${e.timeLabel}',
+            style: body(12.5, color: fg, weight: FontWeight.w700)),
         const SizedBox(height: 2),
         Text(e.title.toUpperCase(), style: display(19, color: fg)),
         if (v != null) Text(v.name, style: body(13.5, color: fg)),
         const SizedBox(height: 8),
         Row(mainAxisSize: MainAxisSize.min, children: [
-          if (e.ticketUrl != null)
-            RsButton('${t('get_tix')} ↗', small: true, onTap: () => openUrl(e.ticketUrl!)),
+          if (e.ticketUrl != null) RsButton('${t('get_tix')} ↗', small: true, onTap: () => openUrl(e.ticketUrl!)),
           if (e.ticketUrl != null) const SizedBox(width: 6),
           RsButton(t('open'), small: true, onTap: () => onEvent(e.id)),
         ]),
