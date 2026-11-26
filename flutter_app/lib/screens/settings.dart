@@ -107,7 +107,7 @@ class SettingsScreen extends StatelessWidget {
     ctrl.dispose();
     if (mail == null || !mail.contains('@') || mail == store.user?.email) return;
     try {
-      await sb.auth.updateUser(UserAttributes(email: mail), emailRedirectTo: '$webUrl#me');
+      await sb.auth.updateUser(UserAttributes(email: mail), emailRedirectTo: webUrl);
       if (context.mounted) toast(context, t('set_email_sent'));
     } on AuthException catch (e) {
       if (context.mounted) {

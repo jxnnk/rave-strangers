@@ -6,7 +6,16 @@
 
 var SB_URL='https://wnmxloykrnbrpvzxhnsb.supabase.co';
 var SB_KEY='sb_publishable_4vHWXBP7d04RUXs7lOQ9nA_yys9gxdN';   /* publishable key: safe in the browser, protected by Row Level Security */
+/* Mail-Links (Passwort, Bestätigung) kommen als #access_token=…&type=recovery zurück.
+   Ältere Links hängen das an einen vorhandenen Hash (#newpw#access_token=…), das versteht supabase-js nicht:
+   vorher geradeziehen. Und merken, dass es ein Passwort-Link war. */
+(function(){ var h=location.hash||'', i=h.indexOf('access_token=');
+  if(i>1){ h='#'+h.slice(i); try{ history.replaceState(null,'',location.pathname+location.search+h); }catch(e){ location.hash=h; } }
+  if(/type=recovery/.test(location.hash||'')){ try{ sessionStorage.setItem('rs-recovery','1'); }catch(e){} }
+})();
 var sb=window.supabase.createClient(SB_URL,SB_KEY);
+/* Ziel für Mail-Links: die Startseite ohne Hash (ein Hash im Ziel würde die Anmelde-Daten im Link kaputt machen) */
+function authBack(){ return location.origin+location.pathname; }
 
 /* ---------- Texts ---------- */
 var T={
@@ -1605,7 +1614,7 @@ document.addEventListener('submit',function(ev){
       if(pw.length<8){ errEl.textContent=t('err_pw'); return; }
       if(!fd.get('age')){ errEl.textContent=t('terms'); return; }
       busy(true);
-      sb.auth.signUp({email:email,password:pw,options:{data:REF?{display_name:name,ref:REF}:{display_name:name},emailRedirectTo:location.origin+location.pathname+'#me'}}).then(function(r){
+      sb.auth.signUp({email:email,password:pw,options:{data:REF?{display_name:name,ref:REF}:{display_name:name},emailRedirectTo:authBack()}}).then(function(r){
         busy(false);
         if(r.error){ errEl.textContent=r.error.message||t('err_generic'); return; }
         var u=r.data&&r.data.user;
@@ -1620,7 +1629,7 @@ document.addEventListener('submit',function(ev){
   } else if(kind==='email'){
     var nm=String(fd.get('email')||'').trim(), msgEl=document.getElementById('s-mail-msg');
     if(!nm||nm===S.user.email) return;
-    sb.auth.updateUser({email:nm},{emailRedirectTo:location.origin+location.pathname+'#me'}).then(function(r){
+    sb.auth.updateUser({email:nm},{emailRedirectTo:authBack()}).then(function(r){
       if(r.error){ msgEl.textContent=/rate/i.test(r.error.message||'')?t('reset_rate'):(r.error.message||t('err_generic')); return; }
       msgEl.textContent=t('set_email_sent'); });
   } else if(kind==='reset'){
@@ -1628,7 +1637,7 @@ document.addEventListener('submit',function(ev){
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(rm)){ S.resetErr=t('email')+'?'; render(false); return; }
     if(resetLeft()) return;
     busy(true);
-    sb.auth.resetPasswordForEmail(rm,{redirectTo:location.origin+location.pathname+'#newpw'}).then(function(r){
+    sb.auth.resetPasswordForEmail(rm,{redirectTo:authBack()}).then(function(r){
       busy(false);
       var err=r&&r.error;
       if(err&&(err.status===429||/rate limit|security purposes/i.test(err.message||''))){ S.resetErr=t('reset_limit'); }
@@ -1736,7 +1745,8 @@ window.addEventListener('hashchange',function(){ if(location.hash==='#chats'||lo
 render(false);
 var first=true;
 sb.auth.onAuthStateChange(function(evName,session){
-  if(evName==='PASSWORD_RECOVERY'){ S.recovery=true; setTimeout(function(){ location.hash='#newpw'; },0); }
+  var rec=false; try{ rec=sessionStorage.getItem('rs-recovery')==='1'; }catch(e){}
+  if(evName==='PASSWORD_RECOVERY'||(rec&&session)){ S.recovery=true; try{ sessionStorage.removeItem('rs-recovery'); }catch(e){} setTimeout(function(){ location.hash='#newpw'; },0); }
   var uid=session&&session.user?session.user.id:null, prev=S.user?S.user.id:null;
   S.user=session?session.user:null;
   if(uid===prev&&!first) return;

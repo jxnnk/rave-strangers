@@ -60,7 +60,7 @@ class _ResetScreenState extends State<ResetScreen> {
       _err = null;
     });
     try {
-      await sb.auth.resetPasswordForEmail(email, redirectTo: '$webUrl#newpw');
+      await sb.auth.resetPasswordForEmail(email, redirectTo: webUrl);
       _sentTo = email;
       _startCooldown();
     } on AuthException catch (e) {

@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
         _msg = null;
       } else {
         final r = await sb.auth.signUp(
-            email: email, password: pw, data: {'display_name': name}, emailRedirectTo: '$webUrl#me');
+            email: email, password: pw, data: {'display_name': name}, emailRedirectTo: webUrl);
         if (r.user != null && (r.user!.identities?.isEmpty ?? false)) {
           _msg = t('signup_exists');
           _msgOk = false;

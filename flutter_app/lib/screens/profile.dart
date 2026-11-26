@@ -140,7 +140,7 @@ class _AuthFormState extends State<_AuthForm> {
         _msg = null;
       } else {
         final r = await sb.auth.signUp(
-            email: email, password: pw, data: {'display_name': name}, emailRedirectTo: '$webUrl#me');
+            email: email, password: pw, data: {'display_name': name}, emailRedirectTo: webUrl);
         // Supabase sends no mail for an address that already has an account (identities is empty)
         if (r.user != null && (r.user!.identities?.isEmpty ?? false)) {
           _msg = t('signup_exists');
