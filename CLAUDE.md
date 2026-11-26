@@ -57,6 +57,6 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | Profilbilder (Supabase Storage) | erledigt (Web + Flutter, Migration 025) |
 | App-Icon | erledigt (Master `flutter_app/branding/app-icon.svg`, `build_icons.sh`; Android: `tool/prepare_android.sh`) |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
-| Impressum, Datenschutz, AGB: Entwurf in `app/legal/`, rote Felder ausfüllen | Jannik |
+| Impressum, Datenschutz, AGB | erledigt (Kontakt: rave-strangers@mail.de) |
 | iOS-Beta: Migration 026 ausführen, Apple-Konto, Codemagic (siehe IOS_BETA.md) | Jannik |
 | iOS Public Beta über TestFlight + Codemagic (siehe `IOS_BETA.md`) | Claude: `codemagic.yaml` steht; Melden-Funktion + Datenschutz-Seite offen |
