@@ -54,7 +54,7 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | Apple- und Google-Login | – |
 | Push-Nachrichten (Firebase) | – |
 | Profilbilder (Supabase Storage) | erledigt (Web + Flutter, Migration 025) |
-| App-Icon | – |
+| App-Icon | erledigt (Master `flutter_app/branding/app-icon.svg`, `build_icons.sh`; Android: `tool/prepare_android.sh`) |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
 | Impressum, Datenschutz, AGB: Entwurf in `app/legal/`, rote Felder ausfüllen | Jannik |
 | iOS-Beta: Migration 026 ausführen, Apple-Konto, Codemagic (siehe IOS_BETA.md) | Jannik |
