@@ -37,7 +37,7 @@ Push-Nachrichten, App-Store-Screenshots, DSA-Händlerstatus (erst für den echte
 ## Was das Repo jetzt automatisch erledigt (Stand 26.11.)
 
 - `flutter_app/tool/prepare_ios.sh`: erzeugt `ios/`, setzt Bundle-ID, Name, Dunkelmodus, nur iPhone + Hochformat, iOS 15, Export-Compliance (`ITSAppUsesNonExemptEncryption=false`), ehrliche Zweckangaben, App-Icon (`ios_assets/`), dunklen Startbildschirm und das Privacy Manifest (`PrivacyInfo.xcprivacy`). Läuft in Codemagic und in GitHub Actions.
-- GitHub Actions „iOS check“ (`.github/workflows/ios.yml`): bei jeder Änderung an `flutter_app/` Analyse + Tests, Release-Build ohne Signatur und Start im iPhone-Simulator mit Screenshot (Artefakt `ios-simulator`). Ist der Check grün, kompiliert und startet die App.
+- GitHub Actions „iOS check“ (`.github/workflows/ios.yml`): bei jeder Änderung an `flutter_app/` Analyse + Tests, Release-Build ohne Signatur, Start im iPhone-Simulator mit Screenshot und Absturz-Check, dann Integrationstest (`integration_test/app_test.dart`): ohne Konto umschauen, Events live aus Supabase laden, Event öffnen, alle 5 Tabs inkl. Apple-Karte. Ist der Check grün, kompiliert, startet und funktioniert die App.
 - Schriften sind in der App enthalten (kein Abruf bei Google).
 
 ## Formulare in App Store Connect (zum Abtippen)
@@ -59,7 +59,7 @@ Push-Nachrichten, App-Store-Screenshots, DSA-Händlerstatus (erst für den echte
 - Was testen: „Events ansehen, ‚Ich gehe hin‘, Crew-Post schreiben, Chat, Mitfahren, Ticket-Alarm, Profilbild. Fehler bitte per Screenshot im TestFlight-Feedback.“
 - Anmeldung erforderlich: Ja → **Demo-Konto** (in Supabase anlegen, E-Mail bestätigt, mit Profil und einem Crew-Post).
 - Prüfnotizen (EN):
-  > Rave Strangers is a community app for techno events in Germany (18+). Browsing works without an account ("Erst mal umschauen"). Social features need the demo account above. User-generated content: users can report any message (long-press), crew post, profile or group, and block users (profile menu or chat menu). Reports are reviewed within 24 hours. Users accept terms with zero tolerance for objectionable content at sign-up. Account deletion: Profile → Settings → Delete account. Location is only used once on-device ("find my city") and never stored.
+  > Rave Strangers is a community app for techno events in Germany (18+). Browsing works without an account ("Erst mal umschauen"). Social features need the demo account above. User-generated content: users can report any message (long-press), crew post, profile or group, and block users (profile menu or chat menu). Reports are reviewed within 24 hours. Users accept terms with zero tolerance for objectionable content at sign-up. Account deletion: Profile → Settings → Delete account. Location is optional (while in use only): after a short explanation with a single "Continue" button the system dialog appears; the position is only used on-device to pick the nearest city with events and is never stored or sent.
 
 ## Bewusst offen (nicht nötig für TestFlight)
 - Englische Zweckangaben (InfoPlist.strings) – Texte sind deutsch, App-Sprache Deutsch.
