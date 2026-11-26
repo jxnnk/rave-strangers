@@ -51,6 +51,7 @@ class _InboxScreenState extends State<InboxScreen> {
       'new_event' when n['organizer_id'] != null =>
         t('n_new_org', {'o': store.orgById(n['organizer_id'] as int)?.name ?? '', 'e': title}),
       'new_event' => t('n_new', {'v': v?.name ?? '', 'e': title}),
+      'review' => t('n_review', {'e': title}),
       _ => t('n_rem', {'e': title}),
     };
   }
@@ -58,6 +59,7 @@ class _InboxScreenState extends State<InboxScreen> {
   IconData _icon(String? k) => switch (k) {
         'tickets' => Icons.confirmation_number_outlined,
         'new_event' => Icons.fiber_new_outlined,
+        'review' => Icons.star_outline,
         _ => Icons.alarm,
       };
 

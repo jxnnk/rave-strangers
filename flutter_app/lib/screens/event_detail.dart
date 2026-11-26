@@ -8,6 +8,7 @@ import '../strings.dart';
 import '../theme.dart';
 import '../widgets.dart';
 import 'club.dart';
+import 'event_ratings.dart';
 
 class EventDetail extends StatelessWidget {
   final Ev e;
@@ -44,7 +45,7 @@ class EventDetail extends StatelessWidget {
               Wrap(spacing: 10, runSpacing: 4, children: [for (final g in e.genres) Tag(g)]),
               const SizedBox(height: 18),
               Wrap(spacing: 8, runSpacing: 8, children: [
-                RsButton(goes ? '✓ ${t('going_on')}' : t('going'),
+                RsButton(e.phase == 'past' ? (goes ? '✓ ${t('was_there_on')}' : t('was_there')) : (goes ? '✓ ${t('going_on')}' : t('going')),
                     primary: !goes,
                     active: goes,
                     onTap: () async {
@@ -68,6 +69,7 @@ class EventDetail extends StatelessWidget {
                 RsButton(t('share'), icon: Icons.ios_share, onTap: () => shareEvent(e)),
                 if (v != null) RsButton(t('route'), onTap: () => openUrl(routeUrl(v))),
               ]),
+              CheckinCard(e),
               _SocialProof(e, going: n),
               OrgChips(e),
               const SizedBox(height: 18),
@@ -77,6 +79,7 @@ class EventDetail extends StatelessWidget {
                 if (v != null) [t('venue'), v.name],
                 if (v != null) [t('address'), v.address.isNotEmpty ? v.address : v.city],
               ]),
+              EventRatings(e),
               Section(1, t('lineup')),
               if (e.lineup.isEmpty) Text(t('tba'), style: body(15, color: C.muted)),
               for (final name in e.lineup)

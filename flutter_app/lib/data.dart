@@ -135,6 +135,15 @@ class Ev {
 
   DateTime get start => berlin(startUtc);
   DateTime get day => dayKey(start);
+  /// 'future' (mehr als 1 h vorher), 'live' (läuft, bis 2 h nach Ende) oder 'past'.
+  String get phase {
+    final now = DateTime.now().toUtc();
+    final end = endUtc ?? startUtc.add(const Duration(hours: 14));
+    if (now.isBefore(startUtc.subtract(const Duration(hours: 1)))) return 'future';
+    if (now.isBefore(end.add(const Duration(hours: 2)))) return 'live';
+    return 'past';
+  }
+
   bool get isUpcoming => (endUtc ?? startUtc.add(const Duration(hours: 12))).isAfter(DateTime.now().toUtc());
   String get timeLabel => timeKnown ? fmtTime(start) : t('tba');
 }
@@ -177,6 +186,27 @@ class Store extends ChangeNotifier {
   List<Headline> headlines = [];
   List<Post> posts = [];
   Set<int> going = {};
+  Set<int> checkins = {}; // Events, bei denen ich vor Ort eingecheckt habe (DB 027)
+  Set<int> myEvRev = {}; // Events, die ich schon bewertet habe
+  /// Darf ich dieses Event bewerten? Dabei gewesen, angefangen, höchstens 3 Wochen her.
+  bool canRate(Ev e) =>
+      user != null && going.contains(e.id) && e.phase != 'future' &&
+      DateTime.now().toUtc().difference(e.startUtc).inDays < 21;
+  /// Vergangene Events, bei denen ich war und noch nicht bewertet habe (neueste zuerst).
+  List<Ev> get toRate => events.where((e) => e.phase == 'past' && canRate(e) && !myEvRev.contains(e.id)).toList()
+    ..sort((a, b) => b.startUtc.compareTo(a.startUtc));
+  Future<String> checkIn(int eventId) async {
+    final r = await sb.rpc('check_in', params: {'p_event': eventId}) as String?;
+    if (r == 'ok') {
+      checkins.add(eventId);
+      if (!going.contains(eventId)) {
+        going.add(eventId);
+        counts[eventId] = (counts[eventId] ?? 0) + 1;
+      }
+      notifyListeners();
+    }
+    return r ?? 'err';
+  }
   Set<int> saved = {};
   Set<int> alarms = {}; // bookmarks with remind = ticket alert
   Set<int> vfollow = {}; // followed clubs -> new dates land in notifications
@@ -273,7 +303,8 @@ class Store extends ChangeNotifier {
     error = null;
     notifyListeners();
     try {
-      final since = DateTime.now().toUtc().subtract(const Duration(days: 1)).toIso8601String();
+      // 14 Tage zurück: vergangene Events braucht es für Bewertungen (visibleEvents zeigt weiter nur kommende)
+      final since = DateTime.now().toUtc().subtract(const Duration(days: 14)).toIso8601String();
       final r = await Future.wait<List<Map<String, dynamic>>>([
         sb.from('venues').select('id,name,city,address,lat,lon,approx,kind,rules'),
         sb
@@ -331,6 +362,8 @@ class Store extends ChangeNotifier {
   Future<void> loadMine() async {
     final u = user;
     if (u == null) {
+      checkins = {};
+      myEvRev = {};
       going = {};
       saved = {};
       alarms = {};
@@ -361,6 +394,14 @@ class Store extends ChangeNotifier {
       going = g;
       attRows = List<Map<String, dynamic>>.from(att);
       saved = bm.map((b) => b['event_id'] as int).toSet();
+      try {
+        final ci = await sb.from('checkins').select('event_id').eq('profile_id', u.id);
+        checkins = ci.map((x) => x['event_id'] as int).toSet();
+        final mr = await sb.from('reviews').select('event_id').eq('author', u.id);
+        myEvRev = mr.map((x) => x['event_id'] as int?).whereType<int>().toSet();
+      } catch (e) {
+        debugPrint('checkins/reviews failed: $e');
+      }
       alarms = bm.where((b) => b['remind'] == true).map((b) => b['event_id'] as int).toSet();
       final fl = await sb
           .from('follows')

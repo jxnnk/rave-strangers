@@ -50,6 +50,7 @@ Nach Änderungen an `app/` den Cache in `app/sw.js` hochzählen (`rs-shell-vNN`)
 | Aufgabe | Wer |
 |---|---|
 | Flutter: neuen Stand kompilieren und Fehler fixen | Jannik |
+| Event-Bewertungen + Check-in | erledigt (Web + Flutter, DB 027/028) |
 | PostHog-Tracking mit Einwilligungs-Dialog (Web + Flutter) | – |
 | Apple- und Google-Login | – |
 | Push-Nachrichten (Firebase) | – |

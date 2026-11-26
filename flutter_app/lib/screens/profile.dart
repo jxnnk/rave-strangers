@@ -68,6 +68,13 @@ class _Me extends StatelessWidget {
         RsButton(t('edit_profile'), icon: Icons.edit_outlined,
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingsScreen()))),
         const SizedBox(height: 22),
+        if (store.toRate.isNotEmpty) ...[
+          Section(0, t('er_torate')),
+          Text(t('er_torate_sub'), style: body(14, color: C.muted)),
+          const SizedBox(height: 6),
+          for (final e in store.toRate.take(5)) EventRow(e),
+          const SizedBox(height: 18),
+        ],
         const InviteBox(),
         Section(1, t('my_going')),
         if (going.isEmpty) EmptyBox(t('none_yet')),
