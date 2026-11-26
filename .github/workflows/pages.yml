@@ -1,28 +1,59 @@
-# Publishes the web app in app/ to GitHub Pages on every push to main.
+# Publishes the web app to GitHub Pages.
+#   main -> https://jxnnk.github.io/rave-strangers/      (live)
+#   dev  -> https://jxnnk.github.io/rave-strangers/dev/  (Vorschau zum Testen, nicht in Suchmaschinen)
+# GitHub Pages erlaubt Deployments standardmäßig nur von main. Ein Push auf dev startet deshalb
+# diesen Workflow noch einmal auf main; der baut dann beide Stände zusammen.
 name: Deploy app to GitHub Pages
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths: ['app/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
+  trigger-from-dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy auf main anstoßen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main
+
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: live
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+          path: preview
+      - name: Seite zusammenbauen (live + /dev/)
+        run: |
+          mkdir -p _site/dev
+          cp -r live/app/. _site/
+          cp -r preview/app/. _site/dev/
+          # Vorschau: nicht indexieren, roter Hinweis oben, eigener Cache-Name
+          sed -i 's|<head>|<head><meta name="robots" content="noindex,nofollow">|' _site/dev/index.html
+          sed -i 's|<body\([^>]*\)>|<body\1><div style="position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:9999;background:#FF2B1C;color:#111113;font:700 10px/1.7 sans-serif;padding:0 10px;pointer-events:none">DEV-VORSCHAU</div>|' _site/dev/index.html
+          sed -i "s|var CACHE='rs-shell-|var CACHE='rs-dev-shell-|" _site/dev/sw.js
+          echo "live: $(git -C live log -1 --format=%h) · dev: $(git -C preview log -1 --format=%h)"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: app
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
