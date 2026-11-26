@@ -47,6 +47,7 @@ class _ReportSheetState extends State<_ReportSheet> {
   String? _reason;
   bool _block = false;
   bool _busy = false;
+  String? _error;
   final _note = TextEditingController();
 
   @override
@@ -81,8 +82,10 @@ class _ReportSheetState extends State<_ReportSheet> {
     } catch (e) {
       debugPrint('report failed: $e');
       if (!mounted) return;
-      setState(() => _busy = false);
-      toast(context, '$e'.contains('rate_limited') ? t('report_rate') : t('err'));
+      setState(() {
+        _busy = false;
+        _error = '$e'.contains('rate_limited') ? t('report_rate') : t('err');
+      });
     }
   }
 
@@ -131,6 +134,8 @@ class _ReportSheetState extends State<_ReportSheet> {
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(t('report_block'), style: body(15)),
               ),
+            if (_error != null)
+              Padding(padding: const EdgeInsets.only(top: 4), child: Text(_error!, style: body(14, color: C.accent))),
             const SizedBox(height: 8),
             SizedBox(
               width: double.infinity,

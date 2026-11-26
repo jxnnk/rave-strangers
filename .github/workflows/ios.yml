@@ -4,7 +4,7 @@ name: iOS check
 on:
   push:
     branches: [dev, main]
-    paths: ['flutter_app/**', '.github/workflows/ios.yml']
+    paths: ['flutter_app/**', '.github/workflows/ios.yml', '!flutter_app/**/*.md']
   workflow_dispatch:
 concurrency:
   group: ios-${{ github.ref }}
