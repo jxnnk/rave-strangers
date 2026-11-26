@@ -180,7 +180,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
     final content = SafeArea(
       child: Stack(children: [
-        Positioned(top: 6, right: 12, child: _in(0, const LangSwitch())),
         LayoutBuilder(builder: (context, box) {
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -219,6 +218,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             ),
           );
         }),
+        // zuletzt, damit es über der Scroll-Fläche liegt und Antippen ankommt
+        Positioned(top: 6, right: 12, child: _in(0, const LangSwitch())),
       ]),
     );
     return widget.embedded ? content : Scaffold(backgroundColor: C.bg, body: AutofillGroup(child: content));

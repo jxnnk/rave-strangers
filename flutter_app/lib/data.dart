@@ -103,6 +103,8 @@ class Ev {
   final List<String> genres, lineup;
   final int lineupMore;
   final String? ticketUrl, sourceUrl, priceText, ticketStatus;
+  /// Preis in der App-Sprache ("VVK ab 35 €" -> "Presale from €35").
+  String? get price => priceText == null ? null : localPrice(priceText!);
 
   Ev.fromMap(Map<String, dynamic> m)
       : id = m['id'] as int,
@@ -584,3 +586,25 @@ class Store extends ChangeNotifier {
 }
 
 final store = Store();
+
+/// Preise kommen auf Deutsch aus den Club-Seiten. Für Englisch die üblichen Wörter übersetzen.
+String localPrice(String p) {
+  if (appLang == 'de') return p;
+  var s = p;
+  const words = {
+    r'\bVorverkauf\b': 'Presale',
+    r'\bVVK\b': 'Presale',
+    r'\bAbendkasse\b': 'At the door',
+    r'\bAK\b': 'Door',
+    r'\bEintritt frei\b': 'Free entry',
+    r'\bkostenlos\b': 'free',
+    r'\bermäßigt\b': 'reduced',
+    r'\bab\b': 'from',
+    r'\bbis\b': 'until',
+    r'\bUhr\b': '',
+  };
+  words.forEach((k, v) => s = s.replaceAll(RegExp(k, caseSensitive: false), v));
+  // 29,90 € -> €29.90
+  s = s.replaceAllMapped(RegExp(r'(\d+)(?:,(\d{1,2}))?\s?€'), (m) => '€${m[1]}${m[2] != null ? '.${m[2]}' : ''}');
+  return s.replaceAll(RegExp(r'\s{2,}'), ' ').trim();
+}

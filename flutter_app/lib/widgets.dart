@@ -269,8 +269,8 @@ class LangSwitch extends StatelessWidget {
           child: InkWell(
             onTap: () => store.setLang(code),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              child: Text(code.toUpperCase(), style: mono(11, color: appLang == code ? C.bg : C.muted)),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+              child: Text(code.toUpperCase(), style: mono(12, color: appLang == code ? C.bg : C.muted)),
             ),
           ),
         );
@@ -339,7 +339,7 @@ class FlyerCard extends StatelessWidget {
                       child: Text('${v?.name ?? ''} · ${e.timeLabel}',
                           maxLines: 1, overflow: TextOverflow.ellipsis, style: body(13.5, color: C.ink, weight: FontWeight.w700)),
                     ),
-                    if (e.priceText != null) Text(e.priceText!, style: body(13.5, color: C.ink, weight: FontWeight.w700)),
+                    if (e.price != null) Text(e.price!, style: body(13.5, color: C.ink, weight: FontWeight.w700)),
                   ]),
                   if (crew > 0) ...[
                     const SizedBox(height: 4),

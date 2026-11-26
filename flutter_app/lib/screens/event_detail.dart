@@ -134,7 +134,8 @@ class _Tickets extends StatelessWidget {
   const _Tickets(this.e);
   @override
   Widget build(BuildContext context) {
-    final st = e.ticketStatus ?? 'unknown';
+    var st = e.ticketStatus ?? 'unknown';
+    if (st == 'unknown' && e.ticketUrl != null) st = 'shop'; // Shop-Link da, Status unbekannt
     final dot = switch (st) {
       'available' => C.green,
       'few' => C.amber,
@@ -150,10 +151,17 @@ class _Tickets extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(color: C.surface, border: Border.all(color: st == 'sold_out' ? C.accent : C.line2)),
-        child: Wrap(crossAxisAlignment: WrapCrossAlignment.center, spacing: 12, runSpacing: 6, children: [
-          Container(width: 10, height: 10, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)),
-          Text(t('tix_$st').toUpperCase(), style: mono(12, color: C.text)),
-          if (e.priceText != null) Text('${t('price')}: ${e.priceText}'.toUpperCase(), style: mono(11.5)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [
+            Container(width: 10, height: 10, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(t('tix_$st').toUpperCase(), style: mono(12, color: C.text))),
+          ]),
+          if (e.price != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 22, top: 6),
+              child: Text('${t('price')}: ${e.price}', style: body(14, color: C.muted)),
+            ),
         ]),
       ),
       const SizedBox(height: 12),
@@ -198,7 +206,8 @@ class _Tickets extends StatelessWidget {
 
 
 /// Tickets can't be bought right now -> offer the ticket alert instead.
-bool needsAlarm(Ev e) => e.ticketUrl == null || e.ticketStatus == 'sold_out' || e.ticketStatus == null || e.ticketStatus == 'unknown';
+/// Ticket-Alarm nur anbieten, wenn man gerade wirklich keine Tickets kaufen kann.
+bool needsAlarm(Ev e) => e.ticketUrl == null || e.ticketStatus == 'sold_out';
 
 class AlarmButton extends StatelessWidget {
   final Ev e;
@@ -293,8 +302,8 @@ class _TicketBar extends StatelessWidget {
             Expanded(
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(label.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: mono(11, color: C.text)),
-                if (e.priceText != null)
-                  Text(e.priceText!, maxLines: 1, overflow: TextOverflow.ellipsis, style: body(13.5, color: C.muted)),
+                if (e.price != null)
+                  Text(e.price!, maxLines: 1, overflow: TextOverflow.ellipsis, style: body(13.5, color: C.muted)),
               ]),
             ),
             const SizedBox(width: 10),
