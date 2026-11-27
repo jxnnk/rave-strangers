@@ -29,7 +29,7 @@ pb UIStatusBarStyle string UIStatusBarStyleLightContent
 /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations~ipad" "$P" 2>/dev/null || true
 /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations array" -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationPortrait" "$P"
 # Zweckangaben: ehrlich, sonst Ablehnung nach 5.1.1. Kamera/Mikrofon verlangt Apple, weil image_picker sie technisch enthält.
-pb NSLocationWhenInUseUsageDescription string "Damit wir dir automatisch die Events in der Stadt zeigen, in der du gerade bist, und du dich bei einem Event vor Ort einchecken kannst. Dein Standort bleibt auf dem Gerät und wird nicht gespeichert oder gesendet."
+pb NSLocationWhenInUseUsageDescription string "Damit wir dir automatisch die Events in der Stadt zeigen, in der du gerade bist, und du dich bei einem Event vor Ort einchecken kannst. Dein Standort wird nie gespeichert. Nur beim Check-in wird er einmal mit der Position des Clubs verglichen."
 pb NSLocationAlwaysAndWhenInUseUsageDescription string "Rave Strngrs nutzt deinen Standort nie im Hintergrund, nur während die App geöffnet ist."
 pb NSPhotoLibraryUsageDescription string "Damit du ein Profilbild aus deiner Galerie auswählen kannst. Nur das gewählte Bild wird hochgeladen."
 pb NSCameraUsageDescription string "Rave Strngrs nutzt die Kamera derzeit nicht. Profilbilder wählst du aus deiner Galerie."

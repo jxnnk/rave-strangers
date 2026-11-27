@@ -195,8 +195,9 @@ class Store extends ChangeNotifier {
   /// Vergangene Events, bei denen ich war und noch nicht bewertet habe (neueste zuerst).
   List<Ev> get toRate => events.where((e) => e.phase == 'past' && canRate(e) && !myEvRev.contains(e.id)).toList()
     ..sort((a, b) => b.startUtc.compareTo(a.startUtc));
-  Future<String> checkIn(int eventId) async {
-    final r = await sb.rpc('check_in', params: {'p_event': eventId}) as String?;
+  /// Der Server prüft den Abstand selbst (DB 030); die Position wird nur verglichen, nie gespeichert.
+  Future<String> checkIn(int eventId, double lat, double lon) async {
+    final r = await sb.rpc('check_in', params: {'p_event': eventId, 'p_lat': lat, 'p_lon': lon}) as String?;
     if (r == 'ok') {
       checkins.add(eventId);
       if (!going.contains(eventId)) {

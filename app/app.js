@@ -72,7 +72,7 @@ var T={
     err_generic:'Das hat nicht geklappt. Bitte versuch es noch einmal.',err_login:'E-Mail oder Passwort stimmt nicht, oder die E-Mail ist noch nicht bestätigt.',
     err_handle:'Dieser Nutzername ist schon vergeben.',err_handle_fmt:'Nutzername: 3 bis 30 Zeichen, nur a–z, 0–9, Punkt und Unterstrich.',err_pw:'Das Passwort braucht mindestens 8 Zeichen.',
     me_title:'Mein Profil',handle:'Nutzername',bio:'Über mich',bio_ph:'Was hörst du, wo tanzt du?',save:'Speichern',saved:'Gespeichert',soc_hint:'Socials verlinken',
-    er_t:'Wie war das Event?',er_none:'Noch keine Bewertungen für dieses Event.',er_write:'Event bewerten',er_login:'Melde dich an, um das Event zu bewerten.',er_only_go:'Bewerten kann, wer dabei war. Tipp auf „Ich war dort“.',er_closed:'Bewertungen sind bis 3 Wochen nach dem Event möglich.',er_lineup:'Line-up & Musik',er_safety:'Sicherheit',er_aware:'Awareness & Wohlfühlen',er_was_there:'War vor Ort',er_verified_n:'{n} vor Ort eingecheckt',er_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen. Clubs und Veranstalter sehen dein Feedback.',er_torate:'Wie war es? Jetzt bewerten',er_torate_sub:'Deine letzten Events. Dein Feedback hilft Clubs und Veranstaltern, besser zu werden.',was_there:'Ich war dort',was_there_on:'Du warst dort',ci_t:'Bist du gerade hier?',ci_sub:'Tipp auf „Ich bin da“. Dein Handy prüft einmal, ob du in der Nähe des Clubs bist. Dein Standort verlässt dein Gerät nicht.',ci_btn:'Ich bin da',ci_done:'Eingecheckt',ci_done_sub:'Deine Bewertung bekommt später das Häkchen „War vor Ort“.',ci_busy:'Prüfe Standort …',ci_ok:'Eingecheckt! Viel Spaß.',ci_far:'Du scheinst nicht am Club zu sein (mehr als 400 m entfernt).',ci_notnow:'Einchecken geht nur während des Events.',ci_denied:'Ohne Standort-Freigabe geht Einchecken nicht.',ci_err:'Einchecken hat nicht geklappt.',note_review:'Wie war „{e}“? Bewerte das Event.',org_rating:'Bewertung aus {n} Events-Feedbacks',my_going:'Ich gehe hin',my_saved:'Merkliste',my_subs:'Meine Einträge',none_yet:'Noch nichts.',
+    er_t:'Wie war das Event?',er_none:'Noch keine Bewertungen für dieses Event.',er_write:'Event bewerten',er_login:'Melde dich an, um das Event zu bewerten.',er_only_go:'Bewerten kann, wer dabei war. Tipp auf „Ich war dort“.',er_closed:'Bewertungen sind bis 3 Wochen nach dem Event möglich.',er_lineup:'Line-up & Musik',er_safety:'Sicherheit',er_aware:'Awareness & Wohlfühlen',er_was_there:'War vor Ort',er_verified_n:'{n} vor Ort eingecheckt',er_rules:'Bewerte fair und aus eigener Erfahrung. Keine Namen von Türstehern oder Gästen. Clubs und Veranstalter sehen dein Feedback.',er_torate:'Wie war es? Jetzt bewerten',er_torate_sub:'Deine letzten Events. Dein Feedback hilft Clubs und Veranstaltern, besser zu werden.',was_there:'Ich war dort',was_there_on:'Du warst dort',ci_t:'Bist du gerade hier?',ci_sub:'Tipp auf „Ich bin da“. Wir prüfen einmal, ob du in der Nähe des Clubs bist. Deine Position wird dafür nur verglichen und nie gespeichert.',ci_btn:'Ich bin da',ci_done:'Eingecheckt',ci_done_sub:'Deine Bewertung bekommt später das Häkchen „War vor Ort“.',ci_busy:'Prüfe Standort …',ci_ok:'Eingecheckt! Viel Spaß.',ci_far:'Du scheinst nicht am Club zu sein (mehr als 400 m entfernt).',ci_notnow:'Einchecken geht nur während des Events.',ci_denied:'Ohne Standort-Freigabe geht Einchecken nicht.',ci_err:'Einchecken hat nicht geklappt.',note_review:'Wie war „{e}“? Bewerte das Event.',org_rating:'Bewertung aus {n} Events-Feedbacks',my_going:'Ich gehe hin',my_saved:'Merkliste',my_subs:'Meine Einträge',none_yet:'Noch nichts.',
     verif_t:'Artist-Verifizierung',verif_none:'Du bist DJ oder Live-Act? Beantrage die Verifizierung. Dann bekommst du das rote Häkchen.',
     verif_name:'Artist-Name',verif_links:'Belege (Links, eins pro Zeile)',verif_links_ph:'z. B. Resident-Advisor-Seite, offizielles Instagram, Booking-Agentur',
     verif_btn:'Verifizierung beantragen',verif_pending:'Antrag eingegangen. Wir prüfen dein Profil und melden uns.',verif_rejected:'Dein letzter Antrag wurde abgelehnt. Du kannst einen neuen stellen.',verif_ok:'Dein Profil ist verifiziert.',
@@ -139,7 +139,7 @@ var T={
     err_generic:'That did not work. Please try again.',err_login:'Email or password is wrong, or the email is not confirmed yet.',
     err_handle:'This username is taken.',err_handle_fmt:'Username: 3 to 30 characters, only a–z, 0–9, dot and underscore.',err_pw:'The password needs at least 8 characters.',
     me_title:'My profile',handle:'Username',bio:'About me',bio_ph:'What do you listen to, where do you dance?',save:'Save',saved:'Saved',soc_hint:'Link your socials',
-    er_t:'How was the event?',er_none:'No ratings for this event yet.',er_write:'Rate this event',er_login:'Log in to rate this event.',er_only_go:'Only people who were there can rate. Tap “I was there”.',er_closed:'Ratings are possible up to 3 weeks after the event.',er_lineup:'Line-up & music',er_safety:'Safety',er_aware:'Awareness & comfort',er_was_there:'Was there',er_verified_n:'{n} checked in on site',er_rules:'Rate fairly and from your own experience. No names of door staff or guests. Clubs and promoters see your feedback.',er_torate:'How was it? Rate now',er_torate_sub:'Your recent events. Your feedback helps clubs and promoters get better.',was_there:'I was there',was_there_on:'You were there',ci_t:'Are you here right now?',ci_sub:'Tap “I’m here”. Your phone checks once whether you are near the club. Your location never leaves your device.',ci_btn:'I’m here',ci_done:'Checked in',ci_done_sub:'Your rating will get the “Was there” tick later.',ci_busy:'Checking location …',ci_ok:'Checked in! Have fun.',ci_far:'You don’t seem to be at the club (more than 400 m away).',ci_notnow:'Check-in only works during the event.',ci_denied:'Check-in needs location access.',ci_err:'Check-in didn’t work.',note_review:'How was “{e}”? Rate the event.',org_rating:'Rating from {n} event reviews',my_going:"I'm going",my_saved:'Saved',my_subs:'My submissions',none_yet:'Nothing yet.',
+    er_t:'How was the event?',er_none:'No ratings for this event yet.',er_write:'Rate this event',er_login:'Log in to rate this event.',er_only_go:'Only people who were there can rate. Tap “I was there”.',er_closed:'Ratings are possible up to 3 weeks after the event.',er_lineup:'Line-up & music',er_safety:'Safety',er_aware:'Awareness & comfort',er_was_there:'Was there',er_verified_n:'{n} checked in on site',er_rules:'Rate fairly and from your own experience. No names of door staff or guests. Clubs and promoters see your feedback.',er_torate:'How was it? Rate now',er_torate_sub:'Your recent events. Your feedback helps clubs and promoters get better.',was_there:'I was there',was_there_on:'You were there',ci_t:'Are you here right now?',ci_sub:'Tap “I’m here”. We check once whether you are near the club. Your position is only compared for this and never stored.',ci_btn:'I’m here',ci_done:'Checked in',ci_done_sub:'Your rating will get the “Was there” tick later.',ci_busy:'Checking location …',ci_ok:'Checked in! Have fun.',ci_far:'You don’t seem to be at the club (more than 400 m away).',ci_notnow:'Check-in only works during the event.',ci_denied:'Check-in needs location access.',ci_err:'Check-in didn’t work.',note_review:'How was “{e}”? Rate the event.',org_rating:'Rating from {n} event reviews',my_going:"I'm going",my_saved:'Saved',my_subs:'My submissions',none_yet:'Nothing yet.',
     verif_t:'Artist verification',verif_none:'Are you a DJ or live act? Request verification to get the red tick.',
     verif_name:'Artist name',verif_links:'Proof (links, one per line)',verif_links_ph:'e.g. Resident Advisor page, official Instagram, booking agency',
     verif_btn:'Request verification',verif_pending:"Request received. We'll check your profile and get back to you.",verif_rejected:'Your last request was declined. You can send a new one.',verif_ok:'Your profile is verified.',
@@ -515,10 +515,10 @@ function ticketsHTML(e){
 }
 function awareHTML(v){ var a=v&&v.rules&&v.rules.aware; return '<div class="nophone" style="margin-top:0"><div>'+t('aware_d')+(a?'<br><b>'+esc(t('aware_team',{x:a}))+'</b>':'')+'</div></div>'; }
 function reportForm(kind,id){
-  var reasons=['rr1','rr2','rr6','rr3','rr4','rr5'].map(function(k){ return '<option>'+t(k)+'</option>'; }).join('');
+  var reasons=[['rr1','harass'],['rr2','spam'],['rr6','scam'],['rr3','violence'],['rr4','wrong_info'],['rr5','other']].map(function(k){ return '<option value="'+k[1]+'">'+t(k[0])+'</option>'; }).join('');
   return '<details class="more"><summary>'+(kind==='event'?t('report_ev'):t('report'))+'</summary><form class="form" data-form="report" data-kind="'+kind+'" data-id="'+esc(id)+'" style="margin-top:8px">'+
     '<div class="field"><label for="rp-r">'+t('report_reason')+'</label><select id="rp-r" name="reason">'+reasons+'</select></div>'+
-    '<div class="field"><label for="rp-t">'+t('report_txt')+'</label><textarea id="rp-t" name="text" maxlength="1000"></textarea></div>'+
+    '<div class="field"><label for="rp-t">'+t('report_txt')+'</label><textarea id="rp-t" name="text" maxlength="500"></textarea></div>'+
     '<div><button class="btn primary" type="submit">'+t('report_send')+'</button></div></form></details>';
 }
 
@@ -1198,7 +1198,7 @@ function viewAdmin(){
     Promise.all([
       data(sb.from('artist_verifications').select('id,artist_name,proof_links,note,created_at,profile_id,profiles!artist_verifications_profile_id_fkey(handle,display_name,avatar_url)').eq('status','pending').order('created_at',{ascending:true})),
       data(sb.from('events').select('id,title,starts_at,venue_id,source_url,created_by,status,review_state,review_note').or('status.eq.pending,review_state.eq.unclear').neq('status','cancelled').order('starts_at',{ascending:true})),
-      data(sb.from('reports').select('id,reason,details,created_at,target_profile,target_event').eq('status','pending').order('created_at',{ascending:true})),
+      data(sb.from('reports').select('id,reason,kind,ref_id,target_user,note,snippet,details,created_at,target_profile,target_event').eq('status','open').order('created_at',{ascending:true})),
       sb.rpc('admin_ref_stats',{p_days:30}).then(function(x){ return (x&&x.data)||[]; },function(){ return []; }),
       data(sb.from('promoter_requests').select('id,org_name,website,note,created_at,profiles!promoter_requests_profile_id_fkey(handle,display_name)').eq('status','pending').order('created_at',{ascending:true})).catch(function(){ return []; }),
       data(sb.from('promoters').select('profile_id,org_name,active_until,profiles(handle,display_name)').gt('active_until',new Date().toISOString()).order('active_until',{ascending:true})).catch(function(){ return []; })
@@ -1217,8 +1217,10 @@ function viewAdmin(){
       (x.review_note?'<p class="sub" style="margin:4px 0 8px">'+t('rev_note')+': '+esc(x.review_note)+'</p>':'')+
       '<div class="row"><button type="button" class="btn small primary" data-act="adm-publish" data-id="'+x.id+'">'+t('publish')+'</button><button type="button" class="btn small" data-act="adm-cancel" data-id="'+x.id+'">'+t('reject')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   var reps=a.reports.length?a.reports.map(function(x){
-    var target=x.target_event?'<a class="link" href="#event-'+x.target_event+'">Event #'+x.target_event+'</a>':'Profil '+esc(String(x.target_profile).slice(0,8));
-    return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.reason)+'</b> · '+target+'</p>'+(x.details?'<p>'+esc(x.details)+'</p>':'')+
+    var ev=x.target_event||(x.kind==='event'?x.ref_id:null), who=x.target_user||x.target_profile;
+    var target=ev?'<a class="link" href="#event-'+(+ev)+'">Event #'+(+ev)+'</a>':esc(x.kind||'profile')+(who?' · '+esc(String(who).slice(0,8)):'')+(x.ref_id&&x.kind!=='event'?' #'+(+x.ref_id):'');
+    var txt=x.note||x.details;
+    return '<div class="card" style="margin-bottom:8px"><p><b style="color:var(--text)">'+esc(x.reason)+'</b> · '+target+'</p>'+(txt?'<p>'+esc(txt)+'</p>':'')+(x.snippet?'<p class="sub">„'+esc(x.snippet)+'“</p>':'')+
       '<div class="row"><button type="button" class="btn small" data-act="adm-report" data-id="'+x.id+'">'+t('done')+'</button></div></div>'; }).join(''):emptyBox(t('none_yet'));
   var refs=(a.refs||[]).length?'<table class="reftab"><thead><tr><th></th><th>'+t('ref_visits')+'</th><th>'+t('ref_signups')+'</th></tr></thead><tbody>'+a.refs.map(function(x){ return '<tr><td>'+esc(x.ref)+'</td><td>'+(+x.visits)+'</td><td>'+(+x.signups)+'</td></tr>'; }).join('')+'</tbody></table>':emptyBox(t('none_yet'));
   var who=function(p){ return p?'<a class="link" href="#u-'+esc(p.handle)+'">@'+esc(p.handle)+'</a>':''; };
@@ -1524,10 +1526,10 @@ document.addEventListener('click',function(ev){
     toast(t('ci_busy'));
     var cev=evt(+id), cv=cev?venue(cev.v):null;
     navigator.geolocation.getCurrentPosition(function(pos){
-      /* Abstand wird hier im Browser berechnet, der Standort geht nicht an den Server (Datenschutz) */
+      /* Vorab-Prüfung im Browser; der Server prüft den Abstand noch einmal selbst (DB 030). Die Position wird dort nur verglichen, nie gespeichert. */
       if(!cv||cv.lat==null){ toast(t('ci_err')); return; }
       if(distM(pos.coords.latitude,pos.coords.longitude,cv.lat,cv.lon)>400){ toast(t('ci_far')); return; }
-      sb.rpc('check_in',{p_event:+id}).then(function(r){
+      sb.rpc('check_in',{p_event:+id,p_lat:pos.coords.latitude,p_lon:pos.coords.longitude}).then(function(r){
         if(r.error){ toast(t('ci_err')); return; }
         if(r.data==='ok'){ if(!has(S.checkins,+id)) S.checkins.push(+id); if(!has(S.going,+id)) S.going.push(+id); buzz(); toast(t('ci_ok')); render(false); }
         else toast(t(r.data==='too_far'?'ci_far':r.data==='not_now'?'ci_notnow':'ci_err'));
@@ -1588,7 +1590,7 @@ document.addEventListener('click',function(ev){
   else if(act==='adm-pro-ok'){ adminAct(data(sb.rpc('approve_promoter',{req_id:+id,p_months:+el.getAttribute('data-m')}))); }
   else if(act==='adm-pro-no'){ adminAct(data(sb.rpc('reject_promoter',{req_id:+id}))); }
   else if(act==='adm-pro-ext'){ if(el.getAttribute('data-m')==='0'&&!confirm(t('adm_end')+'?')) return; adminAct(data(sb.rpc('set_promoter_until',{p_profile:id,p_months:+el.getAttribute('data-m')}))); }
-  else if(act==='adm-report'){ adminAct(data(sb.from('reports').update({status:'approved'}).eq('id',+id))); }
+  else if(act==='adm-report'){ adminAct(data(sb.from('reports').update({status:'done'}).eq('id',+id))); }
 });
 document.addEventListener('change',function(ev){
   var sel=ev.target.getAttribute&&ev.target.getAttribute('data-sel');
@@ -1713,8 +1715,9 @@ document.addEventListener('submit',function(ev){
       .catch(function(err){ if(inp) inp.value=mb; toast(/rate_limited/.test(err&&err.message||'')?t('rate_limited'):t('err_generic')); });
   } else if(kind==='report'){
     if(needLogin()) return;
-    var row={reporter:S.user.id,reason:String(fd.get('reason')),details:String(fd.get('text')||'').trim()||null};
-    if(f.getAttribute('data-kind')==='event') row.target_event=+f.getAttribute('data-id'); else row.target_profile=f.getAttribute('data-id');
+    /* Einheitliches Schema mit der Flutter-App (DB 030): kind + ref_id/target_user, reason als Code */
+    var row={reporter:S.user.id,reason:String(fd.get('reason')),note:String(fd.get('text')||'').trim().slice(0,500)||null};
+    if(f.getAttribute('data-kind')==='event'){ row.kind='event'; row.ref_id=+f.getAttribute('data-id'); } else { row.kind='profile'; row.target_user=f.getAttribute('data-id'); }
     busy(true);
     data(sb.from('reports').insert(row)).then(function(){ busy(false); f.reset(); var d=f.closest('details'); if(d) d.open=false; toast(t('report_sent')); }).catch(function(err){ busy(false); fail(err); });
   } else if(kind==='event'){

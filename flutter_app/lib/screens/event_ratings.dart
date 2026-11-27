@@ -59,13 +59,13 @@ class _CheckinCardState extends State<CheckinCard> {
         if (mounted) toast(context, t('ci_far'));
         return;
       }
-      final r = await store.checkIn(widget.e.id);
+      final r = await store.checkIn(widget.e.id, pos.latitude, pos.longitude);
       if (!mounted) return;
       if (r == 'ok') {
         HapticFeedback.mediumImpact();
         toast(context, t('ci_ok'));
       } else {
-        toast(context, t(r == 'not_now' ? 'ci_notnow' : 'ci_err'));
+        toast(context, t(r == 'not_now' ? 'ci_notnow' : r == 'too_far' ? 'ci_far' : 'ci_err'));
       }
     } catch (e) {
       debugPrint('check-in failed: $e');
