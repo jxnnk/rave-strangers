@@ -28,3 +28,19 @@ Stand 26.11.: Raver (kostenlos) und Promoter (Abo) sind gebaut (Web + Flutter). 
 - Offen: Preis festlegen; Online-Zahlung (Stripe auf der Website, Freischaltung per Webhook in einer Edge Function). Vorher Gewerbe, AGB mit Abo-Bedingungen, Kündigungsbutton (§ 312k BGB) für Verbraucher.
 - iOS/Android: In der App keinen Preis und keinen Kauf-Link zeigen, solange nicht über Apple/Google abgerechnet wird (App Store 3.1.1 / 3.1.3, Google Play Payments). Die App zeigt deshalb nur „Anfrage stellen“.
 - Später: Erinnerung kurz vor Abo-Ende, Promoter-Badge an Events.
+
+## Genre-Filter: Mehrfachauswahl, Ober-/Untergenres, Rückfall (Notiz 27.11.)
+**Von Felix (Idee):**
+- Mehrere Genres gleichzeitig wählbar, nicht nur eins.
+- Zwei Ebenen: Obergenre (z. B. Groove) mit Untergenres (z. B. Schranz).
+- Gibt es für ein gewähltes Untergenre im gewählten Umkreis keine Events: Umkreis vergrößern **und** klar anzeigen „Kein Schranz in der Nähe, aber Groove-Events“ (Rückfall aufs Obergenre).
+
+**Stand im Repo:** Filter ist Einzelauswahl über eine flache Liste mit 8 Genres, doppelt hart codiert (`flutter_app/lib/data.dart` `genres`, `app/app.js` `GENRES`). Events speichern `genres text[]`. Einen Umkreis-Filter gibt es noch nicht, gefiltert wird nach Stadt.
+
+**Vorschlag Claude (offen, zu entscheiden):**
+- Genre-Baum an einer Stelle pflegen (Tabelle `genres` mit `parent_id` oder eine gemeinsame JSON-Datei), statt zweier Listen.
+- Mehrfachauswahl = ODER (Event passt, wenn es eins der Genres hat). Obergenre wählen schließt seine Untergenres ein.
+- Rückfall nur anzeigen, nie still austauschen: Treffer fürs Untergenre zuerst, darunter eigener Abschnitt „Ähnlich: Groove“.
+- Umkreis-Erweiterung in festen Stufen (z. B. 25 → 50 → 100 km) mit sichtbarem Hinweis; braucht Venue-Koordinaten und Standort nur im Vordergrund (Regel 7).
+- Offene Frage: Wer ordnet Events Untergenres zu? Promoter beim Eintragen, sonst bleibt der Rückfall der Normalfall. Genre-Liste mit echten Kategorien aus der Szene abstimmen, keine erfundenen.
+- Nicht Beta-blockierend → nach der Beta.
