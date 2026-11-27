@@ -44,3 +44,18 @@ Stand 26.11.: Raver (kostenlos) und Promoter (Abo) sind gebaut (Web + Flutter). 
 - Umkreis-Erweiterung in festen Stufen (z. B. 25 → 50 → 100 km) mit sichtbarem Hinweis; braucht Venue-Koordinaten und Standort nur im Vordergrund (Regel 7).
 - Offene Frage: Wer ordnet Events Untergenres zu? Promoter beim Eintragen, sonst bleibt der Rückfall der Normalfall. Genre-Liste mit echten Kategorien aus der Szene abstimmen, keine erfundenen.
 - Nicht Beta-blockierend → nach der Beta.
+
+## Geschmacks-Swipe für Artists/Genres + Gemeinsamkeiten in der Crew (Notiz 27.11.)
+**Von Felix (Idee):**
+- Artists (und Genres) wie bei Tinder wischen: rechts = feier ich, links = nicht meins.
+- Daraus gezielter Events vorschlagen, auf denen die gemochten Artists spielen.
+- Crew: Beim Hinzufügen eines Freundes und auf dessen Profil Gemeinsamkeiten zeigen („Ihr feiert beide X“), gemeinsame Artists und Events, auf denen man schon war.
+
+**Was es im Repo schon gibt (Basis):** `follows` (Profil folgt Artist-Profil), `event_lineup.artist_id` (Artist ↔ Event), `attendance` mit `visible` (privat hingehen möglich), `checkins` (027), Profilseite `person.dart`.
+
+**Vorschlag Claude (offen, zu entscheiden):**
+- Rechts-Wisch = bestehendes `follows` nutzen, statt neue Struktur; Links-Wisch nur als „nicht mehr zeigen“ speichern, nie anderen anzeigen.
+- Swipe-Stapel nur aus Artists, die echt in Events im Repo vorkommen (keine erfundenen Profile).
+- Event-Vorschläge: zuerst simpel „Events mit Artists, denen du folgst“, ohne Algorithmus-Blackbox.
+- Gemeinsamkeiten nur aus Daten, die beide sichtbar haben: `attendance.visible`, Check-ins nur mit Opt-in. Eigene Einstellung „Meinen Musikgeschmack/meine Events in der Crew zeigen“ (DSGVO: Zweck klar, standardmäßig nur Crew).
+- Nicht Beta-blockierend → nach der Beta. Gute Kandidat-Funktion für Bindung nach dem Start, weil sie den USP „Finde deine Crew“ direkt stützt.
