@@ -73,7 +73,7 @@ Vor größeren Änderungen daran kurz im Chat Bescheid geben.
 | Apple- und Google-Login | – |
 | Push-Nachrichten (Firebase) | – |
 | Profilbilder (Supabase Storage) | erledigt (Web + Flutter, Migration 025) |
-| App-Icon | erledigt (Master `flutter_app/branding/app-icon.svg`, `build_icons.sh`; Android: `tool/prepare_android.sh`) |
+| App-Icon + Markenpaket | erledigt: Icon 09C2 + Wortmarke 03, alles in `branding/` (Übersicht `markenpaket-uebersicht.png`); App-Icons via `flutter_app/branding/build_icons.sh`, Android via `tool/prepare_android.sh` |
 | Karlsruhe-Events vollständig machen (nur echte Quellen) | – |
 | Impressum, Datenschutz, AGB | erledigt (Kontakt: rave-strangers@mail.de) |
 | iOS-Beta: Apple-Konto, Codemagic (siehe IOS_BETA.md); Migration 026 ist schon aktiv | Jannik (Konto) + Fero |
